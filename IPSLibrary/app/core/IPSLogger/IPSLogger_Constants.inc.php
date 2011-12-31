@@ -10,7 +10,8 @@
 	 */
 
   include_once "\..\..\..\config\core\IPSLogger\IPSLogger_Configuration.inc.php";
-
+  include_once 'IPSLogger_IDs.inc.php';
+  
   define ("c_LogLevel_Fatal",          0);
   define ("c_LogLevel_Error",          1);
   define ("c_LogLevel_Warning",        2);

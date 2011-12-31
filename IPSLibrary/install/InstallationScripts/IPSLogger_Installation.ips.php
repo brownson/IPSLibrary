@@ -25,25 +25,25 @@
 	}
 
 
-	IPSUtils_Include ("IPSInstaller.ips.php",            "IPSLibrary::install::IPSInstaller");
-	IPSUtils_Include ("IPSLogger_Configuration.ips.php", "IPSLibrary::config::core::IPSLogger");
+	IPSUtils_Include ("IPSInstaller.inc.php",            "IPSLibrary::install::IPSInstaller");
+	IPSUtils_Include ("IPSLogger_Configuration.inc.php", "IPSLibrary::config::core::IPSLogger");
 
-	$libraryPath = $moduleManager->GetConfigValue(IPSConfigurationHandler::LIBRARY);
+	$libraryPath = $moduleManager->GetConfigValue(IPSConfigHandler::LIBRARYPATH);
 	$AppPath        = $libraryPath.".IPSLibrary.app.core.IPSLogger";
 	$DataPath       = $libraryPath.".IPSLibrary.data.core.IPSLogger";
 	$ConfigPath     = $libraryPath.".IPSLibrary.config.core.IPSLogger";
 
 	$WFC10_Enabled  = $moduleManager->GetConfigValue('Enabled', 'WFC10');
-	$WFC10_ConfigId = $moduleManager->GetConfigValue('ID', 'WFC10');
+	$WFC10_ConfigId = $moduleManager->GetConfigValueIntDef('ID', 'WFC10', GetWFCIdDefault());
 	$WFC10_Path     = $moduleManager->GetConfigValue('Path', 'WFC10');
 	$WFC10_Parent   = $moduleManager->GetConfigValue('Root', 'WFC10');
 	$WFC10_TabName  = $moduleManager->GetConfigValue('TabName', 'WFC10');
 	$WFC10_TabIcon  = $moduleManager->GetConfigValue('TabIcon', 'WFC10');
-	$WFC10_TabOrder = $moduleManager->GetConfigValue('TabOrder', 'WFC10');
+	$WFC10_TabOrder = $moduleManager->GetConfigValueInt('TabOrder', 'WFC10');
 
 	$Mobile_Enabled = $moduleManager->GetConfigValue('Enabled', 'Mobile');
 	$Mobile_Path    = $moduleManager->GetConfigValue('Path', 'Mobile');
-	$Mobile_Order   = $moduleManager->GetConfigValue('Order', 'Mobile');
+	$Mobile_Order   = $moduleManager->GetConfigValueInt('Order', 'Mobile');
 	$Mobile_Icon    = $moduleManager->GetConfigValue('Icon', 'Mobile');
 
 	// ----------------------------------------------------------------------------------------------------------------------------
@@ -92,34 +92,34 @@
 	$ID_ProwlOutLevel     = CreateVariable('ProwlOut_Level',     1 /*Integer*/, $InstanceId, 810, 'IPSLogger_Level',    $ID_ScriptIPSLoggerChangeSettings, 1 /*Error*/, 'Intensity');
 	$ID_ProwlOutPriority  = CreateVariable('ProwlOut_Priority',  1 /*Integer*/, $InstanceId, 820, 'IPSLogger_Priority', $ID_ScriptIPSLoggerChangeSettings, 0,           'Return');
 
-	SetVariableConstant ("c_ID_SingleOutEnabled",   $ID_SingleOutEnabled, $AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_SingleOutLevel",     $ID_SingleOutLevel,   $AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_SingleOutMsg",       $ID_SingleOutMsg,     $AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_HtmlOutEnabled",     $ID_HtmlOutEnabled,   $AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_HtmlOutLevel",       $ID_HtmlOutLevel,     $AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_HtmlOutMsgCount",    $ID_HtmlOutMsgCount,  $AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_HtmlOutMsgId",       $ID_HtmlOutMsgId,     $AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_HtmlOutMsgList",     $ID_HtmlOutMsgList,   $AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_IPSOutEnabled",      $ID_IPSOutEnabled,    $AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_IPSOutLevel",        $ID_IPSOutLevel,      $AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_EMailOutEnabled",    $ID_EMailOutEnabled,  $AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_EMailOutLevel",      $ID_EMailOutLevel,    $AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_EMailOutPriority",   $ID_EMailOutPriority, $AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_EMailOutDelay",      $ID_EMailOutSendDelay,$AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_EMailOutMsgList",    $ID_EMailOutMsgList,  $AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_FileOutEnabled",     $ID_FileOutEnabled,   $AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_FileOutLevel",       $ID_FileOutLevel,     $AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_FileOutDays",        $ID_FileOutDays,      $AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_Log4IPSOutEnabled",  $ID_Log4IPSOutEnabled,$AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_Log4IPSOutLevel",    $ID_Log4IPSOutLevel,  $AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_Log4IPSOutDays",     $ID_Log4IPSOutDays,   $AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_ScriptSendMail",     $ID_ScriptIPSLoggerSendMail, $AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_ScriptPurgeLogFiles",$ID_ScriptIPSLoggerPurgeLogFiles, $AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_EchoOutEnabled",     $ID_EchoOutEnabled,   $AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_EchoOutLevel",       $ID_EchoOutLevel,     $AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_ProwlOutEnabled",    $ID_ProwlOutEnabled,  $AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_ProwlOutLevel",      $ID_ProwlOutLevel,    $AppPath.'IPSLogger_IDs.ips.php');
-	SetVariableConstant ("c_ID_ProwlOutPriority",   $ID_ProwlOutPriority, $AppPath.'IPSLogger_IDs.ips.php');
+	SetVariableConstant ("c_ID_SingleOutEnabled",   $ID_SingleOutEnabled, 'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_SingleOutLevel",     $ID_SingleOutLevel,   'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_SingleOutMsg",       $ID_SingleOutMsg,     'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_HtmlOutEnabled",     $ID_HtmlOutEnabled,   'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_HtmlOutLevel",       $ID_HtmlOutLevel,     'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_HtmlOutMsgCount",    $ID_HtmlOutMsgCount,  'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_HtmlOutMsgId",       $ID_HtmlOutMsgId,     'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_HtmlOutMsgList",     $ID_HtmlOutMsgList,   'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_IPSOutEnabled",      $ID_IPSOutEnabled,    'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_IPSOutLevel",        $ID_IPSOutLevel,      'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_EMailOutEnabled",    $ID_EMailOutEnabled,  'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_EMailOutLevel",      $ID_EMailOutLevel,    'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_EMailOutPriority",   $ID_EMailOutPriority, 'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_EMailOutDelay",      $ID_EMailOutSendDelay,'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_EMailOutMsgList",    $ID_EMailOutMsgList,  'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_FileOutEnabled",     $ID_FileOutEnabled,   'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_FileOutLevel",       $ID_FileOutLevel,     'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_FileOutDays",        $ID_FileOutDays,      'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_Log4IPSOutEnabled",  $ID_Log4IPSOutEnabled,'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_Log4IPSOutLevel",    $ID_Log4IPSOutLevel,  'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_Log4IPSOutDays",     $ID_Log4IPSOutDays,   'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_ScriptSendMail",     $ID_ScriptIPSLoggerSendMail, 'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_ScriptPurgeLogFiles",$ID_ScriptIPSLoggerPurgeLogFiles, 'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_EchoOutEnabled",     $ID_EchoOutEnabled,   'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_EchoOutLevel",       $ID_EchoOutLevel,     'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_ProwlOutEnabled",    $ID_ProwlOutEnabled,  'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_ProwlOutLevel",      $ID_ProwlOutLevel,    'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
+	SetVariableConstant ("c_ID_ProwlOutPriority",   $ID_ProwlOutPriority, 'IPSLogger_IDs.inc.php', 'IPSLibrary::app::core::IPSLogger');
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 	// Webfront Installation
@@ -185,6 +185,8 @@
 		CreateLink('Output Enabled',   $ID_ProwlOutEnabled,              $ID_CategorySettingsProwl,    10);
 		CreateLink('Logging Level',    $ID_ProwlOutLevel,                $ID_CategorySettingsProwl,    20);
 		CreateLink('Priority',         $ID_ProwlOutPriority,             $ID_CategorySettingsProwl,    30);
+
+		ReloadAllWebFronts();
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
@@ -236,10 +238,14 @@
 		CreateLink('Priority',         $ID_ProwlOutPriority,             $ID_Output,   30);
 	}
 
+	Register_PhpErrorHandler($moduleManager);
+
+	
+	
 	// ----------------------------------------------------------------------------------------------------------------------------
 	// Some Tests
 	// ----------------------------------------------------------------------------------------------------------------------------
-	IPSUtils_Include ("IPSLogger.ips.php", "IPSLibrary::app::core::IPSLogger");
+	IPSUtils_Include ("IPSLogger.inc.php", "IPSLibrary::app::core::IPSLogger");
 
 	//  Some Test Messages
 	IPSLogger_Fat(__file__, 'Test for a Fatal Error');
@@ -253,8 +259,26 @@
  	IPSLogger_Trc(__file__, 'Test for a Trace Message ...');
  	IPSLogger_Tst(__file__, 'Test for a Test Message ...');
 
+	// ------------------------------------------------------------------------------------------------
+	function Register_PhpErrorHandler($moduleManager) {
+		$file = IPS_GetKernelDir().'scripts\\__autoload.php';
 
-   // ------------------------------------------------------------------------------------------------
+		if (!file_exists($file)) {
+			throw new Exception($file.' could NOT be found!', E_USER_ERROR);
+		}
+		$FileContent = file_get_contents($file);
+
+		$pos = strpos($FileContent, 'IPSLogger_PhpErrorHandler.inc.php');
+
+		if ($pos === false) {
+			$includeCommand = '    IPSUtils_Include("IPSLogger_PhpErrorHandler.inc.php", "IPSLibrary::app::core::IPSLogger");';
+			$FileContent = str_replace('?>', $includeCommand.PHP_EOL.'?>', $FileContent);
+			$moduleManager->LogHandler()->Log('Register Php ErrorHandler of IPSLogger in File __autoload.php');
+			file_put_contents($file, $FileContent);
+		}
+	}
+
+	// ------------------------------------------------------------------------------------------------
 	function CreateTimer ($Name, $Parent, $Hour) {
 	   $TimerId = @IPS_GetEventIDByName($Name, $Parent);
 	   if ($TimerId === false) {

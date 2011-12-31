@@ -1,4 +1,4 @@
-<?
+ <?
 	/**@defgroup ipslogger_configuration IPSLogger Konfiguration
 	 * @ingroup ipslogger
 	 * @{
@@ -9,8 +9,6 @@
 	 * @author        Andreas Brauneis
 	 *
 	 */
-
-	include 'IPSLogger_IDs.inc.php';
 
 	/** WebFront Konfigurations Parameter
 	 *
