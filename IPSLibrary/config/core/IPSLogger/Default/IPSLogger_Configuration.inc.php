@@ -5,8 +5,10 @@
 	 *
 	 * Konfigurations Einstellungen des Loggers.
 	 *
-	 * @file          IPSLogger_Configuration.ips.php
+	 * @file          default\IPSLogger_Configuration.inc.php
 	 * @author        Andreas Brauneis
+	 * @version
+	 * Version 2.50.1, 31.01.2012<br/>
 	 *
 	 */
 
@@ -53,6 +55,14 @@
 	 * Parameter kann jederzeit geändert werden.
 	 */
  	define ("c_Style_HtmlOutColGroup",   '<colgroup><col width="25px"><col width="40px"><col width="100px"><col width="200px"><col></colgroup>');
+
+	/** WebFront Konfigurations Parameter
+	 *
+	 * Steuert ob neue Messages am Ende der Html List hinzugefügt werden oder am Anfang
+	 *
+	 * Parameter kann jederzeit geändert werden.
+	 */
+ 	define ('IPSLOGGER_HTML_NEWMESSAGETOP',   false);
 
 	/** Konfigurations Parameter für File Output
 	 *
@@ -135,7 +145,7 @@
 	 *
 	 * Parameter kann jederzeit geändert werden.
 	 */
-  	define ("c_EMail_Signature",    "lg\nDei Hittn");
+  	define ("c_EMail_Signature",    "Message send from IP-Symcon HomeControl");
 
 	/** Konfigurations Parameter für Prowl Output
 	 *

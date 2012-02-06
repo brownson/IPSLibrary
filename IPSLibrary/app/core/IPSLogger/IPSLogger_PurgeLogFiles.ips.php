@@ -4,6 +4,8 @@
 	 *
 	 * @file          IPSLogger_PurgeLogFiles.ips.php
 	 * @author        Andreas Brauneis
+	 * @version
+	 * Version 2.50.1, 31.01.2012<br/>
 	 *
 	 * Löschen der alten Log Files
 	 *

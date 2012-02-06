@@ -4,6 +4,8 @@
 	 *
 	 * @file          IPSLogger_ChangeSettings.ips.php
 	 * @author        Andreas Brauneis
+	 * @version
+	 * Version 2.50.1, 31.01.2012<br/>
 	 *
 	 * Verändern von Einstellungen des IPSLoggers
 	 *

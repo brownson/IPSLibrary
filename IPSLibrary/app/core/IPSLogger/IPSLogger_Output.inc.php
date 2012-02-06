@@ -2,8 +2,10 @@
 	/**@addtogroup ipslogger 
 	 * @{
 	 *
-	 * @file          IPSLogger_Output.ips.php
+	 * @file          IPSLogger_Output.inc.php
 	 * @author        Andreas Brauneis
+	 * @version
+	 * Version 2.50.1, 31.01.2012<br/>
 	 *
 	 * Dieses Script enthält die Funktionen, die die Messages zu den diversen Outputs schicken.
 	 *
@@ -174,19 +176,36 @@
 		   $Out .= '</tr>';
 
 			//<table><tr id="1"><td>....</tr></table>
-			if (strpos($MsgList, '</table>') === false) {
-			   $MsgList = "";
+		   if (IPSLOGGER_HTML_NEWMESSAGETOP) {
+				if (strpos($MsgList, '</table>') === false) {
+				   $MsgList = "";
+				} else {
+					$StrPos1     = strlen($TablePrefix);
+				   $StrTmp      = '<tr id="'.($CurrentMsgId-$MsgCount).'"';
+					if (strpos($MsgList, $StrTmp)===false) {
+					   $StrPos2 = strpos($MsgList, '</table>');
+				   } else {
+						$StrPos2 = strpos($MsgList, $StrTmp);
+				   }
+					$StrLen      = $StrPos2 - $StrPos1;
+					$MsgList     = substr($MsgList, $StrPos1, $StrLen);
+				}
+				SetValue(c_ID_HtmlOutMsgList, $TablePrefix.$Out.$MsgList.'</table>');
 			} else {
-			   $StrTmp      = '<tr id="'.($CurrentMsgId-$MsgCount+1).'"';
-				if (strpos($MsgList, $StrTmp)===false) {
-				   $StrPos = strlen($TablePrefix);
-			   } else {
-					$StrPos      = strpos($MsgList, $StrTmp);
-			   }
-				$StrLen      = strlen($MsgList) - strlen('</table>') - $StrPos;
-				$MsgList     = substr($MsgList, $StrPos, $StrLen);
+				if (strpos($MsgList, '</table>') === false) {
+				   $MsgList = "";
+				} else {
+				   $StrTmp      = '<tr id="'.($CurrentMsgId-$MsgCount+1).'"';
+					if (strpos($MsgList, $StrTmp)===false) {
+					   $StrPos = strlen($TablePrefix);
+				   } else {
+						$StrPos      = strpos($MsgList, $StrTmp);
+				   }
+					$StrLen      = strlen($MsgList) - strlen('</table>') - $StrPos;
+					$MsgList     = substr($MsgList, $StrPos, $StrLen);
+				}
+				SetValue(c_ID_HtmlOutMsgList, $TablePrefix.$MsgList.$Out.'</table>');
 			}
-			SetValue(c_ID_HtmlOutMsgList, $TablePrefix.$MsgList.$Out.'</table>');
 			SetValue(c_ID_HtmlOutMsgId, $CurrentMsgId);
 		}
 	}

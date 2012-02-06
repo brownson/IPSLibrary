@@ -4,6 +4,8 @@
 	 *
 	 * @file          IPSLogger_SendMail.ips.php
 	 * @author        Andreas Brauneis
+	 * @version
+	 * Version 2.50.1, 31.01.2012<br/>
 	 *
 	 * Versenden von Mails
 	 *

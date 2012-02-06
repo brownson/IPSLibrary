@@ -2,8 +2,10 @@
 	/**@addtogroup ipslogger 
 	 * @{
 	 *
-	 * @file          IPSLogger_Constants.ips.php
+	 * @file          IPSLogger_Constants.inc.php
 	 * @author        Andreas Brauneis
+	 * @version
+	 * Version 2.50.1, 31.01.2012<br/>
 	 *
 	 * Definition der Konstanten die für den Betrieb des Loggers nötig sind.
 	 *
@@ -82,7 +84,7 @@
 
   function IPSLogger_HtmlEncode($s) {
     $source = array("&", "ä", "ö", "ü", "Ä", "Ö", "Ü", "ß", "<", ">", "€", "", "¹", "²", "³");
-    $dest = array("&amp;", "&auml;", "&ouml;", "&uuml;", "&Auml;", "&Ouml;", "&Uuml;", "&szlig;", "&lt;", "&gt;", "&euro;", "¹", "&#178", "³");
+    $dest = array("&", "ä", "ö", "ü", "Ä", "Ö", "Ü", "ß", "<", ">", "¬", "¹", "&#178", "³");
     $s = str_replace($source, $dest, $s);
     return $s;
   }

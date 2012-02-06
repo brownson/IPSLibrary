@@ -6,32 +6,42 @@
 	 * Installations File für den IPSLogger
 	 *
 	 * @section requirements_ipslogger Installations Voraussetzungen IPSLogger
-	 * - keine
+	 * - IPS Kernel >= 2.50
+	 * - IPSModuleManager >= 2.50.1
 	 *
 	 * @section visu_ipslogger Visualisierungen für IPSLogger
 	 * - WebFront 10Zoll
 	 * - Mobile
 	 *
+	 * @page install_ipslogger Installations Schritte
+	 * Folgende Schritte sind zur Installation der EDIP Ansteuerung nötig:
+	 * - Laden des Modules (siehe IPSModuleManager)
+	 * - Konfiguration (Details siehe Konfiguration, Installation ist auch ohne spezielle Konfiguration möglich)
+	 * - Installation (siehe IPSModuleManager)
+	 *
 	 * @file          IPSLogger_Installation.ips.php
 	 * @author        Andreas Brauneis
+	 * @version
+	 *  Version 2.50.1, 31.01.2012<br/>
 	 *
 	 */
 
 	if (!isset($moduleManager)) {
-		IPSUtils_Include ('IPSModuleManager.ips.php', 'IPSLibrary::install::IPSModuleManager');
+		IPSUtils_Include ('IPSModuleManager.class.php', 'IPSLibrary::install::IPSModuleManager');
 
-		echo 'ModuleManager Variable not set --> Create "default" ModuleManager';
-		$moduleManager = new IPSModuleManager('IPSModuleManager');
+		echo 'ModuleManager Variable not set --> Create "default" ModuleManager'.PHP_EOL;
+		$moduleManager = new IPSModuleManager('IPSLogger');
 	}
 
+	$moduleManager->VersionHandler()->CheckModuleVersion('IPS','2.50');
+	$moduleManager->VersionHandler()->CheckModuleVersion('IPSModuleManager','2.50.1');
 
 	IPSUtils_Include ("IPSInstaller.inc.php",            "IPSLibrary::install::IPSInstaller");
 	IPSUtils_Include ("IPSLogger_Configuration.inc.php", "IPSLibrary::config::core::IPSLogger");
 
-	$libraryPath = $moduleManager->GetConfigValue(IPSConfigHandler::LIBRARYPATH);
-	$AppPath        = $libraryPath.".IPSLibrary.app.core.IPSLogger";
-	$DataPath       = $libraryPath.".IPSLibrary.data.core.IPSLogger";
-	$ConfigPath     = $libraryPath.".IPSLibrary.config.core.IPSLogger";
+	$AppPath        = "Program.IPSLibrary.app.core.IPSLogger";
+	$DataPath       = "Program.IPSLibrary.data.core.IPSLogger";
+	$ConfigPath     = "Program.IPSLibrary.config.core.IPSLogger";
 
 	$WFC10_Enabled  = $moduleManager->GetConfigValue('Enabled', 'WFC10');
 	$WFC10_ConfigId = $moduleManager->GetConfigValueIntDef('ID', 'WFC10', GetWFCIdDefault());
@@ -143,7 +153,6 @@
 		CreateWFCItemCategory  ($WFC10_ConfigId, 'SystemTP_LogWindow'.$UniqueId,   'SystemTP',  10, 'Logging', 'Window', $ID_CategoryOutput /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC10_ConfigId, 'SystemTP_LogSettings'.$UniqueId, 'SystemTP',  20, 'Log Settings','Gear',   $ID_CategorySettings /*BaseId*/, 'true' /*BarBottomVisible*/);
 
-		// Output Window
 		CreateLink('Logging Window',   $ID_HtmlOutMsgList,    $ID_CategoryOutput, 10);
 
 		// Output Overview
@@ -185,6 +194,19 @@
 		CreateLink('Output Enabled',   $ID_ProwlOutEnabled,              $ID_CategorySettingsProwl,    10);
 		CreateLink('Logging Level',    $ID_ProwlOutLevel,                $ID_CategorySettingsProwl,    20);
 		CreateLink('Priority',         $ID_ProwlOutPriority,             $ID_CategorySettingsProwl,    30);
+
+		// Installation of Info Widget
+	   $wfcItems=WFC_GetItems($WFC10_ConfigId);
+		$widget=false;
+	   foreach ($wfcItems as $item) {
+	     	if ($item['ClassName']=='InfoWidget' and strpos($item['Configuration'], (string)$ID_SingleOutMsg) > 0) {
+		    	echo 'InfoWidget already installed.'.PHP_EOL;
+				$widget = true;
+			}
+		}
+		if (!$widget) {
+			CreateWFCItemWidget ($WFC10_ConfigId, 'IPSLogger_Widget', 'roottp', 90, $ID_SingleOutMsg, $ID_ScriptIPSLoggerClearSingleOut);
+	 	}
 
 		ReloadAllWebFronts();
 	}

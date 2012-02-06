@@ -2,8 +2,10 @@
 	/**@addtogroup ipslogger
 	 * @{
 	 *
-	 * @file          IPSLogger_PhpErrorHandler.ips.php
+	 * @file          IPSLogger_PhpErrorHandler.inc.php
 	 * @author        Andreas Brauneis
+	 * @version
+	 * Version 2.50.1, 31.01.2012<br/>
 	 *
 	 * Script für PHP ErrorHandler
 	 *
@@ -67,8 +69,13 @@
 				IPSLogger_Err("PHP", 'Unknown Error: '.$ErrMsg.$ErrorDetails);
 				break;
 		}
-      exit('Abort Processing during Error: '.$ErrMsg.$ErrorDetails);
-	   //return false;
+
+		// Abort Processing
+		if (array_key_exists('ABORT_ON_ERROR', $_IPS) and $_IPS['ABORT_ON_ERROR']) {
+			exit('Abort Processing during Error: '.$ErrMsg.$ErrorDetails);
+		} else {
+			return false;
+		}
 	}
 
 	$old_error_handler = set_error_handler("IPSLogger_PhpErrorHandler",E_ALL);

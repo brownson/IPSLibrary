@@ -5,11 +5,11 @@
 	 *
    /** @}*/
 
-	/**@defgroup ipslogger_webfront IPSLogger Webfront Visualisierung
+	/**@defgroup ipslogger_webfront IPSLogger Visualisierung
 	 * @ingroup ipslogger
 	 * @{
 	 *
-	 * IPSLogger WebFront Visualisierung
+	 * @page visu_logger_webfront IPSLogger WebFront Visualisierung
 	 *
 	 * Der IPSLogger bietet im WebFront die Möglichkeit die letzten x Messages anzusehen und die Settings
 	 * der diversen Outputs einzustellen.
@@ -75,20 +75,21 @@
 	 * @page practie Best Practice
 	 * @section logging Logging mit Script Konstante oder FileNamen
 	 * @code
-	   Include "IPSLogger.ips.php";
+	   IPSUtils_Include ("IPSLogger.inc.php", "IPSLibrary::app::core::IPSLogger");
+
 	   define ("c_LogId", "MyProcedure");
 
 	   // Code …
 	   IPSLogger_Inf(c_LogId, "Schalte Licht …");
 		@endcode
 	 * @code
-	   include_once "IPSLogger.ips.php";
+	   IPSUtils_Include ("IPSLogger.inc.php", "IPSLibrary::app::core::IPSLogger");
 	   IPSLogger_Inf(__file__, "Schalte Licht …");
 		@endcode
 	 *
 	 * @section logerrors Loggen von Fehlern
 	 * @code
-	   include_once "IPSLogger.ips.php";
+	   IPSUtils_Include ("IPSLogger.inc.php", "IPSLibrary::app::core::IPSLogger");
 	   $VariableId = @IPS_GetVariableIDByName('MeineVariable', 0);
 
 	   if ($VariableId==0) {
@@ -97,12 +98,19 @@
 	   }
 	@endcode
 	 *
-	 * @file          IPSLogger.ips.php
+	 * @file          IPSLogger.inc.php
 	 * @author        Andreas Brauneis
+	 * @version
+	 * Version 2.50.1, 31.01.2012<br/>
 	 *
 	 */
+	if (!array_key_exists('ABORT_ON_ERROR',$_IPS)) {
+		$_IPS['ABORT_ON_ERROR'] = false;
+	}
+
 	include_once "IPSLogger_Constants.inc.php";
 	include_once "IPSLogger_Output.inc.php";
+
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	/** Procedure to log a Fatal Error

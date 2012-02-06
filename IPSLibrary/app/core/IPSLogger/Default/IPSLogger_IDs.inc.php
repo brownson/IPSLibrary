@@ -5,8 +5,10 @@
 	 * File mit IDs, die für den Betrieb des Loggers notwendig sind. 
 	 * Die IDs werden vom Installations Script automatisch gesetzt, manuelle Veränderung dieses Files ist NICHT notwendig !!!
 	 *
-	 * @file          IPSLogger_IDs.ips.php
+	 * @file          IPSLogger_IDs.inc.php
 	 * @author        Andreas Brauneis
+	 * @version
+	 * Version 2.50.1, 31.01.2012<br/>
 	 *
 	 */
 
