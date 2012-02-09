@@ -15,12 +15,12 @@
 		'IPSLibrary\\app\\core\\IPSConfigHandler\\IPSIniConfigHandler.class.php',
 		'IPSLibrary\\app\\core\\IPSUtils\\IPSUtils.inc.php',
 		'IPSLibrary\\install\\InstallationScripts\\IPSModuleManager_Installation.ips.php',
-		'IPSLibrary\\install\\InitializationFiles\\default\\IPSModuleManager.ini',
-		'IPSLibrary\\install\\DownloadListFiles\\IPSModuleManager_Filelist.ini',
+		'IPSLibrary\\install\\InitializationFiles\\Default\\IPSModuleManager.ini',
+		'IPSLibrary\\install\\DownloadListFiles\\IPSModuleManager_FileList.ini',
 	);
 
 	// Download Files
-	echo 'Download of ModuleManager';
+	echo 'Download of ModuleManager'.PHP_EOL;
 	foreach ($fileList as $file) {
 		LoadFile($remoteRepository.$file, $localRepository.$file);
 	}
@@ -36,11 +36,10 @@
    $moduleManager->LoadModule();
    $moduleManager->InstallModule();
 
-
-
 	// -------------------------------------------------------------------------------
 	function LoadFile($sourceFile, $destinationFile) {
 		if (strpos($sourceFile, 'https')===0) {
+      	$sourceFile = str_replace('\\','/',$sourceFile);
 			$curl_handle=curl_init();
 			curl_setopt($curl_handle,CURLOPT_URL,$sourceFile);
 			curl_setopt($curl_handle,CURLOPT_CONNECTTIMEOUT,2);
@@ -48,12 +47,15 @@
 			curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
 			echo 'Load File '.$sourceFile."\n";
 			$fileContent = curl_exec($curl_handle);
+			if (strpos($fileContent, 'Something went wrong with that request. Please try again') > 0) {
+			   die('File '.$sourceFile.' could NOT be found on the Server !!!'.PHP_EOL);
+			}
 			curl_close($curl_handle);
 	//		$fileContent = html_entity_decode($fileContent, ENT_COMPAT, 'UTF-8');
 		} else {
 		   $fileContent = file_get_contents($sourceFile);
 		}
-		
+
       $destinationFile = str_replace('/','\\',$destinationFile);
 		$destinationFilePath = pathinfo($destinationFile, PATHINFO_DIRNAME);
 		if (!file_exists($destinationFilePath)) {
@@ -61,8 +63,7 @@
 				die('Create Directory '.$destinationFilePath.' failed!');
 			}
 		}
-      $destinationFile = str_replace('\\InitializationFiles\\default\\','\\InitializationFiles\\',$destinationFile);
-      //echo "$fileContent";
+      $destinationFile = str_replace('\\InitializationFiles\\Default\\','\\InitializationFiles\\',$destinationFile);
 	   if (!file_put_contents($destinationFile, $fileContent)) {
 			die('Create File '.$destinationFile.' failed!');
 	   }

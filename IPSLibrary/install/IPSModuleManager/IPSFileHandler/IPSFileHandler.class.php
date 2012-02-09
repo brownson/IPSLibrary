@@ -93,6 +93,10 @@
 				curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
 				$fileContent = curl_exec($curl_handle);
 				$fileContent = html_entity_decode($fileContent, ENT_COMPAT, 'ISO-8859-1');
+				if (strpos($fileContent, 'Something went wrong with that request. Please try again') > 0) {
+					throw new IPSFileHandlerException('File '.$destinationFile.' could NOT be found on the Server !!!',
+													E_USER_ERROR);
+				}
 				curl_close($curl_handle);
 
 			   $result = file_put_contents($destinationFile, $fileContent);

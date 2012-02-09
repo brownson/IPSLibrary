@@ -171,7 +171,7 @@
  		const INSTALLATIONSCRIPT_PATH          = "IPSLibrary\\install\\InstallationScripts\\";
 		const INSTALLATIONSCRIPT_SUFFIX        = '_Installation.ips.php';
 		const INITIALIZATIONFILE_PATH          = "IPSLibrary\\install\\InitializationFiles\\";
-		const INITIALIZATIONDEFAULTFILE_PATH   = "IPSLibrary\\install\\InitializationFiles\\default\\";
+		const INITIALIZATIONDEFAULTFILE_PATH   = "IPSLibrary\\install\\InitializationFiles\\Default\\";
 		const INITIALIZATIONFILE_SUFFIX        = '.ini';
 
 		private $moduleName="";
