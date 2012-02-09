@@ -1,0 +1,28 @@
+﻿body {color:#fff;font-size:17px;font-family:arial,sans-serif;margin:0;padding:0;overflow:hidden}
+
+.containerPlayList{position:absolute; left:0px; right:566; top:0px; float:left; width=100%; border: 1px solid rgba(255,255,255,0.25); height:258px;overflow:auto;}
+.containerCover{position:absolute; right:406px; top:0px; width:154px; float:left; border:1px solid rgba(255,255,255,0.25); height:258px;}
+.containerControl{position:absolute; right:0px; width:400px; top:0px; float:left;height:258px; border: 1px solid rgba(255,255,255,0.25); background:rgba(0, 0, 0, 0.25);}
+
+.containerRadioSelect{position:absolute; left:0px; right:306px; top:0px; float:left; height:180px; border: 1px solid rgba(255,255,255,0.25); background:rgba(0,0,0,0.25); overflow:auto;}
+.containerRadioInfo{  position:absolute; right:0px; width:300px; top:0px; float:left; height:180px; border: 1px solid rgba(255,255,255,0.25); background:rgba(0,0,0,0.25);}
+
+.containerSelection {position:absolute; right:0px; width:100%; top:0px; float:left; height:250px; border: 0px solid rgba(255,255,255,0.25);}
+
+.containerControlLine{position:relative; width:100%; margin:auto; text-align:center; float:left; }
+.containerControlLineBottom{ position:absolute; width:100%; margin:auto; bottom:3px; display:block; vertical-align:middle; text-align:center; float:left; }
+.containerControlLineTop{ position:absolute; width:100%; top:3px; display:block; vertical-align:middle; text-align:center; float:left; }
+.containerControlLineSeparator{ display:none;}
+
+.containerControlButton{  display:inline-block; color:rgba(255,255,255,0.3); line-height:28px; border-width: 1px 0; border-style:solid; border-color:transparent; height:28px; float:left; padding: 0px 10px; margin: 3px 0 0 3px;
+                          background-color:rgba(255,255,255,0.1); background-image:url(../../img/bgCategoryElement.png); background-repeat: repeat;background-position:center top;}
+.containerControlButtonSelected{ background-color:rgba(255,255,255,0.3); color:white; }
+.containerControlButtonActive{ background-color:rgba(255,255,255,0.3); color:white; }
+.containerControlDescr{display:inline-block; color:white; line-height:20px; border-width: 0 0 0 0; height:20px; width:100px; text-align:right; float:left; padding: 0 10px; margin: 3px 0 0 3px;}
+.containerControlData{display:inline-block; color:white; line-height:20px; border-width: 0 0 0 0; height:20px; width:250px; text-align:left; float:left; padding: 0 10px; margin: 3px 0 0 3px; overflow:hidden}
+.containerControlTrack{display:inline-block; color:white; border-width:0; text-align:left; float:left; padding:0; padding:0px 10px ; margin: 3px; overflow:hidden; font-size:14px;font-family:arial,sans-serif;}
+.containerControlTrackActive{font-size:16px;font-family:arial,sans-serif; background:rgba(255,255,255,0.3); width:100%;}
+.containerControlSelect{height:40px; width:200px; background-image:url(http://localhost:7001/img/bg.png)}
+.containerControlSelectInterpret{font:bold 14px verdana; height:18px; overflow:hidden;}
+.containerControlSelectAlbum{font:normal 10px verdana; height:18px; overflow:hidden;}
+
