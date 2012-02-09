@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+  <Transactions>
+    <Transaction>2011/08/08 19:40:57.513.dproj,C:\ab\Modules\eBusAdapter\MyLib.dproj=C:\ab\Modules\eBusAdapter\eBusAdapter.dproj</Transaction>
+    <Transaction>2011/08/08 19:41:22.670.pas,C:\ab\Modules\eBusAdapter\UTestModule.pas=C:\ab\Modules\eBusAdapter\UeBusAdapter.pas</Transaction>
+  </Transactions>
+</BorlandProject>
