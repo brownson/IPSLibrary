@@ -1,0 +1,10 @@
+C:\temp\BrownsonTools\BrownsonTools\BrownsonLibrary\bin\Debug\BrownsonLibrary.dll
+C:\temp\BrownsonTools\BrownsonTools\BrownsonLibrary\bin\Debug\BrownsonLibrary.pdb
+C:\temp\BrownsonTools\BrownsonTools\BrownsonLibrary\obj\Debug\ResolveAssemblyReference.cache
+C:\temp\BrownsonTools\BrownsonTools\BrownsonLibrary\obj\Debug\BrownsonLibrary.dll
+C:\temp\BrownsonTools\BrownsonTools\BrownsonLibrary\obj\Debug\BrownsonLibrary.pdb
+C:\ab\IPS\Projects.Net\BrownsonTools\BrownsonLibrary\bin\Debug\BrownsonLibrary.dll
+C:\ab\IPS\Projects.Net\BrownsonTools\BrownsonLibrary\bin\Debug\BrownsonLibrary.pdb
+C:\ab\IPS\Projects.Net\BrownsonTools\BrownsonLibrary\obj\Debug\ResolveAssemblyReference.cache
+C:\ab\IPS\Projects.Net\BrownsonTools\BrownsonLibrary\obj\Debug\BrownsonLibrary.dll
+C:\ab\IPS\Projects.Net\BrownsonTools\BrownsonLibrary\obj\Debug\BrownsonLibrary.pdb

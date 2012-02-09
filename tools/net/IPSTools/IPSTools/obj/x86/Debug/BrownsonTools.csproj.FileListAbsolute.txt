@@ -1,0 +1,6 @@
+C:\ab\IPS\Projects.Net\BrownsonTools\BrownsonTool\bin\Debug\BrownsonTools.exe.config
+C:\ab\IPS\Projects.Net\BrownsonTools\BrownsonTool\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\ab\IPS\Projects.Net\BrownsonTools\BrownsonTool\obj\x86\Debug\BrownsonTool.BrownsonTools.resources
+C:\ab\IPS\Projects.Net\BrownsonTools\BrownsonTool\obj\x86\Debug\BrownsonTools.Properties.Resources.resources
+C:\ab\IPS\Projects.Net\BrownsonTools\BrownsonTool\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\ab\IPS\Projects.Net\BrownsonTools\BrownsonTool\obj\x86\Debug\GenerateResource.write.1.tlog
