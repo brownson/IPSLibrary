@@ -1,0 +1,19 @@
+﻿html, body { font: normal 14px verdana; color: #ffffff;}
+
+#containerLeft{position:absolute; left:0px; top:0px; width:48%; float:left; }
+#containerRight{position:absolute; right:0px; top:0px; width:48%; }
+
+#containerVolume{position:absolute; left:0px; top:0px; width:98.4%; height:34px; }
+#containerTop{position:absolute; left:0px; top:0px; width:98.4%; height:60px; }
+#containerBottomLeft{position:absolute; left:0px; top:60px; width:48%;  float:left; }
+#containerBottomRight{position:absolute; right:0px; top:60px; width:48%;  }
+
+.rc_button                  {background:#282828; border:1px solid #9ab3ca; overflow:hidden; height:34px;font:normal 14px verdana;width:14%}
+.rc_button_template{overflow:hidden; height:34px;font:normal 14px verdana;width:14%}
+.rc_button14              {background:#282828; border:1px solid #9ab3ca; overflow:hidden; height:34px;font:normal 14px verdana;width:14%}
+.rc_button14_template{overflow:hidden; height:34px;font:normal 14px verdana;width:14%}
+.rc_button33              {background:#282828; border:1px solid #9ab3ca; overflow:hidden; height:34px;font:normal 14px verdana;width:33%}
+.rc_button33_template{overflow:hidden; height:34px;font:normal 14px verdana;width:33%}
+.rc_button33_blue    {background:#283344; border:1px solid #9ab3ca; overflow:hidden; height:34px;font:normal 14px verdana;width:33%}
+.rc_button_pressed  {background:#454545;background-color:#354050;background-image:url(./icons/bgActionBar.png);background-repeat:repeat}
+.rc_button_active    {background:#454545;background-color:#354050;background-image:url(./icons/bgActionBar.png);background-repeat:repeat}
