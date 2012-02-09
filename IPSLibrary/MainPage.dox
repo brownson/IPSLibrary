@@ -1,0 +1,28 @@
+/**
+ * @mainpage Übersicht IPS Modul Library
+ *
+ * Die IPS Modul Library bietet zahlreiche Module, die installiert werden können. Jedes Modul besteht aus einem oder mehreren Scripten,
+ * hat diverse Möglichkeiten der Konfiguration, ein Installations File und ist Dokumentiert.
+ *
+ * Basis für die Installation ist der IPSModuleManager, dieser bietet die Möglichkeit die Module aus dem Code Repository zu laden und zu
+ * installieren.
+ *
+ * @section overview Architektur Übersicht
+ * @image html IPSModulLibrary_Overview.png
+ *
+ * @section modules verfügbare Module
+ * - @link ipsutils IPSUtils@endlink, diverse allgemeine Funktionen, die einem das Leben in IPS leichter machen.
+ * - @link ipsmodulemanager IPSModuleManager@endlink, bildet die Basis zur Installation und zum Update aller Module
+ * - @link ipscomponent IPSComponent@endlink, IPSComponent bildet einen abstractions Layer zur Hardware, dieser stellt für alle Module ein einheitliches Interface zu den unterschiedlichen Hardware Komponenten her.
+ * - @link ipsmessagehandler IPSMessageHandler@endlink, in Kombination mit IPSComponent ermöglicht dieses Modul die aktive Rückmeldung der Hardware zu den Modulen.
+ * - @link ipslogger IPSLogger@endlink, Logging Handler, der für den Betrieb eines Großteils der Module benötigt wird.
+ * - @link netplayer NetPlayer@endlink, Auswahl und Abspielen von Musik Files und Web Radios
+ * - @link entertainment Entertainment Steuerung@endlink, Steuerung von Multimedia Geräten, autom. Ein- und Ausschalten von Geräten, Fernbedienung der Geräte über die IPS Frontends, Visualisierung von Geräte und Raum Status.
+ * - @link ipsedip IPSEDIP@endlink, bietet die Möglichkeit IPS Strukturen auf einem EDIP Display zu visualisieren (Hersteller ELECTRONIC ASSEMBLY, www.lcd-module.de).
+ *
+ * @section howto Prinzipielle Vorgehensweise
+ * - Download des Modules (Details siehe IPSModuleManager)
+ * - Konfiguration des Modules
+ * - Installation des Modules (Details siehe IPSModuleManager)
+ *
+ */
