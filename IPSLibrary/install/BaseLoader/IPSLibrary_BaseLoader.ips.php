@@ -47,7 +47,8 @@
 			curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
 			echo 'Load File '.$sourceFile."\n";
 			$fileContent = curl_exec($curl_handle);
-			if (strpos($fileContent, 'Something went wrong with that request. Please try') > 0) {
+			if (strpos($fileContent, 'Something went wrong with that request. Please try again') > 0 and
+				strpos($fileContent, 'IPSFileHandler.class.php') === false) {
 			   die('File '.$sourceFile.' could NOT be found on the Server !!!'.PHP_EOL);
 			}
 			curl_close($curl_handle);
