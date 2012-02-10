@@ -121,7 +121,7 @@
 			if ($versionRequired[0] > $versionInstalled[0] or
 			    $versionRequired[1] > $versionInstalled[1] or
 				 $versionRequired[2] > $versionInstalled[2]) {
-				 throw new IPSVersionHandlerException('Required Version '.$moduleVersion.' is lower current Version '.$this->GetModuleVersion());
+				 throw new IPSVersionHandlerException('Required Version '.$moduleVersion.' is lower current Version '.$versionHandler->GetModuleVersion());
 			}
 		}
 
