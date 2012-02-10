@@ -44,13 +44,13 @@
 	for ($idx=0 ; $idx<strlen($message) ; $idx++) {
 		$log .= ord(substr($message, $idx, 1)).',';
 	}
-	IPSLogger_Inf(__file__, 'Received: '.$log);
+	IPSLogger_Trc(__file__, 'Received: '.$log);
 
 
 	// Message beyond minimum Length
 	if (strlen($message) < 4) {
 	   RegVar_SetBuffer($registerId, $message);
-		IPSLogger_Inf(__file__, 'Message beyond minimum Length of 4');
+		IPSLogger_Trc(__file__, 'Message beyond minimum Length of 4');
 	   return;
 	}
 
@@ -59,7 +59,7 @@
 	// Message beyond Message Length (esc cmd len data[])
 	if (strlen($message) < 3+$messageLength) {
 	   RegVar_SetBuffer($registerId, $message);
-		IPSLogger_Inf(__file__, 'Message beyond Message Length of '.$messageLength);
+		IPSLogger_Trc(__file__, 'Message beyond Message Length of '.$messageLength);
 	   return;
 	}
 
