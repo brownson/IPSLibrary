@@ -60,8 +60,8 @@
 			<div id="containerControlLine2" class="containerControlLineSeparator"></div>
 
 			<div id="containerControlLine8" class="containerControlLineTop">
-				<div id="rc_mp_cdselectprev" class="containerControlButton">&lt;&lt;</div>
-				<div id="rc_mp_cdselectnext" class="containerControlButton">&gt;&gt;</div>
+				<div id="rc_mp_cdselectprev" class="containerControlButton"><<</div>
+				<div id="rc_mp_cdselectnext" class="containerControlButton">>></div>
 				<div id="rc_mp_cdselectback" class="containerControlButton">back</div>
 				<?php 
 					if (GetValue(NP_ID_CDCATEGORYNAME)<>"") echo '<div  id="rc_mp_cdselectroot" class="containerControlButton">Root</div>';

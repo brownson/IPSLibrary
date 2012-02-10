@@ -32,9 +32,9 @@
 					<th class="rc_button_template"></th>
 				</tr>
 				<tr>
-					<th id="rc_cmd_NavLeft" rc_name="PhilipsTV" rc_button="Left" class="rc_button33_blue">&lt;&lt;</th>
+					<th id="rc_cmd_NavLeft" rc_name="PhilipsTV" rc_button="Left" class="rc_button33_blue"><<</th>
 					<th id="rc_cmd_OK" rc_name="PhilipsTV" rc_button="OK" class="rc_button33_blue">OK</th>
-					<th id="rc_cmd_NavRight" rc_name="PhilipsTV" rc_button="Right" class="rc_button33_blue">&gt;&gt;</th>
+					<th id="rc_cmd_NavRight" rc_name="PhilipsTV" rc_button="Right" class="rc_button33_blue">>></th>
 				</tr>
 				<tr>
 					<th class="rc_button_template"></th>

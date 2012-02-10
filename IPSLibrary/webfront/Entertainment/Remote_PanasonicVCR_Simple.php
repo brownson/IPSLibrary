@@ -19,8 +19,8 @@
 					<th class="rc_button14_template"></th>
 					<th class="rc_button14_template"></th>
 					<th class="rc_button14_template"></th>
-					<th id="rc_cmd_ChannelDown" rc_name="PanasonicRC2" rc_button="ChannelDown" class="rc_button14" >&lt;&lt; Program</th>
-					<th id="rc_cmd_ChannelUp"   rc_name="PanasonicRC2" rc_button="ChannelUp"   class="rc_button14" >Program &gt;&gt;</th>
+					<th id="rc_cmd_ChannelDown" rc_name="PanasonicRC2" rc_button="ChannelDown" class="rc_button14" ><< Program</th>
+					<th id="rc_cmd_ChannelUp"   rc_name="PanasonicRC2" rc_button="ChannelUp"   class="rc_button14" >Program >></th>
 				</tr>
 			</table>
 		</div> 

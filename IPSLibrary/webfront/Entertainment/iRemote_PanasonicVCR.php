@@ -21,12 +21,12 @@
 			</table>
 			<table width=100%>
 				<tr>
-					<th id="rc_cmd_SkipLast" rc_name="PanasonicRC2" rc_button="SkipLast" class="rc_button" >&lt;&lt; Skip</th>
-					<th id="rc_cmd_SkipNext" rc_name="PanasonicRC2" rc_button="SkipNext" class="rc_button" >Skip &gt;&gt;</th>
+					<th id="rc_cmd_SkipLast" rc_name="PanasonicRC2" rc_button="SkipLast" class="rc_button" ><< Skip</th>
+					<th id="rc_cmd_SkipNext" rc_name="PanasonicRC2" rc_button="SkipNext" class="rc_button" >Skip >></th>
 				</tr>
 				<tr>
-					<th id="rc_cmd_SearchBack" rc_name="PanasonicRC2" rc_button="SearchLast" class="rc_button" >&lt;&lt; Search</th>
-					<th id="rc_cmd_SearchForw" rc_name="PanasonicRC2" rc_button="SearchNext" class="rc_button" >Search &gt;&gt;</th>
+					<th id="rc_cmd_SearchBack" rc_name="PanasonicRC2" rc_button="SearchLast" class="rc_button" ><< Search</th>
+					<th id="rc_cmd_SearchForw" rc_name="PanasonicRC2" rc_button="SearchNext" class="rc_button" >Search >></th>
 				</tr>
 			</table>
 
@@ -59,9 +59,9 @@
 					<th class="rc_button33_template"></th>
 				</tr>
 				<tr>
-					<th id="rc_cmd_NavLeft" rc_name="PanasonicRC2" rc_button="Left" class="rc_button33_blue">&lt;&lt;</th>
+					<th id="rc_cmd_NavLeft" rc_name="PanasonicRC2" rc_button="Left" class="rc_button33_blue"><<</th>
 					<th id="rc_cmd_OK" rc_name="PanasonicRC2" rc_button="OK" class="rc_button33_blue">OK</th>
-					<th id="rc_cmd_NavRight" rc_name="PanasonicRC2" rc_button="Right" class="rc_button33_blue">&gt;&gt;</th>
+					<th id="rc_cmd_NavRight" rc_name="PanasonicRC2" rc_button="Right" class="rc_button33_blue">>></th>
 				</tr>
 				<tr>
 					<th class="rc_button33_template"></th>

@@ -51,9 +51,9 @@
 			<th id="rc_cmd_guide" rc_name="TopfieldSat" rc_button="Guide"  class="rc_button33" >Guide</th>
 		  </tr>
 		  <tr>
-			<th id="rc_cmd_navleft" rc_name="TopfieldSat" rc_button="VolumeMinus"  class="rc_button33_blue">&lt;&lt;</th>
+			<th id="rc_cmd_navleft" rc_name="TopfieldSat" rc_button="VolumeMinus"  class="rc_button33_blue"><<</th>
 			<th id="rc_cmd_ok" rc_name="TopfieldSat" rc_button="OK"  class="rc_button33_blue">OK</th>
-			<th id="rc_cmd_navright" rc_name="TopfieldSat" rc_button="VolumePlus"  class="rc_button33_blue">&gt;&gt;</th>
+			<th id="rc_cmd_navright" rc_name="TopfieldSat" rc_button="VolumePlus"  class="rc_button33_blue">>></th>
 		  </tr>
 		  <tr>
 			<th id="rc_cmd_exit" rc_name="TopfieldSat" rc_button="Exit"  class="rc_button33" >Exit</th>

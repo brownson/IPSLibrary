@@ -14,13 +14,13 @@
     <div id="containerTop">
 		<table width=100%>
 			<tr>
-				<th id="rc_cmd_SkipLast" rc_name="Panasonic" rc_button="SkipLast" class="rc_button14" >&lt;&lt; Skip</th>
-				<th id="rc_cmd_SearchBack" rc_name="Panasonic" rc_button="SearchLast" class="rc_button14" >&lt;&lt; Search</th>
+				<th id="rc_cmd_SkipLast" rc_name="Panasonic" rc_button="SkipLast" class="rc_button14" ><< Skip</th>
+				<th id="rc_cmd_SearchBack" rc_name="Panasonic" rc_button="SearchLast" class="rc_button14" ><< Search</th>
 				<th id="rc_cmd_Stop" rc_name="Panasonic" rc_button="Stop" class="rc_button14" >Stop</th>
 				<th id="rc_cmd_Play" rc_name="Panasonic" rc_button="PLay" class="rc_button14" >Play</th>
 				<th id="rc_cmd_Pause" rc_name="Panasonic" rc_button="Pause" class="rc_button14" >Pause</th>
-				<th id="rc_cmd_SearchForw" rc_name="Panasonic" rc_button="SearchNext" class="rc_button14" >Search &gt;&gt;</th>
-				<th id="rc_cmd_SkipNext" rc_name="Panasonic" rc_button="SkipNext" class="rc_button14" >Skip &gt;&gt;</th>
+				<th id="rc_cmd_SearchForw" rc_name="Panasonic" rc_button="SearchNext" class="rc_button14" >Search >></th>
+				<th id="rc_cmd_SkipNext" rc_name="Panasonic" rc_button="SkipNext" class="rc_button14" >Skip >></th>
 			</tr>
 		</table>
 	</div> 
@@ -32,9 +32,9 @@
 				<th id="rc_cmd_Functions" rc_name="Panasonic" rc_button="Functions" class="rc_button33" >Functions</th>
 			</tr>
 			<tr>
-				<th id="rc_cmd_NavLeft" rc_name="Panasonic" rc_button="Left" class="rc_button33_blue">&lt;&lt;</th>
+				<th id="rc_cmd_NavLeft" rc_name="Panasonic" rc_button="Left" class="rc_button33_blue"><<</th>
 				<th id="rc_cmd_OK" rc_name="Panasonic" rc_button="OK" class="rc_button33_blue">OK</th>
-				<th id="rc_cmd_NavRight" rc_name="Panasonic" rc_button="Right" class="rc_button33_blue">&gt;&gt;</th>
+				<th id="rc_cmd_NavRight" rc_name="Panasonic" rc_button="Right" class="rc_button33_blue">>></th>
 			</tr>
 			<tr>
 				<th id="rc_cmd_Option" rc_name="Panasonic" rc_button="Option" class="rc_button33">Option</th>
