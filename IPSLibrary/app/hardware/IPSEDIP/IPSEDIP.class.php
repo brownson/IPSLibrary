@@ -112,7 +112,7 @@
 					$eventId   = @IPS_GetEventIdByName($eventName ,EDIP_ID_EVENTSCRIPT);
 					if ($eventId===false) {
 						$eventId = IPS_CreateEvent(0);
-					   IPSLogger_Dbg(__file__, "Create Event=$eventName, ID=$eventId, Parent=".EDIP_ID_EVENTSCRIPT);
+						IPSLogger_Trc(__file__, "Create Event=$eventName, ID=$eventId, Parent=".EDIP_ID_EVENTSCRIPT);
 				  		IPS_SetName($eventId, $eventName);
 						IPS_SetEventTrigger($eventId, 1, $objectId);
 						IPS_SetParent($eventId, EDIP_ID_EVENTSCRIPT);
@@ -130,7 +130,7 @@
 			   $eventName = $edipName.'_'.IPS_GetName($objectId);
 				$eventId   = @IPS_GetEventIdByName($eventName ,EDIP_ID_EVENTSCRIPT);
 				if ($eventId!==false) {
-				   IPSLogger_Dbg(__file__, "Drop Event=$eventName, ID=$eventId");
+				   IPSLogger_Trc(__file__, "Drop Event=$eventName, ID=$eventId");
 				   IPS_DeleteEvent($eventId);
 				}
 			}
@@ -406,7 +406,7 @@
 		 *
 		 */
 		public function RefreshDisplay() {
-		   IPSLogger_Dbg(__file__, 'Refresh EDIP Display '.IPS_GetName($this->instanceId));
+		   IPSLogger_Trc(__file__, 'Refresh EDIP Display '.IPS_GetName($this->instanceId));
 		   $this->AddObjects();
 		   $this->OrderObjects();
 			$this->StoreObjectData();
@@ -421,7 +421,7 @@
 
 
 		private function ReceiveCodeSpecial($code) {
-			IPSLogger_Dbg(__file__, 'Received SpecialCode='.$code.' from EDIP');
+			IPSLogger_Trc(__file__, 'Received SpecialCode='.$code.' from EDIP');
 			switch ($code) {
 				case 1: // Navigate Back
 					if (GetValue($this->objectEditId)<>0) {
@@ -436,13 +436,13 @@
 		}
 
 		private function ReceiveCodeCategory($object) {
-			IPSLogger_Dbg(__file__, 'Received CategoryCode='.$object['Cmd'].' for CategoryId='.$object['Id'].' from EDIP');
+			IPSLogger_Trc(__file__, 'Received CategoryCode='.$object['Cmd'].' for CategoryId='.$object['Id'].' from EDIP');
 			$this->currentId = (int)$object['Id'];
 			SetValue(IPS_GetObjectIDbyIdent(EDIP_VAR_CURRENT, $this->instanceId), $this->currentId);
 		}
 
 		private function ReceiveCodeScript($object) {
-			IPSLogger_Dbg(__file__, 'Received CategoryCode='.$object['Cmd'].' for ScriptId='.$object['Id'].' from EDIP');
+			IPSLogger_Trc(__file__, 'Received CategoryCode='.$object['Cmd'].' for ScriptId='.$object['Id'].' from EDIP');
 			IPS_RunScriptWaitEx((int)$object['Id'], array( 'IPS_SENDER'=>'WebFront', 'IPS_VALUE'=>null, 'IPS_VARIABLE'=>null, 'REMOTE_ADDR'=>null));
 		}
 
@@ -459,18 +459,18 @@
 			if ($profile=='' or $action==0) return;
 
 			if (GetValue($this->objectEditId)<>0) {
-	      	SetValue($this->objectEditId, 0);
-	      }
+				SetValue($this->objectEditId, 0);
+			}
 
 			switch($type) {
 				case 0: // Boolean
-				   IPSLogger_Inf(__file__, 'Execute Action '.$action);
+					IPSLogger_Dbg(__file__, 'Execute Action '.$action);
 					IPS_RunScriptWaitEx($action, array( 'SENDER'=>'WebFront', 'VALUE'=>!$value, 'VARIABLE'=>$variableId, 'REMOTE_ADDR'=>'localhost'));
 					break;
 				case 1: // Integer
-				   if ($object['Value']=="") {
-				      SetValue($this->objectEditId, $variableId);
-				   } else {
+					if ($object['Value']=="") {
+						SetValue($this->objectEditId, $variableId);
+					} else {
 						IPS_RunScriptWaitEx($action, array( 'SENDER'=>'WebFront', 'VALUE'=>(int)$object['Value'], 'VARIABLE'=>$variableId, 'REMOTE_ADDR'=>'localhost'));
 					}
 					break;

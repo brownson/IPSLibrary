@@ -30,10 +30,10 @@
 
 				$result = IPS_SemaphoreEnter($configId, 0);
 				if (!$result) {
-				   IPSLogger_Dbg(__file__, "Refresh is already in Process - ignore ...");
+				   IPSLogger_Trc(__file__, "Refresh is already in Process - ignore ...");
 					return;
 				}
-				IPSLogger_Dbg(__file__, "Refresh EDIP by Event=$eventName");
+				IPSLogger_Trc(__file__, "Refresh EDIP by Event=$eventName");
 				IPS_Sleep(1000);
 				IPS_SemaphoreLeave($configId);
 
