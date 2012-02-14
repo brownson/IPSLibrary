@@ -5,7 +5,7 @@
 	 *
 	 * Konfigurations Einstellungen des Loggers.
 	 *
-	 * @file          default\IPSLogger_Configuration.inc.php
+	 * @file          Default/IPSLogger_Configuration.inc.php
 	 * @author        Andreas Brauneis
 	 * @version
 	 * Version 2.50.1, 31.01.2012<br/>

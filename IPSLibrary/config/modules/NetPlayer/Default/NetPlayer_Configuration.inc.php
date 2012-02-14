@@ -5,7 +5,7 @@
 	 *
 	 * Konfiguration der NetPlayers
 	 *
-	 * @file          NetPlayer\NetPlayer_Configuration.inc.php
+	 * @file          Default\NetPlayer_Configuration.inc.php
 	 * @author        Andreas Brauneis
 	 * @version
 	 * Version 2.50.1, 31.01.2012<br/>

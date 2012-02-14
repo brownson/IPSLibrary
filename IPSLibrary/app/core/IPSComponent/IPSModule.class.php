@@ -1,11 +1,9 @@
 <?
-	/**@defgroup ipsmodule IPSModule
+	/**@addtogroup ipscomponent
 	 * @{
-	 *
  	 *
 	 * @file          IPSModule.class.php
 	 * @author        Andreas Brauneis
-	 *
 	 *
 	 */
 

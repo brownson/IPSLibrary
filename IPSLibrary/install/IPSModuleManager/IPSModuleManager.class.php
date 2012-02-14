@@ -1,4 +1,17 @@
 <?
+
+	 /**@defgroup ipsmodulemanager IPSModuleManager
+	 * @{
+	 *
+	 * Der IPSModuleManager bildet das Herzstück des IPSLibrary Installers. Er beinhaltet diverse Konfigurations Möglichkeiten, die
+	 * man in der Datei IPSModuleManager.ini verändern kann (Ablagerort: IPSLibrary/install/InitializationFile/).
+	 *
+	 * @file          IPSModuleManager.class.php
+	 * @author        Andreas Brauneis
+	 *
+	 *
+	 * @}*/
+
 	/**@defgroup ipsmodulemanager_overview IPSModuleManager Übersicht
 	 * @ingroup ipsmodulemanager
 	 * @{
@@ -134,15 +147,8 @@
 	 * 
 	 * @}*/
 
-	 /**@defgroup ipsmodulemanager IPSModuleManager
+	 /**@addtogroup ipsmodulemanager
 	 * @{
-	 *
-	 * Der IPSModuleManager bildet das Herzstück des IPSLibrary Installers. Er beinhaltet diverse Konfigurations Möglichkeiten, die 
-	 * man in der Datei IPSModuleManager.ini verändern kann (Ablagerort: IPSLibrary\install\InitializationFile\).
-	 *
-	 * @file          IPSModuleManager.class.php
-	 * @author        Andreas Brauneis
-	 *
 	 */
 
 	$_IPS['ABORT_ON_ERROR'] = true;
