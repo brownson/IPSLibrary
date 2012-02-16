@@ -1,5 +1,5 @@
 <?
-	/**@defgroup ipsutils IPSUtils
+	/**@addtogroup ipsmodulemanager
 	 * @{
 	 *
 	 * @file          IPSUtils.inc.php

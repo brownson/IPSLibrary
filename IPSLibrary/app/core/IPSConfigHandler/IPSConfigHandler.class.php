@@ -1,5 +1,5 @@
 <?
-	/**@defgroup ipsconfighandler IPSConfigHandler
+	/**@addtogroup ipsmodulemanager
 	 * @{
 	 *
  	 *

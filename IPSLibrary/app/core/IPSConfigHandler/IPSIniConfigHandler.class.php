@@ -1,5 +1,5 @@
 <?
-	/**@addtogroup ipsconfighandler
+	/**@addtogroup ipsmodulemanager
 	 * @{
 	 *
 	 * @file          IPSConfigHandler.class.php
