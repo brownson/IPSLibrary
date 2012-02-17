@@ -27,7 +27,7 @@
 	 * - Konfigurations Handler
 	 * - Log Handler
 	 * 
-	 * @page ipsmodulemanager_download Initialer Download von Modulen
+	 * @section ipsmodulemanager_download Initialer Download von Modulen
 	 *  Die Installation neuer Module gliedert sich in 3 Phasen:
 	 *  - Module Download
 	 *  - Konfiguration
@@ -36,7 +36,7 @@
 	 *  Ein Module kann nach mit folgendem Code geladen werden:
 	 *  @code
 	      IPSUtils_Include ("IPSModuleManager.class.php","IPSLibrary::install::IPSModuleManager");
-	      $moduleManager = new ModuleManager('IPSLogger');
+	      $moduleManager = new IPSModuleManager('IPSLogger');
 	      $moduleManager.LoadModule();
 	    @endcode
 	 *  
@@ -50,22 +50,22 @@
 	 *  Beispiel zur Installation des IPSLogger Modules:
 	 *  @code
           IPSUtils_Include ("IPSModuleManager.class.php","IPSLibrary::install::IPSModuleManager");
-          $moduleManager = new ModuleManager('IPSLogger');
+          $moduleManager = new IPSModuleManager('IPSLogger');
           $moduleManager.InstallModule();
         @endcode
 	 * 
-	 * @page ipsmodulemanager_update Update eines oder mehrerer Module
+	 * @section ipsmodulemanager_update Update eines oder mehrerer Module
 	 *  Update eines einzelnen Modules erfolgt mit folgendem Code:
 	 *  @code
           IPSUtils_Include ("IPSModuleManager.class.php","IPSLibrary::install::IPSModuleManager");
-          $moduleManager = new ModuleManager('IPSLogger');
+          $moduleManager = new IPSModuleManager('IPSLogger');
           $moduleManager.UpdateModule();
         @endcode
 	 * 
 	 * Ein Update aller installierten Module kann mit folgendem Code gemacht werden;
 	 *  @code
           IPSUtils_Include ("IPSModuleManager.class.php","IPSLibrary::install::IPSModuleManager");
-          $moduleManager = new ModuleManager('');
+          $moduleManager = new IPSModuleManager('');
           $moduleManager.UpdateAllModules();
         @endcode
 	 * 
@@ -74,22 +74,22 @@
 	 *  Versionsnummer gefunden werden, wird automatisch das Installations Script ausgeführt (inklusive 
 	 *  Anpassung der WebFront und Mobile Strukturen).
 	 * 
-	 * @page ipsmodulemanager_version Versions Verwaltung
+	 * @section ipsmodulemanager_version Versions Verwaltung
 	 *  Der IPSModuleManager beinhaltet eine interne Versionsverwaltung, der die aktuelle IPS Version überprüft und auch alle Module überprüft, die 
 	 *  Voraussetzung des aktuellen Modules sind.
 	 * 
-	 * @page ipsmodulemanager_logging Logging des IPSModuleManagers
+	 * @section ipsmodulemanager_logging Logging des IPSModuleManagers
 	 *  Der LogHandler legt bei jedem Update oder Installations Vorgang ein Protokoll File an, wo man die einzelnen Schritte des Installations Ablaufes
 	 *  nachvollziehen kann. Standardmäßig ist das Output Verzeichnis auf "logs" gesetzt, kann aber jederzeit über den Parameter "LogDirectory" verändert werden.
 	 *  Output erfolgt in eine Datei mit dem Namen IPSModuleManager_YYYY-MM-DD_HHMI.log
 	 *
-	 * @page ipsmodulemanager_config Konfigurations Handler
+	 * @section ipsmodulemanager_config Konfigurations Handler
 	 *  Der Konfigurations Handler bietet die Möglichkeit Installation Parameter (wie zum Beispiel WebFront Konfigurator ID, persönliche 
 	 *  Icons, Namen usw.) in einem Initialisierungs File abzulegen und so die Installation der Module auf die persönlichen Bedürfnisse abzustimmen.
 	 * 
-	 * @page ipsmodulemanager_backup Backup Handler
+	 * @section ipsmodulemanager_backup Backup Handler
 	 *  Vor dem Download der neuen Scripte wird auch automatisch ein Backup der Scripte des betroffen Modules gemacht.
-	 *  Ablageort für Backups ist standardmäßig auf /backups/ gesetzt und kann über den Konfigurations Parameter "BackupDirectory" jederzeit verändert 
+	 *  Ablageort für Backups ist standardmäßig auf "backups" gesetzt und kann über den Konfigurations Parameter "BackupDirectory" jederzeit verändert
 	 *  werden. Das Backup des jeweiligen Update Vorgangs wird dann in einem Folder IPSLibrary_YYYY-MM-DD_HH:MI abgelegt.
 	 * 
 	 * @}*/
