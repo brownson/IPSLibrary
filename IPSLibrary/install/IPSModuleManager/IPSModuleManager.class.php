@@ -78,6 +78,11 @@
 	 *  Der IPSModuleManager beinhaltet eine interne Versionsverwaltung, der die aktuelle IPS Version überprüft und auch alle Module überprüft, die 
 	 *  Voraussetzung des aktuellen Modules sind.
 	 * 
+	 * @page ipsmodulemanager_logging Logging des IPSModuleManagers
+	 *  Der LogHandler legt bei jedem Update oder Installations Vorgang ein Protokoll File an, wo man die einzelnen Schritte des Installations Ablaufes
+	 *  nachvollziehen kann. Standardmäßig ist das Output Verzeichnis auf "logs" gesetzt, kann aber jederzeit über den Parameter "LogDirectory" verändert werden.
+	 *  Output erfolgt in eine Datei mit dem Namen IPSModuleManager_YYYY-MM-DD_HHMI.log
+	 *
 	 * @page ipsmodulemanager_config Konfigurations Handler
 	 *  Der Konfigurations Handler bietet die Möglichkeit Installation Parameter (wie zum Beispiel WebFront Konfigurator ID, persönliche 
 	 *  Icons, Namen usw.) in einem Initialisierungs File abzulegen und so die Installation der Module auf die persönlichen Bedürfnisse abzustimmen.
@@ -87,18 +92,13 @@
 	 *  Ablageort für Backups ist standardmäßig auf /backups/ gesetzt und kann über den Konfigurations Parameter "BackupDirectory" jederzeit verändert 
 	 *  werden. Das Backup des jeweiligen Update Vorgangs wird dann in einem Folder IPSLibrary_YYYY-MM-DD_HH:MI abgelegt.
 	 * 
-	 * @page ipsmodulemanager_logging Logging des IPSModuleManagers
-	 *  Der LogHandler legt bei jedem Update oder Installations Vorgang ein Protokoll File an, wo man die einzelnen Schritte des Installations Ablaufes 
-	 *  nachvollziehen kann. Standardmäßig ist das Output Verzeichnis auf "logs" gesetzt, kann aber jederzeit über den Parameter "LogDirectory" verändert werden.
-	 *  Output erfolgt in eine Datei mit dem Namen IPSModuleManager_YYYY-MM-DD_HHMI.log
-	 * 
 	 * @}*/
 
 	/**@defgroup ipsmodulemanager_configuration IPSModuleManager Konfiguration
 	 * @ingroup ipsmodulemanager
 	 * @{
 	 * Alle Konfigurations Einstellung, die für Installation von Modulen benötigt werden, sind in Initialisierungs Files abgelegt. Ablageort 
-	 * für diese Files ist "IPSLibray\install\InitializationFiles\", die Files werden beim initialen Download des Modules aus den Files im "Default" 
+	 * für diese Files ist "IPSLibray.install.InitializationFiles", die Files werden beim initialen Download des Modules aus den Files im "Default"
 	 * Verzeichnis generiert und bei späteren Updates nicht mehr verändert.
 	 * Bei Problemen kann das File wieder mit der Version im Default Verzeichnis repariert werden. Im Verzeichnis "Examples" finden sich noch weitere 
 	 * Files, die Beispiele für die jeweilige Konfiguration beinhalten.
@@ -130,7 +130,7 @@
 	    @endcode
 	 * 
 	 * [] markiert immer eine Gruppe von Einstellungen, In der Gruppe "WFC10” werden die Einstellungen gesucht, die für die WebFront 
-	 * Installation benötigt werden. (WFC10 ? WebFront mit 10 Zoll Optimierung). Analog gibt es eine Gruppe "Mobile", die für das Mobile 
+	 * Installation benötigt werden. (WFC10 - WebFront mit 10 Zoll Optimierung). Analog gibt es eine Gruppe "Mobile", die für das Mobile
 	 * Interface (iPhone, iPad und Android) verwendet wird. 
 	 * 
 	 * Beschreibung der wichtigsten Parameter:
