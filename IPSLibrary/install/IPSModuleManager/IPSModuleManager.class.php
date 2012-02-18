@@ -1,10 +1,10 @@
 <?
 
-	 /**@defgroup ipsmodulemanager IPSModuleManager
+	/**@defgroup ipsmodulemanager IPSModuleManager
 	 * @{
 	 *
 	 * Der IPSModuleManager bildet das Herzstück des IPSLibrary Installers. Er beinhaltet diverse Konfigurations Möglichkeiten, die
-	 * man in der Datei IPSModuleManager.ini verändern kann (Ablagerort: IPSLibrary/install/InitializationFile/).
+	 * man in der Datei IPSModuleManager.ini verändern kann (Ablagerort: IPSLibrary.install.InitializationFile).
 	 *
 	 * @file          IPSModuleManager.class.php
 	 * @author        Andreas Brauneis
@@ -70,7 +70,7 @@
         @endcode
 	 * 
 	 *  Bei einem Update werden alle Scripte des jeweiligen Modules neu aus dem Repository geladen 
-	 *  (Konfigurations Scripte / Dateien werden nicht verändert). Sollte nach dem Update eine neue 
+	 *  (Konfigurations Scripte und Dateien werden nicht verändert). Sollte nach dem Update eine neue
 	 *  Versionsnummer gefunden werden, wird automatisch das Installations Script ausgeführt (inklusive 
 	 *  Anpassung der WebFront und Mobile Strukturen).
 	 * 
