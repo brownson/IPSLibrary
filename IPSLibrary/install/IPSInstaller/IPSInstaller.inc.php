@@ -352,6 +352,64 @@
 		return CreateSerialPort($Name, $ComPort, $Baud, $StopBits, $DataBits, $Parity, $Position);
 	}
 
+	/** Anlegen eines Splitter mit linkem und rechtem Trennzeichen
+	 *
+	 * Die Funktion legt eine Splitter Instanz an, die mit linkem und rechtem Trennzeichen arbeitet.
+	 *
+	 * @param string $name Name der Cutter Instanz
+	 * @param integer $ioInstanceId ID der übergeordneten IO Instanz
+	 * @param string $leftCutChar Linkes Trennzeichen
+	 * @param string $rightCutChar Rechtes Trennzeichen
+	 * @param string $timeout Timeout, wenn die Verzögerung zweier Pakete größer als Timeout ist, wird der Puffer gelöscht und as zweite Paket als neuer Inhalt übernommen
+	 * @return integer ID der Cutter Instanz
+	 *
+	 */
+	function CreateVariableCutter ($name, $ioInstanceId, $leftCutChar, $rightCutChar, $timeout=0) {
+		$instanceId = CreateInstance($name, 0, '{AC6C6E74-C797-40B3-BA82-F135D941D1A2}',0);
+      Cutter_SetParseType($instanceId, 0);
+      Cutter_SetLeftCutChar($instanceId, $leftCutChar);
+      Cutter_SetRightCutChar($instanceId, $rightCutChar);
+      Cutter_SetTimeout($instanceId, $timeout);
+		IPS_ConnectInstance($instanceId, $ioInstanceId);
+
+		if (!@IPS_ApplyChanges($instanceId)) {
+			echo "Error applying Changes to Cutter Instance --> Abort Script\n";
+			Exit;
+		};
+
+      return $instanceId;
+	}
+
+
+	/** Anlegen eines Splitter mit fester Länge
+	 *
+	 * Die Funktion legt eine Splitter Instanz an, die eine feste Länge verwendet.
+	 *
+	 * @param string $name Name der Cutter Instanz
+	 * @param integer $ioInstanceId ID der übergeordneten IO Instanz
+	 * @param string $inputLength Eingabelänge
+	 * @param string $syncChar Sync Zeichen
+	 * @param string $timeout Timeout, wenn die Verzögerung zweier Pakete größer als Timeout ist, wird der Puffer gelöscht und as zweite Paket als neuer Inhalt übernommen
+	 * @return integer ID der Cutter Instanz
+	 *
+	 */
+	function CreateFixedCutter ($name, $ioInstanceId, $inputLength, $syncChar, $timeout=0) {
+		$instanceId = CreateInstance($name, 0, '{AC6C6E74-C797-40B3-BA82-F135D941D1A2}',0);
+      Cutter_SetParseType($instanceId, 1);
+      Cutter_SetInputLength($instanceId, $inputLength);
+      Cutter_SetSyncChar($instanceId, $syncChar);
+      Cutter_SetTimeout($instanceId, $timeout);
+		IPS_ConnectInstance($instanceId, $ioInstanceId);
+
+		if (!@IPS_ApplyChanges($instanceId)) {
+			echo "Error applying Changes to Cutter Instance --> Abort Script\n";
+			Exit;
+		};
+
+      return $instanceId;
+	}
+
+
 	/** Anlegen einer Register-Variable
 	 *
 	 * Die Funktion legt eine Register Variable, als übergeordnete ID dient dabei $ParentId. Sollte
