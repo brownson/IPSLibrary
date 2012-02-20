@@ -16,29 +16,16 @@
 	 * @ingroup ipsmodulemanager
 	 * @{
 	 * 
-	 * Übersicht IPSModuleManager
-	 * @image html IPSModuleManager_Overview.png
-	 * 
-	 * Der IPSModuleManager supportet die folgenden Möglichkeiten:
-	 * - Initialer Download und Installation neuer Module
-	 * - Update auf neuere Version von Modulen
-	 * - Versionsverwaltung für Module
-	 * - Backup Handler
-	 * - Konfigurations Handler
-	 * - Log Handler
+	 * ...
 	 * 
 	 * @}*/
 
 	/**@defgroup ipsmodulemanager_configuration IPSModuleManager Konfiguration
 	 * @ingroup ipsmodulemanager
 	 * @{
-	 * Alle Konfigurations Einstellung, die für Installation von Modulen benötigt werden, sind in Initialisierungs Files abgelegt. Ablageort 
-	 * für diese Files ist "IPSLibray.install.InitializationFiles", die Files werden beim initialen Download des Modules aus den Files im "Default"
-	 * Verzeichnis generiert und bei späteren Updates nicht mehr verändert.
-	 * Bei Problemen kann das File wieder mit der Version im Default Verzeichnis repariert werden. Im Verzeichnis "Examples" finden sich noch weitere 
-	 * Files, die Beispiele für die jeweilige Konfiguration beinhalten.
-	 * 
-	 * 
+	 *
+	 * ...
+	 *
 	 * @}*/
 
 	 /**@addtogroup ipsmodulemanager
@@ -403,6 +390,10 @@
 		 * @return array[] Liste mit Filenamen
 		 */
 		private function GetScriptList($fileKey, $fileTypeSection, $baseDirectory) {
+			if ($fileKey=='DownloadFiles') {
+			   return array($this->GetModuleDownloadListFile($baseDirectory));
+			}
+		
 		   $resultList = array();
 		   $scriptList = $this->fileConfigHandler->GetValueDef($fileKey, $fileTypeSection, array());
 
@@ -435,8 +426,6 @@
 						case 'Install':
 							if ($fileKey=='DefaultFiles' or $fileKey=='ExampleFiles') {
 							   $fullScriptName   = $baseDirectory.'\\IPSLibrary\\install\\InitializationFiles\\'.$script;
-							} elseif ($fileKey=='DownloadFiles') {
-							   $fullScriptName   = $baseDirectory.'\\IPSLibrary\\install\\DownloadListFiles\\'.$script;
 							} else {
 							   $fullScriptName   = $baseDirectory.'\\IPSLibrary\\install\\InstallationScripts\\'.$script;
 							}
