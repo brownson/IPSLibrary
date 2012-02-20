@@ -62,7 +62,17 @@
 	$actionScriptId = IPS_GetScriptIDByName('NetPlayer_ActionScript',  $CategoryIdApp);
 	$eventScriptId  = IPS_GetScriptIDByName('NetPlayer_EventScript',   $CategoryIdApp);
 
-	//$EventId      = CreateEvent('TitelDatei', IPS_GetVariableIDByName('Titeldatei', $mediaPlayerInstanceId), $eventScriptId);
+	// Controls
+	CreateProfile_Associations ('NetPlayer_Category',    array('Root'));
+	CreateProfile_Associations ('NetPlayer_CDAlbumList', array('...'));
+	CreateProfile_Associations ('NetPlayer_CDAlbumNav',  array('<<','>>'));
+	CreateProfile_Associations ('NetPlayer_CDTrackList', array('...'));
+	CreateProfile_Associations ('NetPlayer_CDTrackList2', array('xx', 'yyy'));
+	CreateProfile_Associations ('NetPlayer_CDTrackNav',  array('<<','>>'));
+	CreateProfile_Associations ('NetPlayer_RadioList',   array('...'));
+	CreateProfile_Associations ('NetPlayer_RadioNav',    array('<<','>>'));
+	CreateProfile_Associations ('NetPlayer_Control',     array('Play','Pause','Stop','<<','>>'));
+	CreateProfile_Associations ('NetPlayer_Source',      array('CD Player','Radio Player'));
 
 	// MP3 Player
 	$mp3PlayerInstanceId     = CreateInstance("CDPlayer", $CategoryIdData, "{485D0419-BE97-4548-AA9C-C083EB82E61E}",1000);
@@ -79,18 +89,6 @@
 	$radioNameId     = CreateVariable("Name", 3 /*String*/,   $webRadioInstanceId, 10 , '~TextBox');
 	$radioUrlId      = CreateVariable("Url",  3 /*String*/,   $webRadioInstanceId, 20 , '~TextBox');
 	$radioIdxId      = CreateVariable("Idx",  1 /*Integer*/,  $webRadioInstanceId, 30 , '', null/*NoAS*/, 0);
-
-	// Controls
-	CreateProfile_Associations ('NetPlayer_Category',    array('Root'));
-	CreateProfile_Associations ('NetPlayer_CDAlbumList', array('...'));
-	CreateProfile_Associations ('NetPlayer_CDAlbumNav',  array('<<','>>'));
-	CreateProfile_Associations ('NetPlayer_CDTrackList', array('...'));
-	CreateProfile_Associations ('NetPlayer_CDTrackList2', array('xx', 'yyy'));
-	CreateProfile_Associations ('NetPlayer_CDTrackNav',  array('<<','>>'));
-	CreateProfile_Associations ('NetPlayer_RadioList',   array('...'));
-	CreateProfile_Associations ('NetPlayer_RadioNav',    array('<<','>>'));
-	CreateProfile_Associations ('NetPlayer_Control',     array('Play','Pause','Stop','<<','>>'));
-	CreateProfile_Associations ('NetPlayer_Source',      array('CD Player','Radio Player'));
 
 	$powerId               = CreateVariable("Power",           0 /*Boolean*/,  $CategoryIdData, 100 , '~Switch', $actionScriptId, 0);
 	$sourceId              = CreateVariable("Source",          1 /*Integer*/,  $CategoryIdData, 110 , 'NetPlayer_Source', $actionScriptId, 0 /*CD*/);
