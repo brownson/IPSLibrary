@@ -18,6 +18,8 @@
     * Version 2.50.1, 31.01.2012<br/>
     */
 
+	IPSUtils_Include ('IPSComponent.class.php', 'IPSLibrary::app::core::IPSComponent');
+
 	abstract class IPSComponentAVControl extends IPSComponent {
 
 		/**
@@ -31,6 +33,17 @@
 		 * @param IPSModuleAVControl $module Module Object an das das aufgetretene Event weitergeleitet werden soll
 		 */
 		abstract public function HandleEvent($variable, $value, IPSModuleAVControl $module);
+
+		/**
+		 * @public
+		 *
+		 * Funktion liefert String IPSComponent Constructor String.
+		 * String kann dazu benützt werden, das Object mit der IPSComponent::CreateObjectByParams
+		 * wieder neu zu erzeugen.
+		 *
+		 * @return string Parameter String des IPSComponent Object
+		 */
+		abstract public function GetComponentParams();
 
 		/**
 		 * @public
@@ -72,6 +85,26 @@
 		 * @return integer Wert der Lautstärke (Wertebereich 0 - 100)
 		 */
 		abstract public function GetVolume($outputId);
+
+		/**
+		 * @public
+		 *
+		 * Setzen des Mutings für einen Ausgang
+		 *
+		 * @param integer $outputId Ausgang der geändert werden soll (Wertebereich 0 - x)
+		 * @param boolean $value Wert für Muting (Wertebereich true oder false)
+		 */
+		abstract public function SetMute($outputId, $value);
+
+		/**
+		 * @public
+		 *
+		 * Liefert Muting Status eines Ausgangs
+		 *
+		 * @param integer $outputId Ausgang (Wertebereich 0 - x)
+		 * @return boolean Wert für Muting (Wertebereich true oder false)
+		 */
+		abstract public function GetMute($outputId);
 
 		/**
 		 * @public
