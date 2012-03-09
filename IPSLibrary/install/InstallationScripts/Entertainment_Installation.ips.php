@@ -43,33 +43,36 @@
 	IPSUtils_Include ("IPSInstaller.inc.php",                "IPSLibrary::install::IPSInstaller");
 	IPSUtils_Include ("Entertainment_Configuration.inc.php", "IPSLibrary::config::modules::Entertainment");
 
-	$AppPath        = "Program.IPSLibrary.app.modules.Entertainment";
-	$DataPath       = "Program.IPSLibrary.data.modules.Entertainment";
-	$ConfigPath     = "Program.IPSLibrary.config.modules.Entertainment";
+	$WFC10_Enabled        = $moduleManager->GetConfigValue('Enabled', 'WFC10');
+	$WFC10_ConfigId       = $moduleManager->GetConfigValueIntDef('ID', 'WFC10', GetWFCIdDefault());
+	$WFC10_Path           = $moduleManager->GetConfigValue('Path', 'WFC10');
+	$WFC10_TabPaneItem    = $moduleManager->GetConfigValue('TabPaneItem', 'WFC10');
+	$WFC10_TabPaneParent  = $moduleManager->GetConfigValue('TabPaneParent', 'WFC10');
+	$WFC10_TabPaneName    = $moduleManager->GetConfigValue('TabPaneName', 'WFC10');
+	$WFC10_TabPaneIcon    = $moduleManager->GetConfigValue('TabPaneIcon', 'WFC10');
+	$WFC10_TabPaneOrder   = $moduleManager->GetConfigValueInt('TabPaneOrder', 'WFC10');
+	$WFC10_TabName1        = $moduleManager->GetConfigValue('TabName1', 'WFC10');
+	$WFC10_TabIcon1        = $moduleManager->GetConfigValue('TabIcon1', 'WFC10');
 
-	$WFC10_Enabled  = $moduleManager->GetConfigValue('Enabled', 'WFC10');
-	$WFC10_ConfigId = $moduleManager->GetConfigValueIntDef('ID', 'WFC10', GetWFCIdDefault());
-	$WFC10_Path     = $moduleManager->GetConfigValue('Path', 'WFC10');
-	$WFC10_Parent   = $moduleManager->GetConfigValue('Root', 'WFC10');
-	$WFC10_TabName  = $moduleManager->GetConfigValue('TabName', 'WFC10');
-	$WFC10_TabIcon  = $moduleManager->GetConfigValue('TabIcon', 'WFC10');
-	$WFC10_TabOrder = $moduleManager->GetConfigValueInt('TabOrder', 'WFC10');
+	$Mobile_Enabled       = $moduleManager->GetConfigValue('Enabled', 'Mobile');
+	$Mobile_Path          = $moduleManager->GetConfigValue('Path', 'Mobile');
+	$Mobile_PathOrder     = $moduleManager->GetConfigValueInt('PathOrder', 'Mobile');
+	$Mobile_PathIcon      = $moduleManager->GetConfigValue('PathIcon', 'Mobile');
+	$Mobile_Name          = $moduleManager->GetConfigValue('Name', 'Mobile');
+	$Mobile_Order         = $moduleManager->GetConfigValueInt('Order', 'Mobile');
+	$Mobile_Icon          = $moduleManager->GetConfigValue('Icon', 'Mobile');
+
 	$WFC10_Recreate = true;
-
-	$Mobile_Enabled = $moduleManager->GetConfigValue('Enabled', 'Mobile');
-	$Mobile_Path    = $moduleManager->GetConfigValue('Path', 'Mobile');
-	$Mobile_Order   = $moduleManager->GetConfigValueInt('Order', 'Mobile');
-	$Mobile_Icon    = $moduleManager->GetConfigValue('Icon', 'Mobile');
 	$Mobile_Recreate= true;
 
-   $ProgramDeleteExistingProfiles = true;
-   
+	$ProgramDeleteExistingProfiles = true;
+	
 	// ----------------------------------------------------------------------------------------------------------------------------
 	// Program Installation
 	// ----------------------------------------------------------------------------------------------------------------------------
 	echo "--- Entertainment Installation -------------------------------------------------------------------\n";
-	$CategoryIdData = CreateCategoryPath($DataPath);
-	$CategoryIdApp  = CreateCategoryPath($AppPath);
+	$CategoryIdData     = $moduleManager->GetModuleCategoryID('data');
+	$CategoryIdApp      = $moduleManager->GetModuleCategoryID('app');
 
 	$CategoryIdDevices       = CreateCategory('Devices',    $CategoryIdData, 10);
 	$CategoryIdRoomes        = CreateCategory('Roomes',     $CategoryIdData, 20);
@@ -174,8 +177,8 @@
 		echo "--- Create WebFront Interface ----------------------------------------------------------\n";
 		$WebFrontId               = CreateCategoryPath($WFC10_Path);
 		if ($WFC10_Recreate) {
-		   EmptyCategory($WebFrontId);
-			DeleteWFCItems($WFC10_ConfigId, 'EntertainmentTP');
+			EmptyCategory($WebFrontId);
+			DeleteWFCItems($WFC10_ConfigId, $WFC10_TabPaneItem);
 		}
 
 		$UniqueId                 = date('Hi');
@@ -184,20 +187,19 @@
 		$ID_CategoryWebFrontOverviewRightTop    = CreateCategory(    'RightTop',    $ID_CategoryWebFrontOverview,  10);
 		$ID_CategoryWebFrontOverviewRightBottom = CreateCategory(    'RightBottom', $ID_CategoryWebFrontOverview,  20);
 
-		CreateWFCItemTabPane   ($WFC10_ConfigId, 'EntertainmentTP',                       $WFC10_Parent,         $WFC10_TabOrder, $WFC10_TabName, $WFC10_TabIcon);
-		CreateWFCItemSplitPane ($WFC10_ConfigId, 'EntertainmentTP_OvSPLeft',              'EntertainmentTP',            0, 'Übersicht', 'Speaker', 1 /*Vertical*/, 40 /*Width*/, 0 /*Target=Pane1*/, 0/*Percent*/, 'true');
-		CreateWFCItemCategory  ($WFC10_ConfigId, 'EntertainmentTP_OvCatLeft'.$UniqueId,   'EntertainmentTP_OvSPLeft',  10, '', '', $ID_CategoryWebFrontOverviewLeft /*BaseId*/, 'false' /*BarBottomVisible*/);
-		CreateWFCItemSplitPane ($WFC10_ConfigId, 'EntertainmentTP_OvSPRight',             'EntertainmentTP_OvSPLeft',  20, '', '', 0 /*Horizontal*/, 50 /*Width*/, 0 /*Target=Pane1*/, 0/*Percent*/, 'true');
-		CreateWFCItemCategory  ($WFC10_ConfigId, 'EntertainmentTP_OvCatTop.'.$UniqueId,   'EntertainmentTP_OvSPRight', 10, '', '', $ID_CategoryWebFrontOverviewRightTop /*BaseId*/, 'false' /*BarBottomVisible*/);
-		CreateWFCItemCategory  ($WFC10_ConfigId, 'EntertainmentTP_OvCatBottom'.$UniqueId, 'EntertainmentTP_OvSPRight', 20, '', '', $ID_CategoryWebFrontOverviewRightBottom /*BaseId*/, 'false' /*BarBottomVisible*/);
-
+		CreateWFCItemTabPane   ($WFC10_ConfigId, $WFC10_TabPaneItem,                          $WFC10_TabPaneParent,         $WFC10_TabPaneOrder, $WFC10_TabPaneName, $WFC10_TabPaneIcon);
+		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OvSPLeft',              $WFC10_TabPaneItem,               0, $WFC10_TabName1, $WFC10_TabIcon1, 1 /*Vertical*/, 40 /*Width*/, 0 /*Target=Pane1*/, 0/*Percent*/, 'true');
+		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OvCatLeft'.$UniqueId,   $WFC10_TabPaneItem.'_OvSPLeft',  10, '', '', $ID_CategoryWebFrontOverviewLeft /*BaseId*/, 'false' /*BarBottomVisible*/);
+		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OvSPRight',             $WFC10_TabPaneItem.'_OvSPLeft',  20, '', '', 0 /*Horizontal*/, 50 /*Width*/, 0 /*Target=Pane1*/, 0/*Percent*/, 'true');
+		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OvCatTop.'.$UniqueId,   $WFC10_TabPaneItem.'_OvSPRight', 10, '', '', $ID_CategoryWebFrontOverviewRightTop /*BaseId*/, 'false' /*BarBottomVisible*/);
+		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OvCatBottom'.$UniqueId, $WFC10_TabPaneItem.'_OvSPRight', 20, '', '', $ID_CategoryWebFrontOverviewRightBottom /*BaseId*/, 'false' /*BarBottomVisible*/);
 
 		CreateLink('Alle Räume Ausschalten',  $ScriptIdAllOff,  $ID_CategoryWebFrontOverviewRightTop, 1000);
 	}
 
 
 	if ($Mobile_Enabled) {
-		$iPhoneId  = CreateCategoryPath($Mobile_Path, $Mobile_Order, $Mobile_Icon);
+		$iPhoneId  = CreateCategoryPath($Mobile_Path, $Mobile_PathOrder, $Mobile_PathIcon);
 		if ($Mobile_Recreate) {
 		   EmptyCategory($iPhoneId);
 		}
@@ -216,7 +218,7 @@
 		if ($WFC10_Enabled)  $ID_RoomWebfront = CreateCategory($RoomName, $WebFrontId,  $RoomOrder);
 		$RoomOrder       = $RoomOrder + 1;
 		$DeviceOrder     = 10;
-		if ($WFC10_Enabled) CreateWFCItemCategory  ($WFC10_ConfigId, 'EntertainmentTP_'.$RoomOrder.'_'.$UniqueId,'EntertainmentTP', $RoomOrder,$RoomName, '', $ID_RoomWebfront /*BaseId*/, 'false' /*BarBottomVisible*/);
+		if ($WFC10_Enabled) CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_'.$RoomOrder.'_'.$UniqueId,$WFC10_TabPaneItem, $RoomOrder,$RoomName, '', $ID_RoomWebfront /*BaseId*/, 'false' /*BarBottomVisible*/);
 		foreach($RoomProperties as $ControlType => $ControlData) {
 		   if (!is_array($ControlData)) continue 1;
 		   $ControlName = $ControlData[c_Property_Name];
