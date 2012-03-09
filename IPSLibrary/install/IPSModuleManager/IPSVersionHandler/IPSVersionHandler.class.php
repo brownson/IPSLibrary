@@ -32,6 +32,8 @@
 		protected $moduleName = "";
 		protected $logHandler = null;
 		
+		const FILE_AVAILABLE_MODULES   = 'IPSLibrary\\config\\AvailableModules.ini';
+
 		const MODULE_IPS         = 'IPS';
 		const VERSION_LOADING    = 'Loading';
 		const VERSION_LOADED     = 'Loaded';
@@ -135,6 +137,30 @@
 		 */
 		abstract public function GetInstalledModules();
 
+		/**
+		 * @public
+		 *
+		 * Liefert eine Liste aller installierten Module
+		 *
+		 * @return string[] Liste der installierten Module
+		 */
+		public function GetAvailableModules() {
+			$fileName   = IPS_GetKernelDir().'scripts\\'.$this::FILE_AVAILABLE_MODULES;
+			$fileContent = file_get_contents($fileName);
+			$lines = explode(PHP_EOL, $fileContent);
+
+			$resultList = array();
+			foreach ($lines as $line) {
+				$content           = explode('=', $line);
+				$moduleName        = $content[0];
+				$moduleProperties  = explode('|',$content[1]);
+				$modulePath        = 	$moduleProperties[0];
+				$moduleDescription = 	$moduleProperties[1];
+
+				$result[$moduleName] = array($modulePath,$moduleDescription);
+		   }
+			return $result;
+		}
 	}
 
 	/** @}*/

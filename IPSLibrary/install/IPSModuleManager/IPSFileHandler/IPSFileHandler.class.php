@@ -45,6 +45,20 @@
 		/**
 		 * @public
 		 *
+		 * Liefert den übergebenen Pfadnamen mit einem abschließenden Pfad Delimiter
+		 *
+		 * @param string $path Pfad
+		 */
+		public static function AddTrailingPathDelimiter($path) {
+			if (substr($path, -1) <> '\\' and substr($path, -1) <> '/') {
+			   $path = $path.DIRECTORY_SEPARATOR;
+			}
+			return $path;
+		}
+
+		/**
+		 * @public
+		 *
 		 * Liefert den "User" Filenamen anhand des Default Filenames
 		 *
 		 * @param string $defaultFile Default Dateiname / Pfad 
@@ -62,11 +76,50 @@
 		/**
 		 * @public
 		 *
+		 * Filtert Dateien die gleich sind (CRLF wird ignoriert) aus den übergebenen
+		 * File Listen heraus.
+		 *
+		 * @param string $sourceList Liste der Files, die kopiert werden soll
+		 * @param string $destinationList Liste der Files, die erzeugt werden soll
+		 */
+		public function FilterEqualFiles(&$sourceList, &$destinationList) {
+		   $sourceOut      = array();
+		   $destinationOut = array();
+			foreach ($sourceList as $idx=>$sourceScript) {
+				$sourceFile          = $sourceList[$idx];
+				$destinationFile     = $destinationList[$idx];
+				
+				$addFileToList = true;
+				if (!file_exists($destinationFile)) {
+					$addFileToList = true;
+				} else {
+				   $sourceContent      = file_get_contents($sourceFile);
+				   $destinationContent = file_get_contents($destinationFile);
+				   $sourceContent      = str_replace(chr(13), '',$sourceContent);
+				   $destinationContent = str_replace(chr(13), '',$destinationContent);
+				   if ($sourceContent == $destinationContent) {
+						$addFileToList = false;
+				   }
+				}
+				if ($addFileToList) {
+				   $sourceOut[]      = $sourceFile;
+				   $destinationOut[] = $destinationFile;
+
+				};
+			}
+			$sourceList      = $sourceOut;
+			$destinationList = $destinationOut;
+		}
+
+
+		/**
+		 * @public
+		 *
 		 * Erzeugt Files aus den zugrundeliegenden Default Files 
 		 *
 		 * @param string $sourceFile Datei die kopiert werden soll
 		 * @param string $destinationFile Datei die erzeugt werden soll
-		 * @throws IPSFileHandlerException wenn Fehler beim erzeugen der Zieldatei auftritt
+		 * @throws IPSFileHandlerException wenn Fehler beim Erzeugen der Zieldatei auftritt
 		 */
 		public function CopyFile($sourceFile, $destinationFile) {
 
@@ -88,7 +141,7 @@
 
 				$curl_handle=curl_init();
 				curl_setopt($curl_handle,CURLOPT_URL,$sourceFile);
-				curl_setopt($curl_handle,CURLOPT_CONNECTTIMEOUT,2);
+				curl_setopt($curl_handle,CURLOPT_CONNECTTIMEOUT,5);
 				curl_setopt($curl_handle,CURLOPT_RETURNTRANSFER,true);
 				curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
 				$fileContent = curl_exec($curl_handle);
@@ -120,7 +173,7 @@
 		 * Erzeugt Files aus den zugrundeliegenden Default Files 
 		 *
 		 * @param string $scriptList Liste der Default Files, von denen eine User Version erzeugt werden soll
-		 * @throws IPSFileHandlerException wenn Fehler beim erzeugen der Zieldatei auftritt
+		 * @throws IPSFileHandlerException wenn Fehler beim Erzeugen der Zieldatei auftritt
 		 */
 		public function CreateScriptsFromDefault($scriptList) {
 			foreach ($scriptList as $idx=>$scriptDefault) {
@@ -139,7 +192,7 @@
 		 *
 		 * @param string $sourceList Liste der Files, die kopiert werden soll
 		 * @param string $destinationList Liste der Files, die erzeugt werden soll
-		 * @throws IPSFileHandlerException wenn Fehler beim erzeugen der Zieldatei auftritt
+		 * @throws IPSFileHandlerException wenn Fehler beim Erzeugen der Zieldatei auftritt
 		 */
 		public function CopyFiles ($sourceList, $destinationList) {
 			foreach ($sourceList as $idx=>$sourceScript) {
@@ -155,7 +208,7 @@
 		 *
 		 * @param string $repositoryList Liste der Files, die geladen werden soll
 		 * @param string $localList Liste der Files, die erzeugt werden soll
-		 * @throws IPSFileHandlerException wenn Fehler beim erzeugen der Zieldatei auftritt
+		 * @throws IPSFileHandlerException wenn Fehler beim Erzeugen der Zieldatei auftritt
 		 */
 		public function LoadFiles($repositoryList, $localList) {
 			$this->CopyFiles($repositoryList, $localList);
@@ -168,7 +221,7 @@
 		 *
 		 * @param string $localList Liste der Files, die geschrieben werden soll
 		 * @param string $repositoryList Liste der Files, die erzeugt werden soll
-		 * @throws IPSFileHandlerException wenn Fehler beim erzeugen der Zieldatei auftritt
+		 * @throws IPSFileHandlerException wenn Fehler beim Erzeugen der Zieldatei auftritt
 		 */
 		public function WriteFiles($localList, $repositoryList) {
 			$this->CopyFiles($localList, $repositoryList);
@@ -189,8 +242,65 @@
 		      $exampleFile = IPS_GetKernelDir().'\\scripts\\'.str_replace('::','\\',$namespace).'\\examples\\'.$exampleFile;
 		      $configFile  = IPS_GetKernelDir().'\\scripts\\'.str_replace('::','\\',$namespace).'\\'.$configFile;
 			}
-			
+
 			$this->CopyFile($exampleFile, $configFile);
+		}
+
+		/**
+		 * @public
+		 *
+		 * Löschen eines Files
+		 *
+		 * @param string $file File das gelöscht werden soll
+		 * @throws IPSFileHandlerException wenn Fehler beim Löschen der Zieldatei auftritt
+		 */
+		public function DeleteFile($file) {
+		   if (file_exists($file)) {
+				$this->logHandler->Log('Delete File '.$file);
+				if (!unlink($file)) {
+					throw new IPSFileHandlerException('Error while deleting File '.$file, E_USER_ERROR);
+				}
+			}
+		}
+
+		/**
+		 * @public
+		 *
+		 * Löschen von Files
+		 *
+		 * @param string $localList Liste der Files, die gelöscht werden soll
+		 * @throws IPSFileHandlerException wenn Fehler beim Löschen der Zieldatei auftritt
+		 */
+		public function DeleteFiles($localList) {
+			foreach ($localList as $idx=>$file) {
+			  $this->DeleteFile($file);
+			}
+		}
+
+		/**
+		 * @public
+		 *
+		 * Löschen eines Files
+		 *
+		 * @param string $file File das gelöscht werden soll
+		 * @throws IPSFileHandlerException wenn Fehler beim Löschen der Zieldatei auftritt
+		 */
+		public function DeleteEmptyDirectories($file) {
+			$filePath = pathinfo($file, PATHINFO_DIRNAME);
+			if (!is_dir($filePath)) {
+			   return;
+			}
+
+	      $fileList = scandir($filePath);
+      	$fileList = array_diff($fileList, Array(".",".."));
+			if (count($fileList)==0) {
+				$this->logHandler->Log('Delete Directory '.$filePath);
+			   if (!rmdir($filePath)) {
+					throw new IPSFileHandlerException('Error while deleting Directory '.$filePath, E_USER_ERROR);
+				}
+			   $parentDirectory = pathinfo($filePath, PATHINFO_DIRNAME);
+			   $this->DeleteEmptyDirectories($parentDirectory);
+			}
 		}
 	}
 

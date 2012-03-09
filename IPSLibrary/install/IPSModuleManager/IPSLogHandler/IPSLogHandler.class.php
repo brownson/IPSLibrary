@@ -45,6 +45,18 @@
 			$this->logContext   = $logContext;
 		}
 
+
+		/**
+		 * @public
+		 *
+		 * Liefert Namen des aktuellen LogFiles
+		 *
+		 * @return string Name des LogFiles
+		 */
+		public function GetLogFileName() {
+			return self::$logDirectory.self::$logFile;
+		}
+
 		/**
 		 * @public
 		 *
@@ -110,6 +122,32 @@
 				$this->WriteIPSConsole($msg);
 				$this->WriteFile($msg);
 			}
+		}
+
+		/**
+		 * @public
+		 *
+		 * Protokollierung von Error Messages
+		 *
+		 * @param string $msg Error Message
+		 */
+		public function Error($msg) {
+			$debugTrace = debug_backtrace();
+			foreach ($debugTrace as $idx=>$stack) {
+				if (array_key_exists('line', $stack) and array_key_exists('function', $stack) and array_key_exists('file', $stack)) {
+					$file     = str_replace('scripts\\', '', str_replace(IPS_GetKernelDir(), '', $stack['file']));
+					$function = $stack['function'];
+					$line     = str_pad($stack['line'],3,' ', STR_PAD_LEFT);
+					$stackTxt  .= PHP_EOL."  $line in $file (call $function)";
+				} elseif (array_key_exists('function', $stack)) {
+					$stackTxt  .= PHP_EOL.'      in '.$stack['function'];
+				} else {
+					$stackTxt  .= PHP_EOL.'      Unknown Stack ...';
+				}
+			}
+			$this->WritePHPConsole($msg.$stackTxt);
+			$this->WriteIPSConsole($msg.$stackTxt);
+			$this->WriteFile($msg.$stackTxt);
 		}
 
 	}

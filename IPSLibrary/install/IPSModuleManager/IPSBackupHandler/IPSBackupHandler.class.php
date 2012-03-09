@@ -40,7 +40,7 @@
 												E_USER_ERROR);
 			}
 			$this->backupBaseDirectory = $backupBaseDirectory;
-			$this->backupDirectory     = $backupBaseDirectory.'IPSLibrary_'.date("Y-m-d_Hi");
+			$this->backupDirectory     = $backupBaseDirectory.'IPSLibrary_'.date("Y-m-d_Hi").'\\';
 			$this->logHandler          = IPSLogHandler::GetLogger(get_class($this));
 		}
 	
@@ -56,6 +56,23 @@
 		/**
 		 * @public
 		 *
+		 * Backup einer Datei erzeugen
+		 *
+		 * @param string $sourceFile Datei die gesichert werden soll
+		 * @param string $backupFile Ziel Datei
+		 */
+		public function CreateBackupFromFile($sourceFile, $backupFile) {
+			$fileHandler = new IPSFileHandler();
+			if (file_exists($sourceFile)) {
+				$fileHandler->CopyFile($sourceFile, $backupFile);
+			} else {
+				$this->logHandler->Debug('Backup NOT possible - Source File '.$sourceFile.' doesnt exists');
+			}
+   	}
+
+		/**
+		 * @public
+		 *
 		 * Backup von Dateien erzeugen
 		 *
 		 * @param string $sourceList Liste der Dateien die gesichert werden soll
@@ -65,11 +82,7 @@
 			$fileHandler = new IPSFileHandler();
 			foreach ($sourceList as $idx=>$sourceFile) {
 				$backupFile = $backupList[$idx];
-				if (file_exists($sourceFile)) {
-					$fileHandler->CopyFile($sourceFile, $backupFile);
-				} else {
-					$this->logHandler->Debug('Backup NOT possible - Source File '.$sourceFile.' doesnt exists');
-				}
+				$this->CreateBackupFromFile($sourceFile, $backupFile);
 			}
 		}
 	}

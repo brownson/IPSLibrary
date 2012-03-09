@@ -9,33 +9,10 @@
 	 * @file          IPSModuleManager.class.php
 	 * @author        Andreas Brauneis
 	 *
-	 *
-	 * @}*/
-
-	/**@defgroup ipsmodulemanager_overview IPSModuleManager Übersicht
-	 * @ingroup ipsmodulemanager
-	 * @{
-	 * 
-	 * ...
-	 * 
-	 * @}*/
-
-	/**@defgroup ipsmodulemanager_configuration IPSModuleManager Konfiguration
-	 * @ingroup ipsmodulemanager
-	 * @{
-	 *
-	 * ...
-	 *
-	 * @}*/
-
-	 /**@addtogroup ipsmodulemanager
-	 * @{
 	 */
 
-	$_IPS['ABORT_ON_ERROR'] = true;
-
 	IPSUtils_Include ("IPSInstaller.inc.php",                  "IPSLibrary::install::IPSInstaller");
-	IPSUtils_Include ("IPSVariableVersionHandler.class.php",   "IPSLibrary::install::IPSModuleManager::IPSVersionHandler");
+	IPSUtils_Include ("IPSFileVersionHandler.class.php",   	  "IPSLibrary::install::IPSModuleManager::IPSVersionHandler");
 	IPSUtils_Include ("IPSScriptHandler.class.php",            "IPSLibrary::install::IPSModuleManager::IPSScriptHandler");
 	IPSUtils_Include ("IPSFileHandler.class.php",              "IPSLibrary::install::IPSModuleManager::IPSFileHandler");
 	IPSUtils_Include ("IPSBackupHandler.class.php",            "IPSLibrary::install::IPSModuleManager::IPSBackupHandler");
@@ -57,6 +34,7 @@
 		const DOWNLOADLISTFILE_SUFFIX          = '_FileList.ini';
  		const INSTALLATIONSCRIPT_PATH          = "IPSLibrary\\install\\InstallationScripts\\";
 		const INSTALLATIONSCRIPT_SUFFIX        = '_Installation.ips.php';
+		const DEINSTALLATIONSCRIPT_SUFFIX      = '_Deinstallation.ips.php';
 		const INITIALIZATIONFILE_PATH          = "IPSLibrary\\install\\InitializationFiles\\";
 		const INITIALIZATIONDEFAULTFILE_PATH   = "IPSLibrary\\install\\InitializationFiles\\Default\\";
 		const INITIALIZATIONFILE_SUFFIX        = '.ini';
@@ -85,6 +63,9 @@
 		 * @param IPSConfigHandler $managerConfigHandler Konfigurations Handler für ModuleManager
 		 */
 		public function __construct($moduleName, $sourceRepository='', $versionHandler=null, $fileConfigHandler=null, $moduleConfigHandler=null, $managerConfigHandler=null) {
+			$_IPS['ABORT_ON_ERROR'] = true;
+			$_IPS['MODULEMANAGER']  = $this;
+
 			if ($moduleName=='') {
 				$moduleName = 'IPSModuleManager';
 			}
@@ -100,19 +81,20 @@
 			if ($this->sourceRepository=='') {
 				$this->sourceRepository = $this->managerConfigHandler->GetValue(IPSConfigHandler::SOURCEREPOSITORY, '');
 			}
+			$this->sourceRepository = IPSFileHandler::AddTrailingPathDelimiter($this->sourceRepository);
 
 			// Create Log Handler
 			$logDirectory = $this->managerConfigHandler->GetValueDef(IPSConfigHandler::LOGDIRECTORY, '', IPS_GetKernelDir().'logs\\');
 			$this->logHandler = new IPSLogHandler(get_class($this), $logDirectory, '');
 		   
 			// Create Version Handler
-			$libraryBasePath           = 'Program';
 			$this->versionHandler      = $versionHandler;
 			if ($versionHandler==null) {
-				$this->versionHandler   = new IPSVariableVersionHandler($moduleName, $libraryBasePath);
+				$this->versionHandler   = new IPSFileVersionHandler($moduleName);
 			}
 
 			// Create Script Handler
+			$libraryBasePath           = 'Program';
 			$this->scriptHandler       = new IPSScriptHandler($libraryBasePath);
 
 			// Create File Handler
@@ -330,6 +312,137 @@
 		   return (float)$this->GetConfigValueDef($key, $section, $defaultValue);
 		}
 
+		/**
+		 * @public
+		 *
+		 * Liefert die ensprechenden Pfad im IPSLibrary Objektbaum
+		 *
+		 * @param string $type Zweig im Objektbaum ('app','config' oder 'data')
+		 * @return int Pfad der Kategorie
+		 */
+		public function GetModuleCategoryPath($type='app') {
+		   if ($type<>'app' and $type<>'config' and $type<>'data') {
+		      throw new Exception('Unknown Category Type '.$type);
+		   }
+			$namespace  = $this->fileConfigHandler->GetValue(IPSConfigHandler::MODULENAMESPACE);
+			$namespace  = str_replace('::app::','::'.$type.'::',$namespace);
+		   $path       = 'Program.'.str_replace('::','.',$namespace);
+
+			return $path;
+		}
+
+		/**
+		 * @public
+		 *
+		 * Liefert die ensprechende ID im IPSLibrary Objektbaum
+		 *
+		 * @param string $type Zweig im Objektbaum ('app','config' oder 'data')
+		 * @param boolean $createNonExisting Anlegen des Baumes, falls nicht vorhanden
+		 * @return int ID der Kategorie
+		 */
+		public function GetModuleCategoryID($type='app', $createNonExisting=true) {
+		   $path       = $this->GetModuleCategoryPath($type);
+			$categoryID = IPSUtil_ObjectIDByPath($path, true);
+			
+			if ($categoryID===false and $createNonExisting) {
+			   $categoryID = CreateCategoryPath($path);
+			}
+
+			return $categoryID;
+		}
+
+		/**
+		 * @public
+		 *
+		 * Liefert Namen des aktuellen LogFiles
+		 *
+		 * @return string Name des LogFiles
+		 */
+		public function GetLogFileName() {
+		   return $this->logHandler->GetLogFileName();
+		}
+
+		/**
+		 * @public
+		 *
+		 * Liefert ein Array aller installierten Module
+		 *
+		 * Aufbau:
+		 * array('Module1' => array('<<Version>>', '<<Status>>', '<<Description>>'),
+		 *       'Module2' => array('<<Version>>', '<<Status>>', '<<Description>>'),
+		 *       ...
+		 *       'ModuleX' => array('<<Version>>', '<<Status>>', '<<Description>>'))
+		 *
+		 * @return string Array der Installierten Module
+		 */
+		public function GetInstalledModules() {
+		   $resultList = array();
+		   $installedModules = $this->versionHandler->GetInstalledModules();
+		   $availableModules = $this->versionHandler->GetAvailableModules();
+			foreach ($installedModules as $module=>$version) {
+			   $versionArray = explode('.', $version);
+			   $state = '';
+			   if (array_key_exists(4,$versionArray)) {
+			      $state = $versionArray[4];
+					unset($versionArray[4]);
+			   }
+			   if (array_key_exists(3,$versionArray) and $versionArray[3]=='') {
+					unset($versionArray[3]);
+			   }
+			   $version = implode('.', $versionArray);
+			   $description = '';
+			   
+			   if (array_key_exists($module, $availableModules)) {
+			      $description = $availableModules[$module][1];
+			   }
+			   $resultList[$module] = array($version, $state, $description);
+			}
+			return $resultList;
+		}
+		/**
+		 * @public
+		 *
+		 * Liefert ein Array aller verfügbaren Module
+		 *
+		 * Aufbau:
+		 * array('Module1' => array('<<ModulePfad>>', '<<Description>>'),
+		 *       'Module2' => array('<<ModulePfad>>', '<<Description>>'),
+		 *       ...
+		 *       'ModuleX' => array('<<ModulePfad>>', '<<Description>>'))
+		 *
+		 * @return string Array der verfügbaren Module
+		 */
+		public function GetAvailableModules($reloadModuleFile=true) {
+		   if ($reloadModuleFile) {
+				$localFile       = IPS_GetKernelDir().'scripts\\'.IPSVersionHandler::FILE_AVAILABLE_MODULES;
+				$repositoryFile  = $this->sourceRepository.IPSVersionHandler::FILE_AVAILABLE_MODULES;
+				$this->fileHandler->LoadFiles(array($repositoryFile), array($localFile));
+			}
+		
+		   $installedModules = $this->versionHandler->GetAvailableModules();
+		   return $installedModules;
+		}
+
+		/**
+		 * @public
+		 *
+		 * Liefert die ID des Objectes, mit dem das Modul konfiguriert werden kann.
+		 * Falls kein Objekt gefunden wird, dann liefert die Funktion FALSE zurück.
+		 *
+		 * @return integer ID des Objectes
+		 */
+		public function GetConfigurationObjectID() {
+			$configList       = $this->GetScriptList('DefaultFiles', 'Config', IPS_GetKernelDir().'scripts\\');
+			if (count($configList)==0) {
+			   return false;
+			}
+			$configDefaultFile = $configList[0];
+			$configFile = IPSFileHandler::GetUserFilenameByDefaultFilename($configDefaultFile);
+			$scriptPath = $this->scriptHandler->GetScriptPathByFileName($configFile);
+			$scriptName = $this->scriptHandler->GetScriptNameByFileName($configFile);
+			$scriptID   = IPSUtil_ObjectIDByPath($scriptPath.'.'.$scriptName,true);
+			return $scriptID;
+		}
 
 		/**
 		 * @private
@@ -339,6 +452,17 @@
 		private function GetModuleInstallationScript() {
 			$path = IPS_GetKernelDir().'scripts\\'.$this::INSTALLATIONSCRIPT_PATH;
 			$file = $this->moduleName.$this::INSTALLATIONSCRIPT_SUFFIX;
+			return $path.$file;
+		}
+
+		/**
+		 * @private
+		 *
+		 * @return string liefert Installation Filename des Modules
+		 */
+		private function GetModuleDeinstallationScript() {
+			$path = IPS_GetKernelDir().'scripts\\'.$this::INSTALLATIONSCRIPT_PATH;
+			$file = $this->moduleName.$this::DEINSTALLATIONSCRIPT_SUFFIX;
 			return $path.$file;
 		}
 
@@ -454,6 +578,7 @@
 		private function RegisterModuleFiles($fileKey, $fileTypeSection, $fileList) {
 			$registerDefaultFiles = $this->GetConfigValueBoolDef('RegisterDefaultFiles', '', '');
 			$registerExampleFiles = $this->GetConfigValueBoolDef('RegisterExampleFiles', '', '');
+			$registerInstallFiles = $this->GetConfigValueBoolDef('RegisterInstallFiles', '', '');
 
 			if ($fileKey=='DefaultFiles') {
 				$this->scriptHandler->RegisterUserScriptsListByDefaultFilename($fileList);
@@ -461,6 +586,11 @@
 
 			if ((!$registerDefaultFiles and $fileKey=='DefaultFiles') or
 				(!$registerExampleFiles and $fileKey=='ExampleFiles')) {
+				return;
+			}
+
+			if (!$registerInstallFiles and
+			    ($this->moduleName=='IPSModuleManager' or $fileTypeSection=='Install')) {
 				return;
 			}
 
@@ -501,6 +631,8 @@
 		   if ($sourceRepository=='') {
 		   	$sourceRepository = $this->sourceRepository;
 		   }
+		   $sourceRepository = IPSFileHandler::AddTrailingPathDelimiter($sourceRepository);
+
 			$this->versionHandler->SetModuleVersionLoading();
 
 			$this->LoadModuleFiles('DownloadFiles','Install',  $sourceRepository);
@@ -556,6 +688,7 @@
 		   if ($sourceRepository=='') {
 		   	$sourceRepository = $this->sourceRepository;
 		   }
+		   $sourceRepository = IPSFileHandler::AddTrailingPathDelimiter($sourceRepository);
 		   $this->LoadModule($sourceRepository);
 		   $this->InstallModule(false /*dont force Installation*/);
 		}
@@ -571,8 +704,9 @@
 		   if ($sourceRepository=='') {
 		   	$sourceRepository = $this->sourceRepository;
 		   }
+  		   $sourceRepository = IPSFileHandler::AddTrailingPathDelimiter($sourceRepository);
 		   $moduleList = $this->versionHandler->GetInstalledModules();
-			foreach ($moduleList as $module) {
+			foreach ($moduleList as $module=>$version) {
 				$moduleManager = new IPSModuleManager($module, $sourceRepository);
 				$moduleManager->UpdateModule();
 			}
@@ -581,12 +715,131 @@
 		/**
 		 * @public
 		 *
-		 * Der Aufruf der Funktion versucht eine bereits installierte ModuleVersion zu reparier.
+		 * Der Aufruf der Funktion versucht eine bereits installierte ModuleVersion zu reparieren.
 		 *
 		 */
 		public function RepairModule() {
 		   $this->InstallModule(true /*ForceInstallation*/);
 		}
+
+		/**
+		 * @public
+		 *
+		 * Exportiert eine Liste von Dateien anhand des Filetypes
+		 *
+		 * @param string $fileKey Type des Files (ScriptList, DefaultList, ExampleList, ...)
+		 * @param string $fileTypeSection Filetype Section (app, config, webfront ...)
+		 * @param string $sourceRepository Pfad/Url zum Source Repository, das zum Speichern verwendet werden soll
+		 */
+		private function DeleteModuleFiles($fileKey, $fileTypeSection) {
+		   $backupDirectory = $this->managerConfigHandler->GetValueDef('DeployBackupDirectory', '', IPS_GetKernelDir().'backup\\IPSLibrary_Delete\\');
+			$backupHandler   = new IPSBackupHandler($backupDirectory);
+
+			$localList       = $this->GetScriptList($fileKey, $fileTypeSection, IPS_GetKernelDir().'scripts\\');
+			$backupList      = $this->GetScriptList($fileKey, $fileTypeSection, $backupHandler->GetBackupDirectory());
+
+			$this->logHandler->Log('Delete Files with Key='.$fileKey.' and Section='.$fileTypeSection);
+			foreach ($localList as $idx=>$file) {
+				if ($fileKey=='DefaultFiles') {
+				   $userFile   = IPSFileHandler::GetUserFilenameByDefaultFilename($file);
+				   $backupFile = IPSFileHandler::GetUserFilenameByDefaultFilename($backupList[$idx]);
+					$this->backupHandler->CreateBackupFromFile($userFile, $backupFile);
+					$this->scriptHandler->UnregisterScriptByFilename($userFile);
+					$this->fileHandler->DeleteFile($userFile);
+				}
+				$this->backupHandler->CreateBackupFromFile($file, $backupList[$idx]);
+				$this->scriptHandler->UnregisterScriptByFilename($file);
+				$this->fileHandler->DeleteFile($file);
+				$this->fileHandler->DeleteEmptyDirectories($file);
+			}
+		}
+
+		private function DeleteModuleObjects($path, $exclusiveSwitch=true) {
+		   if ($path <> '' and $exclusiveSwitch) {
+				$categoryID = IPSUtil_ObjectIDByPath($path, true);
+				if ($categoryID===false) {
+					$this->logHandler->Debug('Path '.$path.' not found...');
+				   return;
+				}
+				$this->logHandler->Log('Delete Objects in Category='.$path.', ID='.$categoryID);
+
+				DeleteCategory($categoryID);
+			}
+		}
+
+		private function DeleteWFCItems($wfcItemPrefix, $exclusiveSwitch=true) {
+		   if ($wfcItemPrefix <> '' and $exclusiveSwitch) {
+		      $wfcConfigID = $this->GetConfigValueIntDef('ID', 'WFC10', GetWFCIdDefault());
+				$this->logHandler->Log('Delete WFC Items with Prefix='.$wfcItemPrefix);
+				DeleteWFCItems($wfcConfigID, $wfcItemPrefix);
+				ReloadAllWebFronts();
+		   }
+		}
+
+		/**
+		 * @public
+		 *
+		 * Löscht ein Module aus IP-Symcon
+		 *
+		 * Es werden folgende Komponenten gelöscht
+		 *   - Alle WebFront Seiten, die autom. generiert wurden
+		 *   - Alle Mobile Interface Einträge
+		 *   - Alle Variablen und Scripte in IPS
+		 *   - Alle zugehörigen Dateien
+		 *
+		 */
+		public function DeleteModule() {
+		   if ($this->moduleName=='IPSModuleManager') {
+			   $this->DeleteModuleObjects('Program.IPSLibrary.install');
+			   $this->DeleteModuleObjects('Program.IPSLibrary.app.core.IPSUtils');
+			   $this->DeleteModuleObjects('Program.IPSLibrary.app.core.IPSConfigHandler');
+		   } else {
+		      if ($this->moduleConfigHandler->GetValueDef('TabItem', 'WFC10', '') <> '') {
+		      	$this->DeleteWFCItems($this->moduleConfigHandler->GetValueDef('TabPaneItem', 'WFC10', '').$this->moduleConfigHandler->GetValueDef('TabItem', 'WFC10', ''));
+		      }
+				for ($idx=1;$idx<=10;$idx++) {
+			      if ($this->moduleConfigHandler->GetValueDef('TabItem'.$idx, 'WFC10', '') <> '') {
+			      	$this->DeleteWFCItems($this->moduleConfigHandler->GetValueDef('TabPaneItem', 'WFC10', '').$this->moduleConfigHandler->GetValueDef('TabItem'.$idx, 'WFC10', ''));
+					}
+				}
+		      $this->DeleteWFCItems($this->moduleConfigHandler->GetValueDef('TabPaneItem', 'WFC10', ''),
+				                      $this->moduleConfigHandler->GetValueBoolDef('TabPaneExclusive', 'WFC10', false));
+
+				$namespace  = $this->fileConfigHandler->GetValue(IPSConfigHandler::MODULENAMESPACE);
+			   $this->DeleteModuleObjects($this->GetModuleCategoryPath('app'));
+			   $this->DeleteModuleObjects($this->GetModuleCategoryPath('data'));
+			   $this->DeleteModuleObjects($this->GetModuleCategoryPath('config'));
+			   $this->DeleteModuleObjects($this->moduleConfigHandler->GetValueDef('Path', 'WFC10', ''));
+			   $this->DeleteModuleObjects($this->moduleConfigHandler->GetValueDef('Path', 'Mobile', ''),
+				                           $this->moduleConfigHandler->GetValueBoolDef('PathExclusive', 'Mobile', false));
+			   $this->DeleteModuleObjects($this->moduleConfigHandler->GetValueDef('Path', 'Mobile', '').'.'.$this->moduleConfigHandler->GetValueDef('Name', 'Mobile', ''));
+				for ($idx=1;$idx<=10;$idx++) {
+			   	$this->DeleteModuleObjects($this->moduleConfigHandler->GetValueDef('Path', 'Mobile', '').'.'.$this->moduleConfigHandler->GetValueDef('Name'.$idx, 'Mobile', ''));
+				}
+			}
+
+			$deinstallationScriptName = $this->GetModuleDeinstallationScript();
+			if (file_exists($deinstallationScriptName)) {
+			   $this->logHandler->Log('Execute Deinstallation Script '.$deinstallationScriptName);
+		      include_once $deinstallationScriptName;
+		   }
+
+			$this->DeleteModuleFiles('DefaultFiles', 'App');
+			$this->DeleteModuleFiles('ScriptFiles',  'App');
+			$this->DeleteModuleFiles('ScriptFiles',  'Config');
+			$this->DeleteModuleFiles('DefaultFiles', 'Config');
+			$this->DeleteModuleFiles('ExampleFiles', 'Config');
+			$this->DeleteModuleFiles('ScriptFiles',  'WebFront');
+			$this->DeleteModuleFiles('ExampleFiles', 'WebFront');
+			$this->DeleteModuleFiles('InstallFiles', 'Install');
+			$this->DeleteModuleFiles('DefaultFiles', 'Install');
+			$this->DeleteModuleFiles('ExampleFiles', 'Install');
+			$this->DeleteModuleFiles('DownloadFiles','Install');
+
+			$this->versionHandler->DeleteModule();
+		}
+
+
 
 		/**
 		 * @public
@@ -606,6 +859,8 @@
 			$backupList      = $this->GetScriptList($fileKey, $fileTypeSection, $backupHandler->GetBackupDirectory());
 
 			$this->backupHandler->CreateBackup($repositoryList, $backupList);
+
+			$this->fileHandler->FilterEqualFiles($localList, $repositoryList);
 			$this->fileHandler->WriteFiles($localList, $repositoryList);
 		}
 
@@ -620,18 +875,21 @@
 		   if ($sourceRepository=='') {
 				$sourceRepository = $this->sourceRepository;
 			}
+		   $sourceRepository = IPSFileHandler::AddTrailingPathDelimiter($sourceRepository);
 
-			$this->DeployModuleFiles('DefaultFiles', 'App', $sourceRepository);
-			$this->DeployModuleFiles('ScriptFiles',  'App', $sourceRepository);
+			$this->DeployModuleFiles('DownloadFiles','Install',  $sourceRepository);
 
-			$this->DeployModuleFiles('ScriptFiles',  'Config', $sourceRepository);
-			$this->DeployModuleFiles('DefaultFiles', 'Config', $sourceRepository);
-			$this->DeployModuleFiles('ExampleFiles', 'Config', $sourceRepository);
+			$this->DeployModuleFiles('DefaultFiles', 'App',      $sourceRepository);
+			$this->DeployModuleFiles('ScriptFiles',  'App',      $sourceRepository);
 
-			$this->DeployModuleFiles('DownloadFiles','Install', $sourceRepository);
-			$this->DeployModuleFiles('InstallFiles', 'Install', $sourceRepository);
-			$this->DeployModuleFiles('DefaultFiles', 'Install', $sourceRepository);
-			$this->DeployModuleFiles('ExampleFiles', 'Install', $sourceRepository);
+			$this->DeployModuleFiles('ScriptFiles',  'Config',   $sourceRepository);
+			$this->DeployModuleFiles('DefaultFiles', 'Config',   $sourceRepository);
+			$this->DeployModuleFiles('ExampleFiles', 'Config',   $sourceRepository);
+
+			$this->DeployModuleFiles('DownloadFiles','Install',  $sourceRepository);
+			$this->DeployModuleFiles('InstallFiles', 'Install',  $sourceRepository);
+			$this->DeployModuleFiles('DefaultFiles', 'Install',  $sourceRepository);
+			$this->DeployModuleFiles('ExampleFiles', 'Install',  $sourceRepository);
 
 			$this->DeployModuleFiles('ScriptFiles',  'WebFront', $sourceRepository);
 			$this->DeployModuleFiles('ExampleFiles', 'WebFront', $sourceRepository);
@@ -649,7 +907,7 @@
 				$sourceRepository = $this->sourceRepository;
 			}
 		   $moduleList = $this->versionHandler->GetInstalledModules();
-			foreach ($moduleList as $module) {
+			foreach ($moduleList as $module=>$version) {
 				$moduleManager = new IPSModuleManager($module, $sourceRepository);
 				$moduleManager->DeployModule();
 			}

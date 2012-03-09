@@ -2,61 +2,75 @@
 	/**@addtogroup ipsmodulemanager
 	 * @{
 	 *
-	 * @file          IPSVariableVersionHandler.class.php
+	 * @file          IPSFileVersionHandler.class.php
 	 * @author        Andreas Brauneis
 	 *
 	 */
 
-	include 'IPSVersionHandler.class.php';
+	include_once 'IPSVersionHandler.class.php';
 
    /**
-    * @class IPSVariableVersionHandler
+    * @class IPSFileVersionHandler
     *
-    * Implementierung einer Versions-Verwaltung der IPSLibrary Module auf Basis von
-    * IPS Variablen.
+    * Implementierung einer Versions-Verwaltung der IPSLibrary Module auf Basis Files
     *
     * @author Andreas Brauneis
     * @version
-    * Version 2.50.1, 31.01.2012<br/>
+    * Version 2.50.1, 17.02.2012<br/>
     */
-	class IPSVariableVersionHandler extends IPSVersionHandler {
+	class IPSFileVersionHandler extends IPSVersionHandler {
 
-		private $instanceId;
-		private $librayBasePath;
+		const FILE_INSTALLED_MODULES   = 'IPSLibrary\\config\\InstalledModules.ini';
+
+		private $fileName;
+		private $moduleList;
 
 		/**
        * @public
 		 *
-		 * Initialisierung des IPSVariableVersionHandler
+		 * Initialisierung des IPSFileVersionHandler
 		 *
 		 * @param string $moduleName Name des Modules
-		 * @param string $libraryBasePath BasisPfad zur IPSLibrary (z.B 'Program')
 		 */
-		public function __construct($moduleName, $libraryBasePath) {
+		public function __construct($moduleName) {
 			if ($moduleName=="") {
 				die("ModuleName must have a Value!");
 			}
 			parent::__construct($moduleName);
-			$this->InitIPSStructure($libraryBasePath);
+			$this->fileName   = IPS_GetKernelDir().'scripts\\'.$this::FILE_INSTALLED_MODULES;
+
+			$this->LoadVersionFile();
+			if (!array_key_exists($moduleName, $this->moduleList)) {
+			   $this->moduleList[$moduleName] = '';
+			}
+			
+		}
+		
+		private function LoadVersionFile() {
+		   if (file_exists($this->fileName)) {
+			   $fileContent = file_get_contents($this->fileName);
+			   $lines = explode(PHP_EOL, $fileContent);
+			   foreach ($lines as $line) {
+			      $content = explode('=', $line);
+					if (count($content)>0) {
+               	$this->moduleList[$content[0]] = $content[1];
+               }
+			   }
+			   
+		   } else {
+				$this->moduleList = array();
+			}
 		}
 
-		private function InitIPSStructure($libraryBasePath) {
-			$path = 'IPSLibrary.install.IPSModuleManager.IPSVersionHandler';
-			if ($libraryBasePath <> '') {
-				$path = $libraryBasePath.'.'.$path;
+		private function WriteVersionFile() {
+			$fileContent = '';
+			foreach ($this->moduleList as $moduleName=>$moduleVersion) {
+			   if ($fileContent <> '') {
+			      $fileContent .= PHP_EOL;
+			   }
+				$fileContent .= $moduleName.'='.$moduleVersion;
 			}
-			$categoryId            = CreateCategoryPath($path);
-			$this->instanceId      = CreateDummyInstance("IPSLibrary", $categoryId, 30);
-			$this->libraryBasePath = $libraryBasePath;
-		}
-
-		private function GetVariableId() {
-			$id = @IPS_GetObjectIDByName($this->moduleName, $this->instanceId);
-			if ($id===false) {
-				$position = count(IPS_GetChildrenIDs($this->instanceId)) * 10 + 10;
-				$id = CreateVariable ($this->moduleName, 3 /*String*/, $this->instanceId, $position, "~String");
-			}
-			return $id;
+			file_put_contents($this->fileName, $fileContent);
 		}
 
 		private function VersionToArray($moduleVersion) {
@@ -80,7 +94,7 @@
 		   if ($this->moduleName == $this::MODULE_IPS) {
 				$moduleVersion=IPS_GetKernelVersion();
 		   } else {
-				$moduleVersion=GetValue($this->GetVariableId());
+				$moduleVersion=$this->moduleList[$this->moduleName];
 		   }
 			return $moduleVersion;
 		}
@@ -114,14 +128,14 @@
 		 * @throws IPSVersionHandlerException wenn Version nicht korrekt ist
 		 */
 		public function CheckModuleVersion($moduleName, $moduleVersion) {
-		   $versionHandler = new IPSVariableVersionHandler($moduleName, $this->libraryBasePath);
+		   $versionHandler = new IPSFileVersionHandler($moduleName);
 			$versionInstalled = $versionHandler->GetModuleVersionArray();
 			$versionRequired  = $this->VersionToArray($moduleVersion);
 			
 			if ($versionRequired[0] > $versionInstalled[0] or
 			    $versionRequired[1] > $versionInstalled[1] or
 				 $versionRequired[2] > $versionInstalled[2]) {
-				 throw new IPSVersionHandlerException('Required Version '.$moduleVersion.' is lower current Version '.$versionHandler->GetModuleVersion());
+				 throw new IPSVersionHandlerException('Required Version '.$moduleVersion.' for Module '.$moduleName.' is lower current Version '.$versionHandler->GetModuleVersion());
 			}
 		}
 
@@ -147,23 +161,25 @@
 		/**
 		 * @public
 		 *
+		 * Löschen eines Modules
+		 */
+		public function DeleteModule() {
+			$this->logHandler->Log('Remove Module '.$this->moduleName.' from Versioning System');
+		   unset($this->moduleList[$this->moduleName]);
+		   $this->WriteVersionFile();
+		}
+
+		/**
+		 * @public
+		 *
 		 * Schreiben der aktuellen Module Version
 		 *
 		 * @param string $moduleVersion Name des Modules
 		 */
 		public function SetModuleVersion($moduleVersion) {
 			$this->logHandler->Log('Set Version '.$this->moduleName.'='.$moduleVersion);
-			SetValue($this->GetVariableId(), $moduleVersion);
-		}
-
-		/**
-		 * @public
-		 *
-		 * Löschen eines Modules
-		 */
-		public function DeleteModule() {
-			$this->logHandler->Log('Remove Module '.$this->moduleName.' from Versioning System');
-			DeleteVariable($this->GetVariableId());
+		   $this->moduleList[$this->moduleName] = $moduleVersion;
+		   $this->WriteVersionFile();
 		}
 
 		/**
@@ -210,13 +226,14 @@
 		 * @return string[] Liste der installierten Module
 		 */
 		public function GetInstalledModules() {
-			$childrenIds = IPS_GetChildrenIDs($this->instanceId);
 			$result = array();
-			foreach ($childrenIds as $id) {
-				$result[IPS_GetName($id)] = GetValue($id);
+			foreach ($this->moduleList as $moduleName=>$moduleVersion) {
+				$result[$moduleName] = $moduleVersion;
 			}
 			return $result;
 		}
+
+
 	}
 
 	/** @}*/
