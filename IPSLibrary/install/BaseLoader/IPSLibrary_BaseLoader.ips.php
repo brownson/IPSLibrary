@@ -1,5 +1,5 @@
 <?
-	$remoteRepository = 'https://raw.github.com/brownson/IPSLibrary/master/';
+	$remoteRepository = 'https://raw.github.com/brownson/IPSLibrary--Test-/master/';
 	$localRepository = IPS_GetKernelDir().'scripts\\';
 
 	$fileList = array(

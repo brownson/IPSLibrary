@@ -82,7 +82,7 @@
 		 *
 		 * Die Funktion registriert ein ScriptFile anhand des Filenames und Directory Pfades in IPS
 		 *
-		 * @param string $scriptList Liste von Scripts, die registriert werden soll
+		 * @param string $file Name des Script Files
 		 */
 		public function UnregisterScriptByFilename($file) {
 			$scriptPath = $this->GetScriptPathByFileName($file);
@@ -101,7 +101,7 @@
 		 *
 		 * Die Funktion registriert ein ScriptFile anhand des Filenames und Directory Pfades in IPS
 		 *
-		 * @param string $scriptList Liste von Scripts, die registriert werden soll
+		 * @param string $file Name des Script Files
 		 */
 		public function RegisterScriptByFilename($file) {
 			$scriptPath = $this->GetScriptPathByFileName($file);

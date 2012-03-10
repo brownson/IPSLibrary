@@ -368,10 +368,10 @@
 		 * Liefert ein Array aller installierten Module
 		 *
 		 * Aufbau:
-		 * array('Module1' => array('<<Version>>', '<<Status>>', '<<Description>>'),
-		 *       'Module2' => array('<<Version>>', '<<Status>>', '<<Description>>'),
+		 * array('Module1' => array('Version', 'Status', 'Description'),
+		 *       'Module2' => array('Version', 'Status', 'Description'),
 		 *       ...
-		 *       'ModuleX' => array('<<Version>>', '<<Status>>', '<<Description>>'))
+		 *       'ModuleX' => array('Version', 'Status', 'Description'))
 		 *
 		 * @return string Array der Installierten Module
 		 */
@@ -399,16 +399,17 @@
 			}
 			return $resultList;
 		}
+
 		/**
 		 * @public
 		 *
 		 * Liefert ein Array aller verfügbaren Module
 		 *
 		 * Aufbau:
-		 * array('Module1' => array('<<ModulePfad>>', '<<Description>>'),
-		 *       'Module2' => array('<<ModulePfad>>', '<<Description>>'),
+		 * array('Module1' => array('ModulePfad', 'Description'),
+		 *       'Module2' => array('ModulePfad', 'Description'),
 		 *       ...
-		 *       'ModuleX' => array('<<ModulePfad>>', '<<Description>>'))
+		 *       'ModuleX' => array('ModulePfad', 'Description'))
 		 *
 		 * @return string Array der verfügbaren Module
 		 */
