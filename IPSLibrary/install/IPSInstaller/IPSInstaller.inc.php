@@ -37,8 +37,8 @@
 		if ($CategoryId === false) $CategoryId = @IPS_GetCategoryIDByName($Name, $ParentId);
 		if ($CategoryId === false) {
 			$CategoryId = IPS_CreateCategory();
-			IPS_SetName($CategoryId, $Name);
 			IPS_SetParent($CategoryId, $ParentId);
+			IPS_SetName($CategoryId, $Name);
 			IPS_SetIdent($CategoryId, Get_IdentByName($Name));
 			if ($Position!==false) {
 				IPS_SetPosition($CategoryId, $Position);
@@ -46,7 +46,7 @@
 			if ($Icon!==false) {
 				IPS_SetIcon($CategoryId, $Icon);
 			}
-			echo 'Created Category '.$Name.'='.$CategoryId."\n";
+			Debug ('Created Category '.$Name.'='.$CategoryId."");
 		}
 		UpdateObjectData($CategoryId, $Position, $Icon);
 		return $CategoryId;
@@ -62,7 +62,7 @@
 	 */
 	function DeleteCategory($CategoryId) {
 		EmptyCategory($CategoryId);
-		echo "Delete Category ID=$CategoryId\n";
+		Debug ("Delete Category ID=$CategoryId");
 		IPS_DeleteCategory($CategoryId);
 	}
 
@@ -75,8 +75,7 @@
 	 */
 	function EmptyCategory($CategoryId) {
 		if ($CategoryId==0) {
-			echo "Root Category could NOT ne deleted!!!\n";
-			exit;
+			Error ("Root Category could NOT ne deleted!!!");
 		}
 
 		$ChildrenIds = IPS_GetChildrenIDs($CategoryId);
@@ -95,23 +94,22 @@
 					IPS_DeleteVariable($ObjectId);
 					break;
 				case 3: // Script
-					IPS_DeleteScript($ObjectId);
+					IPS_DeleteScript($ObjectId, false);
 					break;
 				case 4: // Event
 					IPS_DeleteEvent($ObjectId);
 					break;
 				case 5: // Media
-					IPS_DeleteMedia($ObjectId);
+					IPS_DeleteMedia($ObjectId, true);
 					break;
 				case 6: // Link
 					IPS_DeleteLink($ObjectId);
 					break;
 				default:
-					echo "Found unknown ObjectType $ObjectType\n";
-					exit;
+					Error ("Found unknown ObjectType $ObjectType");
 			}
 		}
-		echo "Empty Category ID=$CategoryId\n";
+		Debug ("Empty Category ID=$CategoryId");
 	}
 
 	/** Anlegen eines Kategorie Pfades.
@@ -160,7 +158,7 @@
 				if ($ReturnFalse) {
 					return false;
 				} else {
-					die("'$Category' could NOT be found !!!");
+					Error("'$Category' could NOT be found for in Path '$Path'!!!");
 				}
 			}
 			$ParentId = $ObjId;
@@ -206,11 +204,11 @@
 		if ($InstanceId === false) $InstanceId = @IPS_GetInstanceIDByName($Name, $ParentId);
 		if ($InstanceId === false) {
 			$InstanceId	= IPS_CreateInstance($ModulId);
+			IPS_SetParent($InstanceId, $ParentId);
 			IPS_SetName($InstanceId, $Name);
 			IPS_SetIdent($InstanceId, Get_IdentByName($Name));
-			IPS_SetParent($InstanceId, $ParentId);
 			IPS_SetPosition($InstanceId, $Position);
-			echo "Created Instance $Name=$InstanceId, ModuleID=$ModulId\n";
+			Debug ("Created Instance $Name=$InstanceId, ModuleID=$ModulId");
 		}
 		UpdateObjectData($InstanceId, $Position);
 		return $InstanceId;
@@ -232,7 +230,7 @@
 		$SoundCards = WAC_GetDevices($MediaPlayerInstanceId);
 		foreach ($SoundCards as $Idx=>$SoundCard) {
 			if ($SoundCard <> "No sound") {
-				echo "Set Soundcard $SoundCard\n";
+				Debug ("Set Soundcard $SoundCard");
 			   WAC_SetDeviceID($MediaPlayerInstanceId, $Idx);
 			}
 		}
@@ -261,11 +259,11 @@
 		if ($MediaId === false) $MediaId = @IPS_GetMediaIDByName($Name, $ParentId);
 		if ($MediaId === false) {
 			$MediaId	= IPS_CreateMedia($MediaType);
+			IPS_SetParent($MediaId, $ParentId);
 			IPS_SetName($MediaId, $Name);
 			IPS_SetIdent($MediaId, Get_IdentByName($Name));
-			IPS_SetParent($MediaId, $ParentId);
 			IPS_SetPosition($MediaId, $Position);
-			echo "Created Media $Name=$MediaId, File=$FileName\n";
+			Debug ("Created Media $Name=$MediaId, File=$FileName");
 		}
 		IPS_SetMediaFile($MediaId, $FileName, $FileExists);
 		UpdateObjectData($MediaId, $Position, $Icon);
@@ -312,8 +310,7 @@
 		COMPort_SetOpen($InstanceId, true);
 
 		if (!@IPS_ApplyChanges($InstanceId) and !$IgnoreError) {
-			echo "Error applying Changes to ComPort Instance --> Abort Script\n";
-			Exit;
+			Error ("Error applying Changes to ComPort Instance --> Abort Script");
 		};
 		return $InstanceId;
 	}
@@ -340,7 +337,7 @@
 		$InstanceId   = false;
 		foreach ($InstanceList as $id) {
 			$Port = COMPort_GetPort($id);
-			echo "Found Port >>$Port<<\n";
+			Debug ("Found Port >>$Port<<");
 			if ($Port==$ComPort or $Port=="") {
 				$InstanceId = $id;
 			}
@@ -373,8 +370,7 @@
 		IPS_ConnectInstance($instanceId, $ioInstanceId);
 
 		if (!@IPS_ApplyChanges($instanceId)) {
-			echo "Error applying Changes to Cutter Instance --> Abort Script\n";
-			Exit;
+			Error ("Error applying Changes to Cutter Instance --> Abort Script");
 		};
 
       return $instanceId;
@@ -402,8 +398,7 @@
 		IPS_ConnectInstance($instanceId, $ioInstanceId);
 
 		if (!@IPS_ApplyChanges($instanceId)) {
-			echo "Error applying Changes to Cutter Instance --> Abort Script\n";
-			Exit;
+			Error ("Error applying Changes to Cutter Instance --> Abort Script");
 		};
 
       return $instanceId;
@@ -450,15 +445,15 @@
 		if ($ScriptId === false) {
 			$File = str_replace(IPS_GetKernelDir().'scripts\\', '', $File);
 			if (!file_exists(IPS_GetKernelDir().'scripts\\'.$File)) {
-				exit ("Script File $File could NOT be found !!!");
+				Error ("Script File $File could NOT be found !!!");
 			}
 			$ScriptId = IPS_CreateScript(0);
-			IPS_SetName($ScriptId, $Name);
 			IPS_SetParent($ScriptId, $ParentId);
+			IPS_SetName($ScriptId, $Name);
 			IPS_SetPosition($ScriptId, $Position);
  			IPS_SetScriptFile($ScriptId, $File);
 			IPS_SetIdent($ScriptId, Get_IdentByName($Name));
-			echo 'Created Script '.$Name.'='.$ScriptId."\n";
+			Debug ('Created Script '.$Name.'='.$ScriptId."");
 		}
 		UpdateObjectData($ScriptId, $Position);
 		return $ScriptId;
@@ -485,9 +480,9 @@
 		if ($VariableId === false) $VariableId = @IPS_GetVariableIDByName($Name, $ParentId);
 		if ($VariableId === false) {
  			$VariableId = IPS_CreateVariable($Type);
+			IPS_SetParent($VariableId, $ParentId);
 			IPS_SetName($VariableId, $Name);
 			IPS_SetIdent($VariableId, Get_IdentByName($Name));
-			IPS_SetParent($VariableId, $ParentId);
 			IPS_SetPosition($VariableId, $Position);
   			IPS_SetVariableCustomProfile($VariableId, $Profile);
  			IPS_SetVariableCustomAction($VariableId, $Action);
@@ -504,15 +499,15 @@
 				SetValue($VariableId, $ValueDefault); 
 			}
 			
-			echo 'Created VariableId '.$Name.'='.$VariableId."\n";
+			Debug ('Created VariableId '.$Name.'='.$VariableId."");
 		}
 		$VariableData = IPS_GetVariable ($VariableId);
 		if ($VariableData['VariableCustomProfile'] <> $Profile) {
-			echo "Set VariableProfile='$Profile' for Variable='$Name' \n";
+			Debug ("Set VariableProfile='$Profile' for Variable='$Name' ");
 			IPS_SetVariableCustomProfile($VariableId, $Profile);
 		}
 		if ($VariableData['VariableCustomAction'] <> $Action) {
-			echo "Set VariableCustomAction='$Action' for Variable='$Name' \n";
+			Debug ("Set VariableCustomAction='$Action' for Variable='$Name' ");
 			IPS_SetVariableCustomAction($VariableId, $Action);
 		}
 		UpdateObjectData($VariableId, $Position, $Icon);
@@ -541,14 +536,14 @@
 		if ($LinkId === false) $LinkId = @IPS_GetLinkIDByName($Name, $ParentId);
 		if ($LinkId === false) {
  			$LinkId = IPS_CreateLink();
+			IPS_SetParent($LinkId, $ParentId);
 			IPS_SetName($LinkId, $Name);
 			if ($ident<>"") {
 				IPS_SetIdent($LinkId, Get_IdentByName($Name));
 			}
 			IPS_SetLinkChildID($LinkId, $Link);
-			IPS_SetParent($LinkId, $ParentId);
 			IPS_SetPosition($LinkId, $Position);
-			echo 'Created Link '.$Name.'='.$LinkId."\n";
+			Debug ('Created Link '.$Name.'='.$LinkId."");
 		}
 		UpdateObjectData($LinkId, $Position);
 		IPS_SetLinkChildID($LinkId, $Link);
@@ -602,11 +597,11 @@
 		$ObjectData = IPS_GetObject ($ObjectId);
 		$ObjectPath = IPS_GetLocation($ObjectId);
 		if ($ObjectData['ObjectPosition'] <> $Position and $Position!==false) {
-			echo "Set ObjectPosition='$Position' for Object='$ObjectPath' \n";
+			Debug ("Set ObjectPosition='$Position' for Object='$ObjectPath' ");
 			IPS_SetPosition($ObjectId, $Position);
 		}
 		if ($ObjectData['ObjectIcon'] <> $Icon and $Icon!==false) {
-			echo "Set ObjectIcon='$Icon' for Object='$ObjectPath' \n";
+			Debug ("Set ObjectIcon='$Icon' for Object='$ObjectPath' ");
 			IPS_SetIcon($ObjectId, $Icon);
 		}
 
@@ -661,19 +656,17 @@
 		if ($TimerId === false) $TimerId = @IPS_GetEventIDByName($Name, $ParentId);
 		if ($TimerId === false) {
  			$TimerId = IPS_CreateEvent(1 /*Cyclic Event*/);
+			IPS_SetParent($TimerId, $ParentId);
 			IPS_SetName($TimerId, $Name);
 			IPS_SetIdent($TimerId, Get_IdentByName($Name));
-			IPS_SetParent($TimerId, $ParentId);
 			if (!IPS_SetEventCyclic($TimerId, 2 /**Daily*/, 1,0,0,0,0)) {
-				echo "IPS_SetEventCyclic failed !!!\n";
-				exit;
+				Error ("IPS_SetEventCyclic failed !!!");
 			}
 			if (!IPS_SetEventCyclicTimeBounds($TimerId, mktime($Hour, $Minute, 0), 0)) {
-				echo "IPS_SetEventCyclicTimeBounds failed !!!\n";
-				exit;
+				Error ("IPS_SetEventCyclicTimeBounds failed !!!");
 			}
 			IPS_SetEventActive($TimerId, true);
-			echo 'Created Timer '.$Name.'='.$TimerId."\n";
+			Debug ('Created Timer '.$Name.'='.$TimerId."");
 		}
 		return $TimerId;
 	}
@@ -694,15 +687,14 @@
 		if ($TimerId === false) $TimerId = @IPS_GetEventIDByName($Name, $ParentId);
 		if ($TimerId === false) {
  			$TimerId = IPS_CreateEvent(1 /*Cyclic Event*/);
+			IPS_SetParent($TimerId, $ParentId);
 			IPS_SetName($TimerId, $Name);
 			IPS_SetIdent($TimerId, Get_IdentByName($Name));
-			IPS_SetParent($TimerId, $ParentId);
 			if (!IPS_SetEventCyclic($TimerId, 2 /*Daily*/, 1 /*Int*/,0 /*Days*/,0/*DayInt*/,1/*TimeType Sec*/,$Seconds/*Sec*/)) {
-				echo "IPS_SetEventCyclic failed !!!\n";
-				exit;
+				Error ("IPS_SetEventCyclic failed !!!");
 			}
 			IPS_SetEventActive($TimerId, $Active);
-			echo 'Created Timer '.$Name.'='.$TimerId."\n";
+			Debug ('Created Timer '.$Name.'='.$TimerId."");
 		}
 		return $TimerId;
 	}
@@ -723,15 +715,14 @@
 		if ($TimerId === false) $TimerId = @IPS_GetEventIDByName($Name, $ParentId);
 		if ($TimerId === false) {
  			$TimerId = IPS_CreateEvent(1 /*Cyclic Event*/);
+			IPS_SetParent($TimerId, $ParentId);
 			IPS_SetName($TimerId, $Name);
 			IPS_SetIdent($TimerId, Get_IdentByName($Name));
-			IPS_SetParent($TimerId, $ParentId);
 			if (!IPS_SetEventCyclic($TimerId, 2 /*Daily*/, 1 /*Unused*/,0 /*Unused*/,0/*Unused*/,2/*TimeType Minutes*/,$Minutes/*Minutes*/)) {
-				echo "IPS_SetEventCyclic failed !!!\n";
-				exit;
+				Error ("IPS_SetEventCyclic failed !!!");
 			}
 			IPS_SetEventActive($TimerId, $Active);
-			echo 'Created Timer '.$Name.'='.$TimerId."\n";
+			Debug ('Created Timer '.$Name.'='.$TimerId."");
 		}
 		return $TimerId;
 	}
@@ -753,12 +744,12 @@
 		if ($EventId === false) $EventId = @IPS_GetEventIDByName ($Name,$ScriptId);
 		if ($EventId === false) {
 			$EventId = IPS_CreateEvent(0);
+			IPS_SetParent($EventId, $ScriptId);
 			IPS_SetName($EventId, $Name);
 			IPS_SetIdent($EventId, Get_IdentByName($Name));
 			IPS_SetEventTrigger($EventId, $TriggerType, $VariableId);
-			IPS_SetParent($EventId, $ScriptId);
 			IPS_SetEventActive($EventId, true);
-			echo "Created Event $Name=$EventId, trigger ScriptId=$ScriptId by Variable=$VariableId\n";
+			Debug ("Created Event $Name=$EventId, trigger ScriptId=$ScriptId by Variable=$VariableId");
   		}
 		return $EventId;
 	}
@@ -916,7 +907,7 @@
 
 	function CreateWFCItem ($WFCId, $ItemId, $ParentId, $Position, $Title, $Icon, $ClassName, $Configuration) {
 	   if (!exists_WFCItem($WFCId, $ItemId)) {
-		   echo "Add WFCItem='$ItemId', Class=$ClassName, Config=$Configuration\n";
+		   Debug ("Add WFCItem='$ItemId', Class=$ClassName, Config=$Configuration");
 			WFC_AddItem($WFCId, $ItemId, $ClassName, $Configuration, $ParentId);
 		}
 		WFC_UpdateConfiguration($WFCId, $ItemId, $Configuration);
@@ -1039,8 +1030,7 @@
 		$ItemList = WFC_GetItems($WFCId);
 		foreach ($ItemList as $Item) {
 			if (strpos($Item['ID'], $ItemId)===0) {
-				//echo "Found WFC Item='".$Item['ID']."', Parent='".$Item['ParentID']."'\n";
-				WFC_DeleteItem($WFCId, $Item['ID']);
+				DeleteWFCItem($WFCId, $Item['ID']);
 			}
 		}
 	}
@@ -1054,8 +1044,27 @@
 	 *
 	 */
 	function DeleteWFCItem($WFCId, $ItemId) {
-		echo "Delete WFC Item='$ItemId'\n";
+		Debug ("Delete WFC Item='$ItemId'");
 		WFC_DeleteItem($WFCId, $ItemId);
+	}
+
+	function Debug($msg) {
+		if (isset($_IPS['MODULEMANAGER'])) {
+		   $moduleManager = $_IPS['MODULEMANAGER'];
+		   $moduleManager->LogHandler()->Debug($msg);
+		} else {
+		   echo $msg.PHP_EOL;
+		}
+	}
+
+	function Error($msg) {
+		if (isset($_IPS['MODULEMANAGER'])) {
+		   $moduleManager = $_IPS['MODULEMANAGER'];
+		   $moduleManager->LogHandler()->Error($msg);
+		} else {
+		   echo $msg.PHP_EOL;
+		}
+		throw new Exception($msg);
 	}
 
 	/** @}*/

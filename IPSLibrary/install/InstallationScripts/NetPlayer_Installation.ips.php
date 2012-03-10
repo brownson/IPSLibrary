@@ -43,20 +43,15 @@
 	IPSUtils_Include ("NetPlayer_Constants.inc.php",     "IPSLibrary::app::modules::NetPlayer");
 	IPSUtils_Include ("NetPlayer_Configuration.inc.php", "IPSLibrary::config::modules::NetPlayer");
 
-	$AppPath        = "Program.IPSLibrary.app.modules.NetPlayer";
-	$DataPath       = "Program.IPSLibrary.data.modules.NetPlayer";
-	$ConfigPath     = "Program.IPSLibrary.config.modules.NetPlayer";
-	$HardwarePath   = "Hardware.NetPlayer";
-
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 	// Program Installation
 	// ----------------------------------------------------------------------------------------------------------------------------
 
 	echo "--- Create NetPlayer -------------------------------------------------------------------\n";
-	$CategoryIdData = CreateCategoryPath($DataPath);
-	$CategoryIdApp  = CreateCategoryPath($AppPath);
-	$CategoryIdHw   = CreateCategoryPath($HardwarePath);
+	$CategoryIdData     = $moduleManager->GetModuleCategoryID('data');
+	$CategoryIdApp      = $moduleManager->GetModuleCategoryID('app');
+	$CategoryIdHw       = CreateCategoryPath('Hardware.NetPlayer');
 
 	// Scripts
 	$actionScriptId = IPS_GetScriptIDByName('NetPlayer_ActionScript',  $CategoryIdApp);

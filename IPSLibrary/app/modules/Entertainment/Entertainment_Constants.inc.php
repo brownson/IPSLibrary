@@ -53,6 +53,7 @@
 	define ("c_Property_Script",   					"Script");
 	define ("c_Property_ScriptSnd",   				"ScriptSnd");
 	define ("c_Property_ScriptRcv",   				"ScriptRcv");
+	define ("c_Property_ComponentParams",   		"ComponentParams");
 	define ("c_Property_Installation",   			"Installation");
 	define ("c_Property_FunctionSnd",   			"FunctionSnd");
 	define ("c_Property_MessageTypes",				"MessageTypes");

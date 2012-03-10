@@ -37,8 +37,15 @@
 			$this->logHandler      = IPSLogHandler::GetLogger(get_class($this));
 		}
 
-		private function GetScriptPathByFileName($script) {
-			$scriptPath = pathinfo($script, PATHINFO_DIRNAME);
+		/**
+		 * @public
+		 *
+		 * Liefert den Pfad eines übergebenen Scriptes in der IPS Structure
+		 *
+		 * @param string $file Name des Script Files
+		 */
+		public function GetScriptPathByFileName($file) {
+			$scriptPath = pathinfo($file, PATHINFO_DIRNAME);
 			$scriptPath = str_replace(IPS_GetKernelDir().'scripts\\', '', $scriptPath);
 			$scriptPath = str_replace('\\', '.', $scriptPath);
 			$scriptPath = str_replace('/', '.', $scriptPath);
@@ -48,8 +55,15 @@
 			return $scriptPath;
 		}
 
-		private function GetScriptNameByFileName($script) {
-			$scriptName = pathinfo($script, PATHINFO_BASENAME);
+		/**
+		 * @public
+		 *
+		 * Liefert den Namen eines übergebenen Scriptes in der IPS Structure
+		 *
+		 * @param string $file Name des Script Files
+		 */
+		public function GetScriptNameByFileName($file) {
+			$scriptName = pathinfo($file, PATHINFO_BASENAME);
 			$scriptName = str_replace('.class', '', $scriptName);
 			$scriptName = str_replace('.ips', '', $scriptName);
 			$scriptName = str_replace('.inc', '', $scriptName);
@@ -61,6 +75,45 @@
 			$scriptExt = pathinfo($script, PATHINFO_EXTENSION);
 			return $scriptExt;
 		}
+		
+
+		/**
+		 * @public
+		 *
+		 * Die Funktion registriert ein ScriptFile anhand des Filenames und Directory Pfades in IPS
+		 *
+		 * @param string $scriptList Liste von Scripts, die registriert werden soll
+		 */
+		public function UnregisterScriptByFilename($file) {
+			$scriptPath = $this->GetScriptPathByFileName($file);
+			$scriptName = $this->GetScriptNameByFileName($file);
+			$this->logHandler->Debug("Search Script $scriptPath.$scriptName");
+			$pathId = IPSUtil_ObjectIDByPath($scriptPath, true);
+			$scriptId = @IPS_GetObjectIDByIdent(Get_IdentByName($scriptName), $pathId);
+			if ($scriptId!==false) {
+				$this->logHandler->Debug("Unegister Script $scriptName in $scriptPath (File=$file)");
+			   IPS_DeleteScript($scriptId, true);
+			}
+		}
+
+		/**
+		 * @public
+		 *
+		 * Die Funktion registriert ein ScriptFile anhand des Filenames und Directory Pfades in IPS
+		 *
+		 * @param string $scriptList Liste von Scripts, die registriert werden soll
+		 */
+		public function RegisterScriptByFilename($file) {
+			$scriptPath = $this->GetScriptPathByFileName($file);
+			$scriptName = $this->GetScriptNameByFileName($file);
+			if (strpos($file, IPS_GetKernelDir().'scripts\\')===0) {
+				$this->logHandler->Debug("Register Script $scriptName in $scriptPath (File=$file)");
+				$categoryId = CreateCategoryPath($scriptPath);
+				CreateScript($scriptName, $file, $categoryId);
+			} else {
+				$this->logHandler->Debug("Script $scriptName NOT registered (Filepath)");
+			}
+		}
 
 		/**
 		 * @public
@@ -71,16 +124,7 @@
 		 */
 		public function RegisterScriptListByFilename($scriptList) {
 			foreach ($scriptList as $idx=>$script) {
-				$scriptPath = $this->GetScriptPathByFileName($script);
-				$scriptName = $this->GetScriptNameByFileName($script);
-				$scriptExt  = $this->GetScriptExtensionByFileName($script);
-				if (strpos($script, IPS_GetKernelDir().'scripts\\')===0) {
-					$this->logHandler->Debug("Register Script $scriptName in $scriptPath (File=$script)");
-					$categoryId = CreateCategoryPath($scriptPath);
-					CreateScript($scriptName, $script, $categoryId);
-				} else {
-					$this->logHandler->Debug("Script $scriptName NOT registered (Filepath)");
-				}
+			   $this->RegisterScriptByFilename($script);
 			}
 		}
 

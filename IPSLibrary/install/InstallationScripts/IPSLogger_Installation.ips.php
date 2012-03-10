@@ -39,29 +39,42 @@
 	IPSUtils_Include ("IPSInstaller.inc.php",            "IPSLibrary::install::IPSInstaller");
 	IPSUtils_Include ("IPSLogger_Configuration.inc.php", "IPSLibrary::config::core::IPSLogger");
 
-	$AppPath        = "Program.IPSLibrary.app.core.IPSLogger";
-	$DataPath       = "Program.IPSLibrary.data.core.IPSLogger";
-	$ConfigPath     = "Program.IPSLibrary.config.core.IPSLogger";
+	$WFC10_Enabled          = $moduleManager->GetConfigValue('Enabled', 'WFC10');
+	$WFC10_ConfigId         = $moduleManager->GetConfigValueIntDef('ID', 'WFC10', GetWFCIdDefault());
+	$WFC10_Path             = $moduleManager->GetConfigValue('Path', 'WFC10');
+	$WFC10_TabPaneItem      = $moduleManager->GetConfigValue('TabPaneItem', 'WFC10');
+	$WFC10_TabPaneParent    = $moduleManager->GetConfigValue('TabPaneParent', 'WFC10');
+	$WFC10_TabPaneName      = $moduleManager->GetConfigValue('TabPaneName', 'WFC10');
+	$WFC10_TabPaneOrder     = $moduleManager->GetConfigValue('TabPaneOrder', 'WFC10');
+	$WFC10_TabPaneIcon      = $moduleManager->GetConfigValue('TabPaneIcon', 'WFC10');
+	$WFC10_TabPaneExclusive = $moduleManager->GetConfigValueBoolDef('TabPaneExclusive', 'WFC10', false);
+	
+	$WFC10_TabItem1         = $moduleManager->GetConfigValue('TabItem1', 'WFC10');
+	$WFC10_TabName1         = $moduleManager->GetConfigValue('TabName1', 'WFC10');
+	$WFC10_TabIcon1         = $moduleManager->GetConfigValue('TabIcon1', 'WFC10');
+	$WFC10_TabOrder1        = $moduleManager->GetConfigValueInt('TabOrder1', 'WFC10');
+	$WFC10_TabItem2         = $moduleManager->GetConfigValue('TabItem2', 'WFC10');
+	$WFC10_TabName2         = $moduleManager->GetConfigValue('TabName2', 'WFC10');
+	$WFC10_TabIcon2         = $moduleManager->GetConfigValue('TabIcon2', 'WFC10');
+	$WFC10_TabOrder2        = $moduleManager->GetConfigValueInt('TabOrder2', 'WFC10');
 
-	$WFC10_Enabled  = $moduleManager->GetConfigValue('Enabled', 'WFC10');
-	$WFC10_ConfigId = $moduleManager->GetConfigValueIntDef('ID', 'WFC10', GetWFCIdDefault());
-	$WFC10_Path     = $moduleManager->GetConfigValue('Path', 'WFC10');
-	$WFC10_Parent   = $moduleManager->GetConfigValue('Root', 'WFC10');
-	$WFC10_TabName  = $moduleManager->GetConfigValue('TabName', 'WFC10');
-	$WFC10_TabIcon  = $moduleManager->GetConfigValue('TabIcon', 'WFC10');
-	$WFC10_TabOrder = $moduleManager->GetConfigValueInt('TabOrder', 'WFC10');
-
-	$Mobile_Enabled = $moduleManager->GetConfigValue('Enabled', 'Mobile');
-	$Mobile_Path    = $moduleManager->GetConfigValue('Path', 'Mobile');
-	$Mobile_Order   = $moduleManager->GetConfigValueInt('Order', 'Mobile');
-	$Mobile_Icon    = $moduleManager->GetConfigValue('Icon', 'Mobile');
+	$Mobile_Enabled         = $moduleManager->GetConfigValue('Enabled', 'Mobile');
+	$Mobile_Path            = $moduleManager->GetConfigValue('Path', 'Mobile');
+	$Mobile_PathOrder       = $moduleManager->GetConfigValueInt('PathOrder', 'Mobile');
+	$Mobile_PathIcon        = $moduleManager->GetConfigValue('PathIcon', 'Mobile');
+	$Mobile_Name1           = $moduleManager->GetConfigValue('Name1', 'Mobile');
+	$Mobile_Order1          = $moduleManager->GetConfigValueInt('Order1', 'Mobile');
+	$Mobile_Icon1           = $moduleManager->GetConfigValue('Icon1', 'Mobile');
+	$Mobile_Name2           = $moduleManager->GetConfigValue('Name2', 'Mobile');
+	$Mobile_Order2          = $moduleManager->GetConfigValueInt('Order2', 'Mobile');
+	$Mobile_Icon2           = $moduleManager->GetConfigValue('Icon2', 'Mobile');
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 	// Program Installation
 	// ----------------------------------------------------------------------------------------------------------------------------
 
-	$CategoryIdData = CreateCategoryPath($DataPath);
-	$CategoryIdApp  = CreateCategoryPath($AppPath);
+	$CategoryIdData     = $moduleManager->GetModuleCategoryID('data');
+	$CategoryIdApp      = $moduleManager->GetModuleCategoryID('app');
 	$InstanceId     = CreateDummyInstance("IPSLogger", $CategoryIdData, 0);
 
 	CreateProfiles();
@@ -149,9 +162,11 @@
 		$UniqueId = date('Hi');
 		DeleteWFCItems($WFC10_ConfigId, 'SystemTP_LogWindow');
 		DeleteWFCItems($WFC10_ConfigId, 'SystemTP_LogSettings');
-		CreateWFCItemTabPane   ($WFC10_ConfigId, 'SystemTP',                       $WFC10_Parent, $WFC10_TabOrder, $WFC10_TabName, $WFC10_TabIcon);
-		CreateWFCItemCategory  ($WFC10_ConfigId, 'SystemTP_LogWindow'.$UniqueId,   'SystemTP',  10, 'Logging', 'Window', $ID_CategoryOutput /*BaseId*/, 'false' /*BarBottomVisible*/);
-		CreateWFCItemCategory  ($WFC10_ConfigId, 'SystemTP_LogSettings'.$UniqueId, 'SystemTP',  20, 'Log Settings','Gear',   $ID_CategorySettings /*BaseId*/, 'true' /*BarBottomVisible*/);
+		DeleteWFCItems($WFC10_ConfigId, $WFC10_TabPaneItem.$WFC10_TabItem1);
+		DeleteWFCItems($WFC10_ConfigId, $WFC10_TabPaneItem.$WFC10_TabItem2);
+		CreateWFCItemTabPane   ($WFC10_ConfigId, $WFC10_TabPaneItem,  $WFC10_TabPaneParent, $WFC10_TabPaneOrder, $WFC10_TabPaneName, $WFC10_TabPaneIcon);
+		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.$WFC10_TabItem1.$UniqueId, $WFC10_TabPaneItem, $WFC10_TabOrder1, $WFC10_TabName1, $WFC10_TabIcon1, $ID_CategoryOutput /*BaseId*/, 'false' /*BarBottomVisible*/);
+		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.$WFC10_TabItem2.$UniqueId, $WFC10_TabPaneItem, $WFC10_TabOrder2, $WFC10_TabName2, $WFC10_TabIcon2, $ID_CategorySettings /*BaseId*/, 'true' /*BarBottomVisible*/);
 
 		CreateLink('Logging Window',   $ID_HtmlOutMsgList,    $ID_CategoryOutput, 10);
 
@@ -196,11 +211,11 @@
 		CreateLink('Priority',         $ID_ProwlOutPriority,             $ID_CategorySettingsProwl,    30);
 
 		// Installation of Info Widget
-	   $wfcItems=WFC_GetItems($WFC10_ConfigId);
+		$wfcItems=WFC_GetItems($WFC10_ConfigId);
 		$widget=false;
-	   foreach ($wfcItems as $item) {
-	     	if ($item['ClassName']=='InfoWidget' and strpos($item['Configuration'], (string)$ID_SingleOutMsg) > 0) {
-		    	echo 'InfoWidget already installed.'.PHP_EOL;
+		foreach ($wfcItems as $item) {
+			if ($item['ClassName']=='InfoWidget' and strpos($item['Configuration'], (string)$ID_SingleOutMsg) > 0) {
+				echo 'InfoWidget already installed.'.PHP_EOL;
 				$widget = true;
 			}
 		}
@@ -215,9 +230,9 @@
 	// iPhone Installation
 	// ----------------------------------------------------------------------------------------------------------------------------
 	if ($Mobile_Enabled) {
-		$ID_CategoryiPhone    = CreateCategoryPath($Mobile_Path, $Mobile_Order, $Mobile_Icon);
-		CreateLink('Logging Window',   $ID_HtmlOutMsgList,    $ID_CategoryiPhone, 10);
-		$ID_CategoryiPhone    = CreateCategoryPath($Mobile_Path.'.Logging Settings', 20, 'Gear');
+		$ID_CategoryiPhone    = CreateCategoryPath($Mobile_Path, $Mobile_PathOrder, $Mobile_PathIcon);
+		CreateLink($Mobile_Name1,   $ID_HtmlOutMsgList,    $ID_CategoryiPhone, $Mobile_Order1);
+		$ID_CategoryiPhone    = CreateCategoryPath($Mobile_Path.'.'.$Mobile_Name2, $Mobile_Order2, $Mobile_Icon2);
 
 		$ID_Output = CreateDummyInstance("Widget", $ID_CategoryiPhone, 100);
 		CreateLink('Output Enabled',   $ID_SingleOutEnabled,             $ID_Output,   10);
@@ -262,7 +277,6 @@
 
 	Register_PhpErrorHandler($moduleManager);
 
-	
 	
 	// ----------------------------------------------------------------------------------------------------------------------------
 	// Some Tests

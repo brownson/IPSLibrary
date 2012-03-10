@@ -49,6 +49,7 @@
 	 *
 	 * @param string $path Pfadangabe
 	 * @param string $returnFalse wenn true, retouniert die Funktion false wenn das übergebene Object nicht gefunden wurde
+	 * @return integer ID des Objektes
 	 *
 	 */
 	function IPSUtil_ObjectIDByPath($path, $returnFalse=false) {
@@ -74,6 +75,20 @@
 			$parentId = $objId;
 		}
 		return $objId;
+	}
+
+	/** Ident aus Object ID ermittlen
+	 *
+	 * @param integer $objId ID des Objektes
+	 * @param string Ident des Objektes
+	 *
+	 */
+	if (!function_exists('IPS_GetIdent')) {
+		function IPS_GetIdent($objId) {
+			$object = IPS_GetObject($objId);
+			$ident  = $object['ObjectIdent'];
+			return $ident;
+		}
 	}
 
 

@@ -41,7 +41,6 @@
 				c_Property_MessageTypes       => array(),
 				c_Property_InpTranslationList	=> array(),
 				c_Property_OutTranslationList => array(),
-																	),
 			),
 			c_Comm_Onkyo => array (
 				c_Property_ScriptSnd 			=> 'Entertainment_InterfaceOnkyoSnd.inc.php',

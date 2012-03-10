@@ -42,7 +42,7 @@
       	$sourceFile = str_replace('\\','/',$sourceFile);
 			$curl_handle=curl_init();
 			curl_setopt($curl_handle,CURLOPT_URL,$sourceFile);
-			curl_setopt($curl_handle,CURLOPT_CONNECTTIMEOUT,2);
+			curl_setopt($curl_handle,CURLOPT_CONNECTTIMEOUT,5);
 			curl_setopt($curl_handle,CURLOPT_RETURNTRANSFER,true);
 			curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
 			echo 'Load File '.$sourceFile."\n";
