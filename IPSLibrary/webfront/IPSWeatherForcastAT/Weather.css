@@ -1,0 +1,23 @@
+﻿html, body{margin:0; padding:10px; height:100%; font:normal 14px verdana; color:#fff; overflow:hidden;}
+body{-moz-user-select: none; -khtml-user-select: none; user-select: none;}
+
+#containerToday{position:absolute; left:10px; top:10px; width:42%; height:98%; border:1px solid #9ab3ca; float:left; }
+#containerForecast{position:absolute; right:10px; top:10px; width:55%; height:98%; border:1px solid #9ab3ca;  }
+
+.heading{position:relative; top:10px; text-align:center; text-shadow: #9ab3ca 3px 3px 5px; width:auto; height:auto; font:bold 24px verdana; color:#9ab3ca;}
+
+.containerTodayBorder{position:absolute; left:10px; top:50px; right:10px; bottom:10px; border:1px solid #9ab3ca; }
+.containerTodayData {width:45%; padding-left:5%; padding-top:10px;margin:auto; float:left;  font:normal 14px verdana; }
+.containerTodayIcon{width:40%; padding-right:5%; padding-top:30px;margin:auto; float:left;  }
+.containerTodayText{width:90%; padding-left:5%; padding-right:5%; padding-top:10px; margin:auto; clear:both;font:normal 13px verdana;}
+
+.containerForecastBorder{position:absolute; left:10px; top:50px; right:10px; bottom:10px; border:1px solid #9ab3ca; }
+.containerForecastData1{width:30%; padding-left:5%;  padding-top:5px;margin:auto; float:left;font:normal 14px verdana; text-align:center;}
+.containerForecastData2{width:30%;                   padding-top:5px;margin:auto; float:left;font:normal 14px verdana; text-align:center;}
+.containerForecastData3{width:30%; padding-right:5%; padding-top:5px;margin:auto; float:left;font:normal 14px verdana; text-align:center;}
+.containerForecastIcon1{width:30%; padding-left:5%;  padding-top:5px;margin:auto; float:left;clear:both;text-align:center;}
+.containerForecastIcon2{width:30%;                   padding-top:5px;margin:auto; float:left;text-align:center;}
+.containerForecastIcon3{width:30%; padding-right:5%; padding-top:5px;margin:auto; float:left;text-align:center;}
+.containerForecastText1{width:90%; padding-left:5%; padding-right:5%; padding-top:5px; margin:auto; clear:both;font:normal 13px verdana;}
+.containerForecastText2{width:90%; padding-left:5%; padding-right:5%; padding-top:5px; margin:auto; clear:both;font:normal 13px verdana;}
+.containerForecastText3{width:90%; padding-left:5%; padding-right:5%; padding-top:5px; margin:auto; clear:both;font:normal 13px verdana;}
