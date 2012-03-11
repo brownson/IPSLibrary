@@ -140,14 +140,14 @@
 				$this->logHandler->Log("Copy $sourceFile --> $destinationFile");
 
 				$curl_handle=curl_init();
-				curl_setopt($curl_handle,CURLOPT_URL,$sourceFile);
-				curl_setopt($curl_handle,CURLOPT_CONNECTTIMEOUT,5);
-				curl_setopt($curl_handle,CURLOPT_RETURNTRANSFER,true);
+				curl_setopt($curl_handle, CURLOPT_URL,$sourceFile);
+				curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT,10);
+				curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER,true);
 				curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
+				curl_setopt($curl_handle, CURLOPT_FAILONERROR, true);
 				$fileContent = curl_exec($curl_handle);
 				$fileContent = html_entity_decode($fileContent, ENT_COMPAT, 'ISO-8859-1');
-				if (strpos($fileContent, 'Something went wrong with that request. Please try again') > 0 and
-				    strpos($fileContent, 'IPSFileHandler.class.php') === false) {
+				if ($fileContent===false) {
 					throw new IPSFileHandlerException('File '.$destinationFile.' could NOT be found on the Server !!!',
 													E_USER_ERROR);
 				}
@@ -155,8 +155,13 @@
 
 			   $result = file_put_contents($destinationFile, $fileContent);
 			   if ($result===false) {
-					throw new IPSFileHandlerException('Error writing File Content to '.$destinationFile,
-													E_USER_ERROR);
+					$this->logHandler->Log("Write Destination File $destinationFile failed --> Retry ...");
+			      sleep(1);
+				   $result = file_put_contents($destinationFile, $fileContent);
+				   if ($result===false) {
+						throw new IPSFileHandlerException('Error writing File Content to '.$destinationFile,
+														E_USER_ERROR);
+				   }
 			   }
 			} else {
 				$this->logHandler->Log("Copy $sourceFile --> $destinationFile");
@@ -173,12 +178,13 @@
 		 * Erzeugt Files aus den zugrundeliegenden Default Files 
 		 *
 		 * @param string $scriptList Liste der Default Files, von denen eine User Version erzeugt werden soll
+		 * @param boolean $overwriteUserFiles bestehende User Files mit Default überschreiben
 		 * @throws IPSFileHandlerException wenn Fehler beim Erzeugen der Zieldatei auftritt
 		 */
-		public function CreateScriptsFromDefault($scriptList) {
+		public function CreateScriptsFromDefault($scriptList, $overwriteUserFiles=false) {
 			foreach ($scriptList as $idx=>$scriptDefault) {
 				$script = self::GetUserFilenameByDefaultFilename($scriptDefault);
-				if (!file_exists($script)) {
+				if (!file_exists($script) or $overwriteUserFiles) {
 					$this->logHandler->Log("Create User File $script from Default File $scriptDefault");
 					$this->CopyFile ($scriptDefault, $script);
 				}

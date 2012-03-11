@@ -1,5 +1,5 @@
 <?
-	$remoteRepository = 'https://raw.github.com/brownson/IPSLibrary--Test-/master/';
+	$remoteRepository = 'https://github.com/brownson/IPSLibrary/tree/Development';
 	$localRepository = IPS_GetKernelDir().'scripts\\';
 
 	$fileList = array(
@@ -33,25 +33,27 @@
 	include_once IPS_GetKernelDir().'scripts\\IPSLibrary\\app\\core\\IPSUtils\\IPSUtils.inc.php';
 	IPSUtils_Include ('IPSModuleManager.class.php', 'IPSLibrary::install::IPSModuleManager');
 	$moduleManager = new IPSModuleManager('IPSModuleManager');
-   $moduleManager->LoadModule();
+   $moduleManager->LoadModule($remoteRepository, true);
    $moduleManager->InstallModule();
 
 	// -------------------------------------------------------------------------------
 	function LoadFile($sourceFile, $destinationFile) {
 		if (strpos($sourceFile, 'https')===0) {
       	$sourceFile = str_replace('\\','/',$sourceFile);
-			$curl_handle=curl_init();
-			curl_setopt($curl_handle,CURLOPT_URL,$sourceFile);
-			curl_setopt($curl_handle,CURLOPT_CONNECTTIMEOUT,5);
-			curl_setopt($curl_handle,CURLOPT_RETURNTRANSFER,true);
-			curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
 			echo 'Load File '.$sourceFile."\n";
+			$curl_handle=curl_init();
+			curl_setopt($curl_handle, CURLOPT_URL,$sourceFile);
+			curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT,10);
+			curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER,true);
+			curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
+			curl_setopt($curl_handle, CURLOPT_FAILONERROR, true);
 			$fileContent = curl_exec($curl_handle);
-			if (strpos($fileContent, 'Something went wrong with that request. Please try again') > 0 and
-				strpos($fileContent, 'IPSFileHandler.class.php') === false) {
-			   die('File '.$sourceFile.' could NOT be found on the Server !!!'.PHP_EOL);
+
+			if ($fileContent===false) {
+				throw new Exception('Download of File '.$sourceFile.' failed !!!');
 			}
 			curl_close($curl_handle);
+
 	//		$fileContent = html_entity_decode($fileContent, ENT_COMPAT, 'UTF-8');
 		} else {
 		   $fileContent = file_get_contents($sourceFile);
@@ -61,12 +63,16 @@
 		$destinationFilePath = pathinfo($destinationFile, PATHINFO_DIRNAME);
 		if (!file_exists($destinationFilePath)) {
 			if (!mkdir($destinationFilePath, 0, true)) {
-				die('Create Directory '.$destinationFilePath.' failed!');
+				throw new Exception('Create Directory '.$destinationFilePath.' failed!');
 			}
 		}
       $destinationFile = str_replace('\\InitializationFiles\\Default\\','\\InitializationFiles\\',$destinationFile);
 	   if (!file_put_contents($destinationFile, $fileContent)) {
-			die('Create File '.$destinationFile.' failed!');
+			sleep(1);
+			echo 'Create File '.$destinationFile.' failed --> Retry ...';
+			if (!file_put_contents($destinationFile, $fileContent)) {
+				throw new Exception('Create File '.$destinationFile.' failed!');
+		   }
 	   }
 	}
 
