@@ -1,5 +1,5 @@
 <?
-	$remoteRepository = 'https://github.com/brownson/IPSLibrary/tree/Development';
+	$remoteRepository = 'https://raw.github.com/brownson/IPSLibrary/Development/';
 	$localRepository = IPS_GetKernelDir().'scripts\\';
 
 	$fileList = array(
@@ -24,7 +24,6 @@
 	foreach ($fileList as $file) {
 		LoadFile($remoteRepository.$file, $localRepository.$file);
 	}
-
 	//Registration of IPSUtils in autoload.php
 	Register_IPSUtils();
 
@@ -52,6 +51,7 @@
 			if ($fileContent===false) {
 				throw new Exception('Download of File '.$sourceFile.' failed !!!');
 			}
+			echo 'Loaded '.str_replace(chr(13),'',str_replace(chr(10),'',substr($fileContent,1,200))).'...'.PHP_EOL;
 			curl_close($curl_handle);
 
 	//		$fileContent = html_entity_decode($fileContent, ENT_COMPAT, 'UTF-8');
@@ -81,13 +81,15 @@
 		$file = IPS_GetKernelDir().'scripts\\__autoload.php';
 
 		if (!file_exists($file)) {
+			echo 'Create File __autoload.php';
 			file_put_contents($file, '<?'.PHP_EOL.PHP_EOL.'?>');
 		}
 
 		$FileContent = file_get_contents($file);
-		$pos = strpos($FileContent, 'IPSUtils');
+		$pos = strpos($FileContent, 'IPSUtils.inc.php');
 
 		if ($pos === false) {
+			echo 'Register IPSUtils.inc.php in File __autoload.php';
 			$includeCommand = '    include_once IPS_GetKernelDir()."\scripts\IPSLibrary\app\core\IPSUtils\IPSUtils.inc.php";';
 			$FileContent = str_replace('?>', $includeCommand.PHP_EOL.'?>', $FileContent);
 			file_put_contents($file, $FileContent);
