@@ -793,6 +793,8 @@
 		 */
 		public function DeleteModule() {
 		   if ($this->moduleName=='IPSModuleManager') {
+				throw new Exception('Deinstallation of IPSModuleManager currenty NOT supported !!!');
+				
 			   $this->DeleteModuleObjects('Program.IPSLibrary.install');
 			   $this->DeleteModuleObjects('Program.IPSLibrary.app.core.IPSUtils');
 			   $this->DeleteModuleObjects('Program.IPSLibrary.app.core.IPSConfigHandler');

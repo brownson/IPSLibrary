@@ -52,7 +52,7 @@
 			if ($fileContent===false) {
 				throw new Exception('Download of File '.$sourceFile.' failed !!!');
 			}
-			echo 'Loaded '.str_replace(chr(13),'',str_replace(chr(10),'',substr($fileContent,1,200))).'...'.PHP_EOL;
+			//echo 'Loaded '.str_replace(chr(13),'',str_replace(chr(10),'',substr($fileContent,1,200))).'...'.PHP_EOL;
 			curl_close($curl_handle);
 
 	//		$fileContent = html_entity_decode($fileContent, ENT_COMPAT, 'UTF-8');
