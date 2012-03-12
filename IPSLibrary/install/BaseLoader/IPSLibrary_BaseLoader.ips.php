@@ -7,6 +7,7 @@
 		'IPSLibrary\\install\\IPSModuleManager\\IPSModuleManager.class.php',
 		'IPSLibrary\\install\\IPSModuleManager\\IPSVersionHandler\\IPSVersionHandler.class.php',
 		'IPSLibrary\\install\\IPSModuleManager\\IPSVersionHandler\\IPSVariableVersionHandler.class.php',
+		'IPSLibrary\\install\\IPSModuleManager\\IPSVersionHandler\\IPSFileVersionHandler.class.php',
 		'IPSLibrary\\install\\IPSModuleManager\\IPSScriptHandler\\IPSScriptHandler.class.php',
 		'IPSLibrary\\install\\IPSModuleManager\\IPSFileHandler\\IPSFileHandler.class.php',
 		'IPSLibrary\\install\\IPSModuleManager\\IPSLogHandler\\IPSLogHandler.class.php',
