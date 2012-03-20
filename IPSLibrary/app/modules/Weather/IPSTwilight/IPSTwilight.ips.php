@@ -22,6 +22,23 @@
 	 *
 	 * Script zur Berechnung der aktuellen Dämmerungs Zeiten
 	 *
+	 * IPSTwilight ist ein IPS Modul, um die täglichen Dämmerungszeiten zu berechnen und grafisch darzustellen.
+	 * Ein Timer berechnet jeden Tag automatisch die aktuellen Dämmerungszeiten.
+	 *
+	 * Es gibt die Möglichkeit durch Angabe einer Minimal bzw. Maximal Range die jeweilige Dämmerungszeit zu begrenzen.
+	 *
+	 * So ist es z.B. möglich mit einer Beschattungssteuerung das Schließen der Jalousien an die Dämmerungszeit zu binden, aber gleichzeitig 
+	 * zu definieren, dass das Schließen frühestens um 18:00 aber spätestens um 20:00 zu geschehen hat.
+	 *
+	 * Es werden folgende Dämmerungszeiten berechnet:
+	 * - Sonnenaufgang/Sonnenuntergang
+	 * - bürgerliche (zivile/ civil) Dämmerung - ist der Zeitpunkt, an dem die Sonne 6 Grad unter dem Horizont ist.
+	 * - nautische Dämmerung - ist der Zeitpunkt, an dem die Sonne 12 Grad unter dem Horizont ist.
+	 * - astronomische Dämmerung - ist der Zeitpunkt, an dem die Sonne 18 Grad unter dem Horizont ist.
+	 * 
+	 * Das Einsetzen der Dämmerung hängt vom Längengrand und somit vom jeweiligen Ort ab. Dazu muß im File "IPSTwilight_Configuraiton.inc.php" 
+	 * der jeweilige Breiten und Längengrad gesetzt werden.'''
+	 * 
 	 * @file          IPSTwilight.ips.php
 	 * @author        Andreas Brauneis
 	 * @version
