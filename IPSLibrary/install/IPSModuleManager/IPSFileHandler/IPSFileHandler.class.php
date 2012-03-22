@@ -146,7 +146,7 @@
 				curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
 				curl_setopt($curl_handle, CURLOPT_FAILONERROR, true);
 				$fileContent = curl_exec($curl_handle);
-				$fileContent = html_entity_decode($fileContent, ENT_COMPAT, 'ISO-8859-1');
+				//$fileContent = html_entity_decode($fileContent, ENT_COMPAT, 'ISO-8859-1');
 				if ($fileContent===false) {
 					throw new IPSFileHandlerException('File '.$destinationFile.' could NOT be found on the Server !!!',
 													E_USER_ERROR);
