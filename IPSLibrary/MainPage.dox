@@ -27,3 +27,21 @@
  * - Installation des Modules (Details siehe IPSModuleManager)
  *
  */
+ 
+ 
+/**@defgroup modules Modules
+ * @{
+ *    @defgroup modules_weather Wetter
+ *    @{
+ *    @}
+ * @}
+ * 
+ * @defgroup core Core
+ * @{
+ * @}
+ *
+ *@defgroup hardware Hardware
+ * @{
+ * @}
+ */
+
