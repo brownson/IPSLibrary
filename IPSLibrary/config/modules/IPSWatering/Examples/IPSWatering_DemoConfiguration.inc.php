@@ -21,16 +21,21 @@
 	function get_WateringConfiguration() {
 		return array(
 			c_WateringCircle_1  =>	array(
-				c_Property_Name           =>   'Rasen',
+				c_Property_Name           =>   'Rasen Links',
 				c_Property_Component      =>   'IPSComponentSwitch_Dummy,12345',
 				c_Property_Sensor         =>   '',
 			),
 			c_WateringCircle_2  =>	array(
-				c_Property_Name           =>   'Vorgarten',
+				c_Property_Name           =>   'Rasen Rechts',
 				c_Property_Component      =>   'IPSComponentSwitch_Dummy,12345',
 				c_Property_Sensor         =>   '',
 			),
 			c_WateringCircle_3  =>	array(
+				c_Property_Name           =>   'Vorgarten',
+				c_Property_Component      =>   'IPSComponentSwitch_Dummy,12345',
+				c_Property_Sensor         =>   '',
+			),
+			c_WateringCircle_4  =>	array(
 				c_Property_Name           =>   'Tropfschlauch',
 				c_Property_Component      =>   'IPSComponentSwitch_Dummy,12345',
 				c_Property_Sensor         =>   '',
