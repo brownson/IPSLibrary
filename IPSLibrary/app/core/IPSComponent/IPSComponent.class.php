@@ -1,5 +1,6 @@
 <?
 	/**@defgroup ipscomponent IPSComponent
+	 * @ingroup core
 	 * @{
 	 *
 	 * @file          IPSComponent.class.php

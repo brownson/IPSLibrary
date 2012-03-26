@@ -34,6 +34,10 @@
  *    @defgroup modules_weather Wetter
  *    @{
  *    @}
+ *
+ *    @defgroup modules_information Informationen
+ *    @{
+ *    @}
  * @}
  * 
  * @defgroup core Core

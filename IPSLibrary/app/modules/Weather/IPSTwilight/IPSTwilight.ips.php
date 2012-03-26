@@ -18,6 +18,7 @@
 
 
 	/**@defgroup ipstwilight IPSTwilight 
+	 * @ingroup modules_weather
 	 * @{
 	 *
 	 * Script zur Berechnung der aktuellen Dämmerungs Zeiten

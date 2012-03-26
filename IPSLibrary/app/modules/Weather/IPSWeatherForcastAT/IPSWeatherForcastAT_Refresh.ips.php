@@ -18,6 +18,7 @@
 
 
 	/**@defgroup ipsweatherforcastat IPSWeatherForcastAT 
+	 * @ingroup modules_weather
 	 * @{
 	 *
 	 * Dieses Script aktualisiert die Wetterdaten in IPS

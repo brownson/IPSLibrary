@@ -1,5 +1,6 @@
 <?
 	/**@defgroup ipslogger IPSLogger
+	 * @ingroup core
 	 *
 	 * Logging Handler für IP-Symcon
 	 *

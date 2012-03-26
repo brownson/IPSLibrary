@@ -1,5 +1,6 @@
 <?
 	/**@defgroup netplayer NetPlayer
+	 * @ingroup modules
 	 * @{
 	 *
 	 * Der NetPlayer ermöglicht das Abspielen von MP3 Files und das Streamen von WebRadios.
