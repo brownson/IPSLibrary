@@ -21,7 +21,7 @@
 
 	IPSUtils_Include ('IPSComponentSwitch.class.php', 'IPSLibrary::app::core::IPSComponent::IPSComponentSwitch');
 
-	abstract class IPSComponentSwitch_1WireD2408 extends IPSComponentSwitch {
+	class IPSComponentSwitch_1WireD2408 extends IPSComponentSwitch {
 
 		private $instanceId;
 		private $channelId;

@@ -19,7 +19,9 @@
     * Version 2.50.1, 31.01.2012<br/>
     */
 
-	abstract class IPSComponentSwitch_Homematic extends IPSComponentSwitch {
+	IPSUtils_Include ('IPSComponentSwitch.class.php', 'IPSLibrary::app::core::IPSComponent::IPSComponentSwitch');
+
+	class IPSComponentSwitch_Homematic extends IPSComponentSwitch {
 
 		private $instanceId;
 	
