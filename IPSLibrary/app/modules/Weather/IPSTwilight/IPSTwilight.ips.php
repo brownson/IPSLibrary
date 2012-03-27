@@ -122,14 +122,17 @@
 	function CreateTimer($date, $function, $scriptId_Refresh) {
 		if (function_exists($function)) {
 			IPSLogger_Dbg(__file__, 'Create Callback Timer '.$function.' for with ScriptId='.$scriptId_Refresh);
+			if (@IPS_GetObjectIDByIdent($function, $scriptId_Refresh)!==false) {
+			   IPS_DeleteEvent(IPS_GetObjectIDByIdent($function, $scriptId_Refresh));
+			}
 			CreateTimer_OnceADay ($function, $scriptId_Refresh, (int)date("H", $date), (int)date("i", $date));
 		}
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function SetLimitedValues($NameLimits, $NameBegin, $NameEnd, $TimeStart, $TimeEnd, $categoryId_Values, $scriptId_Refresh) {
-		CreateTimer($TimeStart, 'IPSTwilight_'.str_replace('Limited', '', $NameBegin), $scriptId_Refresh);
-		CreateTimer($TimeEnd,   'IPSTwilight_'.str_replace('Limited', '', $NameEnd),   $scriptId_Refresh);
+		CreateTimer($TimeStart, 'IPSTwilight_'.$NameBegin, $scriptId_Refresh);
+		CreateTimer($TimeEnd,   'IPSTwilight_'.$NameEnd,   $scriptId_Refresh);
 
 		$Limits = GetValue(IPS_GetVariableIDByName($NameLimits, $categoryId_Values));
 		//                   01234567890123456789012
@@ -146,8 +149,8 @@
 		SetValue(IPS_GetVariableIDByName($NameBegin, $categoryId_Values), date("H:i",$TimeStart));
 		SetValue(IPS_GetVariableIDByName($NameEnd,   $categoryId_Values), date("H:i",$TimeEnd));
 
-		CreateTimer($TimeStart, 'IPSTwilight_'.$NameBegin, $scriptId_Refresh);
-		CreateTimer($TimeEnd,   'IPSTwilight_'.$NameEnd,   $scriptId_Refresh);
+		CreateTimer($TimeStart, 'IPSTwilight_'.str_replace('Limited', '', $NameBegin), $scriptId_Refresh);
+		CreateTimer($TimeEnd,   'IPSTwilight_'.str_replace('Limited', '', $NameEnd),   $scriptId_Refresh);
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
