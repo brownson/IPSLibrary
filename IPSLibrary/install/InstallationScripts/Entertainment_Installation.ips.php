@@ -30,10 +30,8 @@
 	if (!isset($moduleManager)) {
 		IPSUtils_Include ('IPSModuleManager.class.php', 'IPSLibrary::install::IPSModuleManager');
 
-		echo 'ModuleManager Variable not set --> Create "default" ModuleManager';
+		echo 'ModuleManager Variable not set --> Create "default" ModuleManager'.PHP_EOL;
 		$moduleManager = new IPSModuleManager('Entertainment');
-		//$moduleManager->DeployModule();
-		//$moduleManager->LoadModule();
 	}
 
 	$moduleManager->VersionHandler()->CheckModuleVersion('IPS','2.50');
@@ -51,8 +49,8 @@
 	$WFC10_TabPaneName    = $moduleManager->GetConfigValue('TabPaneName', 'WFC10');
 	$WFC10_TabPaneIcon    = $moduleManager->GetConfigValue('TabPaneIcon', 'WFC10');
 	$WFC10_TabPaneOrder   = $moduleManager->GetConfigValueInt('TabPaneOrder', 'WFC10');
-	$WFC10_TabName1        = $moduleManager->GetConfigValue('TabName1', 'WFC10');
-	$WFC10_TabIcon1        = $moduleManager->GetConfigValue('TabIcon1', 'WFC10');
+	$WFC10_TabName1       = $moduleManager->GetConfigValue('TabName1', 'WFC10');
+	$WFC10_TabIcon1       = $moduleManager->GetConfigValue('TabIcon1', 'WFC10');
 
 	$Mobile_Enabled       = $moduleManager->GetConfigValue('Enabled', 'Mobile');
 	$Mobile_Path          = $moduleManager->GetConfigValue('Path', 'Mobile');
@@ -82,7 +80,7 @@
 	echo "--- Add Scripts ------------------------------------------------------------------------ \n";
    $ScriptIdAllOff         = IPS_GetScriptIDByName('Entertainment_AllRoomesOff',     $CategoryIdApp);
    $ScriptIdConnASyn       = IPS_GetScriptIDByName('Entertainment_ConnectAsynchron', $CategoryIdApp);
-   $ScriptIdPostInstall    = IPS_GetScriptIDByName('Entertainment_PostInstallation', get_ObjectIDByPath('Program.IPSLibrary.install.InstallationScripts'));
+   $ScriptIdPostInstall    = IPS_GetScriptIDByName('Entertainment_PostInstallation', $CategoryIdApp);
    $ScriptIdInterface      = IPS_GetScriptIDByName('Entertainment_Interface',        $CategoryIdApp);
 
 	// Delete existing Entertainment Profiles
