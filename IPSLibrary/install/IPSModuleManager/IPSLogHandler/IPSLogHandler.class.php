@@ -133,6 +133,7 @@
 		 */
 		public function Error($msg) {
 			$debugTrace = debug_backtrace();
+			$stackTxt   = '';
 			foreach ($debugTrace as $idx=>$stack) {
 				if (array_key_exists('line', $stack) and array_key_exists('function', $stack) and array_key_exists('file', $stack)) {
 					$file     = str_replace('scripts\\', '', str_replace(IPS_GetKernelDir(), '', $stack['file']));
