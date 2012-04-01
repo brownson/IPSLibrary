@@ -128,6 +128,9 @@
 	// Generate Roomes and Controls
 	echo "--- Create Roomes and Controls ---------------------------------------------------------\n";
 	$RoomData          = get_RoomConfiguration();
+	if (count($RoomData)==0) {
+		throw new Exception('No Roomes defined, see Demo Configuration File for an Example!!!');
+	}
 	$RoomOrder         = 100;
 	foreach($RoomData as $RoomName => $RoomProperties) {
 		$RoomId       = CreateCategory($RoomName, $CategoryIdRoomes, $RoomOrder);
@@ -143,6 +146,9 @@
 	// Generate Devices and Controls
 	echo "--- Create Devices and Controls --------------------------------------------------------\n";
 	$DeviceData          = get_DeviceConfiguration();
+	if (count($DeviceData)==0) {
+		throw new Exception('No Devices defined, see Demo Configuration File for an Example!!!');
+	}
 	$DeviceOrder         = 100;
 	foreach($DeviceData as $DeviceName => $DeviceProperties) {
 		$DeviceId     = CreateCategory($DeviceName, $CategoryIdDevices, $DeviceOrder);

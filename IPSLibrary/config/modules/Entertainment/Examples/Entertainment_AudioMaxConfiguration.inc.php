@@ -14,9 +14,9 @@
 	 * @file          Entertainment_AudioMaxConfiguration.inc.php
 	 * @author        Andreas Brauneis
 	 * @version
-	 * Version 2.50.1, 31.01.2012<br/>
+	 *   Version 2.50.1, 31.01.2012<br/>
 	 *
-    */
+	 */
 
 	IPSUtils_Include ("AudioMax.inc.php",        "IPSLibrary::app::hardware::AudioMax");
 	IPSUtils_Include ("Entertainment_Constants.inc.php",   "IPSLibrary::app::modules::Entertainment");
@@ -25,7 +25,7 @@
 
 	define ("c_Comm_WinLIRC",							"WinLIRC");
 	define ("c_Comm_Onkyo",								"Onkyo");
-	define ("c_Comm_NetPlayer",						"NetPlayer");
+	define ("c_Comm_NetPlayer",							"NetPlayer");
 	define ("c_Comm_AudioMax",							"AudioMax");
 
 	define ("c_Room_1",									"Raum 1");
@@ -71,9 +71,8 @@
 			),
 			c_Comm_AudioMax => array (
 				c_Property_ScriptSnd 			=> 'Entertainment_InterfaceIPSComponentAVControl.inc.php',
-				//c_Property_ScriptRcv  			=> 'Entertainment_InterfaceIPSComponentAVControl.inc.php',
 				c_Property_FunctionSnd 			=> 'Entertainment_IPSComponent_SendData',
-				c_Property_ComponentParams    => '',
+				c_Property_ComponentParams    => 'IPSComponentAVControl_AudioMax,null',
 			),
 		);
 	}

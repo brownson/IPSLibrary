@@ -73,13 +73,6 @@
 				c_Property_Instance     		=> 'Program.IPSLibrary.data.modules.NetPlayer',
 				c_Property_Variables     		=> 'MobileControl,RemoteControl,ControlType,Power',
 			),
-			c_Comm_AudioMax => array (
-				c_Property_ScriptSnd 			=> 'Entertainment_InterfaceAudioMaxSnd.inc.php',
-				c_Property_ScriptRcv  			=> 'Entertainment_InterfaceAudioMaxRcv.ips.php',
-				c_Property_FunctionSnd 			=> 'Entertainment_AudioMax_SendData',
-				//c_Property_Instance     		=> 'Program.AudioMax.AudioMax_Server',
-				//c_Property_Variables     		=> 'LAST_COMMAND',
-			),
 		);
 	}
 
