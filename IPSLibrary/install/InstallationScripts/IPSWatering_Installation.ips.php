@@ -78,8 +78,8 @@
 	}
 
 	$moduleManager->VersionHandler()->CheckModuleVersion('IPS','2.50');
+	$moduleManager->VersionHandler()->CheckModuleVersion('IPSModuleManager','2.50.2');
 	$moduleManager->VersionHandler()->CheckModuleVersion('IPSLogger','2.50.1');
-	$moduleManager->VersionHandler()->CheckModuleVersion('IPSModuleManager','2.50.1');
 	$moduleManager->VersionHandler()->CheckModuleVersion('IPSComponent','2.50.1');
 	$moduleManager->VersionHandler()->CheckModuleVersion('IPSMessageHandler','2.50.1');
 

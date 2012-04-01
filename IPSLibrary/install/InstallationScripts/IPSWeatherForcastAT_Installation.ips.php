@@ -67,7 +67,7 @@
 	}
 
 	$moduleManager->VersionHandler()->CheckModuleVersion('IPS','2.50');
-	$moduleManager->VersionHandler()->CheckModuleVersion('IPSModuleManager','2.50.1');
+	$moduleManager->VersionHandler()->CheckModuleVersion('IPSModuleManager','2.50.2');
 
 	IPSUtils_Include ("IPSInstaller.inc.php",                      "IPSLibrary::install::IPSInstaller");
 	IPSUtils_Include ("IPSWeatherForcastAT_Configuration.inc.php", "IPSLibrary::config::modules::Weather::IPSWeatherForcastAT");

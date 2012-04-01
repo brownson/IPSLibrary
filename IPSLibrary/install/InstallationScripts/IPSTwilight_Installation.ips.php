@@ -63,10 +63,10 @@
 	}
 
 	$moduleManager->VersionHandler()->CheckModuleVersion('IPS','2.50');
-	$moduleManager->VersionHandler()->CheckModuleVersion('IPSModuleManager','2.50.1');
+	$moduleManager->VersionHandler()->CheckModuleVersion('IPSModuleManager','2.50.2');
 	$moduleManager->VersionHandler()->CheckModuleVersion('IPSLogger','2.50.1');
 
-	IPSUtils_Include ("IPSInstaller.inc.php",               "IPSLibrary::install::IPSInstaller");
+	IPSUtils_Include ("IPSInstaller.inc.php",              "IPSLibrary::install::IPSInstaller");
 	IPSUtils_Include ("IPSTwilight_Configuration.inc.php", "IPSLibrary::config::modules::Weather::IPSTwilight");
 
 	$WFC10_Enabled        = $moduleManager->GetConfigValue('Enabled', 'WFC10');
