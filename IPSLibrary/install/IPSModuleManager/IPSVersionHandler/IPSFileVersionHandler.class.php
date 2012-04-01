@@ -135,7 +135,13 @@
 			if ($versionRequired[0] > $versionInstalled[0] or
 			    $versionRequired[1] > $versionInstalled[1] or
 				 $versionRequired[2] > $versionInstalled[2]) {
-				 throw new IPSVersionHandlerException('Required Version '.$moduleVersion.' for Module '.$moduleName.' is lower current Version '.$versionHandler->GetModuleVersion());
+				 throw new IPSVersionHandlerException('Versions Fehler:'.PHP_EOL
+																  .'========================================================================'.PHP_EOL
+				                                      .'=== Modul '.$moduleName.' ist veraltet und benötigt ein Update'.PHP_EOL
+				                                      .'===   Aktuelle Version:  '.$versionHandler->GetModuleVersion().PHP_EOL
+				                                      .'===   Benötigte Version: '.$moduleVersion.PHP_EOL
+																  .'========================================================================'.PHP_EOL
+																  );
 			}
 		}
 

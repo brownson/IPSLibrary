@@ -1,5 +1,6 @@
 <?
 	/**@defgroup entertainment Entertainment Steuerung
+	 * @ingroup modules
 	 * @{
 	 *
 	 * Entertainment Steuerung - Ermöglicht die Anbindung und Ansteuerung von diversen Entertainment

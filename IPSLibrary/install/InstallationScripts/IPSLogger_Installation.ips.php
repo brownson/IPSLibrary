@@ -34,7 +34,7 @@
 	}
 
 	$moduleManager->VersionHandler()->CheckModuleVersion('IPS','2.50');
-	$moduleManager->VersionHandler()->CheckModuleVersion('IPSModuleManager','2.50.1');
+	$moduleManager->VersionHandler()->CheckModuleVersion('IPSModuleManager','2.50.2');
 
 	IPSUtils_Include ("IPSInstaller.inc.php",            "IPSLibrary::install::IPSInstaller");
 	IPSUtils_Include ("IPSLogger_Configuration.inc.php", "IPSLibrary::config::core::IPSLogger");
@@ -45,7 +45,7 @@
 	$WFC10_TabPaneItem      = $moduleManager->GetConfigValue('TabPaneItem', 'WFC10');
 	$WFC10_TabPaneParent    = $moduleManager->GetConfigValue('TabPaneParent', 'WFC10');
 	$WFC10_TabPaneName      = $moduleManager->GetConfigValue('TabPaneName', 'WFC10');
-	$WFC10_TabPaneOrder     = $moduleManager->GetConfigValue('TabPaneOrder', 'WFC10');
+	$WFC10_TabPaneOrder     = $moduleManager->GetConfigValueInt('TabPaneOrder', 'WFC10');
 	$WFC10_TabPaneIcon      = $moduleManager->GetConfigValue('TabPaneIcon', 'WFC10');
 	$WFC10_TabPaneExclusive = $moduleManager->GetConfigValueBoolDef('TabPaneExclusive', 'WFC10', false);
 	

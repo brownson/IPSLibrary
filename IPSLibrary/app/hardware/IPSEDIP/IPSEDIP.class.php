@@ -32,6 +32,7 @@
 	/** @}*/
 
 	/**@defgroup ipsedip IPSEDIP 
+	 * @ingroup hardware
 	 * @{
 	 *
 	 * Es handelt sich bei IPSEDIP um Scripts, mit denen es möglich ist IPS Strukturen auf einem EDIP43 Display

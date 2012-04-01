@@ -139,7 +139,7 @@
 			if (WAC_GetPlaylistLength($this->instanceId) > 0 and 
 			    $position < WAC_GetPlaylistLength($this->instanceId) and 
 				$position > 0){
-				WAC_SetPlaylist($this->instanceId, (int)$position);
+				WAC_SetPlaylistPosition($this->instanceId, (int)$position);
 				WAC_Play($this->instanceId);
 				$result = true;
 			} else {
