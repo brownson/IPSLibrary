@@ -6,7 +6,7 @@
 	 * @file          Entertainment_InterfaceIPSComponent.inc.php
 	 * @author        Andreas Brauneis
 	 * @version
-	 * Version 2.50.1, 31.01.2012<br/>
+	 *  Version 2.50.1, 31.01.2012<br/>
 	 *
 	 * Anbindung von IPSComponents
 	 *
@@ -14,6 +14,11 @@
 
 	include_once "Entertainment.inc.php";
 	IPSUtils_Include ('IPSComponent.class.php', 'IPSLibrary::app::core::IPSComponent');
+
+
+	// ---------------------------------------------------------------------------------------------------------------------------
+	function Entertainment_AutoConfigureMessageHandler() {
+	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function Entertainment_IPSComponent_ReceiveData($componentParams, $function, $output, $value) {

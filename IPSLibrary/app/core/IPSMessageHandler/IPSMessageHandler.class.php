@@ -1,5 +1,6 @@
 <?
 	/**@defgroup ipsmessagehandler IPSMessageHandler
+	 * @ingroup core
 	 * @{
 	 *
  	 *

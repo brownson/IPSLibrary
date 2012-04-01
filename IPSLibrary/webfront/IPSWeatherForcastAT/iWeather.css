@@ -1,0 +1,27 @@
+﻿html, body{margin:0; padding:10px; font:normal 20px verdana; background:#27292b; color:#fff; overflow:hidden;}
+img { vertical-align: middle; height: 100%;}
+
+
+#containerToday {position:relative; padding:10px;margin-bottom:30px;width:100%; margin-left:auto; margin-right:auto;border:1px solid #9ab3ca; background:#151515;}
+#containerForecast{position:relative; padding:10px;margin-top:30px;width:100%; margin-left:auto; margin-right:auto;border:1px solid #9ab3ca; background:#151515;}
+
+.containerTodayBorder {width:95%; padding:10px;margin:auto; border:1px solid #9ab3ca; background:#252525; }
+.containerTodayData {width:45%; padding-left:5%; padding-top:10px;margin:auto; float:left;  font:normal 28px verdana; }
+.containerTodayIcon{width:40%; padding-right:5%; padding-top:60px;margin:auto; float:left;  }
+.containerTodayText{width:90%; padding-left:5%; padding-right:5%; padding-top:10px; margin:auto; clear:both;}
+
+.containerForecastBorder {width:95%; padding:10px;margin:auto; border:1px solid #9ab3ca; background:#252525; }
+.containerForecastData1{width:30%; padding-left:5%;  padding-top:10px;margin:auto; float:left;font:normal 28px verdana; text-align:center;}
+.containerForecastData2{width:30%;                   padding-top:10px;margin:auto; float:left;font:normal 28px verdana; text-align:center;}
+.containerForecastData3{width:30%; padding-right:5%; padding-top:10px;margin:auto; float:left;font:normal 28px verdana; text-align:center;}
+.containerForecastIcon1{width:30%; padding-left:5%;  padding-top:10px;margin:auto; float:left;clear:both;}
+.containerForecastIcon2{width:30%;                   padding-top:10px;margin:auto; float:left;}
+.containerForecastIcon3{width:30%; padding-right:5%; padding-top:10px;margin:auto; float:left;}
+.containerForecastText1{width:90%; padding-left:5%; padding-right:5%; padding-top:10px; margin:auto; clear:both;}
+.containerForecastText2{width:90%; padding-left:5%; padding-right:5%; padding-top:10px; margin:auto; clear:both;}
+.containerForecastText3{width:90%; padding-left:5%; padding-right:5%; padding-top:10px; margin:auto; clear:both;}
+
+.heading{ width:95%; padding:20px; text-align:center; text-shadow: #9ab3ca 3px 3px 5px;  font:bold 36px verdana; color:#9ab3ca;}
+
+.pictureToday{height:250px;vertical-align:middle;}
+.pictureForecast{height:170px;}

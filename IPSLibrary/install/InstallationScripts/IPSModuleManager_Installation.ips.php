@@ -98,22 +98,51 @@
 	 * Teilweise werden Parameter auch in beiden Files gesucht. Zum Beispiel werden die diversen Parameter zur Installation des WebFronts (Enabled,
 	 * Root, WFCId) zuerst im jeweiligen Module Ini File gesucht (zB IPSLogger.ini), ist es dort nicht definiert, wird im File IPSModuleManager.ini gesucht.
 	 *
-	 * Beispiel:
+	 * Beispiel aus INI File IPSModuleManager:
+	 *  @code
+         SourceRepository="https://raw.github.com/brownson/IPSLibrary--Test-/master/"
+
+         RegisterDefaultFiles=false
+         RegisterExampleFiles=false
+         RegisterInstallFiles=false
+
+         [WFC10]
+         Enabled=true
+
+         [Mobile]
+         Enabled=true
+	    @endcode
+	 *
+	 * Beschreibung der wichtigsten Parameter:
+	 *   "SourceRepository" spezifiziert das Default Repository
+	 *   "RegisterDefaultFiles" legt fest, ob "default" Files in IPS registriert werden
+	 *   "RegisterExampleFiles" legt fest, ob "example" Files in IPS registriert werden
+	 *   "RegisterInstallFiles" legt fest, ob "install" Files in IPS registriert werden
+	 *
+	 * Beispiel INI File IPSWeatherForcastAT:
 	 *  @code
          [WFC10]
          Enabled=true
-         Path=Visualization.WebFront.Entertainment
-         ID=
-         TabName=
-         TabIcon=Speaker
+         Path=Visualization.WebFront.IPSWeather.IPSWeatherForcastAT
+         TabPaneItem=TPWeather
+         TabPaneParent=roottp
+         TabPaneName=
+         TabPaneOrder=10
+         TabPaneExclusive=false
+         TabPaneIcon=Cloud
+         TabItem=ForcastAT
+         TabName=Vorhersage
+         TabIcon=Cloud
          TabOrder=20
 
          [Mobile]
          Enabled=true
-         Path=Visualization.Mobile
-         Name=Entertainment
+         Path=Visualization.Mobile.Wetter
+         PathOrder=10
+         PathIcon=Cloud
+         Name=Vorhersage
+         Icon=Cloud
          Order=20
-         Icon=Speaker
 	    @endcode
 	 *
 	 * [] markiert immer eine Gruppe von Einstellungen, In der Gruppe "WFC10” werden die Einstellungen gesucht, die für die WebFront
@@ -125,9 +154,16 @@
 	 * - "Path" bestimmt den Installations Pfad in IP-Symcon
 	 * - "ID" bezeichnet die ID des Webfront Konfigurators der verwendet werden soll, wenn nichts angegeben wird, verwendet die Installations
 	 *   Prozedure den erst Besten der gefunden wird.
-	 * - "TabName" definiert Namen im SplitPane des WebFronts
-	 * - "TabIcon" definiert Icon im SplitPane des WebFronts
-	 * - "TabOrder" definiert Position im SplitPane des WebFronts
+	 * - "TabPaneItem" definiert den Item Namen des TabPane's im WebFronts
+	 * - "TabPaneParent" definiert das Parent Item des TabPane's im WebFronts
+	 * - "TabPaneName" Name des TabPane's
+	 * - "TabPaneIcon" Icon des TabPane's
+	 * - "TabPaneOrder" Position des TabPane's
+	 * - "TabPaneExclusive" Wird das TabPane exklusiv vom Modul verwendet (wichtig für Deinstallation)
+	 * - "TabItem" Item Name der für das Tab verwendet wird
+	 * - "TabName" definiert Namen im Tab des WebFronts
+	 * - "TabIcon" definiert Icon im Tab des WebFronts
+	 * - "TabOrder" definiert Position im Tab des WebFronts
 	 * - "Name" für Mobile Frontend Installation
 	 * - "Order" Position Mobile Frontend
 	 * - "Icon" Icon für Mobile Frontend

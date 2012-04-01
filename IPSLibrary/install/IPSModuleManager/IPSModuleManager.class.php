@@ -368,10 +368,10 @@
 		 * Liefert ein Array aller installierten Module
 		 *
 		 * Aufbau:
-		 * array('Module1' => array('<<Version>>', '<<Status>>', '<<Description>>'),
-		 *       'Module2' => array('<<Version>>', '<<Status>>', '<<Description>>'),
+		 * array('Module1' => array('Version', 'Status', 'Description'),
+		 *       'Module2' => array('Version', 'Status', 'Description'),
 		 *       ...
-		 *       'ModuleX' => array('<<Version>>', '<<Status>>', '<<Description>>'))
+		 *       'ModuleX' => array('Version', 'Status', 'Description'))
 		 *
 		 * @return string Array der Installierten Module
 		 */
@@ -399,16 +399,17 @@
 			}
 			return $resultList;
 		}
+
 		/**
 		 * @public
 		 *
 		 * Liefert ein Array aller verfügbaren Module
 		 *
 		 * Aufbau:
-		 * array('Module1' => array('<<ModulePfad>>', '<<Description>>'),
-		 *       'Module2' => array('<<ModulePfad>>', '<<Description>>'),
+		 * array('Module1' => array('ModulePfad', 'Description'),
+		 *       'Module2' => array('ModulePfad', 'Description'),
 		 *       ...
-		 *       'ModuleX' => array('<<ModulePfad>>', '<<Description>>'))
+		 *       'ModuleX' => array('ModulePfad', 'Description'))
 		 *
 		 * @return string Array der verfügbaren Module
 		 */
@@ -605,8 +606,9 @@
 		 * @param string $fileKey Type des Files (ScriptList, DefaultList, ExampleList, ...)
 		 * @param string $fileTypeSection Filetype Section (app, config, webfront ...)
 		 * @param string $sourceRepository Pfad/Url zum Source Repository, das zum Laden verwendet werden soll
+		 * @param boolean $overwriteUserFiles bestehende User Files mit Default überschreiben
 		 */
-		private function LoadModuleFiles($fileKey, $fileTypeSection, $sourceRepository) {
+		private function LoadModuleFiles($fileKey, $fileTypeSection, $sourceRepository, $overwriteUserFiles=false) {
 			$localList       = $this->GetScriptList($fileKey, $fileTypeSection, IPS_GetKernelDir().'scripts\\');
 			$repositoryList  = $this->GetScriptList($fileKey, $fileTypeSection, $sourceRepository);
 			$backupList      = $this->GetScriptList($fileKey, $fileTypeSection, $this->backupHandler->GetBackupDirectory());
@@ -615,7 +617,7 @@
 
 			$this->fileHandler->LoadFiles($repositoryList, $localList);
 			if ($fileKey=='DefaultFiles') {
-				$this->fileHandler->CreateScriptsFromDefault($localList);
+				$this->fileHandler->CreateScriptsFromDefault($localList, $overwriteUserFiles);
 			}
 			$this->RegisterModuleFiles($fileKey, $fileTypeSection, $localList);
 		}
@@ -626,8 +628,9 @@
 		 * Lädt alle zugehörigen Files des Modules von einem Source Repository
 		 *
 		 * @param string $sourceRepository Pfad/Url zum Source Repository, das zum Speichern verwendet werden soll
+		 * @param boolean $overwriteUserFiles bestehende User Files mit Default überschreiben
 		 */
-		public function LoadModule($sourceRepository='') {
+		public function LoadModule($sourceRepository='', $overwriteUserFiles=false) {
 		   if ($sourceRepository=='') {
 		   	$sourceRepository = $this->sourceRepository;
 		   }
@@ -635,22 +638,22 @@
 
 			$this->versionHandler->SetModuleVersionLoading();
 
-			$this->LoadModuleFiles('DownloadFiles','Install',  $sourceRepository);
+			$this->LoadModuleFiles('DownloadFiles','Install',  $sourceRepository, $overwriteUserFiles);
 			$this->fileConfigHandler = new IPSIniConfigHandler($this->GetModuleDownloadListFile(IPS_GetKernelDir().'scripts\\'));
 
-			$this->LoadModuleFiles('InstallFiles', 'Install',  $sourceRepository);
-			$this->LoadModuleFiles('DefaultFiles', 'Install',  $sourceRepository);
-			$this->LoadModuleFiles('ExampleFiles', 'Install',  $sourceRepository);
+			$this->LoadModuleFiles('InstallFiles', 'Install',  $sourceRepository, $overwriteUserFiles);
+			$this->LoadModuleFiles('DefaultFiles', 'Install',  $sourceRepository, $overwriteUserFiles);
+			$this->LoadModuleFiles('ExampleFiles', 'Install',  $sourceRepository, $overwriteUserFiles);
 
-			$this->LoadModuleFiles('ScriptFiles',  'App',      $sourceRepository);
-			$this->LoadModuleFiles('DefaultFiles', 'App',      $sourceRepository);
+			$this->LoadModuleFiles('ScriptFiles',  'App',      $sourceRepository, $overwriteUserFiles);
+			$this->LoadModuleFiles('DefaultFiles', 'App',      $sourceRepository, $overwriteUserFiles);
 
-			$this->LoadModuleFiles('ScriptFiles',  'Config',   $sourceRepository);
-			$this->LoadModuleFiles('DefaultFiles', 'Config',   $sourceRepository);
-			$this->LoadModuleFiles('ExampleFiles', 'Config',   $sourceRepository);
+			$this->LoadModuleFiles('ScriptFiles',  'Config',   $sourceRepository, $overwriteUserFiles);
+			$this->LoadModuleFiles('DefaultFiles', 'Config',   $sourceRepository, $overwriteUserFiles);
+			$this->LoadModuleFiles('ExampleFiles', 'Config',   $sourceRepository, $overwriteUserFiles);
 
-			$this->LoadModuleFiles('ScriptFiles',  'WebFront', $sourceRepository);
-			$this->LoadModuleFiles('ExampleFiles', 'WebFront', $sourceRepository);
+			$this->LoadModuleFiles('ScriptFiles',  'WebFront', $sourceRepository, $overwriteUserFiles);
+			$this->LoadModuleFiles('ExampleFiles', 'WebFront', $sourceRepository, $overwriteUserFiles);
 
 			$this->versionHandler->SetModuleVersionLoaded();
 		}
@@ -790,6 +793,8 @@
 		 */
 		public function DeleteModule() {
 		   if ($this->moduleName=='IPSModuleManager') {
+				throw new Exception('Deinstallation of IPSModuleManager currenty NOT supported !!!');
+				
 			   $this->DeleteModuleObjects('Program.IPSLibrary.install');
 			   $this->DeleteModuleObjects('Program.IPSLibrary.app.core.IPSUtils');
 			   $this->DeleteModuleObjects('Program.IPSLibrary.app.core.IPSConfigHandler');
