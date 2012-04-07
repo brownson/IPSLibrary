@@ -39,6 +39,7 @@
 	$moduleManager->VersionHandler()->CheckModuleVersion('IPSLogger','2.50.1');
 
 	IPSUtils_Include ("IPSInstaller.inc.php",                "IPSLibrary::install::IPSInstaller");
+	IPSUtils_Include ("IPSMessageHandler.class.php",         "IPSLibrary::app::core::IPSMessageHandler");
 	IPSUtils_Include ("Entertainment_Configuration.inc.php", "IPSLibrary::config::modules::Entertainment");
 
 	$WFC10_Enabled        = $moduleManager->GetConfigValue('Enabled', 'WFC10');
@@ -173,6 +174,14 @@
 			}
       }
 	}
+
+	if (class_exists('AudioMax_Server')) {
+		echo 'Register AudioMax for MessageHandler';
+		$instanceIdAudioMax = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.hardware.AudioMax.AudioMax_Server');
+		$instanceIdVariable = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.hardware.AudioMax.AudioMax_Server.LAST_COMMAND');
+		IPSMessageHandler::RegisterOnChangeEvent($instanceIdVariable/*Var*/, 'IPSComponentAVControl_AudioMax,'.$instanceIdAudioMax, 'IPSModuleAVControl_Entertainment');
+	}
+
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 	// Webfront Definition

@@ -17,17 +17,16 @@
 
 
 	// ---------------------------------------------------------------------------------------------------------------------------
-	function Entertainment_AutoConfigureMessageHandler() {
-	}
-
-	// ---------------------------------------------------------------------------------------------------------------------------
 	function Entertainment_IPSComponent_ReceiveData($componentParams, $function, $output, $value) {
 		$interfaceList = get_CommunicationConfiguration();
 
 		$interface = '';
 		foreach ($interfaceList as $interfaceName=>$interfaceData) {
-			if ($interfaceData[c_Property_ComponentParams]==$componentParams) {
-				$interface = $interfaceName;
+			if (array_key_exists(c_Property_ComponentParams, $interfaceData)) {
+				if ($interfaceData[c_Property_ComponentParams]==$componentParams or 
+				    $interfaceData[c_Property_ComponentParams]=='IPSComponentAVControl_AudioMax,null') {
+					$interface = $interfaceName;
+				}
 			}
 		}
 		Entertainment_ReceiveData(array($interface, $function, $output, $value), c_MessageType_Info);

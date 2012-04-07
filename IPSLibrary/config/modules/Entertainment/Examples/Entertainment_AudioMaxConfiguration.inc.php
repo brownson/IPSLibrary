@@ -156,13 +156,13 @@
 				c_Property_Name 			=> 'AudioMax 1',
 				c_Control_DevicePower 	=> array(
 					c_Property_Name 			=> 'Power',
-					c_Property_CommPowerOn	=> array(c_Comm_AudioMax, 'SetPower', '0', true),
-					c_Property_CommPowerOff	=> array(c_Comm_AudioMax, 'SetPower', '0', false),
+					c_Property_CommPowerOn	=> array(c_Comm_AudioMax, 'SetPower', '0', '1'),
+					c_Property_CommPowerOff	=> array(c_Comm_AudioMax, 'SetPower', '0', '0'),
 				),
 				c_Control_Muting 			=> array(
 					c_Property_Name 			=> 'Mute',
-					c_Property_CommMuteOn 	=> array(c_Comm_AudioMax, 'SetMute', '0', true),
-					c_Property_CommMuteOff 	=> array(c_Comm_AudioMax, 'SetMute', '0', false),
+					c_Property_CommMuteOn 	=> array(c_Comm_AudioMax, 'SetMute', '0', '1'),
+					c_Property_CommMuteOff 	=> array(c_Comm_AudioMax, 'SetMute', '0', '0'),
 				),
 				c_Control_Volume 			=> array(
 					c_Property_Name 			=> 'Volume', c_Property_MinValue => 0, c_Property_MaxValue => 100, c_Property_Limit => 80,
@@ -190,13 +190,13 @@
 				c_Property_Name 			=> 'AudioMax 2',
 				c_Control_DevicePower 	=> array(
 					c_Property_Name 			=> 'Power',
-					c_Property_CommPowerOn	=> array(c_Comm_AudioMax, 'SetPower', '1', true),
-					c_Property_CommPowerOff	=> array(c_Comm_AudioMax, 'SetPower', '1', false),
+					c_Property_CommPowerOn	=> array(c_Comm_AudioMax, 'SetPower', '1', '1'),
+					c_Property_CommPowerOff	=> array(c_Comm_AudioMax, 'SetPower', '1', '0'),
 				),
 				c_Control_Muting 			=> array(
 					c_Property_Name 			=> 'Mute',
-					c_Property_CommMuteOn 	=> array(c_Comm_AudioMax, 'SetMute', '1', true),
-					c_Property_CommMuteOff 	=> array(c_Comm_AudioMax, 'SetMute', '1', false),
+					c_Property_CommMuteOn 	=> array(c_Comm_AudioMax, 'SetMute', '1', '1'),
+					c_Property_CommMuteOff 	=> array(c_Comm_AudioMax, 'SetMute', '1', '0'),
 				),
 				c_Control_Volume 			=> array(
 					c_Property_Name 			=> 'Volume', c_Property_MinValue => 0, c_Property_MaxValue => 100, c_Property_Limit => 80,
@@ -224,13 +224,13 @@
 				c_Property_Name 			=> 'AudioMax 3',
 				c_Control_DevicePower 	=> array(
 					c_Property_Name 			=> 'Power',
-					c_Property_CommPowerOn	=> array(c_Comm_AudioMax, 'SetPower', '2', true),
-					c_Property_CommPowerOff	=> array(c_Comm_AudioMax, 'SetPower', '2', false),
+					c_Property_CommPowerOn	=> array(c_Comm_AudioMax, 'SetPower', '2', '1'),
+					c_Property_CommPowerOff	=> array(c_Comm_AudioMax, 'SetPower', '2', '0'),
 				),
 				c_Control_Muting 			=> array(
 					c_Property_Name 			=> 'Mute',
-					c_Property_CommMuteOn 	=> array(c_Comm_AudioMax, 'SetMute', '2', true),
-					c_Property_CommMuteOff 	=> array(c_Comm_AudioMax, 'SetMute', '2', false),
+					c_Property_CommMuteOn 	=> array(c_Comm_AudioMax, 'SetMute', '2', '1'),
+					c_Property_CommMuteOff 	=> array(c_Comm_AudioMax, 'SetMute', '2', '0'),
 				),
 				c_Control_Volume 			=> array(
 					c_Property_Name 			=> 'Volume', c_Property_MinValue => 0, c_Property_MaxValue => 100, c_Property_Limit => 80,
@@ -258,13 +258,13 @@
 				c_Property_Name 			=> 'AudioMax 4',
 				c_Control_DevicePower 	=> array(
 					c_Property_Name 			=> 'Power',
-					c_Property_CommPowerOn	=> array(c_Comm_AudioMax, 'SetPower', '3', true),
-					c_Property_CommPowerOff	=> array(c_Comm_AudioMax, 'SetPower', '3', false),
+					c_Property_CommPowerOn	=> array(c_Comm_AudioMax, 'SetPower', '3', '1'),
+					c_Property_CommPowerOff	=> array(c_Comm_AudioMax, 'SetPower', '3', '0'),
 				),
 				c_Control_Muting 			=> array(
 					c_Property_Name 			=> 'Mute',
-					c_Property_CommMuteOn 	=> array(c_Comm_AudioMax, 'SetMute', '3', true),
-					c_Property_CommMuteOff 	=> array(c_Comm_AudioMax, 'SetMute', '3', false),
+					c_Property_CommMuteOn 	=> array(c_Comm_AudioMax, 'SetMute', '3', '1'),
+					c_Property_CommMuteOff 	=> array(c_Comm_AudioMax, 'SetMute', '3', '0'),
 				),
 				c_Control_Volume 			=> array(
 					c_Property_Name 			=> 'Volume', c_Property_MinValue => 0, c_Property_MaxValue => 100, c_Property_Limit => 80,
