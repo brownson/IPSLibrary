@@ -7,7 +7,7 @@
 	 *
 	 */
 
-	IPSUtils_Include ("Entertainment_InterfaceIPSComponent.inc.php", "IPSLibrary::app::modules::Entertainment");
+	IPSUtils_Include ("Entertainment_InterfaceIPSComponentAVControl.inc.php", "IPSLibrary::app::modules::Entertainment");
 	IPSUtils_Include ('IPSModuleAVControl.class.php', 'IPSLibrary::app::core::IPSComponent::IPSComponentAVControl');
 
 	/**
@@ -41,7 +41,7 @@
 		 * @param IPSComponentAVControl $component Component Object das einen Werte synchronisieren will
 		 */
 		public function SyncPower($value, $outputId, IPSComponentAVControl $component) {
-		   Entertainment_IPSComponent_ReceiveData($component->GetComponentParams(), 'SetPower', $output, $value);
+		   Entertainment_IPSComponent_ReceiveData($component->GetComponentParams(), 'SetPower', $outputId, $value);
 		}
 
 		/**
@@ -54,7 +54,7 @@
 		 * @param IPSComponentAVControl $component Component Object das einen Werte synchronisieren will
 		 */
 		public function SyncVolume($value, $outputId, IPSComponentAVControl $component) {
-		   Entertainment_IPSComponent_ReceiveData($component->GetComponentParams(), 'SetVolume', $output, $value);
+		   Entertainment_IPSComponent_ReceiveData($component->GetComponentParams(), 'SetVolume', $outputId, $value);
 		}
 
 		/**
@@ -67,7 +67,7 @@
 		 * @param IPSComponentAVControl $component Component Object das einen Werte synchronisieren will
 		 */
 		public function SyncMute($value, $outputId, IPSComponentAVControl $component) {
-		   Entertainment_IPSComponent_ReceiveData($component->GetComponentParams(), 'SetMute', $output, $value);
+			Entertainment_IPSComponent_ReceiveData($component->GetComponentParams(), 'SetMute', $outputId, $value);
 		}
 
 		/**
@@ -80,7 +80,7 @@
 		 * @param IPSComponentAVControl $component Component Object das einen Werte synchronisieren will
 		 */
 		public function SyncBalance($value, $outputId, IPSComponentAVControl $component) {
-		   Entertainment_IPSComponent_ReceiveData($component->GetComponentParams(), 'SetBalance', $output, $value);
+		   Entertainment_IPSComponent_ReceiveData($component->GetComponentParams(), 'SetBalance', $outputId, $value);
 		}
 
 		/**
@@ -93,7 +93,7 @@
 		 * @param IPSComponentAVControl $component Component Object das einen Werte synchronisieren will
 		 */
 		public function SyncSource($value, $outputId, IPSComponentAVControl $component) {
-		   Entertainment_IPSComponent_ReceiveData($component->GetComponentParams(), 'SetSource', $output, $value);
+		   Entertainment_IPSComponent_ReceiveData($component->GetComponentParams(), 'SetSource', $outputId, $value);
 		}
 
 		/**
@@ -106,7 +106,7 @@
 		 * @param IPSComponentAVControl $component Component Object das einen Werte synchronisieren will
 		 */
 		public function SyncTreble($value, $outputId, IPSComponentAVControl $component) {
-		   Entertainment_IPSComponent_ReceiveData($component->GetComponentParams(), 'SetTreble', $output, $value);
+		   Entertainment_IPSComponent_ReceiveData($component->GetComponentParams(), 'SetTreble', $outputId, $value);
 		}
 
 		/**
@@ -119,7 +119,7 @@
 		 * @param IPSComponentAVControl $component Component Object das einen Werte synchronisieren will
 		 */
 		public function SyncMiddle($value, $outputId, IPSComponentAVControl $component) {
-		   Entertainment_IPSComponent_ReceiveData($component->GetComponentParams(), 'SetMiddle', $output, $value);
+		   Entertainment_IPSComponent_ReceiveData($component->GetComponentParams(), 'SetMiddle', $outputId, $value);
 		}
 
 		/**
@@ -132,7 +132,7 @@
 		 * @param IPSComponentAVControl $component Component Object das einen Werte synchronisieren will
 		 */
 		public function SyncBass($value, $outputId, IPSComponentAVControl $component) {
-		   Entertainment_IPSComponent_ReceiveData($component->GetComponentParams(), 'SetBass', $output, $value);
+		   Entertainment_IPSComponent_ReceiveData($component->GetComponentParams(), 'SetBass', $outputId, $value);
 		}
 
 

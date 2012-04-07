@@ -34,8 +34,8 @@
 		 */
 		public function __construct($instanceId) {
 			$this->instanceId = (int)$instanceId;
-		   if ($this->instanceId==null) {
-		   	$this->instanceId = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.hardware.AudioMax.AudioMax_Server');
+			if ($this->instanceId==null) {
+				$this->instanceId = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.hardware.AudioMax.AudioMax_Server');
 			}
 		}
 
@@ -49,7 +49,7 @@
 		 * @return string Parameter String des IPSComponent Object
 		 */
 		public function GetComponentParams() {
-			return get_class(this).','.$this->instanceId;
+			return get_class($this).','.$this->instanceId;
 		}
 
 
@@ -76,7 +76,10 @@
 				case AM_CMD_POWER:
 				case AM_CMD_ROOM:
 				   for ($roomId=0;$roomId<AM_CONFIG_ROOM_COUNT;$roomId++) {
-					   $status = AudioMax_GetMainPower($this->instanceId) and AudioMax_GetRoomPower($this->instanceId, $roomId);
+						$status = '0';
+						if (AudioMax_GetMainPower($this->instanceId) and AudioMax_GetRoomPower($this->instanceId, $roomId)) {
+							$status='1';
+						}
 						$module->SyncPower($status, $roomId, $this);
 				   }
 					break;
@@ -87,19 +90,22 @@
 					$value    = $parameters[5];
 					switch($function) {
 						case AM_FNC_BALANCE:
-						   $module->SyncBalance($value, $roomId, $this);
+						   $module->SyncBalance($value * 100 / AM_VAL_BALANCE_MAX, $roomId, $this);
 							break;
 						case AM_FNC_VOLUME:
-						   $module->SyncVolume($value, $roomId, $this);
+						   $module->SyncVolume($value * 100 / AM_VAL_VOLUME_MAX, $roomId, $this);
+							break;
+						case AM_FNC_MUTE:
+						   $module->SyncMute($value, $roomId, $this);
 							break;
 						case AM_FNC_TREBLE:
-						   $module->SyncTreble($value, $roomId, $this);
+						   $module->SyncTreble($value * 100 / AM_VAL_TREBLE_MAX, $roomId, $this);
 							break;
 						case AM_FNC_MIDDLE:
-						   $module->SyncMiddle($value, $roomId, $this);
+						   $module->SyncMiddle($value * 100 / AM_VAL_MIDDLE_MAX, $roomId, $this);
 							break;
 						case AM_FNC_BASS:
-						   $module->SyncBass($value, $roomId, $this);
+						   $module->SyncBass($value * 100 / AM_VAL_BASS_MAX, $roomId, $this);
 							break;
 						case AM_FNC_INPUTSELECT:
 						   $module->SyncSource($value, $roomId, $this);
@@ -124,16 +130,16 @@
 		 * @param boolean $value Wert für Power (Wertebereich false=Off, true=On)
 		 */
 		public function SetPower($outputId, $value) {
-		   AudioMax_SetRoomPower($this->instanceId, $outputId, $value);
+			AudioMax_SetRoomPower($this->instanceId, $outputId, $value);
 			if ($value) {
-		   	AudioMax_SetMainPower($this->instanceId, $value);
+				AudioMax_SetMainPower($this->instanceId, $value);
 			} else {
-			   $allRoomesOff = true;
+				$allRoomesOff = true;
 				for ($roomId=0;$roomId<AM_CONFIG_ROOM_COUNT;$roomId++) {
 					$allRoomesOff = $allRoomesOff and !AudioMax_GetRoomPower($this->instanceId, $roomId);
 				}
 				if ($allRoomesOff) {
-			   	AudioMax_SetMainPower($this->instanceId, $value);
+					AudioMax_SetMainPower($this->instanceId, $value);
 				}
 			}
 		}
