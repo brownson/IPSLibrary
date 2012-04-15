@@ -35,7 +35,7 @@
 		 */
 		public function __construct($instanceId, $channelId) {
 			$this->instanceId = IPSUtil_ObjectIDByPath($instanceId);
-			$this->channelId  = $channelId;
+			$this->channelId  = (int)$channelId;
 		}
 
 		/**
