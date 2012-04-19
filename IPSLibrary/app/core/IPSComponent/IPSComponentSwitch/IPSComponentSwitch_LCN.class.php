@@ -57,7 +57,7 @@
 		 * @param boolean $value Wert für Schalter
 		 */
 		public function SetState($value) {
-			LCN_SwitchRelay($this->instanceId, true);
+			LCN_SwitchRelay($this->instanceId, $value);
 		}
 
 		/**
