@@ -6,8 +6,9 @@
 	 *
 	 * @file          IPSEDIP_TFT43A.class.php
 	 * @author        Andreas Brauneis
+	 * @author        André Czwalina
 	 * @version
-	 * Version 2.50.1, 31.01.2012<br/>
+	 * Version 2.50.2, 16.04.2012<br/>
 	 *
 	 */
 
@@ -17,8 +18,9 @@
     * Implementierung einer IPSEDIP Klasse vom Type TFT43A
     *
     * @author Andreas Brauneis
+	 * @author André Czwalina
     * @version
-    * Version 2.50.1, 31.01.2012<br/>
+    * Version 2.50.2, 16.04.2012<br/>
     */
 	class IPSEDIP_TFT43A extends IPSEDIP {
 		protected function AddMessageHeader() {
@@ -27,13 +29,16 @@
 			$this->messageArray[] = 'AL,0,1'; // Touch löschen
 			$this->messageArray[] = 'DL';     // Display leeren
 			$this->messageArray[] = 'AS,0';   // Summer aus
-			$this->messageArray[] = 'YH,30';  // Helligkeit auf 30
+			$this->messageArray[] = 'YH,'.GetValue($this->objectBacklightId);  // [AC] Helligkeit auf Parawert
+//			$this->messageArray[] = 'YH,30';  // Helligkeit auf 30
 			// Top Line
 			$this->messageArray[] = "FP,19,130,130,130"; // Define Color
 			$this->messageArray[] = "FE,8,1,19,8,1,7"; // Button Color
+			$this->messageArray[] = "AT,404,1,478,25,2,0,CRefresh";  //[AC] Refresh Button rechts oben
 			if ($this->rootId <> $this->currentId) $this->messageArray[] = 'AT,1,1,75,25,1,0,C<<';   // Touch Button
-			$this->messageArray[] = 'ZF,5'; // Schriftart
+			$this->messageArray[] = 'ZF,6'; // Schriftart //[AC]
 			$this->messageArray[] = 'ZZ,1,1'; // SchriftZoom
+			$this->messageArray[] = "FZ,8,1"; // Textfarbe //[AC]
 			$this->messageArray[] = 'ZC,220,5,'.IPS_GetName($this->currentId); // Current Category
 			$this->messageArray[] = "FG,8,1,1"; // Line Color
 			$this->messageArray[] = 'GR,1,30,480,30'; // Line
@@ -76,6 +81,7 @@
 				$cmd         = $variable['Cmd'];
 				$name        = $variable['Name'];
 				$displayType = $variable['DisplayType'];
+				$txtFarbe 	 = $variable['Farbe'];//[AC]
 				$yPosR2      = $yPosR1+$height;
 				$this->GetObjectButtonAttributes($count, $displayType, $yPosR1, $yPosR2, $yPosG1, $yPosG2, $yPosB1, $yPosB2, $yPosT);
 
@@ -84,9 +90,11 @@
 					$this->messageArray[] = 'ZF,5'; // Schriftart
 					$this->messageArray[] = 'ZZ,1,1'; // SchriftZoom
 					$this->messageArray[] = "FR,16,1,1"; // Frame Color
+					$this->messageArray[] = "FZ,8,1"; // Textfarbe //[AC]
 					$this->messageArray[] = "ZL,180,$yPosT,$name"; // Text
 				}
 
+				$this->messageArray[] = "FZ,".$txtFarbe.",1"; // Textfarbe //[AC]
 				switch($displayType) {
 					case 'Text':
 					case 'BigText':
@@ -101,6 +109,7 @@
 
 					case 'Switch':
 					case 'Button':
+					case 'Select':
 					case 'Inline':
 					case 'Block':
 						$valueFormatted  = $variable['ValueFormatted'];
@@ -131,7 +140,21 @@
 							   $valueFormatted = substr($valueFormatted,0,35);
 							  	$this->messageArray[] = "AT,180,$yPosB1,470,$yPosB2,$cmd,0,C$valueFormatted"; // Button Text
 							}
-							
+						} elseif ($displayType=='Select') {
+							if       ($variable['Width']==30 and ($variable['LineIdx']==0)) {
+								$valueFormatted = substr($valueFormatted,0,17);
+							   $this->messageArray[] = "AT,320,$yPosB1,345,$yPosB2,$cmd,0,C$valueFormatted"; // Button Text
+							} elseif ($variable['Width']==30 and ($variable['LineIdx']==1)) {
+								$valueFormatted = substr($valueFormatted,0,17);
+							   $this->messageArray[] = "AT,350,$yPosB1,440,$yPosB2,$cmd,0,C$valueFormatted"; // Button Text
+							} elseif ($variable['Width']==30 and ($variable['LineIdx']==2)) {
+								$valueFormatted = substr($valueFormatted,0,17);
+							   $this->messageArray[] = "AT,445,$yPosB1,470,$yPosB2,$cmd,0,C$valueFormatted"; // Button Text
+							} else {
+								$valueFormatted = substr($valueFormatted,0,17);
+							   $this->messageArray[] = "AT,320,$yPosB1,470,$yPosB2,$cmd,0,C$valueFormatted"; // Button Text
+							}
+
 						} else {
 							$this->messageArray[] = "AT,320,$yPosB1,470,$yPosB2,$cmd,0,C$valueFormatted"; // Button Text
 						}

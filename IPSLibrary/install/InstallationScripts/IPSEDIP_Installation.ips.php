@@ -8,7 +8,7 @@
 	 * @file          IPSEDIP_Installation.ips.php
 	 * @author        Andreas Brauneis
 	 * @version
-	 *  Version 2.50.1, 31.01.2012<br/>
+	 *  Version 2.50.2, 16.04.2012<br/>
 	 *
 	 * Script zur kompletten Installation der IPS EDIP Steuerung.
 	 *
@@ -25,7 +25,7 @@
 	 * - ID des EDIP Empfangs Scriptes IPSEDIP_Receive.ips.php als Action Script der Register Variable(n) definieren.
 	 *
 	 */
-	 
+
 	if (!isset($moduleManager)) {
 		IPSUtils_Include ('IPSModuleManager.class.php', 'IPSLibrary::install::IPSModuleManager');
 
@@ -56,9 +56,10 @@
 	$CategoryIdApp  = CreateCategoryPath($AppPath);
 	$CategoryIdHW   = CreateCategoryPath($HardwarePath);
 
-	$id_ScriptTimer   = IPS_GetScriptIDByName('IPSEDIP_Timer',   $CategoryIdApp);
-	$id_ScriptEvent   = IPS_GetScriptIDByName('IPSEDIP_Event',   $CategoryIdApp);
-	$id_ScriptReceive = IPS_GetScriptIDByName('IPSEDIP_Receive', $CategoryIdApp);
+	$id_ScriptTimer   			= IPS_GetScriptIDByName('IPSEDIP_Timer',   			$CategoryIdApp);
+	$id_ScriptEvent  		 		= IPS_GetScriptIDByName('IPSEDIP_Event',   			$CategoryIdApp);
+	$id_ScriptReceive 			= IPS_GetScriptIDByName('IPSEDIP_Receive', 			$CategoryIdApp);
+   $id_ScriptChangeSettings  	= IPS_GetScriptIDByName('IPSEDIP_ChangeSettings',  $CategoryIdApp);
 
 
 	foreach (IPSEDIP_GetConfiguration() as $configItem=>$configData) {
@@ -71,6 +72,7 @@
 			$id_Variables  = CreateVariable(EDIP_VAR_OBJECTCMDS,   3 /*String*/,  $id_Instance,  60, '', null, '');
 			$id_Variables  = CreateVariable(EDIP_VAR_OBJECTVALUES, 3 /*String*/,  $id_Instance,  60, '', null, '');
 			$id_value      = CreateVariable(EDIP_VAR_OBJECTEDIT,   1 /*Integer*/, $id_Instance,  70, '', null, 0);
+			$id_backlight  = CreateVariable(EDIP_VAR_BACKLIGHT,    1 /*Integer*/, $id_Instance,  80, '~Intensity.100', $id_ScriptChangeSettings, 50);
 
 			// Create Serial Port
          $id_IOComPort = null;
@@ -89,11 +91,16 @@
 			if (!is_numeric($configData[EDIP_CONFIG_ROOT])) {
 			   CreateCategoryPath($configData[EDIP_CONFIG_ROOT]);
 			}
-			
+
 			SetValue($id_Register, IPSUtil_ObjectIDByPath($registerIdConfig));
 			SetValue($id_Root,     IPSUtil_ObjectIDByPath($configData[EDIP_CONFIG_ROOT]));
 			SetValue($id_Current,  IPSUtil_ObjectIDByPath($configData[EDIP_CONFIG_ROOT]));
 			SetValue($id_value,    0);
+			CreateTimer_OnceADay ($configData[EDIP_CONFIG_NAME].'_Backlight_Timer', $id_ScriptTimer, date('H'), date('i',time() +($configData[EDIP_CONFIG_BACKLIGHT_TIMER]*60)));
+			CreateTimer_OnceADay ($configData[EDIP_CONFIG_NAME].'_Root_Timer', 		$id_ScriptTimer, date('H'), date('i',time() +($configData[EDIP_CONFIG_ROOT_TIMER]*60)));
+
+//			CreateCategory
+
 		} else {
 		   echo "Register/Root Ids NOT assigned... \n";
 		}
@@ -103,6 +110,7 @@
 
 	SetVariableConstant ("EDIP_ID_PROGRAM",    $CategoryIdData,   'IPSEDIP_IDs.inc.php', 'IPSLibrary::app::hardware::IPSEDIP');
 	SetVariableConstant ("EDIP_ID_EVENTSCRIPT",$id_ScriptEvent,   'IPSEDIP_IDs.inc.php', 'IPSLibrary::app::hardware::IPSEDIP');
+	SetVariableConstant ("EDIP_ID_TIMERSCRIPT",$id_ScriptTimer,   'IPSEDIP_IDs.inc.php', 'IPSLibrary::app::hardware::IPSEDIP');
 
 	/** @}*/
 ?>

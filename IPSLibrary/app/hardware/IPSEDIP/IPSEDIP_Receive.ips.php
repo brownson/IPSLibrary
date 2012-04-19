@@ -6,8 +6,9 @@
 	 *
 	 * @file          IPSEDIP_Receive.ips.php
 	 * @author        Andreas Brauneis
+	 * @author        André Czwalina
 	 * @version
-	 * Version 2.50.1, 31.01.2012<br/>
+	 * Version 2.50.2, 16.04.2012<br/>
 	 *
 	 * Dieses Script wird von der EDIP Steuerung aufgerufen, wenn Daten über die serielle Schnittstelle
 	 * hereinkommen.
