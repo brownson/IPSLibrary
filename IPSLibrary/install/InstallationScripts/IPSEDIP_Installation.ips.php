@@ -73,6 +73,7 @@
 			$id_Variables  = CreateVariable(EDIP_VAR_OBJECTVALUES, 3 /*String*/,  $id_Instance,  60, '', null, '');
 			$id_value      = CreateVariable(EDIP_VAR_OBJECTEDIT,   1 /*Integer*/, $id_Instance,  70, '', null, 0);
 			$id_backlight  = CreateVariable(EDIP_VAR_BACKLIGHT,    1 /*Integer*/, $id_Instance,  80, '~Intensity.100', $id_ScriptChangeSettings, 50);
+			$id_Notify     = CreateVariable(EDIP_VAR_NOTIFY,       3 /*String*/,  $id_Instance,  90, '', $id_ScriptChangeSettings, '');
 
 			// Create Serial Port
          $id_IOComPort = null;

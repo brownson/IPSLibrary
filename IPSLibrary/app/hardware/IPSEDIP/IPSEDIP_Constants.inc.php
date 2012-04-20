@@ -22,8 +22,9 @@
 	define ('EDIP_VAR_OBJECTVALUES',					'OBJECT_VALUES');
 	define ('EDIP_VAR_OBJECTCMDS',					'OBJECT_CMDS');
 	define ('EDIP_VAR_OBJECTEDIT',					'OBJECT_EDIT');
-	define ('EDIP_VAR_BACKLIGHT',						'OBJECT_Backlight');                                                 // [AC]
-
+	define ('EDIP_VAR_BACKLIGHT',						'OBJECT_BACKLIGHT');                                                 // [AC]
+	define ('EDIP_VAR_NOTIFY',							'OBJECT_NOTIFY');                                                    // [AC]
+	
 	// Configuration
 	define ('EDIP_CONFIG_NR1',							'Edip_1');
 	define ('EDIP_CONFIG_NR2',							'Edip_2');

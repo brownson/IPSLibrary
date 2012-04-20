@@ -97,19 +97,20 @@
 			$this->objectValuesId = IPS_GetObjectIDbyIdent(EDIP_VAR_OBJECTVALUES, $instanceId);
 			$this->objectCmdsId   = IPS_GetObjectIDbyIdent(EDIP_VAR_OBJECTCMDS, $instanceId);
 			$this->objectEditId   = IPS_GetObjectIDbyIdent(EDIP_VAR_OBJECTEDIT, $instanceId);
-			$this->objectBacklightId	=	IPS_GetObjectIDbyIdent(EDIP_VAR_BACKLIGHT, $instanceId);
+			$this->objectBacklightId	=	IPS_GetObjectIDbyIdent(EDIP_VAR_BACKLIGHT, $instanceId);                                   //[AC]
 		}
 
 		abstract protected function AddMessageHeader();
 		abstract protected function AddMessageCategories();
 		abstract protected function AddMessageVariables();
 		abstract protected function AddMessageValueEdit();
+		abstract protected function AddMessageNotify();                                                        							//[AC]
 
 		private function GenerateEvents() {                          
 			$objectIds = explode(',',GetValue($this->objectIdsId));
 			$edipName  = IPS_GetName($this->instanceId);
 			$edipNr	  = (int)substr($edipName,5,1);																											//[AC]
-			$i=0;																																							//[AC]
+			$i=1;																																							//[AC]
 			foreach ($objectIds as $objectId) {
 			   $objectId   = (int)$objectId;
 				$objectData = IPS_GetObject($objectId);
@@ -161,6 +162,7 @@
 				}																																							//[AC]
 			}
 		}
+
 
 		private function StoreObjectData() {
 			$objectIds    = array();
@@ -442,12 +444,14 @@
 		   $this->AddObjects();
 		   $this->OrderObjects();
 			$this->StoreObjectData();
+			$this->ReadNotify();
 
 			$this->messageArray = array();
 			$this->AddMessageHeader();
 			$this->AddMessageCategories();
 			$this->AddMessageVariables();
 			$this->AddMessageValueEdit();
+			$this->AddMessageNotify();                                                        	//[AC]
 			$this->sendArray($this->messageArray);
 		}
 
@@ -463,6 +467,11 @@
 						SetValue(IPS_GetObjectIDbyIdent(EDIP_VAR_CURRENT, $this->instanceId), $this->currentId);
 					} else {
 					}
+					break;
+				case 2: // Refresh
+					break;
+				case 3: // NotifyQuitt
+					SetValueString(IPS_GetObjectIDbyIdent(EDIP_VAR_NOTIFY, $this->instanceId),'');     																							//[AC]
 					break;
 			}
 		}
@@ -594,7 +603,13 @@
 						IPS_SetEventActive($timerId,true);                                                      																					//[AC]
 				}                                                      																																		//[AC]
 		}                                                      																																				//[AC]
-		
+
+		private function ReadNotify() {                                                      																										//[AC]
+			$NotifyId	=	IPS_GetObjectIDbyIdent(EDIP_VAR_NOTIFY, $this->instanceId);   																		            					   //[AC]
+			$this->NotifyMessage = GetValueString($NotifyId);                                                 																					//[AC]
+		}                                                      																																				//[AC]
+
+
 		private function SendArray($messageArray) {
 			$messagePackage = '';
 			foreach ($messageArray as $idx=>$message) {
