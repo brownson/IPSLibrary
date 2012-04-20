@@ -121,25 +121,27 @@
 
 	function IPSEDIP_GetConfiguration() {
 		return array(
-		   EDIP_CONFIG_NR1 => array(EDIP_CONFIG_NAME					=> 'Vorzimmer',
-											 EDIP_CONFIG_REGISTER 			=> '',
+		   EDIP_CONFIG_NR1 => array(EDIP_CONFIG_NAME					=> 'Erdgeschoss',
+											 EDIP_CONFIG_REGISTER 			=> '', //per Hand nachtragen
 											 EDIP_CONFIG_COMPORT 			=> 'COM1',
-											 EDIP_CONFIG_ROOT					=> 19585,
+											 EDIP_CONFIG_ROOT					=> 'Visualization.EDIP.Erdgeschoss',
 											 EDIP_CONFIG_REFRESHMETHOD		=> EDIP_REFRESHMETHOD_BOTH,
 											 EDIP_CONFIG_CLASSNAME			=> EDIP_CLASSNAME_EDIP43,
 											 EDIP_CONFIG_BACKLIGHT_LOW    => 30,
 											 EDIP_CONFIG_BACKLIGHT_HIGH   => 100,
-											 EDIP_CONFIG_BACKLIGHT_TIMER  => 1),
+											 EDIP_CONFIG_BACKLIGHT_TIMER  => 1,
+									 		 EDIP_CONFIG_ROOT_TIMER		   => 5)
 
 		   EDIP_CONFIG_NR2 => array(EDIP_CONFIG_NAME					=> 'Obergeschoss',
-											 EDIP_CONFIG_REGISTER 			=> '',
+											 EDIP_CONFIG_REGISTER 			=> '', //per Hand nachtragen
 											 EDIP_CONFIG_COMPORT 			=> 'COM2',
 											 EDIP_CONFIG_ROOT					=> 'Visualization.EDIP.Obergeschoss',
 											 EDIP_CONFIG_REFRESHMETHOD		=> EDIP_REFRESHMETHOD_NONE,
 											 EDIP_CONFIG_CLASSNAME			=> EDIP_CLASSNAME_EDIP43,
 											 EDIP_CONFIG_BACKLIGHT_LOW    => 30,
 											 EDIP_CONFIG_BACKLIGHT_HIGH   => 100,
-											 EDIP_CONFIG_BACKLIGHT_TIMER  => 1),
+											 EDIP_CONFIG_BACKLIGHT_TIMER  => 1,
+									 		 EDIP_CONFIG_ROOT_TIMER		   => 5)
 		);
 	}
 

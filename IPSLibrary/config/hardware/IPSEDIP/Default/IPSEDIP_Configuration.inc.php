@@ -122,9 +122,9 @@
 	function IPSEDIP_GetConfiguration() {
 		return array(
 		   EDIP_CONFIG_NR1 => array(EDIP_CONFIG_NAME					 => 'Vorimmer',
-								         EDIP_CONFIG_REGISTER           => '',
+								         EDIP_CONFIG_REGISTER           => '', //per Hand nachtragen
 								         EDIP_CONFIG_COMPORT            => '',
-								         EDIP_CONFIG_ROOT               => '',
+								         EDIP_CONFIG_ROOT               => 'Visualization.EDIP.Vorimmer',
 								         EDIP_CONFIG_REFRESHMETHOD      => EDIP_REFRESHMETHOD_BOTH,
 								         EDIP_CONFIG_CLASSNAME          => EDIP_CLASSNAME_EDIP43,
 											EDIP_CONFIG_BACKLIGHT_LOW      => 25,
