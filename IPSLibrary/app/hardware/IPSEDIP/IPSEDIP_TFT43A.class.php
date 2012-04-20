@@ -23,22 +23,22 @@
     * Version 2.50.2, 16.04.2012<br/>
     */
 	class IPSEDIP_TFT43A extends IPSEDIP {
+
 		protected function AddMessageHeader() {
 			// Common Settings
 			$this->messageArray[] = 'TA';     // Terminal aus
 			$this->messageArray[] = 'AL,0,1'; // Touch löschen
 			$this->messageArray[] = 'DL';     // Display leeren
 			$this->messageArray[] = 'AS,0';   // Summer aus
-			$this->messageArray[] = 'YH,'.GetValue($this->objectBacklightId);  																							// [AC] Helligkeit auf Parawert
-//			$this->messageArray[] = 'YH,30';  // Helligkeit auf 30
+			$this->messageArray[] = 'YH,'.GetValue($this->objectBacklightId);  	// [AC] Helligkeit auf Parawert
 			// Top Line
 			$this->messageArray[] = "FP,19,130,130,130"; // Define Color
 			$this->messageArray[] = "FE,8,1,19,8,1,7"; // Button Color
 			$this->messageArray[] = "AT,404,1,478,25,2,0,CRefresh";  //[AC] Refresh Button rechts oben
 			if ($this->rootId <> $this->currentId) $this->messageArray[] = 'AT,1,1,75,25,1,0,C<<';   // Touch Button
-			$this->messageArray[] = 'ZF,6'; // Schriftart 																														//[AC]
+			$this->messageArray[] = 'ZF,6'; // Schriftart 																									
 			$this->messageArray[] = 'ZZ,1,1'; // SchriftZoom
-			$this->messageArray[] = "FZ,8,1"; // Textfarbe 																														//[AC]
+			$this->messageArray[] = "FZ,8,1"; // Textfarbe 																									
 			$this->messageArray[] = 'ZC,220,5,'.IPS_GetName($this->currentId); // Current Category
 			$this->messageArray[] = "FG,8,1,1"; // Line Color
 			$this->messageArray[] = 'GR,1,30,480,30'; // Line
@@ -218,15 +218,15 @@
 			}
 		}
 		
-		protected function AddMessageNotify() {																																						//[AC]
+		protected function AddMessageNotify() {																																	
 			if ($this->NotifyMessage <> ''){
-				$NMessage = $this->NotifyMessage;																																						//[AC]
-				$this->messageArray[] = "FE,8,1,3,8,1,7"; 																																			//[AC]
-				$this->messageArray[] = "AF,6"; 																																							//[AC]
-				$this->messageArray[] = "AK,40,40,440,250,3,0,C$NMessage"; 																													//[AC]
-				$this->messageArray[] = "AF,5"; 																																							//[AC]
+				$NMessage = $this->NotifyMessage;																																	
+				$this->messageArray[] = "FE,8,1,3,8,1,7"; 																														
+				$this->messageArray[] = "AF,6"; 																																		
+				$this->messageArray[] = "AK,40,40,440,250,3,0,C$NMessage"; 																								
+				$this->messageArray[] = "AF,5"; 																																		
 			}
-		}																																																			//[AC]
+		}																																														
 
 		private function GetObjectDisplayAttributes($objectCount, &$height, &$space, $defaultHeight=30, $defaultSpace=10, $startPos=40, $endPos=272) {
 			if ($objectCount==0) return;

@@ -95,22 +95,48 @@
 			$this->registerId     = GetValue(IPS_GetObjectIDbyIdent(EDIP_VAR_REGISTER, $instanceId));
 			$this->objectIdsId    = IPS_GetObjectIDbyIdent(EDIP_VAR_OBJECTIDS, $instanceId);
 			$this->objectValuesId = IPS_GetObjectIDbyIdent(EDIP_VAR_OBJECTVALUES, $instanceId);
+			$this->objectBacklightId	=	IPS_GetObjectIDbyIdent(EDIP_VAR_BACKLIGHT, $instanceId);
 			$this->objectCmdsId   = IPS_GetObjectIDbyIdent(EDIP_VAR_OBJECTCMDS, $instanceId);
 			$this->objectEditId   = IPS_GetObjectIDbyIdent(EDIP_VAR_OBJECTEDIT, $instanceId);
-			$this->objectBacklightId	=	IPS_GetObjectIDbyIdent(EDIP_VAR_BACKLIGHT, $instanceId);                                   //[AC]
 		}
 
 		abstract protected function AddMessageHeader();
 		abstract protected function AddMessageCategories();
 		abstract protected function AddMessageVariables();
 		abstract protected function AddMessageValueEdit();
-		abstract protected function AddMessageNotify();                                                        							//[AC]
+		abstract protected function AddMessageNotify();                                                        							
 
 		private function GenerateEvents() {                          
 			$objectIds = explode(',',GetValue($this->objectIdsId));
 			$edipName  = IPS_GetName($this->instanceId);
-			$edipNr	  = (int)substr($edipName,5,1);																											//[AC]
-			$i=1;																																							//[AC]
+			$edipNr	  = (int)substr($edipName,5,1);																			
+
+			// Trigger Notify
+			$objectId = IPS_GetObjectIDbyIdent(EDIP_VAR_NOTIFY, $this->instanceId);
+			$eventId   = @IPS_GetEventIdByName($edipName."_Trigger_1" ,EDIP_ID_EVENTSCRIPT);	
+			if ($eventId===false) {																						
+				$eventId = IPS_CreateEvent(0);
+				IPS_SetParent($eventId, EDIP_ID_EVENTSCRIPT);
+		  		IPS_SetName($eventId, $edipName."_Trigger_1");													
+				IPS_SetPosition($eventId, 1);																			
+				}																												
+			IPS_SetEventTrigger($eventId, 1, $objectId);															
+			IPS_SetEventActive($eventId, true);
+
+			// Trigger Backlight
+			$objectId = IPS_GetObjectIDbyIdent(EDIP_VAR_BACKLIGHT, $this->instanceId);
+			$eventId   = @IPS_GetEventIdByName($edipName."_Trigger_2" ,EDIP_ID_EVENTSCRIPT);		
+			if ($eventId===false) {																						
+				$eventId = IPS_CreateEvent(0);
+				IPS_SetParent($eventId, EDIP_ID_EVENTSCRIPT);
+		  		IPS_SetName($eventId, $edipName."_Trigger_2");													
+				IPS_SetPosition($eventId, 2);																			
+				}																												
+			IPS_SetEventTrigger($eventId, 1, $objectId);															
+			IPS_SetEventActive($eventId, true);
+
+
+			$i=2;																															
 			foreach ($objectIds as $objectId) {
 			   $objectId   = (int)$objectId;
 				$objectData = IPS_GetObject($objectId);
@@ -118,48 +144,48 @@
 				   $eventName = $edipName.'_'.IPS_GetName($objectId);
 					$eventId   = @IPS_GetEventIdByName($eventName ,EDIP_ID_EVENTSCRIPT);
 					if ($eventId===false) {
-						$Nr = ($edipNr*10)+$i++;																													//[AC]
-						$eventId   = @IPS_GetEventIdByName($edipName."_Trigger_".$i ,EDIP_ID_EVENTSCRIPT);										//[AC]
-						if ($eventId===false) {																														//[AC]
+						$Nr = ($edipNr*10)+$i++;																					
+						$eventId   = @IPS_GetEventIdByName($edipName."_Trigger_".$i ,EDIP_ID_EVENTSCRIPT);		
+						if ($eventId===false) {																						
    						$eventId = IPS_CreateEvent(0);
 							IPS_SetParent($eventId, EDIP_ID_EVENTSCRIPT);
 							IPSLogger_Trc(__file__, "Create Event=$eventName, ID=$eventId, Parent=".EDIP_ID_EVENTSCRIPT);
-   						}																																				//[AC]
-				  		IPS_SetName($eventId, $edipName."_Trigger_".$i);																					//[AC]
-						IPS_SetEventTrigger($eventId, 1, $objectId);																							//[AC]
+   						}																												
+				  		IPS_SetName($eventId, $edipName."_Trigger_".$i);													
+						IPS_SetEventTrigger($eventId, 1, $objectId);															
 						IPS_SetEventActive($eventId, true);
 
-						IPS_SetPosition($eventId, $Nr);																											//[AC]
+						IPS_SetPosition($eventId, $Nr);																			
 						IPSLogger_Trc(__file__, "Aktivate Event=$eventName, ID=$eventId, Parent=".EDIP_ID_EVENTSCRIPT);
-					}																																						//[AC]
+					}																														
 				}
 			}
 		}
 
-		private function DropEvents() {                                                    														//[AC]
+		private function DropEvents() {                                                    						
 			$objectIds = explode(',',GetValue($this->objectIdsId));
 			$edipName  = IPS_GetName($this->instanceId);
-			$edipNr	  = (int)substr($edipName,5,1);																											//[AC]
-			$i = 0;																																						//[AC]
-			$eventObj = IPS_GetObject(EDIP_ID_EVENTSCRIPT);																									//[AC]
-			$eventObjs = $eventObj['ChildrenIDs'];																												//[AC]
+			$edipNr	  = (int)substr($edipName,5,1);																			
+			$i = 0;																														
+			$eventObj = IPS_GetObject(EDIP_ID_EVENTSCRIPT);																	
+			$eventObjs = $eventObj['ChildrenIDs'];																				
 			foreach ($eventObjs as $objectId) {
-			   $eventId = (int)$objectId;																															//[AC]
+			   $eventId = (int)$objectId;																							
 
-				if (substr(IPS_GetName($eventId),0,strlen($edipName))==$edipName){																	//[AC]
-					$Nr = ($edipNr*10)+$i++;																														//[AC]
-				   $eventName = $edipName.'_Trigger_'.$i;																										//[AC]
+				if (substr(IPS_GetName($eventId),0,strlen($edipName))==$edipName){									
+					$Nr = ($edipNr*10)+$i++;																						
+				   $eventName = $edipName.'_Trigger_'.$i;																		
 				   IPSLogger_Trc(__file__, "Deaktivate Event=$eventName, ID=$eventId");
-			  		IPS_SetName($eventId, $eventName);																											//[AC]
-					IPS_SetEventActive($eventId, false);																										//[AC]
-					IPS_SetPosition($eventId, $Nr);																												//[AC]
-					if ($i > 25){																																		//[AC]
-						IPS_DeleteEvent($eventId);																													//[AC]
-					   IPSLogger_Trc(__file__, "Delete Event=$eventName, ID=$eventId");																//[AC]
-					}																																						//[AC]
-				} else {																																					//[AC]
-						IPS_DeleteEvent($eventId);																													//[AC]
-				}																																							//[AC]
+			  		IPS_SetName($eventId, $eventName);																			
+					IPS_SetEventActive($eventId, false);																		
+					IPS_SetPosition($eventId, $Nr);																				
+					if ($i > 25){																										
+						IPS_DeleteEvent($eventId);																					
+					   IPSLogger_Trc(__file__, "Delete Event=$eventName, ID=$eventId");								
+					}																														
+				} else {																													
+						IPS_DeleteEvent($eventId);																					
+				}																															
 			}
 		}
 
@@ -265,11 +291,11 @@
 				$object['Idx']            = $idx;
 				$object['Value']          = $association['Value'];
 				$object['ValueFormatted'] = $object['Prefix'].$association['Name'].$object['Suffix'];
-            $object['ValueFormatted'] = Str_Replace('%d',$valueCurrent, $object['ValueFormatted']);      						//[AC]
+            $object['ValueFormatted'] = Str_Replace('%d',$valueCurrent, $object['ValueFormatted']);      						
 				$object['ObjectType']     = $objectType;
 
             $color = $this->GetDisplayAttributte($object['Link'], 'Color', '8');
-				$object['Farbe']    = $color; 																											//[AC]
+				$object['Farbe']    = $color; 																			
 
             $width = $this->GetDisplayAttributte($object['Link'], 'Width'.$association['Value'], '100');
 				$object['Width']    = $width;
@@ -332,7 +358,7 @@
 			$object['MinValue']       = $profileData['MinValue'];
 			$object['StepSize']       = $profileData['StepSize'];
 
-			$object['Farbe']    	= $this->GetDisplayAttributte($object['Link'], 'Color', '8');  //[AC]
+			$object['Farbe']    	= $this->GetDisplayAttributte($object['Link'], 'Color', '8');  
 
 			switch($type) {
 			   case 0: // Boolean
@@ -348,7 +374,7 @@
 				   } else if (count($profileData['Associations']) > 0) {
 						$object['DisplayType'] = $this->GetDisplayAttributte($link, 'DisplayType', 'Switch');
 						$object['Value']       = ""; // Call Edit Mode
-						if ($object['DisplayType']=='Inline' or $object['DisplayType']=='Block'or $object['DisplayType']=='Select') {      //[AC]
+						if ($object['DisplayType']=='Inline' or $object['DisplayType']=='Block'or $object['DisplayType']=='Select') {      
 						   $this->AddObjectVariableValues($object, $associations, $value, 'Variable');
 						   return;
 						}
@@ -401,15 +427,15 @@
 				switch($object['ObjectType']) {
 					case 0: // Category
 					case 1: // Instance
-//						echo 'Found Category '.$name."\n";                                                           //[AC]
+//						echo 'Found Category '.$name."\n";                                                           
 						$this->AddObjectCategory($linkId, $childrenId, $name, $position);
 						break;
 					case 2: // Variable
-//						echo 'Found Variable '.$name."\n";                                                           //[AC]
+//						echo 'Found Variable '.$name."\n";                                                           
 						$this->AddObjectVariable($linkId, $childrenId, $name, $position);
 						break;
 					case 3: // Script
-//						echo 'Found Script '.$name."\n";                                                           	//[AC]
+//						echo 'Found Script '.$name."\n";                                                           	
 						$this->AddObjectScript($linkId, $childrenId, $name, $position);
 						break;
 					default:
@@ -451,7 +477,7 @@
 			$this->AddMessageCategories();
 			$this->AddMessageVariables();
 			$this->AddMessageValueEdit();
-			$this->AddMessageNotify();                                                        	//[AC]
+			$this->AddMessageNotify();                                                        	
 			$this->sendArray($this->messageArray);
 		}
 
@@ -471,7 +497,7 @@
 				case 2: // Refresh
 					break;
 				case 3: // NotifyQuitt
-					SetValueString(IPS_GetObjectIDbyIdent(EDIP_VAR_NOTIFY, $this->instanceId),'');     																							//[AC]
+					SetValueString(IPS_GetObjectIDbyIdent(EDIP_VAR_NOTIFY, $this->instanceId),'');     															
 					break;
 			}
 		}
@@ -481,12 +507,12 @@
 			$this->currentId = (int)$object['Id'];
 			SetValue(IPS_GetObjectIDbyIdent(EDIP_VAR_CURRENT, $this->instanceId), $this->currentId);
 
-				$edipName 		= IPS_GetName( $this->instanceId);				                                                															//[AC]
-				$EdipConfig   	= IPSEDIP_GetConfiguration();                                                      																			//[AC]
-				if ( $this->currentId <> $this->rootId and $EdipConfig[$edipName][EDIP_CONFIG_ROOT_TIMER] > 0 ){                                                         //[AC]
-						$timerId   = @IPS_GetEventIdByName($EdipConfig[$edipName][EDIP_CONFIG_NAME].'_Root_Timer' ,EDIP_ID_TIMERSCRIPT);                                 	//[AC]
-						IPS_SetEventCyclicTimeBounds($timerId, mktime(date('H'), date('i',time() +($EdipConfig[$edipName][EDIP_CONFIG_ROOT_TIMER]*60)), date('s')), 0);  	//[AC]
-						IPS_SetEventActive($timerId,true);                                                      																				//[AC]
+				$edipName 		= IPS_GetName( $this->instanceId);				                                                							
+				$EdipConfig   	= IPSEDIP_GetConfiguration();                                                      											
+				if ( $this->currentId <> $this->rootId and $EdipConfig[$edipName][EDIP_CONFIG_ROOT_TIMER] > 0 ){                                                         
+						$timerId   = @IPS_GetEventIdByName($EdipConfig[$edipName][EDIP_CONFIG_NAME].'_Root_Timer' ,EDIP_ID_TIMERSCRIPT);                                 	
+						IPS_SetEventCyclicTimeBounds($timerId, mktime(date('H'), date('i',time() +($EdipConfig[$edipName][EDIP_CONFIG_ROOT_TIMER]*60)), date('s')), 0);  	
+						IPS_SetEventActive($timerId,true);                                                      												
 				}
 
 		}
@@ -582,7 +608,7 @@
 						// Unsupported Message Type
 				}
 			}
-			$this->Backlight();                                                  																														//[AC]
+			$this->Backlight();                                                  																						
 			$this->RefreshDisplay();
 
 		   if ($useEvents) {
@@ -590,24 +616,24 @@
 			}
 		}
 		
-		private function Backlight() {                                                      																										//[AC]
-				$edipName  = IPS_GetName($this->instanceId);                                                      																				//[AC]
-				$edipNr	  = (int)substr($edipName,5,1);                                                      																					//[AC]
-				$EdipConfig   	= IPSEDIP_GetConfiguration();                                                      																				//[AC]
-				$BL 				= $EdipConfig[$edipName][EDIP_CONFIG_BACKLIGHT_HIGH];                                                      												//[AC]
-				$BlId 			= IPS_GetObjectIDbyIdent(EDIP_VAR_BACKLIGHT, $this->instanceId);                                                      								//[AC]
-				if ($EdipConfig[$edipName][EDIP_CONFIG_BACKLIGHT_LOW] == GetValue($BlId)) SetValue($BlId, $BL);    																			//[AC]
-				if ($EdipConfig[$edipName][EDIP_CONFIG_BACKLIGHT_TIMER] >0){                                                      														//[AC]
-						$timerId   = @IPS_GetEventIdByName($EdipConfig[$edipName][EDIP_CONFIG_NAME].'_Backlight_Timer' ,EDIP_ID_TIMERSCRIPT);                                 //[AC]
-						IPS_SetEventCyclicTimeBounds($timerId, mktime(date('H'), date('i',time() +($EdipConfig[$edipName][EDIP_CONFIG_BACKLIGHT_TIMER]*60)), date('s')), 0);  //[AC]
-						IPS_SetEventActive($timerId,true);                                                      																					//[AC]
-				}                                                      																																		//[AC]
-		}                                                      																																				//[AC]
+		private function Backlight() {                                                      																		
+				$edipName  = IPS_GetName($this->instanceId);                                                      												
+				$edipNr	  = (int)substr($edipName,5,1);                                                      													
+				$EdipConfig   	= IPSEDIP_GetConfiguration();                                                      												
+				$BL 				= $EdipConfig[$edipName][EDIP_CONFIG_BACKLIGHT_HIGH];                                                      				
+				$BlId 			= IPS_GetObjectIDbyIdent(EDIP_VAR_BACKLIGHT, $this->instanceId);                                                      
+				if ($EdipConfig[$edipName][EDIP_CONFIG_BACKLIGHT_LOW] == GetValue($BlId)) SetValue($BlId, $BL);    											
+				if ($EdipConfig[$edipName][EDIP_CONFIG_BACKLIGHT_TIMER] >0){                                                      						
+						$timerId   = @IPS_GetEventIdByName($EdipConfig[$edipName][EDIP_CONFIG_NAME].'_Backlight_Timer' ,EDIP_ID_TIMERSCRIPT);                                 
+						IPS_SetEventCyclicTimeBounds($timerId, mktime(date('H'), date('i',time() +($EdipConfig[$edipName][EDIP_CONFIG_BACKLIGHT_TIMER]*60)), date('s')), 0);  
+						IPS_SetEventActive($timerId,true);                                                      													
+				}                                                      																										
+		}                                                      																												
 
-		private function ReadNotify() {                                                      																										//[AC]
-			$NotifyId	=	IPS_GetObjectIDbyIdent(EDIP_VAR_NOTIFY, $this->instanceId);   																		            					   //[AC]
-			$this->NotifyMessage = GetValueString($NotifyId);                                                 																					//[AC]
-		}                                                      																																				//[AC]
+		private function ReadNotify() {                                                      																		
+			$NotifyId	=	IPS_GetObjectIDbyIdent(EDIP_VAR_NOTIFY, $this->instanceId);   																		            					   
+			$this->NotifyMessage = GetValueString($NotifyId);                                                 													
+		}                                                      																												
 
 
 		private function SendArray($messageArray) {

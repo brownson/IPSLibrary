@@ -29,27 +29,16 @@
 	 *
 	 */
 
-/*	include_once "IPSEDIP.inc.php";
+	include_once "IPSEDIP.inc.php";
 
 	if ($_IPS['SENDER']=='WebFront') {
 		$ControlId   = $_IPS['VARIABLE'];
 		$CircleId    = get_CirclyIdByControlId($ControlId);
 		$ControlType = get_ControlType($ControlId);
 
-*/
-
 		SetValueInteger($_IPS['VARIABLE'], $_IPS['VALUE']);
-/*
-		switch($ControlType) {
-			case c_Control_Minute:
-			   break;
-
-			default:
-				IPSLogger_Err(__file__, "Error Unknown ControlType $ControlType");
-				break;
-	   }
-
 	}
-*/
+
+
 	/** @}*/
 ?>

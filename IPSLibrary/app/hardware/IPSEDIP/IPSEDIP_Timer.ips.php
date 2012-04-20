@@ -28,20 +28,20 @@
 
 
 // Backlight Funktionen
-			$eventName 		= IPS_GetName($_IPS['EVENT']);				                                                										// [AC]
-			$backlightId   = IPS_GetObjectIDbyIdent(EDIP_VAR_BACKLIGHT, $instanceId);           																	// [AC]
+			$eventName 		= IPS_GetName($_IPS['EVENT']);				                                                								
+			$backlightId   = IPS_GetObjectIDbyIdent(EDIP_VAR_BACKLIGHT, $instanceId);           															
 
-			if ($eventName == $configData[EDIP_CONFIG_NAME].'_'.EDIP_CONFIG_BACKLIGHT_TIMER){          															// [AC]
-				IPS_SetEventActive($_IPS['EVENT'],false);           									  																		// [AC]
-				if (GetValue($backlightId) > $configData[EDIP_CONFIG_BACKLIGHT_LOW]) SetValue($backlightId,$configData[EDIP_CONFIG_BACKLIGHT_LOW]); // [AC]
-			}          									  																																	// [AC]
+			if ($eventName == $configData[EDIP_CONFIG_NAME].'_'.EDIP_CONFIG_BACKLIGHT_TIMER){          													
+				IPS_SetEventActive($_IPS['EVENT'],false);           									  																
+				if (GetValue($backlightId) > $configData[EDIP_CONFIG_BACKLIGHT_LOW]) SetValue($backlightId,$configData[EDIP_CONFIG_BACKLIGHT_LOW]); 
+			}          									  																															
 
 // AutoRoot Funktion
-			if ($eventName == $configData[EDIP_CONFIG_NAME].'_'.EDIP_CONFIG_ROOT_TIMER and $configData[EDIP_CONFIG_ROOT_TIMER] > 0){         		// [AC]
-				$currentId   = IPS_GetObjectIDbyIdent(EDIP_VAR_CURRENT, $instanceId);           																		// [AC]
-				$root   	= GetValue(IPS_GetObjectIDbyIdent(EDIP_VAR_ROOT, $instanceId));           																	// [AC]
-				SetValue($currentId, $root);           																															// [AC]
-				IPS_SetEventActive($_IPS['EVENT'],false);           									  																		// [AC]
+			if ($eventName == $configData[EDIP_CONFIG_NAME].'_'.EDIP_CONFIG_ROOT_TIMER and $configData[EDIP_CONFIG_ROOT_TIMER] > 0){         
+				$currentId   = IPS_GetObjectIDbyIdent(EDIP_VAR_CURRENT, $instanceId);           																
+				$root   	= GetValue(IPS_GetObjectIDbyIdent(EDIP_VAR_ROOT, $instanceId));           															
+				IPS_SetEventActive($_IPS['EVENT'],false);           									  																
+				SetValue($currentId, $root);
 			}
 
 			include_once $instanceClass.'.class.php';
