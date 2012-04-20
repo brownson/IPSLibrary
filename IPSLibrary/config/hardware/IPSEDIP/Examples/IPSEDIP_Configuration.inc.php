@@ -83,7 +83,7 @@
    *       EDIP_CONFIG_COMPORT           => '',
    *       EDIP_CONFIG_ROOT              => 12345,
    *       EDIP_CONFIG_REFRESHMETHOD     => EDIP_REFRESHMETHOD _NONE,
-   *       EDIP_CONFIG_CLASSNAME         => EDIP_CLASSNAME_EDIP43));
+   *       EDIP_CONFIG_CLASSNAME         => EDIP_CLASSNAME_EDIP43,
 	*		  EDIP_CONFIG_BACKLIGHT_LOW     => 30,
 	*		  EDIP_CONFIG_BACKLIGHT_HIGH    => 100,
 	* 		  EDIP_CONFIG_BACKLIGHT_TIMER   => 1,
@@ -105,6 +105,7 @@
    *     </UL>
    *   - WidthX=YY, ermöglicht das einstellen einer spezifischen Breite für eine Assoziatione im Inline/Block Modus. Es werden zur Zeit nur die Werte 50 und 100 unterstützt.
    *
+   *
    * Beispiel:
    *@code
       ##DisplayType=Inline,Width0=100,Width1=50,Width2=50,Width3=50,Width4=50
@@ -113,6 +114,7 @@
       ##DisplayType=BigText
       ##DisplayType=Color=3
       ##DisplayType=BarGraph
+      ##DisplayType=BarGraph,Color=3
    *@endcode
    *
    */
