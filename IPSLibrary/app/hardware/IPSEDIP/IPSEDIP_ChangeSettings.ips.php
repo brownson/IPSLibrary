@@ -29,15 +29,9 @@
 	 *
 	 */
 
-	include_once "IPSEDIP.inc.php";
 
-	if ($_IPS['SENDER']=='WebFront') {
-		$ControlId   = $_IPS['VARIABLE'];
-		$CircleId    = get_CirclyIdByControlId($ControlId);
-		$ControlType = get_ControlType($ControlId);
 
 		SetValueInteger($_IPS['VARIABLE'], $_IPS['VALUE']);
-	}
 
 
 	/** @}*/
