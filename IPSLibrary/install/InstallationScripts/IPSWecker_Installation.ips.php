@@ -68,7 +68,7 @@
 	 * @file          IPSWecker_Installation.ips.php
 	 * @author        André Czwalina
 	 * @version
-	 *  Version 1.00.0, 01.04.2012<br/>
+	* Version 1.00.1, 22.04.2012<br/>
 	 *
 	 */
 
@@ -140,36 +140,44 @@
 	// Add Scripts
    $ScriptIdChangeSettings  = IPS_GetScriptIDByName('IPSWecker_ChangeSettings',  $CategoryIdApp);
    $ScriptIdTimer   			 = IPS_GetScriptIDByName('IPSWecker_Timer',    			$CategoryIdApp);
+   $ScriptIdEvent   			 = IPS_GetScriptIDByName('IPSWecker_Event',    			$CategoryIdApp);
 
 	// Create Weckers and Controls
 	// ----------------------------------------------------------------------------------------------------------------------------
 //	CreateProfile_Associations ('IPSWecker_Program', array(
 //												c_ProgramId_Manual	 	=> c_Program_Manual,
-//												c_ProgramId_EveryDay 	=> c_Program_EveryDay,
-//												c_ProgramId_Every2Day 	=> c_Program_Every2Day,
-//												c_ProgramId_Every3Day 	=> c_Program_Every3Day,
+//												c_ProgramId_EveryTag 	=> c_Program_EveryTag,
+//												c_ProgramId_Every2Tag 	=> c_Program_Every2Tag,
+//												c_ProgramId_Every3Tag 	=> c_Program_Every3Tag,
 //												c_ProgramId_MonWedFri 	=> c_Program_MonWedFri,
 //												c_ProgramId_MonTur 		=> c_Program_MonTur,
-//												c_ProgramId_Sunday 		=> c_Program_Sunday));
+//												c_ProgramId_SunTag 		=> c_Program_SunTag));
 
 
-/*	CreateProfile_Associations ('IPSWecker_Tag', array(
+	CreateProfile_Associations ('IPSWecker_LTag', array(
 												0	=> c_Program_Montag,
 												1 	=> c_Program_Dienstag,
 												2 	=> c_Program_Mittwoch,
 												3 	=> c_Program_Donnerstag,
 												4 	=> c_Program_Freitag,
 												5 	=> c_Program_Samstag,
-												6 	=> c_Program_Sonntag),'', array(
+												6 	=> c_Program_Sonntag,
+												7 	=> c_Program_Werktags,
+												8 	=> c_Program_Wochenende,
+												9 	=> c_Program_Woche),
+												'', array(
 												0  =>	0x800000,
 												1  =>	0x800000,
 												2  =>	0x800000,
 												3  =>	0x800000,
 												4  =>	0x800000,
 												5 	=>	0x008000,
-												6 	=>	0x008000));
-*/
-/*	CreateProfile_Associations ('IPSWecker_Stunde', array(
+												6 	=>	0x008000,
+												7 	=>	-1,
+												8 	=>	-1,
+												9 	=>	-1));
+
+	CreateProfile_Associations ('IPSWecker_LStunde', array(
 												0	=> '00',
 												1 	=> '01',
 												2 	=> '02',
@@ -195,8 +203,8 @@
 												22 	=> '22',
 												23 	=> '23')
 												);
-*/
-/*	CreateProfile_Associations ('IPSWecker_Minute', array(
+
+	CreateProfile_Associations ('IPSWecker_LMinute', array(
 												0	=> '00',
 												1 	=> '05',
 												2 	=> '10',
@@ -207,10 +215,8 @@
 												7 	=> '35',
 												8 	=> '40',
 												9 	=> '45',
-												10 	=> '50',
-												11 	=> '55'));
-*/
-
+												10 => '50',
+												11 => '55'));
 
 
 	CreateProfile_Associations ('IPSWecker_Name', array(
@@ -227,7 +233,7 @@
  	CreateProfile_Associations ('IPSWecker_Stunde', array(
 // 	                                 -2 	=> 'AUS',
 												-1		=> '-',
-												0		=> '%d ',
+												0		=> '%d',
 												100	=> '+'),'', array(
 //												-2 	=>	0x800000,
 												-1  	=>	0x00F0F0,
@@ -236,39 +242,39 @@
 
  	CreateProfile_Associations ('IPSWecker_Minute', array(
 												-1	=> '-',
-												0	=> '%d ',
+												0	=> '%d',
 												100	=> '+'),'', array(
 												-1  	=>	0x00F0F0,
 												0  	=>	-1,
 												100 	=>	0x00F0F0));
 
 	CreateProfile_Associations ('IPSWecker_Global', array(
-												0	=> c_Asso_Off,
-												1 	=> c_Asso_On),'', array(
+												0	=> c_Program_Off,
+												1 	=> c_Program_On),'', array(
 												0  =>	0x800000,
 												1 	=>	0x008000));
 
 	CreateProfile_Associations ('IPSWecker_Aktiv', array(
-												0	=> c_Asso_NoWeck,
-												1 	=> c_Asso_Weck),'', array(
+												0	=> c_Program_NoWeck,
+												1 	=> c_Program_Weck),'', array(
 												0  =>	0x800000,
 												1 	=>	0x008000));
 
 	CreateProfile_Associations ('IPSWecker_Frost', array(
-												0	=> c_Asso_NormWeck,
-												1 	=> c_Asso_PrevWeck),'', array(
+												0	=> c_Program_NormWeck,
+												1 	=> c_Program_PrevWeck),'', array(
 												0  =>	0x800000,
 												1 	=>	0x008000));
 
 	CreateProfile_Associations ('IPSWecker_Schlummer', array(
-												0	=> c_Asso_Off,
-												1 	=> c_Asso_On),'', array(
+												0	=> c_Program_Off,
+												1 	=> c_Program_On),'', array(
 												0  =>	0x800000,
 												1 	=>	0x008000));
 
 	CreateProfile_Associations ('IPSWecker_End', array(
-												0	=> c_Asso_Off,
-												1 	=> c_Asso_On),'', array(
+												0	=> c_Program_Off,
+												1 	=> c_Program_On),'', array(
 												0  =>	0x800000,
 												1 	=>	0x008000));
 
@@ -296,13 +302,13 @@
     	 	IPS_SetVariableProfileAssociation($vpn, $Ass, $WeckerData[c_Property_Name],"", -1);
 
 			$WeckerId              	= CreateCategory($WeckerName, $CategoryIdWeckers, $Idx);
-			$ControlIdMontag			= CreateVariable(c_Control_Mo,			3 /*String*/,  $WeckerId, 10, '~String',   null, date(c_Format_StartTime));
-			$ControlIdDienstag		= CreateVariable(c_Control_Di,			3 /*String*/,  $WeckerId, 20, '~String',   null, date(c_Format_StartTime));
-			$ControlIdMittwoch		= CreateVariable(c_Control_Mi,			3 /*String*/,  $WeckerId, 30, '~String',   null, date(c_Format_StartTime));
-			$ControlIdDonnerstag		= CreateVariable(c_Control_Do,			3 /*String*/,  $WeckerId, 40, '~String',   null, date(c_Format_StartTime));
-			$ControlIdFreitag			= CreateVariable(c_Control_Fr,			3 /*String*/,  $WeckerId, 50, '~String',   null, date(c_Format_StartTime));
-			$ControlIdSamstag			= CreateVariable(c_Control_Sa,			3 /*String*/,  $WeckerId, 60, '~String',   null, date(c_Format_StartTime));
-			$ControlIdSonntag			= CreateVariable(c_Control_So,			3 /*String*/,  $WeckerId, 70, '~String',   null, date(c_Format_StartTime));
+			$ControlIdMontag			= CreateVariable(c_Control_Mo,			3 /*String*/,  $WeckerId, 10, '~String',   null, '00:00');
+			$ControlIdDienstag		= CreateVariable(c_Control_Di,			3 /*String*/,  $WeckerId, 20, '~String',   null, '00:00');
+			$ControlIdMittwoch		= CreateVariable(c_Control_Mi,			3 /*String*/,  $WeckerId, 30, '~String',   null, '00:00');
+			$ControlIdDonnerstag		= CreateVariable(c_Control_Do,			3 /*String*/,  $WeckerId, 40, '~String',   null, '00:00');
+			$ControlIdFreitag			= CreateVariable(c_Control_Fr,			3 /*String*/,  $WeckerId, 50, '~String',   null, '00:00');
+			$ControlIdSamstag			= CreateVariable(c_Control_Sa,			3 /*String*/,  $WeckerId, 60, '~String',   null, '00:00');
+			$ControlIdSonntag			= CreateVariable(c_Control_So,			3 /*String*/,  $WeckerId, 70, '~String',   null, '00:00');
 
 //			$ControlIdMoActive    	= CreateVariable(c_Control_Mo_Active,   0 /*Boolean*/, $WeckerId, 100, 'IPSWecker_Aktiv',   $ScriptIdChangeSettings, true);
 //			$ControlIdDiActive    	= CreateVariable(c_Control_Di_Active,   0 /*Boolean*/, $WeckerId, 110, 'IPSWecker_Aktiv',   $ScriptIdChangeSettings, true);
@@ -312,10 +318,10 @@
 //			$ControlIdSaActive    	= CreateVariable(c_Control_Sa_Active,   0 /*Boolean*/, $WeckerId, 150, 'IPSWecker_Aktiv',   $ScriptIdChangeSettings, true);
 //			$ControlIdSoActive    	= CreateVariable(c_Control_So_Active,   0 /*Boolean*/, $WeckerId, 160, 'IPSWecker_Aktiv',   $ScriptIdChangeSettings, true);
 
-			$ControlIdActive			= CreateVariable(c_Control_Optionen,			3 /*String*/,  $WeckerId, 200, '~String',   	null, '1,1,1,1,1,1,1,0,0,0,1,0,0');
+			$ControlIdActive			= CreateVariable(c_Control_Optionen,			3 /*String*/,  $WeckerId, 200, '~String',   	null, '1,1,1,1,1,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0');
 //			$ControlIdGlobal		   = CreateVariable(c_Control_Global,			  	0 /*Boolean*/, $WeckerId, 210, 'IPSWecker_Aktiv',   $ScriptIdChangeSettings, true );
 //			$ControlIdFeiertag    	= CreateVariable(c_Control_Feiertag,   		0 /*Boolean*/, $WeckerId, 220, 'IPSWecker_Aktiv',   $ScriptIdChangeSettings, false);
-//			$ControlIdFrost		   = CreateVariable(c_Table_Freeze,			  	0 /*Boolean*/, $WeckerId, 230, 'IPSWecker_Frost',   $ScriptIdChangeSettings, false );
+//			$ControlIdFrost		   = CreateVariable(c_WFC_Frost,			  	0 /*Boolean*/, $WeckerId, 230, 'IPSWecker_Frost',   $ScriptIdChangeSettings, false );
 //			$ControlIdUrlaub  	  	= CreateVariable(c_Control_Urlaub, 				0 /*Boolean*/, $WeckerId, 240, 'IPSWecker_Aktiv',   $ScriptIdChangeSettings, false);
 			$ControlIdUrlaubszeit	= CreateVariable(c_Control_Urlaubszeit,		3 /*String*/,  $WeckerId, 250, '~TextBox',  	null, '');
 			$ControlIdUebersicht		= CreateVariable(c_Control_Uebersicht,			3 /*String*/,  $WeckerId, 260, '~HTMLBox',   null, '');
@@ -328,6 +334,12 @@
 			CreateTimer_Profile ($WeckerName."_5", $ScriptIdTimer, 0, 0, $Idx+6, false);
 			CreateTimer_Profile ($WeckerName."_6", $ScriptIdTimer, 0, 0, $Idx+7, false);
 
+			if ($WeckerData[c_Property_StopSensor] <> ''){
+				if (IPS_VariableExists($WeckerData[c_Property_StopSensor]) == true ){
+					CreateEvent ($WeckerName, $WeckerData[c_Property_StopSensor], $ScriptIdEvent, 0);
+				}
+			}
+
 			$Idx = $Idx  + 10;
 			$Ass++ ;
 	}
@@ -338,8 +350,12 @@
 
 	$ControlIdOVWeckerName     = CreateVariable(c_Control_Name,   		1 /*Integer*/, $CategoryIdData,  10, 'IPSWecker_Name', 		$ScriptIdChangeSettings, 0, '');
 	$ControlIdOVWeckerTag     	= CreateVariable(c_Control_Tag,			1 /*Integer*/, $CategoryIdData,  20, 'IPSWecker_Tag', 		$ScriptIdChangeSettings, 0, '');
+	$ControlIdOVWeckerLTag    	= CreateVariable(c_Control_LTag,			1 /*Integer*/, $CategoryIdData,  20, 'IPSWecker_LTag', 		$ScriptIdChangeSettings, 0, '');
 	$ControlIdOVWeckerStunde   = CreateVariable(c_Control_Stunde,  	1 /*Integer*/, $CategoryIdData,  30, 'IPSWecker_Stunde', 	$ScriptIdChangeSettings, 0, '');
+	$ControlIdOVWeckerLStunde  = CreateVariable(c_Control_LStunde,  	1 /*Integer*/, $CategoryIdData,  30, 'IPSWecker_LStunde', 	$ScriptIdChangeSettings, 0, '');
 	$ControlIdOVWeckerMinute   = CreateVariable(c_Control_Minute,  	1 /*Integer*/, $CategoryIdData,  40, 'IPSWecker_Minute', 	$ScriptIdChangeSettings, 0, '');
+	$ControlIdOVWeckerLMinute  = CreateVariable(c_Control_LMinute,  	1 /*Integer*/, $CategoryIdData,  40, 'IPSWecker_LMinute', 	$ScriptIdChangeSettings, 0, '');
+
 	$ControlIdOVActive			= CreateVariable(c_Control_Active,		0 /*Boolean*/, $CategoryIdData,  50, 'IPSWecker_Aktiv',  	$ScriptIdChangeSettings, true);
 	$ControlIdOVGlobal		   = CreateVariable(c_Control_Global,		0 /*Boolean*/, $CategoryIdData,  60, 'IPSWecker_Global',  	$ScriptIdChangeSettings, true );
 	$ControlIdOVFeiertag    	= CreateVariable(c_Control_Feiertag,   0 /*Boolean*/, $CategoryIdData,  70, 'IPSWecker_Aktiv',  	$ScriptIdChangeSettings, false);
@@ -358,9 +374,9 @@
 	if ($WFC_Enabled) {
 		$WebFrontId               = CreateCategoryPath($WFC_Path, 10);
 		EmptyCategory($WebFrontId);
-		$WebFrontOverviewId       = CreateCategory(    'Overview', $WebFrontId,    0);
-		$WebFrontOverviewTopL     = CreateCategory(    'Top_L',    $WebFrontOverviewId,    10);
-		$WebFrontOverviewTopR     = CreateCategory(    'Top_R',    $WebFrontOverviewId,    20);
+		$WebFrontOverviewId       = CreateCategory(    'Overview', 	$WebFrontId,    0);
+		$WebFrontOverviewTopL     = CreateCategory(    'Top_L',    	$WebFrontOverviewId,    10);
+		$WebFrontOverviewTopR     = CreateCategory(    'Top_R',    	$WebFrontOverviewId,    20);
 		$WebFrontOverviewBottomL  = CreateCategory(    'Bottom_L',  $WebFrontOverviewId,    30);
 		$WebFrontOverviewBottomR  = CreateCategory(    'Bottom_R',  $WebFrontOverviewId,    40);
 
@@ -378,31 +394,27 @@
 		CreateWFCItemCategory  ($WFC_ConfigId, $WFC_TabPaneItem.'_OVBottomR', 	$WFC_TabPaneItem.'_OVBottom', 20, 'Bottom_2', 	'', $WebFrontOverviewBottomR /*BaseId*/, 	'false' /*BarBottomVisible*/);
 
 		// Top Left
-		CreateLink     (c_Table_Day,		$ControlIdOVWeckerTag,  				$WebFrontOverviewTopL, 80);
-		CreateLink     (c_Table_Hour,			$ControlIdOVWeckerStunde, 			$WebFrontOverviewTopL, 90);
-		CreateLink     (c_Table_Minute,			$ControlIdOVWeckerMinute,		$WebFrontOverviewTopL, 100);
-		CreateLink     (c_Table_Active,			$ControlIdOVActive,				$WebFrontOverviewTopL, 110);
+		CreateLink     (c_WFC_Tag,					$ControlIdOVWeckerLTag,  		$WebFrontOverviewTopL, 10);
+		CreateLink     (c_WFC_Stunde,				$ControlIdOVWeckerLStunde, 	$WebFrontOverviewTopL, 20);
+		CreateLink     (c_WFC_Minute,				$ControlIdOVWeckerLMinute,		$WebFrontOverviewTopL, 30);
+		CreateLink     (c_WFC_Active,				$ControlIdOVActive,				$WebFrontOverviewTopL, 40);
 
 		// Top Right
-		CreateLink		(c_Table_AlarmName,		$ControlIdOVWeckerName,  		$WebFrontOverviewTopR, 10);
-		CreateLink     (c_Table_Global,			$ControlIdOVGlobal,				$WebFrontOverviewTopR, 20);
-		CreateLink     (c_Table_Holiday,			$ControlIdOVUrlaub,				$WebFrontOverviewTopR, 30);
-		CreateLink     (c_Table_Feasts,				$ControlIdOVFeiertag,		$WebFrontOverviewTopR, 40);
-		CreateLink     (c_Table_Freeze,				$ControlIdOVFrost,			$WebFrontOverviewTopR, 50);
-		CreateLink     (c_Table_Snooze,		$ControlIdOVSchlummer,				$WebFrontOverviewTopR, 60);
-		CreateLink     (c_Table_End,				$ControlIdOVEnd,					$WebFrontOverviewTopR, 70);
-		CreateLink     (c_Table_HolidayTime,		$ControlIdOVUrlaubszeit,	$WebFrontOverviewTopR, 80);
-
+		CreateLink		(c_WFC_AlarmName,			$ControlIdOVWeckerName,  		$WebFrontOverviewTopR, 10);
+		CreateLink     (c_WFC_Global,				$ControlIdOVGlobal,				$WebFrontOverviewTopR, 20);
+		CreateLink     (c_WFC_Urlaub,			$ControlIdOVUrlaub,				$WebFrontOverviewTopR, 30);
+		CreateLink     (c_WFC_Feiertag,				$ControlIdOVFeiertag,			$WebFrontOverviewTopR, 40);
+		CreateLink     (c_WFC_Frost,				$ControlIdOVFrost,				$WebFrontOverviewTopR, 50);
+		CreateLink     (c_WFC_Snooze,				$ControlIdOVSchlummer,			$WebFrontOverviewTopR, 60);
+		CreateLink     (c_WFC_End,					$ControlIdOVEnd,					$WebFrontOverviewTopR, 70);
+		CreateLink     (c_WFC_Urlaubszeit,		$ControlIdOVUrlaubszeit,		$WebFrontOverviewTopR, 80);
 
 		// BottomL
-		CreateLink     (c_Table_Overview,		$ControlIdOVUebersicht,			$WebFrontOverviewBottomL, 10);
+		CreateLink     (c_WFC_Uebersicht,		$ControlIdOVUebersicht,				$WebFrontOverviewBottomL, 10);
 
 		// BottomR
 		CreateLink     (c_Control_MeldungID,		$ControlIdLogId,				$WebFrontOverviewBottomR, 10);
 		CreateLink     (c_Control_Meldungen,		$ControlIdLog,					$WebFrontOverviewBottomR, 20);
-
-
-		ReloadAllWebFronts();
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
@@ -431,33 +443,31 @@
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_LOG',		 	$WFC10_TabPaneItem.'',  		  2000, 'LOG'	  , '', $Web10FrontOverviewLog /*BaseId*/, 'false' /*BarBottomVisible*/);
 
 		// Top Left
-		CreateLink     (c_Table_Day,				$ControlIdOVWeckerTag,  	$Web10FrontOverviewTopL, 10);
-		CreateLink     (c_Table_Hour,				$ControlIdOVWeckerStunde, 	$Web10FrontOverviewTopL, 20);
-		CreateLink     (c_Table_Minute,			$ControlIdOVWeckerMinute,	$Web10FrontOverviewTopL, 30);
-		CreateLink     (c_Table_Active,			$ControlIdOVActive,			$Web10FrontOverviewTopL, 40);
+		CreateLink     (c_WFC_Tag,				$ControlIdOVWeckerTag,  	$Web10FrontOverviewTopL, 10);
+		CreateLink     (c_WFC_Stunde,			$ControlIdOVWeckerStunde, 	$Web10FrontOverviewTopL, 20);
+		CreateLink     (c_WFC_Minute,			$ControlIdOVWeckerMinute,	$Web10FrontOverviewTopL, 30);
+		CreateLink     (c_WFC_Active,			$ControlIdOVActive,			$Web10FrontOverviewTopL, 40);
 
 		// Top Right
-		CreateLink		(c_Table_AlarmName,		$ControlIdOVWeckerName,  	$Web10FrontOverviewTopR, 10);
-		CreateLink     (c_Table_Global,			$ControlIdOVGlobal,			$Web10FrontOverviewTopR, 20);
-		CreateLink     (c_Table_Holiday,			$ControlIdOVUrlaub,			$Web10FrontOverviewTopR, 30);
-		CreateLink     (c_Table_Feasts,			$ControlIdOVFeiertag,		$Web10FrontOverviewTopR, 40);
-		CreateLink     (c_Table_Freeze,			$ControlIdOVFrost,			$Web10FrontOverviewTopR, 50);
-		CreateLink     (c_Table_Snooze,			$ControlIdOVSchlummer,		$Web10FrontOverviewTopR, 60);
-		CreateLink     (c_Table_End,				$ControlIdOVEnd,				$Web10FrontOverviewTopR, 70);
+		CreateLink		(c_WFC_AlarmName,		$ControlIdOVWeckerName,  	$Web10FrontOverviewTopR, 10);
+		CreateLink     (c_WFC_Global,			$ControlIdOVGlobal,			$Web10FrontOverviewTopR, 20);
+		CreateLink     (c_WFC_Urlaub,		$ControlIdOVUrlaub,			$Web10FrontOverviewTopR, 30);
+		CreateLink     (c_WFC_Feiertag,			$ControlIdOVFeiertag,		$Web10FrontOverviewTopR, 40);
+		CreateLink     (c_WFC_Frost,			$ControlIdOVFrost,			$Web10FrontOverviewTopR, 50);
+		CreateLink     (c_WFC_Snooze,			$ControlIdOVSchlummer,		$Web10FrontOverviewTopR, 60);
+		CreateLink     (c_WFC_End,				$ControlIdOVEnd,				$Web10FrontOverviewTopR, 70);
 //		CreateLink     (c_Control_Meldungen,		$ControlIdLog,					$Web10FrontOverviewTopR, 30);
 
 
 		// BottomL
-		CreateLink     (c_Table_HolidayTime,		$ControlIdOVUrlaubszeit,	$Web10FrontOverviewBottomL, 40);
+		CreateLink     (c_WFC_Urlaubszeit,		$ControlIdOVUrlaubszeit,	$Web10FrontOverviewBottomL, 40);
 
 		// BottomR
-//		CreateLink     (c_Table_Overview,		$ControlIdOVUebersicht,		$Web10FrontOverviewBottomL, 10);
+//		CreateLink     (c_WFC_Uebersicht,		$ControlIdOVUebersicht,		$Web10FrontOverviewBottomL, 10);
 
 		// LOG
 		CreateLink     (c_Control_MeldungID,		$ControlIdLogId,				$Web10FrontOverviewLog, 10);
 		CreateLink     (c_Control_Meldungen,		$ControlIdLog,					$Web10FrontOverviewLog, 20);
-
-
 
 		// Web10front Detail
 		$Idx = 20;
@@ -469,12 +479,10 @@
 			$Web10FrontDetailId  			= CreateCategory($WeckerName, $Web10FrontId, 100+$Idx);
 			CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_'.$WeckerName.'_Bottom', 	$WFC10_TabPaneItem.'',  	100+$Idx,		$WeckerName, 	'', $Web10FrontDetailId /*BaseId*/, 'false' /*BarBottomVisible*/);
 
-			CreateLink(c_Table_Overview,    	get_WeckerControlId(c_Control_Uebersicht,   	$CirclyId),		$Web10FrontDetailId,	10);
+			CreateLink(c_WFC_Uebersicht,    	get_WeckerControlId(c_Control_Uebersicht,   	$CirclyId),		$Web10FrontDetailId,	10);
 
 			$Idx = $Idx + 10;
 		}
-
-		ReloadAllWebFronts();
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
@@ -498,23 +506,23 @@
 		CreateWFCItemCategory  ($Touch_ConfigId, $Touch_TabPaneItem.'_Tag',	 		$Touch_TabPaneItem.'',  	30, 'Tag'	  	, ''	, $TouchOverviewTag /*BaseId*/, 'false' /*BarBottomVisible*/);
 
 		// Tag
-		CreateLink		(c_Table_AlarmName,		$ControlIdOVWeckerName,  	$TouchOverviewTag, 10);
-		CreateLink     (c_Table_Day,				$ControlIdOVWeckerTag,  	$TouchOverviewTag, 20);
-		CreateLink     (c_Table_Hour,				$ControlIdOVWeckerStunde, 	$TouchOverviewTag, 30);
-		CreateLink     (c_Table_Minute,			$ControlIdOVWeckerMinute,	$TouchOverviewTag, 40);
-		CreateLink     (c_Table_Active,			$ControlIdOVActive,			$TouchOverviewTag, 50);
+		CreateLink		(c_WFC_AlarmName,		$ControlIdOVWeckerName,  	$TouchOverviewTag, 10);
+		CreateLink     (c_WFC_Tag,				$ControlIdOVWeckerTag,  	$TouchOverviewTag, 20);
+		CreateLink     (c_WFC_Stunde,			$ControlIdOVWeckerStunde, 	$TouchOverviewTag, 30);
+		CreateLink     (c_WFC_Minute,			$ControlIdOVWeckerMinute,	$TouchOverviewTag, 40);
+		CreateLink     (c_WFC_Active,			$ControlIdOVActive,			$TouchOverviewTag, 50);
 
 		// Woche
-		CreateLink		(c_Table_AlarmName,		$ControlIdOVWeckerName,  	$TouchOverviewWoche, 10);
-		CreateLink     (c_Table_Global,			$ControlIdOVGlobal,			$TouchOverviewWoche, 20);
-		CreateLink     (c_Table_HolidayTime,	$ControlIdOVUrlaubszeit,	$TouchOverviewWoche, 40);
+		CreateLink		(c_WFC_AlarmName,		$ControlIdOVWeckerName,  	$TouchOverviewWoche, 10);
+		CreateLink     (c_WFC_Global,			$ControlIdOVGlobal,			$TouchOverviewWoche, 20);
+		CreateLink     (c_WFC_Urlaubszeit,	$ControlIdOVUrlaubszeit,	$TouchOverviewWoche, 40);
 
 		// Wochen Optionen
-		CreateLink     (c_Table_Holiday,			$ControlIdOVUrlaub,			$TouchOverviewOption, 30);
-		CreateLink     (c_Table_Feasts,			$ControlIdOVFeiertag,		$TouchOverviewOption, 40);
-		CreateLink     (c_Table_Freeze,			$ControlIdOVFrost,			$TouchOverviewOption, 50);
-		CreateLink     (c_Table_Snooze,			$ControlIdOVSchlummer,		$TouchOverviewOption, 60);
-		CreateLink     (c_Table_End,				$ControlIdOVEnd,				$TouchOverviewOption, 70);
+		CreateLink     (c_WFC_Urlaub,		$ControlIdOVUrlaub,			$TouchOverviewOption, 30);
+		CreateLink     (c_WFC_Feiertag,			$ControlIdOVFeiertag,		$TouchOverviewOption, 40);
+		CreateLink     (c_WFC_Frost,			$ControlIdOVFrost,			$TouchOverviewOption, 50);
+		CreateLink     (c_WFC_Snooze,			$ControlIdOVSchlummer,		$TouchOverviewOption, 60);
+		CreateLink     (c_WFC_End,				$ControlIdOVEnd,				$TouchOverviewOption, 70);
 
 		// Touch Detail
 		$Idx = 20;
@@ -526,14 +534,14 @@
 			$TouchDetailId  			= CreateCategory($WeckerName, $TouchId, 100+$Idx);
 			CreateWFCItemCategory  ($Touch_ConfigId, $Touch_TabPaneItem.'_'.$WeckerName.'_Bottom', 	$Touch_TabPaneItem.'',  	100+$Idx,		$WeckerName, 	'', $TouchDetailId /*BaseId*/, 'false' /*BarBottomVisible*/);
 
-			CreateLink(c_Table_Overview,    	get_WeckerControlId(c_Control_Uebersicht,   	$CirclyId),		$TouchDetailId,	10);
+			CreateLink(c_WFC_Uebersicht,    	get_WeckerControlId(c_Control_Uebersicht,   	$CirclyId),		$TouchDetailId,	10);
 
 			$Idx = $Idx + 10;
 		}
 
-		ReloadAllWebFronts();
 	}
 
+	ReloadAllWebFronts();
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 	// Mobile Definition
@@ -548,21 +556,21 @@
 //		$mobileOverviewOV       = CreateCategory(    'Übersicht', $mobileId,    40);
 
 		// Woche
-		CreateLink		(c_Table_AlarmName,		$ControlIdOVWeckerName,  	$mobileOverviewWoche, 10);
-		CreateLink     (c_Table_Global,			$ControlIdOVGlobal,			$mobileOverviewWoche, 20);
-		CreateLink     (c_Table_HolidayTime,	$ControlIdOVUrlaubszeit,	$mobileOverviewWoche, 30);
-		CreateLink     (c_Table_Holiday,			$ControlIdOVUrlaub,			$mobileOverviewWoche, 40);
-		CreateLink     (c_Table_Feasts,			$ControlIdOVFeiertag,		$mobileOverviewWoche, 50);
-		CreateLink     (c_Table_Freeze,			$ControlIdOVFrost,			$mobileOverviewWoche, 60);
-		CreateLink     (c_Table_Snooze,			$ControlIdOVSchlummer,		$mobileOverviewWoche, 70);
-		CreateLink     (c_Table_End,				$ControlIdOVEnd,				$mobileOverviewWoche, 80);
+		CreateLink		(c_WFC_AlarmName,		$ControlIdOVWeckerName,  	$mobileOverviewWoche, 10);
+		CreateLink     (c_WFC_Global,			$ControlIdOVGlobal,			$mobileOverviewWoche, 20);
+		CreateLink     (c_WFC_Urlaubszeit,	$ControlIdOVUrlaubszeit,	$mobileOverviewWoche, 30);
+		CreateLink     (c_WFC_Urlaub,			$ControlIdOVUrlaub,			$mobileOverviewWoche, 40);
+		CreateLink     (c_WFC_Feiertag,		$ControlIdOVFeiertag,		$mobileOverviewWoche, 50);
+		CreateLink     (c_WFC_Frost,			$ControlIdOVFrost,			$mobileOverviewWoche, 60);
+		CreateLink     (c_WFC_Snooze,			$ControlIdOVSchlummer,		$mobileOverviewWoche, 70);
+		CreateLink     (c_WFC_End,				$ControlIdOVEnd,				$mobileOverviewWoche, 80);
 
 		// Tag
-		CreateLink		(c_Table_AlarmName,		$ControlIdOVWeckerName,  	$mobileOverviewTag, 10);
-		CreateLink     (c_Table_Day,				$ControlIdOVWeckerTag,  	$mobileOverviewTag, 20);
-		CreateLink     (c_Table_Hour,				$ControlIdOVWeckerStunde, 	$mobileOverviewTag, 30);
-		CreateLink     (c_Table_Minute,			$ControlIdOVWeckerMinute,	$mobileOverviewTag, 40);
-		CreateLink     (c_Table_Active,			$ControlIdOVActive,			$mobileOverviewTag, 50);
+		CreateLink		(c_WFC_AlarmName,		$ControlIdOVWeckerName,  	$mobileOverviewTag, 10);
+		CreateLink     (c_WFC_Tag,				$ControlIdOVWeckerLTag,  	$mobileOverviewTag, 20);
+		CreateLink     (c_WFC_Stunde,			$ControlIdOVWeckerLStunde, $mobileOverviewTag, 30);
+		CreateLink     (c_WFC_Minute,			$ControlIdOVWeckerLMinute,	$mobileOverviewTag, 40);
+		CreateLink     (c_WFC_Active,			$ControlIdOVActive,			$mobileOverviewTag, 50);
 
 		// Übersichten
 		$Idx = 100;
@@ -590,25 +598,23 @@
 //		$eDIPOverviewTag		= CreateCategory(     'Tag(e) Einst.',  		 $eDIPId,    30);
 
 		// Woche
-		CreateLink		(c_Table_AlarmName,		$ControlIdOVWeckerName,  	$eDIPOverviewWoche, 10);
-		CreateLink     (c_Table_HolidayTime,	$ControlIdOVUrlaubszeit,	$eDIPOverviewWoche, 30);
-		CreateLink     (c_Table_Holiday,			$ControlIdOVUrlaub,			$eDIPOverviewOption, 40);
-		CreateLink     (c_Table_Feasts,			$ControlIdOVFeiertag,		$eDIPOverviewOption, 50);
-		CreateLink     (c_Table_Freeze,			$ControlIdOVFrost,			$eDIPOverviewOption, 60);
-		CreateLink     (c_Table_Snooze,			$ControlIdOVSchlummer,		$eDIPOverviewOption, 70);
-		CreateLink     (c_Table_End,				$ControlIdOVEnd,				$eDIPOverviewOption, 80);
+		CreateLink		(c_WFC_AlarmName,		$ControlIdOVWeckerName,  	$eDIPOverviewWoche, 10);
+		CreateLink     (c_WFC_Urlaubszeit,	$ControlIdOVUrlaubszeit,	$eDIPOverviewWoche, 30);
+		CreateLink     (c_WFC_Urlaub,		$ControlIdOVUrlaub,			$eDIPOverviewOption, 40);
+		CreateLink     (c_WFC_Feiertag,			$ControlIdOVFeiertag,		$eDIPOverviewOption, 50);
+		CreateLink     (c_WFC_Frost,			$ControlIdOVFrost,			$eDIPOverviewOption, 60);
+		CreateLink     (c_WFC_Snooze,			$ControlIdOVSchlummer,		$eDIPOverviewOption, 70);
+		CreateLink     (c_WFC_End,				$ControlIdOVEnd,				$eDIPOverviewOption, 80);
 
 		// Tag
-		CreateLink		(c_Table_AlarmName,		$ControlIdOVWeckerName,  	$eDIPId, 10);
-		CreateLink     (c_Table_Global,			$ControlIdOVGlobal,			$eDIPId, 20);
-		CreateLink     (c_Table_Day,				$ControlIdOVWeckerTag,  	$eDIPId, 30);
-		CreateLink     (c_Table_Hour,				$ControlIdOVWeckerStunde, 	$eDIPId, 40);
-		CreateLink     (c_Table_Minute,			$ControlIdOVWeckerMinute,	$eDIPId, 50);
-		CreateLink     (c_Table_Active,			$ControlIdOVActive,			$eDIPId, 60);
+		CreateLink		(c_WFC_AlarmName,		$ControlIdOVWeckerName,  	$eDIPId, 10);
+		CreateLink     (c_WFC_Global,			$ControlIdOVGlobal,			$eDIPId, 20);
+		CreateLink     (c_WFC_Tag,				$ControlIdOVWeckerTag,  	$eDIPId, 30);
+		CreateLink     (c_WFC_Stunde,			$ControlIdOVWeckerStunde, 	$eDIPId, 40);
+		CreateLink     (c_WFC_Minute,			$ControlIdOVWeckerMinute,	$eDIPId, 50);
+		CreateLink     (c_WFC_Active,			$ControlIdOVActive,			$eDIPId, 60);
 
 	}
-
-
 
 
 
@@ -640,12 +646,12 @@
 	 *
 	 * @param string $Name Name des Timers
 	 * @param integer $ParentId ID des übergeordneten Objekts im logischen Objektbaum
-	 * @param integer $Hour Stunde zu der der Timer aktiviert werden soll
+	 * @param integer $Stunde Stunde zu der der Timer aktiviert werden soll
 	 * @param integer $Minute Minute zu der der Timer aktiviert werden soll
 	 * @return integer ID des Timers
 	 *
 	 */
-	function CreateTimer_Profile ($Name, $ParentId, $Hour=0, $Minute=0, $Position=0, $Status=true) {
+	function CreateTimer_Profile ($Name, $ParentId, $Stunde=0, $Minute=0, $Position=0, $Status=true) {
 		$TimerId = @IPS_GetObjectIDByIdent(Get_IdentByName($Name), $ParentId);
 		if ($TimerId === false) $TimerId = @IPS_GetEventIDByName($Name, $ParentId);
 		if ($TimerId === false) {
@@ -656,7 +662,7 @@
 			if (!IPS_SetEventCyclic($TimerId, 2 /**Daily*/, 1,0,0,0,0)) {
 				Error ("IPS_SetEventCyclic failed !!!");
 			}
-			if (!IPS_SetEventCyclicTimeBounds($TimerId, mktime($Hour, $Minute, 0), 0)) {
+			if (!IPS_SetEventCyclicTimeBounds($TimerId, mktime($Stunde, $Minute, 0), 0)) {
 				Error ("IPS_SetEventCyclicTimeBounds failed !!!");
 			}
 			IPS_SetPosition($TimerId, $Position);

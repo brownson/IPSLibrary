@@ -22,142 +22,115 @@
 	 * @file          IPSWecker_Timer.ips.php
 	 * @author        André Czwalina
 	 * @version
-	 * Version 1.00.0, 01.04.2012<br/>
+	* Version 1.00.1, 22.04.2012<br/>
 	 *
 	 *
 	 */
 
 	include_once "IPSWecker.inc.php";
 
-
-//print $feiertag;
-//print_r($Fdays);
-
 	switch ($_IPS['SENDER']) {
-		case 'WebFront':
-			break;
 		case 'TimerEvent':
 			$eventId 	=  $_IPS['EVENT'];
-			$eventName 	= substr(IPS_GetName($eventId),0, strlen(IPS_GetName($eventId))-2);
+			$CircleName = substr(IPS_GetName($eventId),0, strlen(IPS_GetName($eventId))-2);
+			$CircleId 	= get_CirclyIdByCircleIdent($CircleName, WECKER_ID_WECKZEITEN);
 			$eventTime 	= IPS_GetEvent($eventId)['CyclicTimeFrom'];
-			$eventNow	= Date('H:i',$eventTime);
 
-			IPSWecker_Log('Wecker Event: Auslösung prüfen für '.$eventName);
+			$wecker     = AddConfiguration($CircleId);
+//			IPSWecker_Log('Event: Auslösung prüfen für '.$wecker['Property']['Name'].' ('.$wecker['Circle']['Name'].')');
 
-			for ($i = 1; $i < 10; $i++){
-				if ((c_WeckerCircle.'_'.$i == $eventName) and (function_exists('c_WeckerCircle_'.$i))) {
-					$eventCircle 		= 'c_WeckerCircle_'.$i;
-					$eventCircleId 	= get_CirclyIdByCircleIdent(c_WeckerCircle.'_'.$i, WECKER_ID_WECKZEITEN);
-					$eventCircleTimeA	= get_ControlValue(get_DateTranslation(Date('l')),	$eventCircleId);
-					$Hour 				= substr($eventCircleTimeA,0,2);
-					$Minute 				= substr($eventCircleTimeA,3,2);
-					$eventCircleTime 	= mktime($Hour, $Minute, 0);
+			if (function_exists($CircleName)) {
+					$CircleTime 			= mktime(substr($wecker['ActiveTime'],0,2), substr($wecker['ActiveTime'],3,2), 0);
+					$CircleNameMode= '';
 
-					$WeckerConfig     = get_WeckerConfiguration();
-					$ParamsSnoozeTime = $WeckerConfig[$eventName][c_Property_SnoozeTime];
-					$ParamsEndTime 	= $WeckerConfig[$eventName][c_Property_EndTime];
-					$ParamsName		 	= $WeckerConfig[$eventName][c_Property_Name];
-					$ParamsFrostTime 	= $WeckerConfig[$eventName][c_Property_FrostTime];
-					$ParamsSensorId	= $WeckerConfig[$eventName][c_Property_FrostSensor];
-					$ParamsFrostTemp 	= $WeckerConfig[$eventName][c_Property_FrostTemp];
-
-					$objectIds 			= explode(',',get_ControlValue(c_Control_Optionen, $eventCircleId));
-					$WDay             = Date('N');
-					$WDay--;
-					$Active           = $objectIds[$WDay];
-					$Freeze 				= $objectIds[9];
-					$Global 				= $objectIds[10];
-					$Snooze 				= $objectIds[11];
-					$End     			= $objectIds[12];
-
-            	$Feiertag = get_Feiertag($objectIds[7]);
-					$Urlaub = get_Urlaub($objectIds[8], get_ControlValue(c_Control_Urlaubszeit, $eventCircleId));
-					
-					$eventCircleMode= '';
-
-
-					// --------------- Weckbedingung -------------------
-					if ($Urlaub == false and $Feiertag == false and $Active == true and $Global == true){
+					// --------------- Weckbedingungen -------------------
+					if ($wecker['RetUrlaub'] == false and $wecker['RetFeiertag'] == false and $wecker['Active'] == true and $wecker['Circle'][c_Control_Global] == true){
 
 							// --------------- FrostTime -------------------
-							if (get_TimeToleranz($eventTime+($ParamsFrostTime*60), $eventCircleTime)){
-									if ( getvalue($ParamsSensorId)  < $ParamsFrostTemp) {
-									// --------------- Neue Eventzeit setzen -------------------
-											if ($Snooze == true){
-													IPS_SetEventCyclicTimeBounds($eventId, $eventCircleTime-($ParamsFrostTime*60)+($ParamsSnoozeTime*60), 0);
+							if (get_TimeToleranz($eventTime+($wecker['Property'][c_Property_FrostTime]*60), $CircleTime)){
+									if ( getAviableSensor($wecker['Property'][c_Property_FrostSensor]) == 2 ) {
+											if ( getvalue($wecker['Property'][c_Property_FrostSensor])  < $wecker['Property'][c_Property_FrostTemp]) {
+													// --------------- Neue Eventzeit setzen -------------------
+													if ($wecker['Circle'][c_Control_Schlummer] == true){
+															IPS_SetEventCyclicTimeBounds($eventId, $CircleTime-($wecker['Property'][c_Property_FrostTime]*60)+($wecker['Property'][c_Property_SnoozeTime]*60), 0);
+													}
+													elseif($wecker['Circle'][c_Control_End] == true){
+															IPS_SetEventCyclicTimeBounds($eventId, $CircleTime-($wecker['Property'][c_Property_FrostTime]*60)+($wecker['Property'][c_Property_EndTime]*60), 0);
+													}
+													// --------------- Aktion -------------------
+													$eventMode = "AlarmTime";
+													IPSWecker_Log('Wecker ausgelöst:  '.$wecker['Property'][c_Property_Name].', Aktion: '.$eventMode);
+													$CircleName($CircleId, $wecker['Property'][c_Property_Name], $eventMode);
+											} else {
+													IPSWecker_Log('Wecker auf Normalzeit, da kein Frost '.$wecker['Property'][c_Property_Name]);
+													IPS_SetEventCyclicTimeBounds($eventId, $CircleTime, 0);
 											}
-											elseif($End == true){
-													IPS_SetEventCyclicTimeBounds($eventId, $eventCircleTime-($ParamsFrostTime*60)+($ParamsEndTime*60), 0);
-											}
-											// --------------- Aktion -------------------
-											$eventMode = "AlarmTime";
-											IPSWecker_Log('Wecker ausgelöst:  '.$ParamsName.', Aktion: '.$eventMode);
-											$eventCircle($eventCircleId, $ParamsName, $eventMode);
-									}
-									else {
-											IPS_SetEventCyclicTimeBounds($eventId, $eventCircleTime, 0);
+									} else {
+											IPSWecker_Log('FEHLER: Frostsensor '.$wecker['Property'][c_Property_FrostSensor].' nicht vorhanden '.$wecker['Property'][c_Property_Name]);
+											IPS_SetEventCyclicTimeBounds($eventId, $CircleTime, 0);
 									}
 							}
 
 							// --------------- AlarmTime -------------------
-							if (get_TimeToleranz($eventTime, $eventCircleTime)){
+							if (get_TimeToleranz($eventTime, $CircleTime)){
 									// --------------- Neue Eventzeit setzen -------------------
-									if ($Snooze == true){
-											IPS_SetEventCyclicTimeBounds($eventId, $eventCircleTime+($ParamsSnoozeTime*60), 0);
+									if ($wecker['Circle'][c_Control_Schlummer] == true){
+											IPS_SetEventCyclicTimeBounds($eventId, $CircleTime+($wecker['Property'][c_Property_SnoozeTime]*60), 0);
 									}
-									elseif($End == true){
-											IPS_SetEventCyclicTimeBounds($eventId, $eventCircleTime+($ParamsEndTime*60), 0);
+									elseif($wecker['Circle'][c_Control_End] == true){
+											IPS_SetEventCyclicTimeBounds($eventId, $CircleTime+($wecker['Property'][c_Property_EndTime]*60), 0);
 									}
-									elseif($Freeze == true){
-											IPS_SetEventCyclicTimeBounds($eventId, $eventCircleTime-($ParamsFrostTime*60), 0);
+									elseif($wecker['Circle'][c_Control_Frost] == true){
+											IPS_SetEventCyclicTimeBounds($eventId, $CircleTime-($wecker['Property'][c_Property_FrostTime]*60), 0);
 									}
 									// --------------- Aktion -------------------
 									$eventMode = "AlarmTime";
-									IPSWecker_Log('Wecker ausgelöst:  '.$ParamsName.', Aktion: '.$eventMode);
-									$eventCircle($eventCircleId, $ParamsName, $eventMode);
+									IPSWecker_Log('Wecker ausgelöst:  '.$wecker['Property'][c_Property_Name].', Aktion: '.$eventMode);
+									$CircleName($CircleId, $wecker['Property'][c_Property_Name], $eventMode);
 							}
 
 							// --------------- SnoozeTime -------------------
-							if ((get_TimeToleranz($eventTime, $eventCircleTime+($ParamsSnoozeTime*60)))
-							or ( get_TimeToleranz($eventTime, $eventCircleTime-($ParamsFrostTime*60)+($ParamsSnoozeTime*60)))){
+							if ((get_TimeToleranz($eventTime, $CircleTime+($wecker['Property'][c_Property_SnoozeTime]*60)))
+							or ( get_TimeToleranz($eventTime, $CircleTime-($wecker['Property'][c_Property_FrostTime]*60)+($wecker['Property'][c_Property_SnoozeTime]*60)))){
 									// --------------- Neue Eventzeit setzen -------------------
-									if ($End == true){
-											IPS_SetEventCyclicTimeBounds($eventId, $eventCircleTime+($ParamsEndTime*60), 0);
+									if ($wecker['Circle'][c_Control_End] == true){
+											IPS_SetEventCyclicTimeBounds($eventId, $CircleTime+($wecker['Property'][c_Property_EndTime]*60), 0);
 									}
-									elseif ($Freeze == true) {
-											IPS_SetEventCyclicTimeBounds($eventId, $eventCircleTime-($ParamsFrostTime*60), 0);
+									elseif ($wecker['Circle'][c_Control_Frost] == true) {
+											IPS_SetEventCyclicTimeBounds($eventId, $CircleTime-($wecker['Property'][c_Property_FrostTime]*60), 0);
 									}
 									else {
-											IPS_SetEventCyclicTimeBounds($eventId, $eventCircleTime, 0);
+											IPS_SetEventCyclicTimeBounds($eventId, $CircleTime, 0);
 									}
-									if ($Snooze == true){
+									if ($wecker['Circle'][c_Control_Schlummer] == true){
 											// --------------- Aktion -------------------
 											$eventMode = "SnoozeTime";
-											IPSWecker_Log('Wecker ausgelöst:  '.$ParamsName.', Aktion: '.$eventMode);
-											$eventCircle($eventCircleId, $ParamsName, $eventMode);
+											IPSWecker_Log('Wecker ausgelöst:  '.$wecker['Property'][c_Property_Name].', Aktion: '.$eventMode);
+											$CircleName($CircleId, $wecker['Property'][c_Property_Name], $eventMode);
 									}
 							}
 
 							// --------------- EndTime -------------------
-							if ((get_TimeToleranz($eventTime, $eventCircleTime+($ParamsEndTime*60)))
-							or ( get_TimeToleranz($eventTime, $eventCircleTime-($ParamsFrostTime*60)+($ParamsEndTime*60)))){
+							if ((get_TimeToleranz($eventTime, $CircleTime+($wecker['Property'][c_Property_EndTime]*60)))
+							or ( get_TimeToleranz($eventTime, $CircleTime-($wecker['Property'][c_Property_FrostTime]*60)+($wecker['Property'][c_Property_EndTime]*60)))){
 									// --------------- Neue Eventzeit setzen -------------------
-									if ($Freeze == true){
-											IPS_SetEventCyclicTimeBounds($eventId, $eventCircleTime-($ParamsFrostTime*60), 0);
+									if ($wecker['Circle'][c_Control_Frost] == true){
+											IPS_SetEventCyclicTimeBounds($eventId, $CircleTime-($wecker['Property'][c_Property_FrostTime]*60), 0);
 									}
 									else {
-											IPS_SetEventCyclicTimeBounds($eventId, $eventCircleTime, 0);
+											IPS_SetEventCyclicTimeBounds($eventId, $CircleTime, 0);
 									}
-									if ($End == true){
+									if ($wecker['Circle'][c_Control_End] == true){
 											// --------------- Aktion -------------------
 											$eventMode = "EndTime";
-											IPSWecker_Log('Wecker ausgelöst:  '.$ParamsName.', Aktion: '.$eventMode);
-											$eventCircle($eventCircleId, $ParamsName, $eventMode);
+											IPSWecker_Log('Wecker ausgelöst:  '.$wecker['Property'][c_Property_Name].', Aktion: '.$eventMode);
+											$CircleName($CircleId, $wecker['Property'][c_Property_Name], $eventMode);
 									}
 							}
-					}
 				}
 			}
+			break;
+		case 'WebFront':
 			break;
 		case 'Execute':
 			break;

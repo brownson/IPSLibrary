@@ -23,7 +23,7 @@
 	* @file          IPSWecker_Configuration.inc.php
 	* @author        André Czwalina
 	* @version
-	* Version 1.00.0, 01.04.2012<br/>
+	* Version 1.00.1, 22.04.2012<br/>
 	*
 	* Konfigurations File für IPSWecker
 	*
@@ -34,7 +34,7 @@
 	/**
 	* Definiert die Anzahl der Meldungen, die im Applikation Logging Window angezeigt werden.
 	*/
-	define ("c_LogMessage_Count",			15);
+	define ("c_LogMessage_Count",			19);
 
 	/**
 	*
@@ -75,14 +75,15 @@
 	* @code
 		function get_WeckerConfiguration() {
 			return array(
-				c_WeckerCircle_1  =>	array(
+				c_WeckerCircle.'1  =>	array(
 					c_Property_Name           =>   'Woche',      WeckerName
-					c_Property_StopSensor	  =>   '',           Noch ohne Funktion
+					c_Property_StopSensor	  =>   '',           ObjectID des Stopsensor. Sobald Variable aktualisiert wird, wird das StopEvent in IPSWecker_Custom für den Wecker ausgelöst.
 					c_Property_FrostTemp		  =>   2,            Sobald diese Temperatur unterschitten wird wird früher geweckt
 					c_Property_FrostSensor	  =>   53094  ,      ObjectID des Temperatursensor. KEINE INSTANZ-ObjectID
 					c_Property_FrostTime		  =>   15,           Zeit (Minuten) die früher geweckt werden soll
 					c_Property_SnoozeTime     =>   5,            Zeit (Minuten) nach Weckzeit für Weckernachdruck (Lautstärke erhöhung, Licht an, Wasser marsch etc.)
 					c_Property_EndTime  		  =>   60,           Zeit (Minuten) nach Weckzeit für weitere Aktion. Gedacht zum abschalten von Licht Radio, falls man nicht da war zum wecken.
+					c_Property_Schichtgruppe  =>   '',           Schichtbetrieb. Alle Schichtzeiten die zusammen gehören müssen die gleich Nr. Eintragen. '' = deaktiviert z.B. Papa die '1', Mama die'2'
 		       ));
 		  }
 	* @endcode

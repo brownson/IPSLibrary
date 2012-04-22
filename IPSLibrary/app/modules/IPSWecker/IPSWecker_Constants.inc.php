@@ -22,34 +22,43 @@
 	 * @file          IPSWecker_Constants.inc.php
 	 * @author        André Czwalina
 	 * @version
-	 * Version 1.00.0, 01.04.2012<br/>
+	* Version 1.00.1, 22.04.2012<br/>
 	 *
 	 * Konstanten Definitionen für IPSWecker
 	 *
 	 */
 	define ("c_WeckerCircles",				"Weckzeiten");
-	define ("c_WeckerCircle",				"Weckzeit");
-	define ("c_WeckerCircle_1",			"Weckzeit_1");
-	define ("c_WeckerCircle_2",			"Weckzeit_2");
-	define ("c_WeckerCircle_3",			"Weckzeit_3");
-	define ("c_WeckerCircle_4",			"Weckzeit_4");
-	define ("c_WeckerCircle_5",			"Weckzeit_5");
-	define ("c_WeckerCircle_6",			"Weckzeit_6");
-	define ("c_WeckerCircle_7",			"Weckzeit_7");
-	define ("c_WeckerCircle_8",			"Weckzeit_8");
-	define ("c_WeckerCircle_9",			"Weckzeit_9");
-	define ("c_WeckerCircle_10",			"Weckzeit_10");
+	define ("c_WeckerCircle",				"Weckzeit_");
+//	define ("c_WeckerCircle_1",			"Weckzeit_1");
+//	define ("c_WeckerCircle_2",			"Weckzeit_2");
+//	define ("c_WeckerCircle_3",			"Weckzeit_3");
+//	define ("c_WeckerCircle_4",			"Weckzeit_4");
+//	define ("c_WeckerCircle_5",			"Weckzeit_5");
+//	define ("c_WeckerCircle_6",			"Weckzeit_6");
+//	define ("c_WeckerCircle_7",			"Weckzeit_7");
+//	define ("c_WeckerCircle_8",			"Weckzeit_8");
+//	define ("c_WeckerCircle_9",			"Weckzeit_9");
+//	define ("c_WeckerCircle_10",			"Weckzeit_10");
+//	define ("c_WeckerCircle_11",			"Weckzeit_11");
+//	define ("c_WeckerCircle_12",			"Weckzeit_12");
+//	define ("c_WeckerCircle_13",			"Weckzeit_13");
+//	define ("c_WeckerCircle_14",			"Weckzeit_14");
+//	define ("c_WeckerCircle_15",			"Weckzeit_15");
 
 //	define ("c_Control_NextTime",				"NextTime");
-	define ("c_Control_Wochentag",			"Wochentag");
+//	define ("c_Control_Wochentag",			"Wochentag");
+	define ("c_Control_WeckerName",			"Wecker_Name");
 	define ("c_Control_MeldungID",			"letzte Meldungs ID");
 	define ("c_Control_Meldungen",			"Meldungen");
 
 // Globale Daten
 	define ("c_Control_Name",					"Name");
 	define ("c_Control_Tag",					"Tag");
+	define ("c_Control_LTag",					"LTag");
 	define ("c_Control_Stunde",				"Stunde");
+	define ("c_Control_LStunde",				"LStunde");
 	define ("c_Control_Minute",				"Minute");
+	define ("c_Control_LMinute",				"LMinute");
 	define ("c_Control_Global",				"Wochenwecker");
 	define ("c_Control_Active",				"Tageswecker");
 	define ("c_Control_Feiertag",				"Feiertag");
@@ -78,7 +87,6 @@
 //	define ("c_Control_So_Active",			"So_Active");
 
 
-	define ("c_Control_WeckerName",			"Wecker_Name");
 
 
 	define ("c_Program_Montag",			"Montag");
@@ -88,9 +96,17 @@
 	define ("c_Program_Freitag",			"Freitag");
 	define ("c_Program_Samstag",			"Samstag");
 	define ("c_Program_Sonntag",			"Sonntag");
-	define ("c_Program_Werkstags",		"Werktags");
+	define ("c_Program_Werktags",			"Werktags");
 	define ("c_Program_Wochenende",		"Wochenende");
 	define ("c_Program_Woche",				"Woche");
+	define ("c_Program_On", 	 			'Ein');
+	define ("c_Program_Off",  				'Aus');
+	define ("c_Program_Weck", 				'Wecken');
+	define ("c_Program_NoWeck", 			'Nicht Wecken');
+	define ("c_Program_Active", 			'Aktiv');
+	define ("c_Program_InActive",			'Inktiv');
+	define ("c_Program_PrevWeck",			'Früher');
+	define ("c_Program_NormWeck",			'Normal');
 
 	define ("c_ProgramId_Montag",			00);
 	define ("c_ProgramId_Dienstag",		01);
@@ -123,31 +139,23 @@
 
 
 //Webfront
-	define ("c_Table_Global",  			'Wochenwecker');
-	define ("c_Table_Day",  				'Tag(e)');
-	define ("c_Table_Hour",  				'Stunde');
-	define ("c_Table_Minute",  			'Minute');
-	define ("c_Table_Feature",		 		'Globale Funktionen');
-	define ("c_Table_Active",  			'Aktiv');
-	define ("c_Table_HolidayTime",  		'Urlaubszeiten');
-	define ("c_Table_Holiday",  			'Im Urlaub');
-	define ("c_Table_Feasts",  			'An Feiertagen');
-	define ("c_Table_Freeze",  			'Bei Frost');
-	define ("c_Table_Snooze",           'Schlummerfunktion');
-	define ("c_Table_End",              'Endefunktion');
-	define ("c_Table_Overview",         'Übersicht');
-	define ("c_Table_AlarmName",        'Wecker Name');
-//	define ("c_Table_",  					'');
+	define ("c_WFC_Global",  				'Wochenwecker');
+	define ("c_WFC_Tag",  					'Tag(e)');
+	define ("c_WFC_Stunde",  				'Stunde');
+	define ("c_WFC_Minute",  				'Minute');
+	define ("c_WFC_Feature",		 		'Globale Funktionen');
+	define ("c_WFC_Active",  				'Aktiv');
+	define ("c_WFC_Urlaubszeit",  		'Urlaubszeiten');
+	define ("c_WFC_Urlaub",  				'Im Urlaub');
+	define ("c_WFC_Feiertag",  			'An Feiertagen');
+	define ("c_WFC_Frost",  				'Bei Frost');
+	define ("c_WFC_Snooze",           	'Schlummerfunktion');
+	define ("c_WFC_End",              	'Endefunktion');
+	define ("c_WFC_Uebersicht",         'Übersicht');
+	define ("c_WFC_AlarmName",        	'Wecker Name');
+//	define ("c_WFC_",  					'');
 
 
-	define ("c_Asso_On", 	 				'Ein');
-	define ("c_Asso_Off",  					'Aus');
-	define ("c_Asso_Weck", 					'Wecken');
-	define ("c_Asso_NoWeck", 				'Nicht Wecken');
-	define ("c_Asso_Active", 				'Aktiv');
-	define ("c_Asso_InActive",				'Inktiv');
-	define ("c_Asso_PrevWeck",				'Früher');
-	define ("c_Asso_NormWeck",				'Normal');
 
 	/** @}*/
 ?>

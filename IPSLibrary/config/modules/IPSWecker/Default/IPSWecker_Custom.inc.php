@@ -1,4 +1,5 @@
 <?
+
 	/*
 	 * This file is part of the IPSLibrary.
 	 *
@@ -27,7 +28,7 @@
 	 * @file          IPSWecker_Custom.inc.php
 	 * @author        André Czwalina
 	 * @version
-	 * Version 1.00.0, 01.04.2012<br/>
+	* Version 1.00.1, 22.04.2012<br/>
 	 *
 	 *
 	 * Callback Methoden für IPSWecker
@@ -41,24 +42,25 @@
 	// Parameters:
 	//   $CycleId    - ID des auslösenden Weckers ( Program.IPSWecker.Weckzeiten.Weckzeit_1)
 	//   $WeckerName - Name des auslösenden Weckers
-	//   $Mode       - Grund der auslösung, mögliche Werte: "FreezeTime", "AlarmTime", "SnoozeTime", "EndTime"
+	//   $Mode       - Grund der auslösung, mögliche Werte: "FreezeTime", "AlarmTime", "SnoozeTime", "StopEvent", "EndTime"
 	//
 	// ----------------------------------------------------------------------------------------------------------------------------
 
-	function c_WeckerCircle_1($CycleId, $WeckerName, $Mode) {
+	function Weckzeit_1($CycleId, $WeckerName, $Mode) {
 		$CircleName = IPS_GetName($CycleId);
 
 		switch($Mode){
 		case 'FreezeTime':
 		case 'AlarmTime':
 			// Wecker aktion
-		break;
+			break;
 		case 'SnoozeTime':
 			// Wecker wird lauter
-		break;
+			break;
+		case 'StopEvent':
 		case 'EndTime':
-			// Wecker ausschalten da nicht da.
-		break;
+			// Wecker ausschalten.
+			break;
 		}
 	}
 
@@ -69,27 +71,25 @@
 	// Parameters:
 	//   $CycleId    - ID des auslösenden Weckers ( Program.IPSWecker.Weckzeiten.Weckzeit_1)
 	//   $WeckerName - Name des auslösenden Weckers
-	//   $Mode       - Grund der auslösung, mögliche Werte: "FreezeTime", "AlarmTime", "SnoozeTime", "EndTime"
+	//   $Mode       - Grund der auslösung, mögliche Werte: "FreezeTime", "AlarmTime", "SnoozeTime", "StopEvent", "EndTime"
 	//
 	// ----------------------------------------------------------------------------------------------------------------------------
 
-	function c_WeckerCircle_2($CycleId, $WeckerName, $Mode) {
+	function Weckzeit_2($CycleId, $WeckerName, $Mode) {
 		$CircleName = IPS_GetName($CycleId);
 
 		switch($Mode){
 		case 'FreezeTime':
 		case 'AlarmTime':
-
 			// Wecker aktion
-		break;
+			break;
 		case 'SnoozeTime':
-
 			// Wecker wird lauter
-		break;
+			break;
+		case 'StopEvent':
 		case 'EndTime':
-
-			// Wecker ausschalten da nicht da.
-		break;
+			// Wecker ausschalten.
+			break;
 		}
 	}
 
@@ -100,28 +100,25 @@
 	// Parameters:
 	//   $CycleId    - ID des auslösenden Weckers ( Program.IPSWecker.Weckzeiten.Weckzeit_1)
 	//   $WeckerName - Name des auslösenden Weckers
-	//   $Mode       - Grund der auslösung, mögliche Werte: "FreezeTime", "AlarmTime", "SnoozeTime", "EndTime"
+	//   $Mode       - Grund der auslösung, mögliche Werte: "FreezeTime", "AlarmTime", "SnoozeTime", "StopEvent", "EndTime"
 	//
 	// ----------------------------------------------------------------------------------------------------------------------------
 
-	function c_WeckerCircle_3($CycleId, $WeckerName, $Mode) {
+	function Weckzeit_3($CycleId, $WeckerName, $Mode) {
 		$CircleName = IPS_GetName($CycleId);
-
 
 		switch($Mode){
 		case 'FreezeTime':
 		case 'AlarmTime':
-				IPS_LogMessage('DEBUG',"ALARM");
 			// Wecker aktion
-		break;
+			break;
 		case 'SnoozeTime':
-				IPS_LogMessage('DEBUG',"SNOOZE");
 			// Wecker wird lauter
-		break;
+			break;
+		case 'StopEvent':
 		case 'EndTime':
-				IPS_LogMessage('DEBUG',"END");
-			// Wecker ausschalten da nicht da.
-		break;
+			// Wecker ausschalten.
+			break;
 		}
 	}
 
@@ -132,11 +129,11 @@
 	// Parameters:
 	//   $CycleId    - ID des auslösenden Weckers ( Program.IPSWecker.Weckzeiten.Weckzeit_1)
 	//   $WeckerName - Name des auslösenden Weckers
-	//   $Mode       - Grund der auslösung, mögliche Werte: "FreezeTime", "AlarmTime", "SnoozeTime", "EndTime"
+	//   $Mode       - Grund der auslösung, mögliche Werte: "FreezeTime", "AlarmTime", "SnoozeTime", "StopEvent", "EndTime"
 	//
 	// ----------------------------------------------------------------------------------------------------------------------------
 
-	function c_WeckerCircle_4($CycleId, $WeckerName, $Mode) {
+	function Weckzeit_4($CycleId, $WeckerName, $Mode) {
 		$CircleName = IPS_GetName($CycleId);
 
 		switch($Mode){
@@ -149,6 +146,7 @@
 
 			// Wecker wird lauter
 		break;
+		case 'StopEvent':
 		case 'EndTime':
 
 			// Wecker ausschalten da nicht da.
@@ -163,11 +161,11 @@
 	// Parameters:
 	//   $CycleId    - ID des auslösenden Weckers ( Program.IPSWecker.Weckzeiten.Weckzeit_1)
 	//   $WeckerName - Name des auslösenden Weckers
-	//   $Mode       - Grund der auslösung, mögliche Werte: "FreezeTime", "AlarmTime", "SnoozeTime", "EndTime"
+	//   $Mode       - Grund der auslösung, mögliche Werte: "FreezeTime", "AlarmTime", "SnoozeTime", "StopEvent", "EndTime"
 	//
 	// ----------------------------------------------------------------------------------------------------------------------------
 
-	function c_WeckerCircle_5($CycleId, $WeckerName, $Mode) {
+	function Weckzeit_5($CycleId, $WeckerName, $Mode) {
 		$CircleName = IPS_GetName($CycleId);
 
 		switch($Mode){
@@ -180,6 +178,7 @@
 
 			// Wecker wird lauter
 		break;
+		case 'StopEvent':
 		case 'EndTime':
 
 			// Wecker ausschalten da nicht da.
@@ -194,11 +193,11 @@
 	// Parameters:
 	//   $CycleId    - ID des auslösenden Weckers ( Program.IPSWecker.Weckzeiten.Weckzeit_1)
 	//   $WeckerName - Name des auslösenden Weckers
-	//   $Mode       - Grund der auslösung, mögliche Werte: "FreezeTime", "AlarmTime", "SnoozeTime", "EndTime"
+	//   $Mode       - Grund der auslösung, mögliche Werte: "FreezeTime", "AlarmTime", "SnoozeTime", "StopEvent", "EndTime"
 	//
 	// ----------------------------------------------------------------------------------------------------------------------------
 
-	function c_WeckerCircle_6($CycleId, $WeckerName, $Mode) {
+	function Weckzeit_6($CycleId, $WeckerName, $Mode) {
 		$CircleName = IPS_GetName($CycleId);
 
 		switch($Mode){
@@ -211,6 +210,7 @@
 
 			// Wecker wird lauter
 		break;
+		case 'StopEvent':
 		case 'EndTime':
 
 			// Wecker ausschalten da nicht da.
@@ -225,11 +225,11 @@
 	// Parameters:
 	//   $CycleId    - ID des auslösenden Weckers ( Program.IPSWecker.Weckzeiten.Weckzeit_1)
 	//   $WeckerName - Name des auslösenden Weckers
-	//   $Mode       - Grund der auslösung, mögliche Werte: "FreezeTime", "AlarmTime", "SnoozeTime", "EndTime"
+	//   $Mode       - Grund der auslösung, mögliche Werte: "FreezeTime", "AlarmTime", "SnoozeTime", "StopEvent", "EndTime"
 	//
 	// ----------------------------------------------------------------------------------------------------------------------------
 
-	function c_WeckerCircle_7($CycleId, $WeckerName, $Mode) {
+	function Weckzeit_7($CycleId, $WeckerName, $Mode) {
 		$CircleName = IPS_GetName($CycleId);
 
 		switch($Mode){
@@ -242,6 +242,7 @@
 
 			// Wecker wird lauter
 		break;
+		case 'StopEvent':
 		case 'EndTime':
 
 			// Wecker ausschalten da nicht da.
@@ -256,11 +257,11 @@
 	// Parameters:
 	//   $CycleId    - ID des auslösenden Weckers ( Program.IPSWecker.Weckzeiten.Weckzeit_1)
 	//   $WeckerName - Name des auslösenden Weckers
-	//   $Mode       - Grund der auslösung, mögliche Werte: "FreezeTime", "AlarmTime", "SnoozeTime", "EndTime"
+	//   $Mode       - Grund der auslösung, mögliche Werte: "FreezeTime", "AlarmTime", "SnoozeTime", "StopEvent", "EndTime"
 	//
 	// ----------------------------------------------------------------------------------------------------------------------------
 
-	function c_WeckerCircle_8($CycleId, $WeckerName, $Mode) {
+	function Weckzeit_8($CycleId, $WeckerName, $Mode) {
 		$CircleName = IPS_GetName($CycleId);
 
 		switch($Mode){
@@ -273,6 +274,7 @@
 
 			// Wecker wird lauter
 		break;
+		case 'StopEvent':
 		case 'EndTime':
 
 			// Wecker ausschalten da nicht da.
@@ -287,11 +289,11 @@
 	// Parameters:
 	//   $CycleId    - ID des auslösenden Weckers ( Program.IPSWecker.Weckzeiten.Weckzeit_1)
 	//   $WeckerName - Name des auslösenden Weckers
-	//   $Mode       - Grund der auslösung, mögliche Werte: "FreezeTime", "AlarmTime", "SnoozeTime", "EndTime"
+	//   $Mode       - Grund der auslösung, mögliche Werte: "FreezeTime", "AlarmTime", "SnoozeTime", "StopEvent", "EndTime"
 	//
 	// ----------------------------------------------------------------------------------------------------------------------------
 
-	function c_WeckerCircle_9($CycleId, $WeckerName, $Mode) {
+	function Weckzeit_9($CycleId, $WeckerName, $Mode) {
 		$CircleName = IPS_GetName($CycleId);
 
 		switch($Mode){
@@ -304,6 +306,7 @@
 
 			// Wecker wird lauter
 		break;
+		case 'StopEvent':
 		case 'EndTime':
 
 			// Wecker ausschalten da nicht da.
@@ -318,11 +321,11 @@
 	// Parameters:
 	//   $CycleId    - ID des auslösenden Weckers ( Program.IPSWecker.Weckzeiten.Weckzeit_1)
 	//   $WeckerName - Name des auslösenden Weckers
-	//   $Mode       - Grund der auslösung, mögliche Werte: "FreezeTime", "AlarmTime", "SnoozeTime", "EndTime"
+	//   $Mode       - Grund der auslösung, mögliche Werte: "FreezeTime", "AlarmTime", "SnoozeTime", "StopEvent", "EndTime"
 	//
 	// ----------------------------------------------------------------------------------------------------------------------------
 
-	function c_WeckerCircle_10($CycleId, $WeckerName, $Mode) {
+	function Weckzeit_10($CycleId, $WeckerName, $Mode) {
 		$CircleName = IPS_GetName($CycleId);
 
 		switch($Mode){
@@ -335,6 +338,71 @@
 
 			// Wecker wird lauter
 		break;
+		case 'StopEvent':
+		case 'EndTime':
+
+			// Wecker ausschalten da nicht da.
+		break;
+		}
+	}
+
+	// ----------------------------------------------------------------------------------------------------------------------------
+	//
+	// Function wird aufgerufen bei Wecker auslösung
+	//
+	// Parameters:
+	//   $CycleId    - ID des auslösenden Weckers ( Program.IPSWecker.Weckzeiten.Weckzeit_1)
+	//   $WeckerName - Name des auslösenden Weckers
+	//   $Mode       - Grund der auslösung, mögliche Werte: "FreezeTime", "AlarmTime", "SnoozeTime", "StopEvent", "EndTime"
+	//
+	// ----------------------------------------------------------------------------------------------------------------------------
+
+	function Weckzeit_11($CycleId, $WeckerName, $Mode) {
+		$CircleName = IPS_GetName($CycleId);
+
+		switch($Mode){
+		case 'FreezeTime':
+		case 'AlarmTime':
+
+			// Wecker aktion
+		break;
+		case 'SnoozeTime':
+
+			// Wecker wird lauter
+		break;
+		case 'StopEvent':
+		case 'EndTime':
+
+			// Wecker ausschalten da nicht da.
+		break;
+		}
+	}
+
+	// ----------------------------------------------------------------------------------------------------------------------------
+	//
+	// Function wird aufgerufen bei Wecker auslösung
+	//
+	// Parameters:
+	//   $CycleId    - ID des auslösenden Weckers ( Program.IPSWecker.Weckzeiten.Weckzeit_1)
+	//   $WeckerName - Name des auslösenden Weckers
+	//   $Mode       - Grund der auslösung, mögliche Werte: "FreezeTime", "AlarmTime", "SnoozeTime", "StopEvent", "EndTime"
+	//
+	// ----------------------------------------------------------------------------------------------------------------------------
+
+	function Weckzeit_12($CycleId, $WeckerName, $Mode) {
+		$CircleName = IPS_GetName($CycleId);
+
+		switch($Mode){
+		case 'FreezeTime':
+		case 'AlarmTime':
+
+			// Wecker aktion
+		break;
+		case 'SnoozeTime':
+
+			// Wecker wird lauter
+		break;
+		case 'StopEvent':
 		case 'EndTime':
 
 			// Wecker ausschalten da nicht da.

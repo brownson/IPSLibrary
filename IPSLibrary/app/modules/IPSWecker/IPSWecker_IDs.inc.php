@@ -7,7 +7,7 @@
 	 * @file        IPSWecker_IDs.inc.php
 	 * @author      André Czwalina
 	 * @version
-	 * Version 1.00.0, 01.04.2012<br/>
+	* Version 1.00.1, 22.04.2012<br/>
 	 *
 	 */
 
