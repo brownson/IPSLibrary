@@ -25,7 +25,7 @@
 	 * @file          IPSWecker.inc.php
 	 * @author        André Czwalina
 	 * @version
-	 * Version 1.00.0, 01.04.2012<br/>
+	* Version 1.00.1, 22.04.2012<br/>
 	 *
 	 *
 	 */
@@ -38,6 +38,119 @@
 	IPSUtils_Include ("IPSWecker_Custom.inc.php",         	"IPSLibrary::config::modules::IPSWecker");
 	IPSUtils_Include ("IPSWecker_Logging.inc.php",        	"IPSLibrary::app::modules::IPSWecker");
 	IPSUtils_Include ("IPSWecker_IDs.inc.php",            	"IPSLibrary::app::modules::IPSWecker");
+
+
+//$wecker = AddConfiguration(21764  );
+//print_r($wecker);
+
+
+
+
+ 	// ----------------------------------------------------------------------------------------------------------------------------
+	function AddConfiguration($CircleId, $object=array()){
+
+	$object['Circle'] 	= AddActiveConfiguration($CircleId);
+	$object['Property'] 	= AddPropertyConfiguration($CircleId);
+	$object['Control'] 	= AddActiveControl();
+	$object['ActiveTime'] = $object['Circle']['Time_'.get_DateTranslation(Date('l'))];
+	$object['Global'] 	= $object['Circle'][c_Control_Global];
+	$object['Active'] 	= $object['Circle']['Active_'.get_DateTranslation(Date('l'))];
+	$object['CircleTime'] = mktime(substr($object['ActiveTime'],0,2), substr($object['ActiveTime'],3,2), 0);
+	$object['RetFeiertag'] 	= get_Feiertag($object['Circle'][c_Control_Feiertag]);
+	$object['RetUrlaub'] 	= get_Urlaub($object['Circle'][c_Control_Urlaub], $object['Circle'][c_Control_Urlaubszeit]);
+
+	return $object;
+	}
+
+	// ----------------------------------------------------------------------------------------------------------------------------
+	function AddActiveControl(){
+		$parentId = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSWecker');
+
+		$object = array();
+		$object['ControlId']             = $parentId;
+		$object[c_Control_Name] 			= get_ControlValue(c_Control_Name, $parentId);
+		$object[c_Control_LTag] 			= GetValueFormatted(get_ControlId(c_Control_LTag, $parentId));
+		$object[c_Control_LStunde] 		= GetValueFormatted(get_ControlId(c_Control_LStunde, $parentId));
+		$object[c_Control_LMinute] 		= GetValueFormatted(get_ControlId(c_Control_LMinute, $parentId));
+		$object[c_Control_Global] 			= get_ControlValue(c_Control_Global, $parentId);
+		$object[c_Control_Active] 			= get_ControlValue(c_Control_Active, $parentId);
+		$object[c_Control_Feiertag] 		= get_ControlValue(c_Control_Feiertag, $parentId);
+
+		$object[c_Control_Frost] 			= get_ControlValue(c_Control_Frost, $parentId);
+		$object[c_Control_Urlaub] 			= get_ControlValue(c_Control_Urlaub, $parentId);
+		$object[c_Control_Schlummer] 		= get_ControlValue(c_Control_Schlummer, $parentId);
+		$object[c_Control_End] 				= get_ControlValue(c_Control_End, $parentId);
+//		$object[c_Control_Uebersicht] 	= get_ControlValue(c_Control_Uebersicht, $parentId);
+		$object[c_Control_Urlaubszeit] 	= get_ControlValue(c_Control_Urlaubszeit, $parentId);
+
+		return $object;
+	}
+
+	// ----------------------------------------------------------------------------------------------------------------------------
+	function AddActiveConfiguration($CircleId){
+
+		$Conf = get_ControlValue(c_Control_Optionen, $CircleId);
+
+		$object = array();
+		for ($i = 0; $i < 12; $i++){
+			$objectIds[$i] = '0';
+		}
+		$objectIds = explode(',', $Conf);
+
+		$object['CircleId']     			= $CircleId;
+		$object[c_Control_Name] 			= get_ControlType($CircleId);
+
+		$object['Time_'.c_Control_Mo] 	= get_ControlValue(c_Control_Mo, $CircleId);
+		$object['Time_'.c_Control_Di] 	= get_ControlValue(c_Control_Di, $CircleId);
+		$object['Time_'.c_Control_Mi] 	= get_ControlValue(c_Control_Mi, $CircleId);
+		$object['Time_'.c_Control_Do] 	= get_ControlValue(c_Control_Do, $CircleId);
+		$object['Time_'.c_Control_Fr] 	= get_ControlValue(c_Control_Fr, $CircleId);
+		$object['Time_'.c_Control_Sa] 	= get_ControlValue(c_Control_Sa, $CircleId);
+		$object['Time_'.c_Control_So]	 	= get_ControlValue(c_Control_So, $CircleId);
+
+//		for ($i = 0; $i < 12; $i++){
+//			if ( $objectIds[$i] == '') $objectIds[$i] = '0';
+//		}
+
+
+		$object['Active_'.c_Control_Mo] 	= $objectIds[0];
+		$object['Active_'.c_Control_Di] 	= $objectIds[1];
+		$object['Active_'.c_Control_Mi] 	= $objectIds[2];
+		$object['Active_'.c_Control_Do] 	= $objectIds[3];
+		$object['Active_'.c_Control_Fr] 	= $objectIds[4];
+		$object['Active_'.c_Control_Sa] 	= $objectIds[5];
+		$object['Active_'.c_Control_So] 	= $objectIds[6];
+		$object[c_Control_Feiertag] 	  	= $objectIds[7];
+		$object[c_Control_Urlaub]		  	= $objectIds[8];
+		$object[c_Control_Frost] 			= $objectIds[9];
+		$object[c_Control_Global] 			= $objectIds[10];
+		$object[c_Control_Schlummer] 		= $objectIds[11];
+		$object[c_Control_End] 				= $objectIds[12];
+
+		$object[c_Control_Urlaubszeit] 	= get_ControlValue(c_Control_Urlaubszeit, $CircleId);
+		$object['Uebersicht'] = get_ControlValue(c_Control_Uebersicht, $CircleId);
+
+		return $object;
+	}
+
+	// ----------------------------------------------------------------------------------------------------------------------------
+	function AddPropertyConfiguration($CircleId){
+		$WeckerConfig      = get_WeckerConfiguration();
+
+		$CircleName = get_ControlType($CircleId);
+
+		$object	= array();
+		$object[c_Property_Name]	 			= $WeckerConfig[$CircleName][c_Property_Name];
+		$object[c_Property_StopSensor]		= $WeckerConfig[$CircleName][c_Property_StopSensor];
+		$object[c_Property_FrostTemp]	 		= $WeckerConfig[$CircleName][c_Property_FrostTemp];
+		$object[c_Property_FrostSensor]		= $WeckerConfig[$CircleName][c_Property_FrostSensor];
+		$object[c_Property_FrostTime]	 		= $WeckerConfig[$CircleName][c_Property_FrostTime];
+		$object[c_Property_SnoozeTime]		= $WeckerConfig[$CircleName][c_Property_SnoozeTime];
+		$object[c_Property_EndTime]	 		= $WeckerConfig[$CircleName][c_Property_EndTime];
+		$object[c_Property_Schichtgruppe]	= $WeckerConfig[$CircleName][c_Property_Schichtgruppe];
+
+		return $object;
+	}
 
 
 	// ----------------------------------------------------------------------------------------------------------------------------
@@ -57,7 +170,7 @@
 		$wecker_aktiv_all 	= $objectIds[10];
 		$wecker_snooze 		= $objectIds[11];
 		$wecker_end 			= $objectIds[12];
-		$wecker_urlaubszeit 	= get_ControlValue(c_Control_Urlaubszeit,	$parentId);
+		$wecker_urlaubszeit 	= get_ControlValue(c_Control_Urlaubszeit,	$CircleId);
 		$VorTag = "--:--";
 		$FrostTime = 0;
 
@@ -84,7 +197,7 @@
 
 
 	// ----------------------------------------------------------------------------------------------------------------------------
-	function set_NextTimerEvent($WeckerName, $wecker_zeit, $FrostTime){
+	function set_NextTimerEvent($WeckerName, $wecker_zeit, $FrostTime){			//Aufruf von IPSWecker_Timer
 
 			$Toleranz =2;        //Toleranzzeit in Sekunden. Timerevent auslesen hat zum Teil schwankun von 1 Sekunden. Rundungsfehler?
 			$Hour = substr($wecker_zeit,0,2);
@@ -150,7 +263,7 @@
 		$ConfId 			= get_ControlId(c_Control_Optionen, $CircleId);
 		$ActiveValue 		= get_ControlValue(c_Control_Active,		$parentId);
 
-		$DayId = get_ControlId(c_Control_Tag, $parentId);
+		$DayId = get_ControlId(c_Control_LTag, $parentId);
 		$objectIds = explode(',',GetValue($ConfId));
 
 		   switch (GetValueFormatted ($DayId)){
@@ -175,7 +288,7 @@
 			case c_Program_Sonntag:
 					$objectIds[6] = ((bool)$ActiveValue? "1": "0");
 			  break;
-			case c_Program_Werkstags:
+			case c_Program_Werktags:
 					$objectIds[0] = ((bool)$ActiveValue? "1": "0");
 					$objectIds[1] = ((bool)$ActiveValue? "1": "0");
 					$objectIds[2] = ((bool)$ActiveValue? "1": "0");
@@ -205,12 +318,13 @@
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
+/*
 	function get_Config($parentId, $CircleId){
 		$ConfId 			= get_ControlId(c_Control_Optionen, $CircleId);
 		$ControlType = get_ControlType($CircleId);
 //		IPSWecker_Log('Config lesen für Wecker: '.$ControlType);
 
-		$DayId = get_ControlId(c_Control_Tag, $parentId);
+		$DayId = get_ControlId(c_Control_LTag, $parentId);
 		$objectIds = explode(',',GetValue($ConfId));
 		   switch (GetValueFormatted ($DayId)){
 			case c_Program_Montag:
@@ -234,7 +348,7 @@
 			case c_Program_Sonntag:
 					set_ControlValue(c_Control_Active, 	$parentId, $objectIds[6]);
 			  break;
-			case c_Program_Werkstags:
+			case c_Program_Werktags:
 			  break;
 			case c_Program_Wochenende:
 			  break;
@@ -253,32 +367,36 @@
 		set_ControlValue(c_Control_End, 			$parentId, $objectIds[12]);
 
 		$UeberValue	= get_ControlValue(c_Control_Uebersicht, $CircleId);
-		set_ControlValue(c_Control_Uebersicht, 	$parentId, $UeberValue);
+//		set_ControlValue(c_Control_Uebersicht, 	$parentId, $UeberValue);
 
 	}
 
-
+*/
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function IPSWecker_ChangeWecker($ControlId, $Value) {
 		SetValueInteger ($ControlId,$Value);
 
 	   $parentId 		= get_CirclyIdByControlId($ControlId);
 		$NameValue		= get_ControlValue(c_Control_Name,$parentId)+1;
-		$CircleId 		= get_CirclyIdByCircleIdent(c_WeckerCircle.'_'.$NameValue, WECKER_ID_WECKZEITEN);
+		$CircleId 		= get_CirclyIdByCircleIdent(c_WeckerCircle.$NameValue, WECKER_ID_WECKZEITEN);
 		$ControlType 	= get_ControlType($ControlId);
       $ControlValue 	= GetValue($ControlId);
 
-		$tagl 	= GetValueFormatted(get_ControlId(c_Control_Tag, $parentId));
-		if (($tagl==c_Program_Werkstags) or ($tagl==c_Program_Woche) or ($tagl==c_Program_Wochenende)){
+		$tagId   = get_ControlId(c_Control_LTag, $parentId);
+		$tagl 	= GetValueFormatted($tagId);
+		if (($tagl==c_Program_Werktags) or ($tagl==c_Program_Woche) or ($tagl==c_Program_Wochenende)){
+			  SetValue($tagId, 0);
 			  IPS_SetVariableProfileAssociation('IPSWecker_Tag', 0, c_Program_Montag,"", -1);
 		}
-      set_SchichtAssociation($parentId, $CircleId, $Value);
-		get_Config($parentId, $CircleId);
-		get_AlarmClock($parentId, $CircleId);
+
+      IPSWecker_ChangeSchicht($parentId, $CircleId, $Value);
+		$wecker	=	AddConfiguration($CircleId);
+		set_Control($wecker);
+
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
-	function set_SchichtAssociation($parentId, $CircleId, $Value) {
+	function IPSWecker_ChangeSchicht($parentId, $CircleId, $Value) {
 		$NameId			= get_ControlId(c_Control_Name,$parentId);
 		$NameValue		= GetValueInteger($NameId)+1;
 		$WeckerConfig  = get_WeckerConfiguration();
@@ -288,7 +406,7 @@
 
 		$Ass=0;
 		foreach ($WeckerConfig as $WeckerName=>$WeckerData) {
-			$WeckerCf 		= get_CirclyIdByCircleIdent(c_WeckerCircle.'_'.($Ass+1), WECKER_ID_WECKZEITEN);
+			$WeckerCf 		= get_CirclyIdByCircleIdent(c_WeckerCircle.($Ass+1), WECKER_ID_WECKZEITEN);
 			$ConfId 			= get_ControlId(c_Control_Optionen, $WeckerCf);
 			$objectIds 		= explode(',',GetValue($ConfId));
 
@@ -300,8 +418,7 @@
 						$objectIds[10] = "0";
 					}
 					SetValue($ConfId, implode(",", $objectIds));
-					$UeberValue = set_Overview($parentId, $WeckerCf);
-					set_ControlValue(c_Control_Uebersicht, $parentId, $UeberValue);
+					set_Overview($parentId, $WeckerCf);
 				}
 			}
 
@@ -322,7 +439,7 @@
 
 		$Ass=1;
 		foreach ($WeckerConfig as $WeckerName=>$WeckerData) {
-			$CircleId 		= get_CirclyIdByCircleIdent(c_WeckerCircle.'_'.$Ass, WECKER_ID_WECKZEITEN);
+			$CircleId 		= get_CirclyIdByCircleIdent(c_WeckerCircle.$Ass, WECKER_ID_WECKZEITEN);
 			$ConfId 			= get_ControlId(c_Control_Optionen, $CircleId);
 			$objectIds 		= explode(',',GetValue($ConfId));
 			if ($objectIds[10]) {
@@ -335,231 +452,260 @@
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
-	function get_AlarmClock($parentId, $CircleId) {
+/*	function get_AlarmClock($parentId, $CircleId) {
 		$NameId			= get_ControlId(c_Control_Name,$parentId);
 		$NameValue		= GetValueInteger($NameId)+1;
-		$CircleId 		= get_CirclyIdByCircleIdent(c_WeckerCircle.'_'.$NameValue, WECKER_ID_WECKZEITEN);
+		$CircleId 		= get_CirclyIdByCircleIdent(c_WeckerCircle.$NameValue, WECKER_ID_WECKZEITEN);
 		$ConfId 			= get_ControlId(c_Control_Optionen, $CircleId);
 
 
-		$tagl 	= GetValueFormatted(get_ControlId(c_Control_Tag, $parentId));
-		if (($tagl !== c_Program_Werkstags) and ($tagl !== c_Program_Woche) and ($tagl !== c_Program_Wochenende)){
-				$wecker_tag 	= GetValueFormatted(get_ControlId(c_Control_Tag, $parentId));
+		$tagl 	= GetValueFormatted(get_ControlId(c_Control_LTag, $parentId));
+		if (($tagl !== c_Program_Werktags) and ($tagl !== c_Program_Woche) and ($tagl !== c_Program_Wochenende)){
+				$wecker_tag 	= GetValueFormatted(get_ControlId(c_Control_LTag, $parentId));
 				$wecker_zeit	= get_ControlValue($wecker_tag, 	$CircleId);
 				$Hour = substr($wecker_zeit,0,2);
 				$Minute =substr($wecker_zeit,3,2);
 				set_ControlValue(c_Control_Stunde, 	$parentId, $Hour);
-				set_ControlValue(c_Control_Minute, 	$parentId, $Minute);
+	 			set_ControlValue(c_Control_Minute, 	$parentId, $Minute);
 		}
 	}
+*/
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function IPSWecker_ChangeDay($ControlId, $Value) {
 		$parentId 		= get_CirclyIdByControlId($ControlId);
-		$NameId			= get_ControlId(c_Control_Name,$parentId);
-		$NameValue		= GetValueInteger($NameId)+1;
-		$CircleId 		= get_CirclyIdByCircleIdent(c_WeckerCircle.'_'.$NameValue, WECKER_ID_WECKZEITEN);
-		$ConfId 			= get_ControlId(c_Control_Optionen, $CircleId);
-		$ControlValue = GetValue($ControlId);
+		$DayId  			= get_ControlId(c_Control_LTag, $parentId);
+		$DayValue		= GetValue($DayId);
 
 		switch($Value){
 		case -1:
-		   switch (GetValueFormatted ($ControlId)){
-			case c_Program_Montag:
-			  IPS_SetVariableProfileAssociation('IPSWecker_Tag', 0, c_Program_Woche,"", -1);
-			  break;
-			case c_Program_Dienstag:
-			  IPS_SetVariableProfileAssociation('IPSWecker_Tag', 0, c_Program_Montag,"", -1);
-			  break;
-			case c_Program_Mittwoch:
-			  IPS_SetVariableProfileAssociation('IPSWecker_Tag', 0, c_Program_Dienstag,"", -1);
-			  break;
-			case c_Program_Donnerstag:
-			  IPS_SetVariableProfileAssociation('IPSWecker_Tag', 0, c_Program_Mittwoch,"", -1);
-			  break;
-			case c_Program_Freitag:
-			  IPS_SetVariableProfileAssociation('IPSWecker_Tag', 0, c_Program_Donnerstag,"", -1);
-			  break;
-			case c_Program_Samstag:
-			  IPS_SetVariableProfileAssociation('IPSWecker_Tag', 0, c_Program_Freitag,"", -1);
-			  break;
-			case c_Program_Sonntag:
-			  IPS_SetVariableProfileAssociation('IPSWecker_Tag', 0, c_Program_Samstag,"", -1);
-			  break;
-			case c_Program_Werkstags:
-			  IPS_SetVariableProfileAssociation('IPSWecker_Tag', 0, c_Program_Sonntag,"", -1);
-			  break;
-			case c_Program_Wochenende:
-			  IPS_SetVariableProfileAssociation('IPSWecker_Tag', 0, c_Program_Werkstags,"", -1);
-			  break;
-			case c_Program_Woche:
-			  IPS_SetVariableProfileAssociation('IPSWecker_Tag', 0, c_Program_Wochenende,"", -1);
-			  break;
-			default:
-			  IPS_SetVariableProfileAssociation('IPSWecker_Tag', 0, c_Program_Montag,"", -1);
-			   break;
-    	 	}
+				$DayValue--;
+				if ($DayValue <0) $DayValue = 9;
 			break;
 		case 100:
-		   switch (GetValueFormatted($ControlId)){
-			case c_Program_Montag:
-			  IPS_SetVariableProfileAssociation('IPSWecker_Tag', 0, c_Program_Dienstag,"", -1);
-			  break;
-			case c_Program_Dienstag:
-			  IPS_SetVariableProfileAssociation('IPSWecker_Tag', 0, c_Program_Mittwoch,"", -1);
-			  break;
-			case c_Program_Mittwoch:
-			  IPS_SetVariableProfileAssociation('IPSWecker_Tag', 0, c_Program_Donnerstag,"", -1);
-			  break;
-			case c_Program_Donnerstag:
-			  IPS_SetVariableProfileAssociation('IPSWecker_Tag', 0, c_Program_Freitag,"", -1);
-			  break;
-			case c_Program_Freitag:
-			  IPS_SetVariableProfileAssociation('IPSWecker_Tag', 0, c_Program_Samstag,"", -1);
-			  break;
-			case c_Program_Samstag:
-			  IPS_SetVariableProfileAssociation('IPSWecker_Tag', 0, c_Program_Sonntag,"", -1);
-			  break;
-			case c_Program_Sonntag:
-			  IPS_SetVariableProfileAssociation('IPSWecker_Tag', 0, c_Program_Werkstags,"", -1);
-			  break;
-			case c_Program_Werkstags:
-			  IPS_SetVariableProfileAssociation('IPSWecker_Tag', 0, c_Program_Wochenende,"", -1);
-			  break;
-			case c_Program_Wochenende:
-			  IPS_SetVariableProfileAssociation('IPSWecker_Tag', 0, c_Program_Woche,"", -1);
-			  break;
-			case c_Program_Woche:
-			  IPS_SetVariableProfileAssociation('IPSWecker_Tag', 0, c_Program_Montag,"", -1);
-			  break;
-			default:
-			  IPS_SetVariableProfileAssociation('IPSWecker_Tag', 0, c_Program_Montag,"", -1);
-			   break;
-    	 	}
+				$DayValue++;
+				if ($DayValue >9) $DayValue = 0;
 			break;
 		}
-		get_Config($parentId, $CircleId);
-		get_AlarmClock($parentId, $CircleId);
-//      $null = IPSWecker_Log('Tag gewechselt '.GetValueFormatted($ControlId));
+
+		IPSWecker_ChangeLDay($DayId, $DayValue);
 	}
+
+	// ----------------------------------------------------------------------------------------------------------------------------
+	function IPSWecker_ChangeLDay($ControlId, $Value) {
+		SetValueInteger ($ControlId,$Value);
+
+		$parentId 		= get_CirclyIdByControlId($ControlId);
+		$NameId			= get_ControlId(c_Control_Name,$parentId);
+		$NameValue		= GetValueInteger($NameId)+1;
+		$CircleId 		= get_CirclyIdByCircleIdent(c_WeckerCircle.$NameValue, WECKER_ID_WECKZEITEN);
+
+	   IPS_SetVariableProfileAssociation('IPSWecker_Tag', 0, GetValueFormatted ($ControlId),"", -1);
+
+		$wecker	=	AddConfiguration($CircleId);
+		set_Control($wecker);
+	}
+
+
+	// ----------------------------------------------------------------------------------------------------------------------------
+	function set_Control($Config) {
+		$parentId = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSWecker');
+
+		if (($Config['Control'][c_Control_LTag]<>c_Program_Werktags) and ($Config['Control'][c_Control_LTag]<>c_Program_Woche) and ($Config['Control'][c_Control_LTag]<>c_Program_Wochenende)){
+				$Time = $Config['Circle']['Time_'.$Config['Control'][c_Control_LTag]];
+				$Active = $Config['Circle']['Active_'.$Config['Control'][c_Control_LTag]];
+				SetValue(get_ControlId(c_Control_LStunde, $parentId),substr($Time,0,2) );
+				SetValue(get_ControlId(c_Control_LMinute, $parentId),(substr($Time,3,2)/5) );
+				SetValue(get_ControlId(c_Control_Active, $parentId), $Active);
+		}
+
+
+		SetValue(get_ControlId(c_Control_Global, $parentId), $Config['Circle'][c_Control_Global]);
+		SetValue(get_ControlId(c_Control_Feiertag, $parentId), $Config['Circle'][c_Control_Feiertag]);
+		SetValue(get_ControlId(c_Control_Frost, $parentId), $Config['Circle'][c_Control_Frost]);
+		SetValue(get_ControlId(c_Control_Urlaub, $parentId), $Config['Circle'][c_Control_Urlaub]);
+		SetValue(get_ControlId(c_Control_Schlummer, $parentId), $Config['Circle'][c_Control_Schlummer]);
+		SetValue(get_ControlId(c_Control_End, $parentId), $Config['Circle'][c_Control_End]);
+
+		SetValue(get_ControlId(c_Control_Urlaubszeit, $parentId), $Config['Circle'][c_Control_Urlaubszeit]);
+		SetValue(get_ControlId(c_Control_Uebersicht, $parentId), $Config['Circle'][c_Control_Uebersicht]);
+	}
+
+
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function IPSWecker_ChangeStunde($ControlId, $Value) {
-	   $parentId 		= get_CirclyIdByControlId($ControlId);
-//		$CircleIdent   = IPS_GetName($parentId);
-      $ControlValue 	= GetValueInteger($ControlId);
-		$NameId			= get_ControlId(c_Control_Name,$parentId);
-		$NameValue		= GetValueInteger($NameId)+1;
-		$CircleId 		= get_CirclyIdByCircleIdent(c_WeckerCircle.'_'.$NameValue, WECKER_ID_WECKZEITEN);
+		$parentId 		= get_CirclyIdByControlId($ControlId);
+		$StundeId  		= get_ControlId(c_Control_LStunde, $parentId);
+		$StundeValue	= GetValue($StundeId);
 
 		switch($Value){
-		case -2:
-			SetValueInteger ($ControlId,-2);
-			break;
-
 		case -1:
-			$ControlValue = $ControlValue -1;
-			if ($ControlValue <0) $ControlValue = 23;
-			SetValueInteger ($ControlId,$ControlValue);
+				$StundeValue--;
+				if ($StundeValue <0) $StundeValue = 23;
 			break;
-
 		case 100:
-			$ControlValue = $ControlValue +1;
-			if ($ControlValue <0) $ControlValue = 0;
-			if ($ControlValue >23) $ControlValue = 0;
-			SetValueInteger ($ControlId,$ControlValue);
+				$StundeValue++;
+				if ($StundeValue >23) $StundeValue = 0;
 			break;
 		}
-
-
-		set_NewTimeConfig($parentId, $CircleId);
-		$UeberValue	= set_Overview($parentId, $CircleId);
-		set_ControlValue(c_Control_Uebersicht, 	$parentId, $UeberValue);
-		set_TimerEvents($parentId, $CircleId);
-
-
+		IPSWecker_ChangeLStunde($StundeId, $StundeValue);
 	}
+
+	// ----------------------------------------------------------------------------------------------------------------------------
+	function IPSWecker_ChangeLStunde($ControlId, $Value) {
+		SetValueInteger ($ControlId,$Value);
+
+		$parentId 		= get_CirclyIdByControlId($ControlId);
+		$NameId			= get_ControlId(c_Control_Name,$parentId);
+		$NameValue		= GetValueInteger($NameId)+1;
+		$CircleId 		= get_CirclyIdByCircleIdent(c_WeckerCircle.$NameValue, WECKER_ID_WECKZEITEN);
+
+	   IPS_SetVariableProfileAssociation('IPSWecker_Stunde', 0, GetValueFormatted ($ControlId),"", -1);
+
+		$wecker	=	AddConfiguration($CircleId);
+		set_ConfigTime($wecker);
+
+		$UeberValue	= set_Overview($parentId, $CircleId);
+		set_ControlValue(c_Control_Uebersicht, $parentId, $UeberValue);
+		set_TimerEvents($parentId, $CircleId);
+	}
+
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function IPSWecker_ChangeMinute($ControlId, $Value) {
-	   $parentId 		= get_CirclyIdByControlId($ControlId);
-//		$CircleIdent   = IPS_GetName($parentId);
-      $ControlValue 	= GetValueInteger($ControlId);
-		$NameId			= get_ControlId(c_Control_Name,$parentId);
-		$NameValue		= GetValueInteger($NameId)+1;
-		$CircleId 		= get_CirclyIdByCircleIdent(c_WeckerCircle.'_'.$NameValue, WECKER_ID_WECKZEITEN);
+		$parentId 		= get_CirclyIdByControlId($ControlId);
+		$MinuteId  		= get_ControlId(c_Control_LMinute, $parentId);
+		$MinuteValue	= GetValue($MinuteId);
 
 		switch($Value){
 		case -1:
-			$ControlValue = $ControlValue -5;
-			if ($ControlValue <0) $ControlValue = 55;
-			SetValueInteger ($ControlId,$ControlValue);
+				$MinuteValue--;
+				if ($MinuteValue <0) $MinuteValue = 11;
 			break;
 		case 100:
-			$ControlValue = $ControlValue +5;
-			if ($ControlValue >55) $ControlValue = 0;
-			SetValueInteger ($ControlId,$ControlValue);
+				$MinuteValue++;
+				if ($MinuteValue >11) $MinuteValue = 0;
 			break;
 		}
-		set_NewTimeConfig($parentId, $CircleId);
-		$UeberValue	= set_Overview($parentId, $CircleId);
-//		$UeberValue	= get_ControlValue(c_Control_Uebersicht, $CircleId);
-		set_ControlValue(c_Control_Uebersicht, 	$parentId, $UeberValue);
-		set_TimerEvents($parentId, $CircleId);
+		IPSWecker_ChangeLMinute($MinuteId, $MinuteValue);
+	}
 
+	// ----------------------------------------------------------------------------------------------------------------------------
+	function IPSWecker_ChangeLMinute($ControlId, $Value) {
+		SetValueInteger ($ControlId,$Value);
+
+		$parentId 		= get_CirclyIdByControlId($ControlId);
+		$NameId			= get_ControlId(c_Control_Name,$parentId);
+		$NameValue		= GetValueInteger($NameId)+1;
+		$CircleId 		= get_CirclyIdByCircleIdent(c_WeckerCircle.$NameValue, WECKER_ID_WECKZEITEN);
+
+	   IPS_SetVariableProfileAssociation('IPSWecker_Minute', 0, GetValueFormatted ($ControlId),"", -1);
+
+		$wecker	=	AddConfiguration($CircleId);
+		set_ConfigTime($wecker);
+
+		$UeberValue	= set_Overview($parentId, $CircleId);
+		set_ControlValue(c_Control_Uebersicht, $parentId, $UeberValue);
+		set_TimerEvents($parentId, $CircleId);
 	}
 
 
 	// ----------------------------------------------------------------------------------------------------------------------------
-	function set_NewTimeConfig($ControlId, $CircleId){
-		$Name = get_CirclyNameByID($CircleId);
+	function set_ConfigTime($Config){
 
-		$tagl 	= GetValueFormatted(get_ControlId(c_Control_Tag, $ControlId));
-		if ($tagl==c_Program_Werkstags){
-	      $zeitId 	= get_ControlId(c_Control_Mo,$CircleId);
-			set_TimeStamp($zeitId, $ControlId);
-	      $zeitId 	= get_ControlId(c_Control_Di,$CircleId);
-			set_TimeStamp($zeitId, $ControlId);
-	      $zeitId 	= get_ControlId(c_Control_Mi,$CircleId);
-			set_TimeStamp($zeitId, $ControlId);
-	      $zeitId 	= get_ControlId(c_Control_Do,$CircleId);
-			set_TimeStamp($zeitId, $ControlId);
-	      $zeitId 	= get_ControlId(c_Control_Fr,$CircleId);
-			set_TimeStamp($zeitId, $ControlId);
-		}
-		elseif ($tagl==c_Program_Wochenende){
-	      $zeitId 	= get_ControlId(c_Control_Sa,$CircleId);
-			set_TimeStamp($zeitId, $ControlId);
-	      $zeitId 	= get_ControlId(c_Control_So,$CircleId);
-			set_TimeStamp($zeitId, $ControlId);
-		}
-		elseif ($tagl==c_Program_Woche) {
-	      $zeitId 	= get_ControlId(c_Control_Mo,$CircleId);
-			set_TimeStamp($zeitId, $ControlId);
-	      $zeitId 	= get_ControlId(c_Control_Di,$CircleId);
-			set_TimeStamp($zeitId, $ControlId);
-	      $zeitId 	= get_ControlId(c_Control_Mi,$CircleId);
-			set_TimeStamp($zeitId, $ControlId);
-	      $zeitId 	= get_ControlId(c_Control_Do,$CircleId);
-			set_TimeStamp($zeitId, $ControlId);
-	      $zeitId 	= get_ControlId(c_Control_Fr,$CircleId);
-			set_TimeStamp($zeitId, $ControlId);
-	      $zeitId 	= get_ControlId(c_Control_Sa,$CircleId);
-			set_TimeStamp($zeitId, $ControlId);
-	      $zeitId 	= get_ControlId(c_Control_So,$CircleId);
-			set_TimeStamp($zeitId, $ControlId);
-		}
-		else{
-	      $zeitId 	= get_ControlId($tagl,$CircleId);
-			set_TimeStamp($zeitId, $ControlId);
+		$CircleId = $Config['Circle']['CircleId'];
+		$Name = $Config['Circle']['Name'];
+		$tagl 	= $Config['Control']['LTag'];
+
+		if ($tagl==c_Program_Werktags){
+				SetValue(get_ControlId(c_Control_Mo,$CircleId),$Config['Control']['LStunde'].':'.$Config['Control']['LMinute']);
+				SetValue(get_ControlId(c_Control_Di,$CircleId),$Config['Control']['LStunde'].':'.$Config['Control']['LMinute']);
+				SetValue(get_ControlId(c_Control_Mi,$CircleId),$Config['Control']['LStunde'].':'.$Config['Control']['LMinute']);
+				SetValue(get_ControlId(c_Control_Do,$CircleId),$Config['Control']['LStunde'].':'.$Config['Control']['LMinute']);
+				SetValue(get_ControlId(c_Control_Fr,$CircleId),$Config['Control']['LStunde'].':'.$Config['Control']['LMinute']);
+
+		} elseif ($tagl==c_Program_Wochenende){
+				SetValue(get_ControlId(c_Control_Sa,$CircleId),$Config['Control']['LStunde'].':'.$Config['Control']['LMinute']);
+				SetValue(get_ControlId(c_Control_So,$CircleId),$Config['Control']['LStunde'].':'.$Config['Control']['LMinute']);
+
+		} elseif ($tagl==c_Program_Woche) {
+				SetValue(get_ControlId(c_Control_Mo,$CircleId),$Config['Control']['LStunde'].':'.$Config['Control']['LMinute']);
+				SetValue(get_ControlId(c_Control_Di,$CircleId),$Config['Control']['LStunde'].':'.$Config['Control']['LMinute']);
+				SetValue(get_ControlId(c_Control_Mi,$CircleId),$Config['Control']['LStunde'].':'.$Config['Control']['LMinute']);
+				SetValue(get_ControlId(c_Control_Do,$CircleId),$Config['Control']['LStunde'].':'.$Config['Control']['LMinute']);
+				SetValue(get_ControlId(c_Control_Fr,$CircleId),$Config['Control']['LStunde'].':'.$Config['Control']['LMinute']);
+				SetValue(get_ControlId(c_Control_Sa,$CircleId),$Config['Control']['LStunde'].':'.$Config['Control']['LMinute']);
+				SetValue(get_ControlId(c_Control_So,$CircleId),$Config['Control']['LStunde'].':'.$Config['Control']['LMinute']);
+
+		} else {
+				SetValue(get_ControlId($tagl,$CircleId),$Config['Control']['LStunde'].':'.$Config['Control']['LMinute']);
 		}
 //      $null = IPSWecker_Log('Neue Weckzeit gespeichert');
-      return true;
+      return;
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
-	function set_TimeStamp($zeitId, $ControlId){
-      $stunde  = Getvalue(get_ControlId(c_Control_Stunde, $ControlId));
-		$minute  = Getvalue(get_ControlId(c_Control_Minute, $ControlId));
-      SetValue($zeitId,sprintf("%02s", $stunde).":".sprintf("%02s", $minute));
+	function set_Configuration($Config) {
+		$CircleId = $Config['Circle']['CircleId'];
+		$Name = $Config['Circle']['Name'];
+		$tagl 	= $Config['Control']['LTag'];
+
+		$objectIds  	=  array();
+		$objectIds[c_ProgramId_Montag] 		= ((bool)$Config['Circle']['Active_'.c_Control_Mo]?		"1": "0");
+		$objectIds[c_ProgramId_Dienstag] 	= ((bool)$Config['Circle']['Active_'.c_Control_Di]?		"1": "0");
+		$objectIds[c_ProgramId_Mittwoch] 	= ((bool)$Config['Circle']['Active_'.c_Control_Mi]?		"1": "0");
+		$objectIds[c_ProgramId_Donnerstag] 	= ((bool)$Config['Circle']['Active_'.c_Control_Do]?		"1": "0");
+		$objectIds[c_ProgramId_Freitag] 		= ((bool)$Config['Circle']['Active_'.c_Control_Fr]?		"1": "0");
+		$objectIds[c_ProgramId_Samstag] 		= ((bool)$Config['Circle']['Active_'.c_Control_Sa]?		"1": "0");
+		$objectIds[c_ProgramId_Sonntag] 		= ((bool)$Config['Circle']['Active_'.c_Control_So]?		"1": "0");
+		$objectIds[c_ProgramId_Feiertag]	 	= ((bool)$Config['Control'][c_Control_Feiertag]?			"1": "0");
+		$objectIds[c_ProgramId_Urlaub] 		= ((bool)$Config['Control'][c_Control_Urlaub]?		 		"1": "0");
+		$objectIds[c_ProgramId_Frost] 		= ((bool)$Config['Control'][c_Control_Frost]? 				"1": "0");
+		$objectIds[c_ProgramId_Global] 		= ((bool)$Config['Control'][c_Control_Global]? 				"1": "0");
+		$objectIds[c_ProgramId_Snooze] 		= ((bool)$Config['Control'][c_Control_Schlummer]? 			"1": "0");
+		$objectIds[c_ProgramId_End] 			= ((bool)$Config['Control'][c_Control_End]? 					"1": "0");
+
+		if ($tagl==c_Program_Werktags){
+				$objectIds[c_ProgramId_Montag] 		= ((bool)$Config['Control'][c_Control_Active]?		"1": "0");
+				$objectIds[c_ProgramId_Dienstag] 	= ((bool)$Config['Control'][c_Control_Active]?		"1": "0");
+				$objectIds[c_ProgramId_Mittwoch] 	= ((bool)$Config['Control'][c_Control_Active]?		"1": "0");
+				$objectIds[c_ProgramId_Donnerstag] 	= ((bool)$Config['Control'][c_Control_Active]?		"1": "0");
+				$objectIds[c_ProgramId_Freitag] 		= ((bool)$Config['Control'][c_Control_Active]?		"1": "0");
+
+		} elseif ($tagl==c_Program_Wochenende){
+				$objectIds[c_ProgramId_Samstag] 		= ((bool)$Config['Control'][c_Control_Active]?		"1": "0");
+				$objectIds[c_ProgramId_Sonntag] 		= ((bool)$Config['Control'][c_Control_Active]?		"1": "0");
+
+		} elseif ($tagl==c_Program_Woche) {
+				$objectIds[c_ProgramId_Montag] 		= ((bool)$Config['Control'][c_Control_Active]?		"1": "0");
+				$objectIds[c_ProgramId_Dienstag] 	= ((bool)$Config['Control'][c_Control_Active]?		"1": "0");
+				$objectIds[c_ProgramId_Mittwoch] 	= ((bool)$Config['Control'][c_Control_Active]?		"1": "0");
+				$objectIds[c_ProgramId_Donnerstag] 	= ((bool)$Config['Control'][c_Control_Active]?		"1": "0");
+				$objectIds[c_ProgramId_Freitag] 		= ((bool)$Config['Control'][c_Control_Active]?		"1": "0");
+				$objectIds[c_ProgramId_Samstag] 		= ((bool)$Config['Control'][c_Control_Active]?		"1": "0");
+				$objectIds[c_ProgramId_Sonntag] 		= ((bool)$Config['Control'][c_Control_Active]?		"1": "0");
+
+		} elseif ($tagl==c_Control_Mo) {
+				$objectIds[c_ProgramId_Montag] 	= ((bool)$Config['Control'][c_Control_Active]?		"1": "0");
+
+		} elseif ($tagl==c_Control_Di) {
+				$objectIds[c_ProgramId_Dienstag] 	= ((bool)$Config['Control'][c_Control_Active]?		"1": "0");
+
+		} elseif ($tagl==c_Control_Mi) {
+				$objectIds[c_ProgramId_Mittwoch] 	= ((bool)$Config['Control'][c_Control_Active]?		"1": "0");
+
+		} elseif ($tagl==c_Control_Do) {
+				$objectIds[c_ProgramId_Donnerstag] 	= ((bool)$Config['Control'][c_Control_Active]?		"1": "0");
+
+		} elseif ($tagl==c_Control_Fr) {
+				$objectIds[c_ProgramId_Freitag] 	= ((bool)$Config['Control'][c_Control_Active]?		"1": "0");
+
+		} elseif ($tagl==c_Control_Sa) {
+				$objectIds[c_ProgramId_Samstag] 	= ((bool)$Config['Control'][c_Control_Active]?		"1": "0");
+
+		} elseif ($tagl==c_Control_So) {
+				$objectIds[c_ProgramId_Sonntag] 	= ((bool)$Config['Control'][c_Control_Active]?		"1": "0");
+		}
+		SetValue(get_ControlId(c_Control_Optionen, $CircleId), implode(",", $objectIds));
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
@@ -569,7 +715,7 @@
 		$parentId = get_CirclyIdByControlId($ControlId);
 		$NameId			= get_ControlId(c_Control_Name,$parentId);
 		$NameValue		= GetValueInteger($NameId)+1;
-		$CircleId 		= get_CirclyIdByCircleIdent(c_WeckerCircle.'_'.$NameValue, WECKER_ID_WECKZEITEN);
+		$CircleId 		= get_CirclyIdByCircleIdent(c_WeckerCircle.$NameValue, WECKER_ID_WECKZEITEN);
 		$ConfId 			= get_ControlId(c_Control_Optionen, $CircleId);
 
 
@@ -588,7 +734,7 @@
 		$parentId = get_CirclyIdByControlId($ControlId);
 		$NameId			= get_ControlId(c_Control_Name,$parentId);
 		$NameValue		= GetValueInteger($NameId)+1;
-		$CircleId 		= get_CirclyIdByCircleIdent(c_WeckerCircle.'_'.$NameValue, WECKER_ID_WECKZEITEN);
+		$CircleId 		= get_CirclyIdByCircleIdent(c_WeckerCircle.$NameValue, WECKER_ID_WECKZEITEN);
 		$ConfId 			= get_ControlId(c_Control_Optionen, $CircleId);
 
 
@@ -607,7 +753,7 @@
 		$parentId = get_CirclyIdByControlId($ControlId);
 		$NameId			= get_ControlId(c_Control_Name,$parentId);
 		$NameValue		= GetValueInteger($NameId)+1;
-		$CircleId 		= get_CirclyIdByCircleIdent(c_WeckerCircle.'_'.$NameValue, WECKER_ID_WECKZEITEN);
+		$CircleId 		= get_CirclyIdByCircleIdent(c_WeckerCircle.$NameValue, WECKER_ID_WECKZEITEN);
 		$ConfId 			= get_ControlId(c_Control_Optionen, $CircleId);
 
 
@@ -616,7 +762,11 @@
 
 		$UeberValue	= get_ControlValue(c_Control_Uebersicht, $CircleId);
 		set_ControlValue(c_Control_Uebersicht, 	$parentId, $UeberValue);
-		set_WeckerAssociation($parentId, $CircleId);
+//		set_WeckerAssociation($parentId, $CircleId);
+
+//		$wecker	=	AddConfiguration($CircleId);
+//		set_Configuration($wecker);
+//		set_Control($wecker);
 
 	}
 
@@ -634,7 +784,7 @@
 
 		$parentId      = get_CirclyIdByControlId($ControlId);
 		$NameValue		= get_ControlValue(c_Control_Name,$parentId)+1;
-		$CircleId 		= get_CirclyIdByCircleIdent(c_WeckerCircle.'_'.$NameValue, WECKER_ID_WECKZEITEN);
+		$CircleId 		= get_CirclyIdByCircleIdent(c_WeckerCircle.$NameValue, WECKER_ID_WECKZEITEN);
 
 
 		set_ControlValue(c_Control_Urlaubszeit, $CircleId, $Value);
@@ -644,226 +794,6 @@
 
 	}
 
-
-	// ----------------------------------------------------------------------------------------------------------------------------
-	function IPSWecker_ActivateWecker($CycleId, $Value, $Mode) {
-		$WeckerConfig      = get_WeckerConfiguration();
-		$CircleIdent      = IPS_GetName($CycleId);
-		$ComponentParams  = $WeckerConfig[$CircleIdent][c_Property_Component];
-
-		if (!IPSWecker_BeforeActivateWecker($CycleId, $Value, $Mode)) {
-			return false;
-		}
-
-		$component = IPSComponent::CreateObjectByParams($ComponentParams);
-		$component->SetState($Value);
-
-		IPSWecker_AfterActivateWecker($CycleId, $Value, $Mode);
-
-		return true;
-	}
-
-
-
-	// ----------------------------------------------------------------------------------------------------------------------------
-	function IPSWecker_SetActive($ControlId, $Value, $Mode) {
-	   $CircleId = get_CirclyIdByControlId($ControlId);
-	   if (GetValue($ControlId) <> $Value) {
-			if (IPSWecker_ActivateWecker($CircleId, $Value, $Mode)) {
-				SetValue($ControlId, $Value);
-				if ($Value) {
-					IPSWecker_SetMode($CircleId, $Mode);
-					SetValue(get_ControlId(c_Control_LastDate, $CircleId), date(c_Format_LastDate));
-					SetValue(get_ControlId(c_Control_LastTime, $CircleId), date(c_Format_LastTime));
-				} else {
-				   IPSWecker_CalcNextScheduleDateTime($CircleId);
-				}
-				IPSWecker_LogActivate($CircleId, $Value, $Mode);
-			} else {
-			   IPSWecker_CalcNextScheduleDateTime($CircleId);
-			}
-			IPSWecker_ActivateRefreshTimer($Value);
-		}
-	}
-
-
-	// ----------------------------------------------------------------------------------------------------------------------------
-	function IPSWecker_CalcNextScheduleDateTime($CircleId) {
-		$Automatic = GetValue(get_ControlId(c_Control_Automatic, $CircleId));
-		SetValue(get_ControlId(c_Control_NextTime, $CircleId), GetValue(get_ControlId(c_Control_StartTime, $CircleId)));
-		SetValue(get_ControlId(c_Control_NextDate, $CircleId), get_NextScheduledDate($CircleId));
-
-		if (get_NextScheduledDate($CircleId)===false) {
-			IPSWecker_SetMode($CircleId, c_Mode_AutomaticManual);
-			IPSWecker_ActivateStartTimer($CircleId, false);
-		} else if ($Automatic) {
-			IPSWecker_SetMode($CircleId, c_Mode_AutomaticEnabled);
-			IPSWecker_ActivateStartTimer($CircleId, true);
-		} else {
-			IPSWecker_SetMode($CircleId, c_Mode_AutomaticDisabled);
-			IPSWecker_ActivateStartTimer($CircleId, false);
-		}
-		//IPSWecker_ActivateStartTimer($CircleId, $Automatic);
-	}
-
-	// ----------------------------------------------------------------------------------------------------------------------------
-	function	IPSWecker_ActivateStartTimer($CircleId, $Value=true) {
-		$Name           = IPS_GetName($CircleId);
-		$scriptId_Timer = IPSUtil_ObjectIDByPath('Program.IPSLibrary.app.modules.IPSWecker.IPSWecker_ActivationTimer');
-		$TimerId        = @IPS_GetEventIDByName($Name, $scriptId_Timer);
-		if ($TimerId === false) {
- 			$TimerId = IPS_CreateEvent(1 /*Cyclic Event*/);
-			IPS_SetName($TimerId, $Name);
-			IPS_SetParent($TimerId, $scriptId_Timer);
-			if (!IPS_SetEventCyclic($TimerId, 1 /*Once*/, 1,0,0,0,0)) {
-				IPSLogger_Err(__file__, "IPS_SetEventCyclic failed for WeckerCircle '$Name' Timer !!!");
-				exit;
-			}
-		}
-		if ($Value) {
-			if (!IPS_SetEventCyclicDateBounds ($TimerId, get_DateTime(get_ControlId(c_Control_NextDate, $CircleId), c_Format_NextDate),0)) {
-				IPSLogger_Err(__file__, "IPS_SetEventCyclicTimeBounds failed for WeckerCircle '$Name' Timer !!!");
-				exit;
-			}
-			$Time = GetValue(get_ControlId(c_Control_NextTime, $CircleId));
-			if (!IPS_SetEventCyclicTimeBounds($TimerId, mktime(substr($Time,0,2), substr($Time,3,2), 0), 0)) {
-				IPSLogger_Err(__file__, "IPS_SetEventCyclicTimeBounds failed for WeckerCircle '$Name' Timer !!!");
-				exit;
-			}
-		}
-		IPS_SetEventActive($TimerId, $Value);
-	}
-
-	// ----------------------------------------------------------------------------------------------------------------------------
-	function	IPSWecker_ActivateRefreshTimer($Value) {
-		$Name    = 'Refresh';
-		$scriptId_Timer = IPSUtil_ObjectIDByPath('Program.IPSLibrary.app.modules.IPSWecker.IPSWecker_RefreshTimer');
-		$TimerId = @IPS_GetEventIDByName($Name, $scriptId_Timer);
-		if ($TimerId === false) {
- 			$TimerId = IPS_CreateEvent(1 /*Cyclic Event*/);
-			IPS_SetName($TimerId, $Name);
-			IPS_SetParent($TimerId, $scriptId_Timer);
-			if (!IPS_SetEventCyclic($TimerId, 2 /*Daily*/, 1 /*Int*/,0 /*Days*/,0/*DayInt*/,1/*TimeType Sec*/,1/*Sec*/)) {
-				IPSLogger_Err(__file__, "IPS_SetEventCyclic failed for Refresh Timer!!!");
-				exit;
-			}
-		}
-
-		if ($Value) {
-			IPS_SetEventActive($TimerId, true);
-		} else {
-			$OneOrMoreCirclesActive = false;
-			$categoryId_Circles = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSWecker.WeckerCircles');
-			$CircleIds          = IPS_GetChildrenIds($categoryId_Circles);
-				foreach($CircleIds as $CircleId) {
-				$OneOrMoreCirclesActive = ($OneOrMoreCirclesActive or GetValue(get_ControlId(c_Control_Optionen, $CircleId)));
-			}
-			if (!$OneOrMoreCirclesActive) {
-				IPS_SetEventActive($TimerId, false);
-			}
-		}
-	}
-
-	// ----------------------------------------------------------------------------------------------------------------------------
-	function IPSWecker_SetMode($CircleId, $Mode) {
-	   $ControlIdNextDisplay = get_ControlId(c_Control_NextDisplay, $CircleId);
-	   $ControlIdDuration    = get_ControlId(c_Control_Duration, $CircleId);
-	   $ControlIdToBeDone    = get_ControlId(c_Control_ToBeDone, $CircleId);
-
-		switch ($Mode) {
-		   case c_Mode_StartAutomatic:
-		      SetValue($ControlIdNextDisplay, $Mode);
-				SetValue($ControlIdToBeDone, $Mode.', '.GetValue($ControlIdDuration).' Minuten');
-		      break;
-		   case c_Mode_StartManual:
-		      SetValue($ControlIdNextDisplay, $Mode);
-				SetValue($ControlIdToBeDone, $Mode.', '.GetValue($ControlIdDuration).' Minuten');
-		      break;
-		   case c_Mode_AutomaticManual:
-		   case c_Mode_AutomaticDisabled:
-		      SetValue($ControlIdNextDisplay, $Mode);
-				SetValue($ControlIdToBeDone, $Mode);
-		      break;
-		   case c_Mode_AutomaticEnabled:
-		      $Date = get_DateTime(get_ControlId(c_Control_NextDate, $CircleId), c_Format_NextDate);
-		      $Time = GetValue(get_ControlId(c_Control_NextTime, $CircleId));
-		      SetValue($ControlIdNextDisplay, get_DateTranslation(date('l', $Date)).', '.$Time);
-				SetValue($ControlIdToBeDone, get_DateTranslation(date('l', $Date)).', '.$Time.', '.GetValue($ControlIdDuration).' Minuten');
-		      break;
-		}
-	}
-
-	// ----------------------------------------------------------------------------------------------------------------------------
-   function IPSWecker_SetAutomaticForAllCircles($Value) {
-		$categoryId_Circles = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSWecker.WeckerCircles');
-		$CircleIds          = IPS_GetChildrenIds($categoryId_Circles);
-		foreach($CircleIds as $CircleId) {
-			IPSWecker_SetValue(get_ControlId(c_Control_Automatic, $CircleId), $Value);
-		}
-   }
-
-	// ----------------------------------------------------------------------------------------------------------------------------
-	function IPSWecker_SetValue($ControlId, $Value) {
-		$CircleId = get_CirclyIdByControlId($ControlId);
-		if (GetValue($ControlId)<>$Value) {
-			IPSWecker_SetActive(get_ControlId(c_Control_Optionen, $CircleId), false, c_Mode_StartManual);
-
-			SetValue($ControlId, $Value);
-			IPSWecker_CalcNextScheduleDateTime($CircleId);
-			IPSWecker_LogChange($CircleId, $Value, $ControlId);
-		}
-	}
-
-	// ----------------------------------------------------------------------------------------------------------------------------
-	function IPSWecker_Refresh() {
-		$categoryId_Circles = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSWecker.WeckerCircles');
-		$CircleIds          = IPS_GetChildrenIds($categoryId_Circles);
-		foreach($CircleIds as $CircleId) {
-			if (GetValue(get_ControlId(c_Control_Active, $CircleId))) {
-				$Duration        = GetValue(get_ControlId(c_Control_Duration, $CircleId));
-				$TimeCurrent     = time();
-				$TimeStart       = get_DateTime(get_ControlId(c_Control_LastDate, $CircleId), c_Format_LastDate,
-				                                get_ControlId(c_Control_LastTime, $CircleId), c_Format_LastTime);
-				$TimeDiff        = $TimeCurrent-$TimeStart;
-				$TimeDiffMinutes = floor($TimeDiff/60);
-				$TimeDiffSeconds = $TimeDiff % 60;
-
-				SetValue(get_ControlId(c_Control_ToBeDone, $CircleId),
-				         GetValue(get_ControlId(c_Control_NextDisplay, $CircleId)).", $TimeDiffMinutes von $Duration Min ($TimeDiffSeconds Sek)");
-
-				if ($TimeDiffMinutes >= $Duration) {
-					IPSWecker_SetActive(get_ControlId(c_Control_Active, $CircleId),
-												 false,
-												 c_Mode_StartAutomatic);
-				}
-			}
-		}
-	}
-
-	// ----------------------------------------------------------------------------------------------------------------------------
-	function get_DateTime($DateControlId, $DateFormat='Y.m.d', $TimeControlId=null, $TimeFormat='H:i') {
-		$Value  = GetValue($DateControlId);
-		$Format = $DateFormat;
-		if ($TimeControlId<>null) {
-			$Value  .= GetValue($TimeControlId);
-			$Format .= $TimeFormat;
-			}
-
-		try {
-			$datetime = DateTime::createFromFormat($Format, $Value);
-			if ($datetime <> null) {
-				return $datetime->getTimestamp();
-			} else {
-				IPSLogger_Err(__file__, "'$Value' could NOT be converted to DateTime using '$Format'");
-				Exit;
-			}
-		} catch (Exception $exception) {
-			IPSLogger_Err(__file__, "'$exception': '$Value' could NOT be converted to DateTime using '$Format'");
-			Exit;
-		}
-	}
-
-
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function get_ControlType($ControlId) {
 		$ControlName = IPS_GetName($ControlId);
@@ -871,11 +801,11 @@
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
-	function get_CirclyIdByCircleIdent($CircleIdent, $ParentId=null) {
-		if ($ParentId==null) {
-			$ParentId = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSWecker');
+	function get_CirclyIdByCircleIdent($CircleIdent, $parentId=null) {
+		if ($parentId==null) {
+			$parentId = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSWecker');
 		}
-		$CirclyId = IPS_GetCategoryIDByName($CircleIdent, $ParentId);
+		$CirclyId = IPS_GetCategoryIDByName($CircleIdent, $parentId);
 		return $CirclyId;
 	}
 
@@ -928,6 +858,16 @@
 		SetValue ($VariableId, $Value);
 	}
 
+	// ----------------------------------------------------------------------------------------------------------------------------
+	function	getAviableSensor($sensor){
+		$ret = 0;
+		if ($sensor <> '') $ret = 1;
+		if (IPS_VariableExists($sensor)) $ret = 2;
+
+//IPS_LogMessage('DEBUG',"AviableSensor ($sensor): ".$ret);
+
+		return $ret;
+	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function set_Overview($parentId, $CircleId){
@@ -939,12 +879,12 @@
 
 		$html.="<table class='stundenplan'>\n\n";
 		$html.="	<tr>";
-		$html.="		<td style='width: 50px;' align='center'>".c_Table_Day."</td>\n";
-		$html.="		<td style='width: 90px;' align='center'>".c_Table_Hour."</td>\n";
-		$html.="		<td style='width: 200px;' align='center'>".c_Table_Active."</td>\n";
+		$html.="		<td style='width: 50px;' align='center'>".c_WFC_Tag."</td>\n";
+		$html.="		<td style='width: 90px;' align='center'>".c_WFC_Stunde."</td>\n";
+		$html.="		<td style='width: 200px;' align='center'>".c_WFC_Active."</td>\n";
 		$html.="		<td style='width: 100px; border: 0px;' align='center'>      </td>\n";
-		$html.="		<td style='width: 200px;' align='center'>".c_Table_Feature."</td>\n";
-		$html.="		<td style='width: 200px;' align='center'>".c_Table_Active."</td>\n";
+		$html.="		<td style='width: 200px;' align='center'>".c_WFC_Feature."</td>\n";
+		$html.="		<td style='width: 200px;' align='center'>".c_WFC_Active."</td>\n";
 		$html.="		<td style='border: 0px;' align='center'></td>\n";
 
 		$ConfId 					= get_ControlId(c_Control_Optionen, $CircleId);
@@ -960,65 +900,65 @@
 		$wecker_urlaubszeit 	= get_ControlValue(c_Control_Urlaubszeit,	$CircleId);
 
 		if($wecker_aktiv_all == 0)	{
-			$wecker_global = c_Asso_Off;
+			$wecker_global = c_Program_Off;
 			$farbe_global = "		<td style='background: #880000;' colspan='1' align='center'>";
 		}
 		else {
-			$wecker_global = c_Asso_On;
+			$wecker_global = c_Program_On;
 			$farbe_global = "		<td style='background: #008000;' colspan='1' align='center'>";
 		}
 
 		if($wecker_feiertag  == 0)	{
-			$wecker_feiertag = c_Asso_NoWeck;
+			$wecker_feiertag = c_Program_NoWeck;
 			if($wecker_aktiv_all) 	$farbe_feiertag = "		<td style='background: #880000;' colspan='1' align='center'>";
 			if(!$wecker_aktiv_all)  $farbe_feiertag = "		<td style='background: #400000;' colspan='1' align='center'>";
 		}
 		else	{
-			$wecker_feiertag = c_Asso_Weck;
+			$wecker_feiertag = c_Program_Weck;
 			if($wecker_aktiv_all) 	$farbe_feiertag = "		<td style='background: #008000;' colspan='1' align='center'>";
 			if(!$wecker_aktiv_all)  $farbe_feiertag = "		<td style='background: #002000;' colspan='1' align='center'>";
 		}
 
 		if($wecker_urlaub == 0)	{
-			$wecker_urlaub = c_Asso_NoWeck;
+			$wecker_urlaub = c_Program_NoWeck;
 			if($wecker_aktiv_all) 	$farbe_urlaub = "		<td style='background: #880000;' colspan='1' align='center'>";
 			if(!$wecker_aktiv_all)  $farbe_urlaub = "		<td style='background: #400000;' colspan='1' align='center'>";
 		}
 		else {
-			$wecker_urlaub = c_Asso_Weck;
+			$wecker_urlaub = c_Program_Weck;
 			if($wecker_aktiv_all) 	$farbe_urlaub = "		<td style='background: #008000;' colspan='1' align='center'>";
 			if(!$wecker_aktiv_all) 	$farbe_urlaub = "		<td style='background: #002000;' colspan='1' align='center'>";
 		}
 
 		if($wecker_frost == 0)	{
-			$wecker_frost = c_Asso_NormWeck;
+			$wecker_frost = c_Program_NormWeck;
 			if($wecker_aktiv_all) 	$farbe_frost = "		<td style='background: #880000;' colspan='1' align='center'>";
 			if(!$wecker_aktiv_all)  $farbe_frost = "		<td style='background: #400000;' colspan='1' align='center'>";
 		}
 		else {
-			$wecker_frost = c_Asso_PrevWeck;
+			$wecker_frost = c_Program_PrevWeck;
 			if($wecker_aktiv_all) 	$farbe_frost = "		<td style='background: #008000;' colspan='1' align='center'>";
 			if(!$wecker_aktiv_all)  $farbe_frost = "		<td style='background: #002000;' colspan='1' align='center'>";
 		}
 
 		if($wecker_snooze == 0){
-			$wecker_snooze = c_Asso_Off;
+			$wecker_snooze = c_Program_Off;
 			if($wecker_aktiv_all) 	$farbe_schlummer = "		<td style='background: #880000;' colspan='1' align='center'>";
 			if(!$wecker_aktiv_all)  $farbe_schlummer = "		<td style='background: #400000;' colspan='1' align='center'>";
 		}
 		else {
-			$wecker_snooze = c_Asso_On;
+			$wecker_snooze = c_Program_On;
 			if($wecker_aktiv_all) 	$farbe_schlummer = "		<td style='background: #008000;' colspan='1' align='center'>";
 			if(!$wecker_aktiv_all)  $farbe_schlummer = "		<td style='background: #002000;' colspan='1' align='center'>";
 		}
 
 		if($wecker_end == 0)	{
-			$wecker_end = c_Asso_Off;
+			$wecker_end = c_Program_Off;
 			if($wecker_aktiv_all) 	$farbe_end = "		<td style='background: #880000;' colspan='1' align='center'>";
 			if(!$wecker_aktiv_all)  $farbe_end = "		<td style='background: #400000;' colspan='1' align='center'>";
 		}
 		else {
-			$wecker_end = c_Asso_On;
+			$wecker_end = c_Program_On;
 			if($wecker_aktiv_all) 	$farbe_end = "		<td style='background: #008000;' colspan='1' align='center'>";
 			if(!$wecker_aktiv_all)  $farbe_end = "		<td style='background: #002000;' colspan='1' align='center'>";
 		}
@@ -1040,12 +980,12 @@
 
 
 			if($wecker_aktiv 		== 0) {
-				$wecker_aktiv = c_Asso_NoWeck;
+				$wecker_aktiv = c_Program_NoWeck;
 				if($wecker_aktiv_all) 	$farbe_aktiv = "		<td style='background: #880000;' colspan='1' align='center'>";
 				if(!$wecker_aktiv_all)  $farbe_aktiv = "		<td style='background: #400000;' colspan='1' align='center'>";
 			}
 			else {
-				$wecker_aktiv = c_Asso_Weck;
+				$wecker_aktiv = c_Program_Weck;
 				if($wecker_aktiv_all) 	$farbe_aktiv = "		<td style='background: #008000;' colspan='1' align='center'>";
 				if(!$wecker_aktiv_all)  $farbe_aktiv = "		<td style='background: #002000;' colspan='1' align='center'>";
 			}
@@ -1059,32 +999,32 @@
 			switch ($tag){
 			case 0:
 					$html.="		<td style='width: 100px; border: 0px;' align='center'></td>\n";
-					$html.="		<td align='center'>".c_Table_Global."</td>\n";
+					$html.="		<td align='center'>".c_WFC_Global."</td>\n";
 					$html.="$farbe_global $wecker_global</td>\n";
 				break;
 			case 1:
 					$html.="		<td style='width: 100px; border: 0px;' align='center'></td>\n";
-					$html.="		<td align='center'>".c_Table_Holiday."</td>\n";
+					$html.="		<td align='center'>".c_WFC_Urlaub."</td>\n";
 					$html.="$farbe_urlaub $wecker_urlaub</td>\n";
 				break;
 			case 2:
 					$html.="		<td style='width: 100px; border: 0px;' align='center'></td>\n";
-					$html.="		<td align='center'>".c_Table_Feasts."</td>\n";
+					$html.="		<td align='center'>".c_WFC_Feiertag."</td>\n";
 					$html.="$farbe_feiertag $wecker_feiertag</td>\n";
 				break;
 			case 3:
 					$html.="		<td style='width: 100px; border: 0px;' align='center'></td>\n";
-					$html.="		<td align='center'>".c_Table_Freeze."</td>\n";
+					$html.="		<td align='center'>".c_WFC_Frost."</td>\n";
 					$html.="$farbe_frost $wecker_frost</td>\n";
 				break;
 			case 4:
 					$html.="		<td style='width: 100px; border: 0px;' align='center'></td>\n";
-					$html.="		<td align='center'>".c_Table_Snooze."</td>\n";
+					$html.="		<td align='center'>".c_WFC_Snooze."</td>\n";
 					$html.="$farbe_schlummer $wecker_snooze</td>\n";
 				break;
 			case 5:
 					$html.="		<td style='width: 100px; border: 0px;' align='center'></td>\n";
-					$html.="		<td align='center'>".c_Table_End."</td>\n";
+					$html.="		<td align='center'>".c_WFC_End."</td>\n";
 					$html.="$farbe_end $wecker_end</td>\n";
 				break;
 			case 6:
@@ -1100,7 +1040,7 @@
 
 		$html.="<table>\n";
 		$html.="	<tr>\n";
-		$html.="		<td>".c_Table_HolidayTime."</td>\n";
+		$html.="		<td>".c_WFC_Urlaubszeit."</td>\n";
 		$html.="		<td>: ".$wecker_urlaubszeit."</td>\n";
 		$html.="	</tr>\n";
 		$html.="</table>\n";
@@ -1184,8 +1124,8 @@
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function get_Feiertag($active){
 
-		$tag = new Feiertag();
-		$Fdays = $tag->getHolidays(Date('Y'));
+//		$tag = new Feiertag();
+		$Fdays = getHolidays(Date('Y'));
 		$nichtwecken = false;
 
 		foreach($Fdays as $value) {
@@ -1200,12 +1140,9 @@
 		}
 		return $nichtwecken;
 	}
+
 	// ----------------------------------------------------------------------------------------------------------------------------
-	//Feiertage
- 	class Feiertag
-	{
-  		function getEasterSundayTime($year)
-		{
+  		function getEasterSundayTime($year)	{
    		$p = floor($year/100);
    		$r = floor($year/400);
    		$o = floor(($p*8+13)/25)-2;
@@ -1217,9 +1154,10 @@
    		if ($day>31) $day-=31;
    		return mktime(0, 0, 0, $month, $day, $year);
   		}
-  		function getHolidays($year)
-		{
-    		$time = $this->getEasterSundayTime($year);
+
+	// ----------------------------------------------------------------------------------------------------------------------------
+  		function getHolidays($year) {
+    		$time = getEasterSundayTime($year);
 			$days[""] 									= 0;
 		 	$days["Neujahr"] 							= mktime(0, 0, 0, 1, 1, $year);
     		//$days["Heilige 3 Könige"] 			= mktime(0, 0, 0, 1, 6, $year); //!!!!!!!!!!!!!!!!!!!!!!!
@@ -1240,7 +1178,6 @@
     		$days["2. Weihnachtsfeiertag"] 		= mktime(0, 0, 0, 12, 26, $year);
     		return $days;
 		}
-	}
 
 
 

@@ -22,7 +22,7 @@
 	 * @file          IPSWecker_ChangeSettings.ips.php
 	 * @author        André Czwalina
 	 * @version
-	 * Version 1.00.0, 01.04.2012<br/>
+	* Version 1.00.1, 22.04.2012<br/>
 	 *
 	 *
 	 * Script wird für das WebFront um Änderungen an den Variablen vorzunehmen
@@ -32,57 +32,69 @@
 	include_once "IPSWecker.inc.php";
 
 	if ($_IPS['SENDER']=='WebFront') {
-		$ControlId   = $_IPS['VARIABLE'];
-		$CircleId    = get_CirclyIdByControlId($ControlId);
-		$ControlType = get_ControlType($ControlId);
+		$instanceId   = $_IPS['VARIABLE'];
+//		$ControlId   = get_CirclyIdByinstanceId($instanceId);
+		$ControlType = get_ControlType($instanceId);
 
 		switch($ControlType) {
 			case c_Control_Urlaubszeit:
-			   IPSWecker_ChangeUrlaubszeit($ControlId, $_IPS['VALUE']);
+			   IPSWecker_ChangeUrlaubszeit($instanceId, $_IPS['VALUE']);
 			   break;
 
 			case c_Control_Global:
-			   IPSWecker_ChangeGlobal($ControlId, $_IPS['VALUE']);
+			   IPSWecker_ChangeGlobal($instanceId, $_IPS['VALUE']);
 			   break;
 
 			case c_Control_Active:
-			   IPSWecker_ChangeActive($ControlId, $_IPS['VALUE']);
+			   IPSWecker_ChangeActive($instanceId, $_IPS['VALUE']);
 			   break;
 
 			case c_Control_Feiertag:
-			   IPSWecker_ChangeBoolean($ControlId, $_IPS['VALUE']);
+			   IPSWecker_ChangeBoolean($instanceId, $_IPS['VALUE']);
 			   break;
 
 			case c_Control_Frost:
-			   IPSWecker_ChangeBoolean($ControlId, $_IPS['VALUE']);
+			   IPSWecker_ChangeBoolean($instanceId, $_IPS['VALUE']);
 			   break;
 
 			case c_Control_Urlaub:
-			   $temp = IPSWecker_ChangeBoolean($ControlId, $_IPS['VALUE']);
+			   $temp = IPSWecker_ChangeBoolean($instanceId, $_IPS['VALUE']);
 			   break;
 
 			case c_Control_Schlummer:
-			   IPSWecker_ChangeBoolean($ControlId, $_IPS['VALUE']);
+			   IPSWecker_ChangeBoolean($instanceId, $_IPS['VALUE']);
 			   break;
 
 			case c_Control_End:
-			   IPSWecker_ChangeBoolean($ControlId, $_IPS['VALUE']);
+			   IPSWecker_ChangeBoolean($instanceId, $_IPS['VALUE']);
 			   break;
 
 			case c_Control_Name:
-				$temp = IPSWecker_ChangeWecker($ControlId, $_IPS['VALUE']);
+				IPSWecker_ChangeWecker($instanceId, $_IPS['VALUE']);
 				break;
 
 			case c_Control_Tag:
-			   IPSWecker_ChangeDay($ControlId, $_IPS['VALUE']);
+			   IPSWecker_ChangeDay($instanceId, $_IPS['VALUE']);
+			   break;
+
+			case c_Control_LTag:
+			   IPSWecker_ChangeLDay($instanceId, $_IPS['VALUE']);
 			   break;
 
 			case c_Control_Stunde:
-			   IPSWecker_ChangeStunde($ControlId, $_IPS['VALUE']);
+			   IPSWecker_ChangeStunde($instanceId, $_IPS['VALUE']);
+			   break;
+
+			case c_Control_LStunde:
+			   IPSWecker_ChangeLStunde($instanceId, $_IPS['VALUE']);
 			   break;
 
 			case c_Control_Minute:
-			   IPSWecker_ChangeMinute($ControlId, $_IPS['VALUE']);
+			   IPSWecker_ChangeMinute($instanceId, $_IPS['VALUE']);
+			   break;
+
+			case c_Control_LMinute:
+			   IPSWecker_ChangeLMinute($instanceId, $_IPS['VALUE']);
 			   break;
 
 			default:
