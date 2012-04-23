@@ -31,23 +31,44 @@
 
 	$eventId 	=  $_IPS['EVENT'];
 	$CircleName = IPS_GetName($eventId);
-	$CircleId 	= get_CirclyIdByCircleIdent($CircleName, WECKER_ID_WECKZEITEN);
-	$eventTime 	= IPS_GetEvent($eventId)['CyclicTimeFrom'];
 
-	$wecker     = AddConfiguration($CircleId);
-	IPSWecker_Log('STOP Auslösung für '.$wecker['Property']['Name'].' ('.$wecker['Circle']['Name'].')');
+	if (c_WeckerCircle == substr($CircleName,0,strlen(c_WeckerCircle))){
+			$CircleId 	= get_CirclyIdByCircleIdent($CircleName, WECKER_ID_WECKZEITEN);
+			$eventTime 	= IPS_GetEvent($eventId)['CyclicTimeFrom'];
 
-	if (function_exists($CircleName)) {
+			$wecker     = AddConfiguration($CircleId);
+			IPSLogger_Trc(__file__, ''.$wecker['Property'][c_Property_Name]);
+			IPSWecker_Log('STOP Auslösung für '.$wecker['Property']['Name'].' ('.$wecker['Circle']['Name'].')');
 
-			// --------------- Neue Eventzeit setzen -------------------
-			set_TimerEvents(0,$CircleId);
-			
-			if ($wecker['Circle'][c_Control_End] == true){
-					// --------------- Aktion -------------------
-					$eventMode = "StopEvent";
-					$CircleName($CircleId, $wecker['Property'][c_Property_Name], $eventMode);
+			if (function_exists($CircleName)) {
+					IPSLogger_Trc(__file__, 'Weckerfunktion '.$wecker['Circle']['Name'].' Existiert in IPSWecker_Custom.');
+					// --------------- Neue Eventzeit setzen -------------------
+					set_TimerEvents(0,$CircleId);
+
+					if ($wecker['Circle'][c_Control_End] == true){
+							// --------------- Aktion -------------------
+							$eventMode = "StopEvent";
+							IPSLogger_Inf(__file__, 'STOP ausgelöst:  '.$wecker['Property'][c_Property_Name].', Aktion: '.$eventMode);
+							$CircleName($CircleId, $wecker['Property'][c_Property_Name], $eventMode);
+					}
+			} else {
+					IPSLogger_Err(__file__, "WeckerAktion $CircleName in IPSWecker_Custom existiert nicht. ".$wecker['Property'][c_Property_Name]);
 			}
 	}
 
+	if ($CircleName == c_Control_LTag){
+			$wecker = AddActiveControl();
+		   IPS_SetVariableProfileAssociation('IPSWecker_Tag', 0, $wecker[c_Control_LTag],"", -1);
+	}
+
+	if ($CircleName == c_Control_LStunde){
+			$wecker = AddActiveControl();
+		   IPS_SetVariableProfileAssociation('IPSWecker_Stunde', 0, $wecker[c_Control_LStunde],"", -1);
+	}
+
+	if ($CircleName == c_Control_LMinute){
+			$wecker = AddActiveControl();
+		   IPS_SetVariableProfileAssociation('IPSWecker_Minute', 0, $wecker[c_Control_LMinute],"", -1);
+	}
 	/** @}*/
 ?>

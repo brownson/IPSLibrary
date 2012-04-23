@@ -287,7 +287,6 @@
 	$Idx                 = 100;
 	$vpn 						= 'IPSWecker_Name';
 
-
   	SetVariableConstant ("WECKER_ID_WECKZEITEN",    $CategoryIdWeckers,   	'IPSWecker_IDs.inc.php', 'IPSLibrary::app::modules::IPSWecker');
   	SetVariableConstant ("WECKER_ID_TIMER",    		$ScriptIdTimer,   		'IPSWecker_IDs.inc.php', 'IPSLibrary::app::modules::IPSWecker');
 
@@ -366,6 +365,9 @@
 	$ControlIdOVUrlaubszeit		= CreateVariable(c_Control_Urlaubszeit,3 /*String*/,  $CategoryIdData, 100, '~TextBox',   			$ScriptIdChangeSettings, '');
 	$ControlIdOVUebersicht		= CreateVariable(c_Control_Uebersicht,	3 /*String*/,  $CategoryIdData, 200, '~HTMLBox',   null,	'');
 
+	CreateEvent (c_Control_LTag, 		$ControlIdOVWeckerLTag, 	$ScriptIdEvent, 0);
+	CreateEvent (c_Control_LStunde, 	$ControlIdOVWeckerLStunde, $ScriptIdEvent, 0);
+	CreateEvent (c_Control_LMinute, 	$ControlIdOVWeckerLMinute, $ScriptIdEvent, 0);
 
 
 	// ----------------------------------------------------------------------------------------------------------------------------

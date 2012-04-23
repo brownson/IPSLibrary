@@ -49,13 +49,14 @@
  	// ----------------------------------------------------------------------------------------------------------------------------
 	function AddConfiguration($CircleId, $object=array()){
 
-	$object['Circle'] 	= AddActiveConfiguration($CircleId);
-	$object['Property'] 	= AddPropertyConfiguration($CircleId);
-	$object['Control'] 	= AddActiveControl();
-	$object['ActiveTime'] = $object['Circle']['Time_'.get_DateTranslation(Date('l'))];
-	$object['Global'] 	= $object['Circle'][c_Control_Global];
-	$object['Active'] 	= $object['Circle']['Active_'.get_DateTranslation(Date('l'))];
-	$object['CircleTime'] = mktime(substr($object['ActiveTime'],0,2), substr($object['ActiveTime'],3,2), 0);
+	$object['Circle'] 		= AddActiveConfiguration($CircleId);
+	$object['Property'] 		= AddPropertyConfiguration($CircleId);
+	$object['Control'] 		= AddActiveControl();
+
+	$object['ActiveTime'] 	= $object['Circle']['Time_'.get_DateTranslation(Date('l'))];
+	$object['Global'] 		= $object['Circle'][c_Control_Global];
+	$object['Active'] 		= $object['Circle']['Active_'.get_DateTranslation(Date('l'))];
+	$object['CircleTime'] 	= mktime(substr($object['ActiveTime'],0,2), substr($object['ActiveTime'],3,2), 0);
 	$object['RetFeiertag'] 	= get_Feiertag($object['Circle'][c_Control_Feiertag]);
 	$object['RetUrlaub'] 	= get_Urlaub($object['Circle'][c_Control_Urlaub], $object['Circle'][c_Control_Urlaubszeit]);
 
@@ -159,7 +160,7 @@
 		$WeckerName			= IPS_GetName($CircleId);
 		$WeckerConfig      = get_WeckerConfiguration();
 
-		$ConfId 					= get_ControlId(c_Control_Optionen, 		$CircleId);
+		$ConfId 					= get_ControlId(c_Control_Optionen,	$CircleId);
 		$objectIds 				= explode(',',GetValue($ConfId));
 		$CircleIdent      	= IPS_GetName($CircleId);
 		$ParamsFrostTime 	 = $WeckerConfig[$CircleIdent][c_Property_FrostTime];
