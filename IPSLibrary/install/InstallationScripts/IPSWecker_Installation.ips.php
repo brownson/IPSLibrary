@@ -100,7 +100,7 @@
 	$WFC_TabIcon1       = $moduleManager->GetConfigValue('TabIcon1', 'WFC');
 
 	$WFC10_Enabled        = $moduleManager->GetConfigValue('Enabled', 'WFC10');
-	$WFC10_ConfigId       = $moduleManager->GetConfigValueIntDef('ID', 'WFC10', GetWFCIdDefault());
+	$WFC10_ConfigId       = $moduleManager->GetConfigValueIntDef('ID', 'WFC10', '');
 	$WFC10_Path           = $moduleManager->GetConfigValue('Path', 'WFC10');
 	$WFC10_TabPaneItem    = $moduleManager->GetConfigValue('TabPaneItem', 'WFC10');
 	$WFC10_TabPaneParent  = $moduleManager->GetConfigValue('TabPaneParent', 'WFC10');
@@ -111,7 +111,7 @@
 	$WFC10_TabIcon1       = $moduleManager->GetConfigValue('TabIcon1', 'WFC10');
 
 	$Touch_Enabled        = $moduleManager->GetConfigValue('Enabled', 'Touch');
-	$Touch_ConfigId       = $moduleManager->GetConfigValueIntDef('ID', 'Touch', GetWFCIdDefault());
+	$Touch_ConfigId       = $moduleManager->GetConfigValueIntDef('ID', 'Touch', '');
 	$Touch_Path           = $moduleManager->GetConfigValue('Path', 'Touch');
 	$Touch_TabPaneItem    = $moduleManager->GetConfigValue('TabPaneItem', 'Touch');
 	$Touch_TabPaneParent  = $moduleManager->GetConfigValue('TabPaneParent', 'Touch');
@@ -373,7 +373,7 @@
 	// ----------------------------------------------------------------------------------------------------------------------------
 	// Webfront > 19" Definition
 	// ----------------------------------------------------------------------------------------------------------------------------
-	if ($WFC_Enabled) {
+	if ($WFC_Enabled and $WFC_ConfigId <> '') {
 		$WebFrontId               = CreateCategoryPath($WFC_Path, 10);
 		EmptyCategory($WebFrontId);
 		$WebFrontOverviewId       = CreateCategory(    'Overview', 	$WebFrontId,    0);
@@ -422,7 +422,7 @@
 	// ----------------------------------------------------------------------------------------------------------------------------
 	// Webfront 10" Definition
 	// ----------------------------------------------------------------------------------------------------------------------------
-	if ($WFC10_Enabled) {
+	if ($WFC10_Enabled and $WFC10_ConfigId <> '') {
 		$Web10FrontId               = CreateCategoryPath($WFC10_Path, 10);
 		EmptyCategory($Web10FrontId);
 		$Web10FrontOverviewId       = CreateCategory(    'Overview', $Web10FrontId,    0);
@@ -490,8 +490,8 @@
 	// ----------------------------------------------------------------------------------------------------------------------------
 	// Touch 7" Definition
 	// ----------------------------------------------------------------------------------------------------------------------------
-	if ($Touch_Enabled) {
-		$TouchId               = CreateCategoryPath($Touch_Path, 10);
+	if ($Touch_Enabled and $Touch_ConfigId <> '') {
+	
 		EmptyCategory($TouchId);
 		$TouchOverviewId       = CreateCategory(    'Overview',  $TouchId,    0);
 		$TouchOverviewWoche    = CreateCategory(    'Woche',     $TouchOverviewId,    10);
@@ -520,8 +520,8 @@
 		CreateLink     (c_WFC_Urlaubszeit,	$ControlIdOVUrlaubszeit,	$TouchOverviewWoche, 40);
 
 		// Wochen Optionen
-		CreateLink     (c_WFC_Urlaub,		$ControlIdOVUrlaub,			$TouchOverviewOption, 30);
-		CreateLink     (c_WFC_Feiertag,			$ControlIdOVFeiertag,		$TouchOverviewOption, 40);
+		CreateLink     (c_WFC_Urlaub,			$ControlIdOVUrlaub,			$TouchOverviewOption, 30);
+		CreateLink     (c_WFC_Feiertag,		$ControlIdOVFeiertag,		$TouchOverviewOption, 40);
 		CreateLink     (c_WFC_Frost,			$ControlIdOVFrost,			$TouchOverviewOption, 50);
 		CreateLink     (c_WFC_Snooze,			$ControlIdOVSchlummer,		$TouchOverviewOption, 60);
 		CreateLink     (c_WFC_End,				$ControlIdOVEnd,				$TouchOverviewOption, 70);
@@ -552,10 +552,10 @@
 		$mobileId  = CreateCategoryPath($Mobile_Path, $Mobile_PathOrder, $Mobile_PathIcon);
 
 		EmptyCategory($mobileId);
-		$mobileOverviewWoche    = CreateCategory(    'Wochen Einst.',     $mobileId,    10);
+		$mobileOverviewWoche    = CreateCategory(    'Wochen Einst.',  $mobileId,    10);
 //		$mobileOverviewOption   = CreateCategory(    'Optionen',  $mobileId,    20);
-		$mobileOverviewTag		= CreateCategory(    'Tag(e) Einst.',  		 $mobileId,    30);
-//		$mobileOverviewOV       = CreateCategory(    'Übersicht', $mobileId,    40);
+		$mobileOverviewTag		= CreateCategory(    'Tag(e) Einst.',  $mobileId,    20);
+		$mobileOverviewOVLog    = CreateCategory(    'Meldungen', 		$mobileId,    30);
 
 		// Woche
 		CreateLink		(c_WFC_AlarmName,		$ControlIdOVWeckerName,  	$mobileOverviewWoche, 10);
@@ -573,6 +573,9 @@
 		CreateLink     (c_WFC_Stunde,			$ControlIdOVWeckerLStunde, $mobileOverviewTag, 30);
 		CreateLink     (c_WFC_Minute,			$ControlIdOVWeckerLMinute,	$mobileOverviewTag, 40);
 		CreateLink     (c_WFC_Active,			$ControlIdOVActive,			$mobileOverviewTag, 50);
+
+		//Log
+		CreateLink     (c_Control_Meldungen, $ControlIdLog,				$mobileOverviewOVLog, 30);
 
 		// Übersichten
 		$Idx = 100;

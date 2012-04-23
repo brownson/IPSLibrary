@@ -25,7 +25,7 @@
 	 * @file          IPSWecker.inc.php
 	 * @author        André Czwalina
 	 * @version
-	* Version 1.00.1, 22.04.2012<br/>
+	* Version 1.00.3, 22.04.2012<br/>
 	 *
 	 *
 	 */
@@ -862,7 +862,7 @@
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function	getAviableSensor($sensor){
 		$ret = 0;
-		if ($sensor <> '') $ret = 1;
+		if ($sensor !== '') $ret = 1;
 		if (IPS_VariableExists($sensor)) $ret = 2;
 
 //IPS_LogMessage('DEBUG',"AviableSensor ($sensor): ".$ret);
@@ -1158,10 +1158,12 @@
 
 	// ----------------------------------------------------------------------------------------------------------------------------
   		function getHolidays($year) {
+  		
+			$bland				= c_Property_Bundesland;
+  		
     		$time = getEasterSundayTime($year);
 			$days[""] 									= 0;
 		 	$days["Neujahr"] 							= mktime(0, 0, 0, 1, 1, $year);
-    		//$days["Heilige 3 Könige"] 			= mktime(0, 0, 0, 1, 6, $year); //!!!!!!!!!!!!!!!!!!!!!!!
     		$days["Karfreitag"] 						= $time-(86400*2);
     		$days["Ostersonntag"] 					= $time;
     		$days["Ostermontag"] 					= $time+(86400);
@@ -1169,14 +1171,46 @@
     		$days["Christi Himmelfahrt"] 			= $time+(86400*39);
     		$days["Pfingstsonntag"] 				= $time+(86400*49);
     		$days["Pfingstmontag"] 					= $time+(86400*50);
-    		//$days["Fronleichnam"] 				= $time+(86400*60); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    		//$days["Maria Himmelfahrt"] 			= mktime(0, 0, 0, 08, 15, $year); //!!!!!!!!!!!!!!!!!!!!!
     		$days["Tag der deutschen Einheit"] 	= mktime(0, 0, 0, 10, 3, $year);
-    		$days["Reformationstag"] 			   = mktime(0, 0, 0, 10, 31, $year); //!!!!!!!!!!!!!!!!!!!!!
-    		//$days["Allerheiligen"] 					= mktime(0, 0, 0, 11, 1, $year);
     		$days["Buß- und Bettag"] 				= mktime(0, 0, 0, 11, 26+(7-date('w', mktime(0, 0, 0, 11, 26, $year)))-11, $year); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     		$days["1. Weihnachtsfeiertag"] 		= mktime(0, 0, 0, 12, 25, $year);
     		$days["2. Weihnachtsfeiertag"] 		= mktime(0, 0, 0, 12, 26, $year);
+
+			//*******************************
+			// Fester $Feiertag in BW, BY, ST
+			//*******************************
+			if (($bland == "BW") or ($bland == "BY") or ($bland == "ST")) {
+		    		$days["Heilige 3 Könige"] 			= mktime(0, 0, 0, 1, 6, $year); //!!!!!!!!!!!!!!!!!!!!!!!
+			}
+
+			//***************************************
+			// Fester $Feiertag in BB, MV, SA, ST, TH
+			//***************************************
+			if (($bland == "BB") or ($bland == "MV") or ($bland == "SA") or ($bland == "ST") or ($bland == "TH")) {
+		    		$days["Reformationstag"] 			   = mktime(0, 0, 0, 10, 31, $year); //!!!!!!!!!!!!!!!!!!!!!
+			}
+
+			//***************************************
+			// Fester $Feiertag in BW, BY, NW, RP, SL
+			//***************************************
+			if (($bland == "BW") or ($bland == "BY") or ($bland == "NW") or ($bland == "RP") or ($bland == "SL")) {
+		    		$days["Allerheiligen"] 					= mktime(0, 0, 0, 11, 1, $year);
+			}
+
+			//*******************************************
+			// Fester $Feiertag in BY (nicht überall), SL
+			//*******************************************
+			if (($bland == "BY") or ($bland == "SL")) {
+		    		$days["Maria Himmelfahrt"] 			= mktime(0, 0, 0, 08, 15, $year); //!!!!!!!!!!!!!!!!!!!!!
+			}
+
+			//**********************************************************************
+			// Bewegliche Feiertage BW, BY, HE, NW, RP, SL, (SA, TH nicht überall)
+			//**********************************************************************
+			if (($bland == "BW") or ($bland == "BY") or ($bland == "HE") or ($bland == "NW") or ($bland == "RP") or ($bland == "SL") or ($bland == "SA") or ($bland == "TH")) {
+			    		$days["Fronleichnam"] 				= $time+(86400*60); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			}
+
     		return $days;
 		}
 

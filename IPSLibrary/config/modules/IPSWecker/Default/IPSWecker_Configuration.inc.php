@@ -23,18 +23,40 @@
 	* @file          IPSWecker_Configuration.inc.php
 	* @author        André Czwalina
 	* @version
-	* Version 1.00.1, 22.04.2012<br/>
+	* Version 1.00.3, 22.04.2012<br/>
 	*
 	* Konfigurations File für IPSWecker
 	*
 	*/
-
 	IPSUtils_Include ("IPSWecker_Constants.inc.php",      "IPSLibrary::app::modules::IPSWecker");
+
 
 	/**
 	* Definiert die Anzahl der Meldungen, die im Applikation Logging Window angezeigt werden.
 	*/
 	define ("c_LogMessage_Count",			19);
+
+	/**
+	* Definiert das Bundesland für die Feiertage
+	*  Fuer c_Property_Bundesland bitte folgende Abkuerzungen benutzen:
+	*  BW = Baden-Württemberg
+	*  BY = Bayern
+	*  BE = Berlin
+	*  BB = Brandenburg
+	*  HB = Bremen
+	*  HH = Hamburg
+	*  HE = Hessen
+	*  MV = Mecklenburg-Vorpommern
+	*  NI = Niedersachsen
+	*  NW = Nordrhein-Westfalen
+	*  RP = Rheinland-Pfalz
+	*  SL = Saarland
+	*  SN = Sachsen
+	*  ST = Sachen-Anhalt
+	*  SH = Schleswig-Holstein
+	*  TH = Thüringen
+	*/
+	define ("c_Property_Bundesland",  "HH");
 
 	/**
 	*
@@ -98,18 +120,20 @@
 				c_Property_StopSensor	  =>   '',
 				c_Property_FrostTemp		  =>   2,
 				c_Property_FrostSensor	  =>   ''  ,
-				c_Property_FrostTime		  =>   2,
-				c_Property_SnoozeTime     =>   3,
-				c_Property_EndTime  		  =>   5,
+				c_Property_FrostTime		  =>   10,
+				c_Property_SnoozeTime     =>   5,
+				c_Property_EndTime  		  =>   60,
+				c_Property_Schichtgruppe  =>   '',
 			),
 			c_WeckerCircle.'2'  =>	array(
 				c_Property_Name           =>   'Wochenende',
 				c_Property_StopSensor	  =>   '',
 				c_Property_FrostTemp		  =>   2,
 				c_Property_FrostSensor	  =>   '' ,
-				c_Property_FrostTime		  =>   15,
+				c_Property_FrostTime		  =>   10,
 				c_Property_SnoozeTime  	  =>   5,
 				c_Property_EndTime  		  =>   60,
+				c_Property_Schichtgruppe  =>   '',
 			),
 		);
 	}

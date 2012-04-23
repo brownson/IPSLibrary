@@ -22,7 +22,7 @@
 	 * @file          IPSWecker_Event.ips.php
 	 * @author        André Czwalina
 	 * @version
-	* Version 1.00.1, 22.04.2012<br/>
+	* Version 1.00.3, 22.04.2012<br/>
 	 *
 	 *
 	 */
@@ -37,11 +37,11 @@
 			$eventTime 	= IPS_GetEvent($eventId)['CyclicTimeFrom'];
 
 			$wecker     = AddConfiguration($CircleId);
-			IPSLogger_Trc(__file__, ''.$wecker['Property'][c_Property_Name]);
+			IPSLogger_Dbg(__file__, ''.$wecker['Property'][c_Property_Name]);
 			IPSWecker_Log('STOP Auslösung für '.$wecker['Property']['Name'].' ('.$wecker['Circle']['Name'].')');
 
 			if (function_exists($CircleName)) {
-					IPSLogger_Trc(__file__, 'Weckerfunktion '.$wecker['Circle']['Name'].' Existiert in IPSWecker_Custom.');
+					IPSLogger_Dbg(__file__, 'Weckerfunktion '.$wecker['Circle']['Name'].' Existiert in IPSWecker_Custom.');
 					// --------------- Neue Eventzeit setzen -------------------
 					set_TimerEvents(0,$CircleId);
 

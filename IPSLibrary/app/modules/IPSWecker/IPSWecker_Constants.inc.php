@@ -86,9 +86,6 @@
 //	define ("c_Control_Sa_Active",			"Sa_Active");
 //	define ("c_Control_So_Active",			"So_Active");
 
-
-
-
 	define ("c_Program_Montag",			"Montag");
 	define ("c_Program_Dienstag",			"Dienstag");
 	define ("c_Program_Mittwoch",			"Mittwoch");
