@@ -133,6 +133,7 @@
 	define ("c_Property_EndTime",  		'EndTime');
 	define ("c_Property_StopSensor",  	'StopSensor');
 	define ("c_Property_Schichtgruppe", 'Schichtgruppe');
+	define ("c_Property_Schichtzyklus", 'Schichtzyklus');
 
 
 //Webfront

@@ -44,7 +44,42 @@
 //print_r($wecker);
 
 
+ 	// ----------------------------------------------------------------------------------------------------------------------------
+	function IPSWeckerChangeAktivCircle(){
+		$WeckerConfig  = get_WeckerConfiguration();
 
+		$Ass=0;
+		foreach ($WeckerConfig as $WeckerName=>$WeckerData) {
+			$CircleId 		= get_CirclyIdByCircleIdent(c_WeckerCircle.($Ass+1), WECKER_ID_WECKZEITEN);
+			$ConfId 			= get_ControlId(c_Control_Optionen, $CircleId);
+			$objectIds 		= explode(',',GetValue($ConfId));
+
+			if ($WeckerData[c_Property_Schichtgruppe] <> ''){
+
+				if (in_array((int)date("W"), $WeckerData[c_Property_Schichtzyklus])){
+					$objectIds[10] = "1";
+				} else {
+					$objectIds[10] = "0";
+				}
+				SetValue($ConfId, implode(",", $objectIds));
+			}
+
+			if ($objectIds[10]) {
+			  IPS_SetVariableProfileAssociation('IPSWecker_Name', $Ass, $WeckerData[c_Property_Name],"", 0x00FF00);
+			} else {
+			  IPS_SetVariableProfileAssociation('IPSWecker_Name', $Ass, $WeckerData[c_Property_Name],"", 0xFF0000);
+			}
+
+			$parentId = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSWecker');
+			if (get_ControlValue(c_Control_Name, $parentId) == $Ass){
+				set_Overview($parentId, $CircleId);
+				$wecker	=	AddConfiguration($CircleId);
+				set_Control($wecker);
+			}
+			$Ass++;
+
+		}
+	}
 
  	// ----------------------------------------------------------------------------------------------------------------------------
 	function AddConfiguration($CircleId, $object=array()){
@@ -763,7 +798,7 @@
 
 		$UeberValue	= get_ControlValue(c_Control_Uebersicht, $CircleId);
 		set_ControlValue(c_Control_Uebersicht, 	$parentId, $UeberValue);
-//		set_WeckerAssociation($parentId, $CircleId);
+		set_WeckerAssociation($parentId, $CircleId);
 
 //		$wecker	=	AddConfiguration($CircleId);
 //		set_Configuration($wecker);

@@ -33,6 +33,8 @@
 		case 'TimerEvent':
 			$eventId 	=  $_IPS['EVENT'];
 			if (IPS_GetName($eventId) =='Timer_Event') {
+IPS_LogMessage('DEBUG','Timer_Event: '.IPS_GetName($eventId));
+					IPSWeckerChangeAktivCircle();
 					break;
 			}
 
