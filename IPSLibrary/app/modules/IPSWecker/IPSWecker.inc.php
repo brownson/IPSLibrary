@@ -25,7 +25,7 @@
 	 * @file          IPSWecker.inc.php
 	 * @author        André Czwalina
 	 * @version
-	* Version 1.00.3, 22.04.2012<br/>
+	* Version 1.00.5, 22.04.2012<br/>
 	 *
 	 *
 	 */
@@ -54,8 +54,7 @@
 			$ConfId 			= get_ControlId(c_Control_Optionen, $CircleId);
 			$objectIds 		= explode(',',GetValue($ConfId));
 
-			if ($WeckerData[c_Property_Schichtgruppe] <> ''){
-
+			if ($WeckerData[c_Property_Schichtgruppe] <> '' and count($WeckerData[c_Property_Schichtzyklus]) > 0){
 				if (in_array((int)date("W"), $WeckerData[c_Property_Schichtzyklus])){
 					$objectIds[10] = "1";
 				} else {

@@ -22,7 +22,7 @@
 	 * @file          IPSWecker_Timer.ips.php
 	 * @author        André Czwalina
 	 * @version
-	* Version 1.00.3, 22.04.2012<br/>
+	* Version 1.00.5, 22.04.2012<br/>
 	 *
 	 *
 	 */
@@ -33,7 +33,6 @@
 		case 'TimerEvent':
 			$eventId 	=  $_IPS['EVENT'];
 			if (IPS_GetName($eventId) =='Timer_Event') {
-IPS_LogMessage('DEBUG','Timer_Event: '.IPS_GetName($eventId));
 					IPSWeckerChangeAktivCircle();
 					break;
 			}

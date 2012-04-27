@@ -23,7 +23,7 @@
 	* @file          IPSWecker_Configuration.inc.php
 	* @author        André Czwalina
 	* @version
-	* Version 1.00.3, 22.04.2012<br/>
+	* Version 1.00.5, 22.04.2012<br/>
 	*
 	* Konfigurations File für IPSWecker
 	*
@@ -106,6 +106,7 @@
 					c_Property_SnoozeTime     =>   5,            Zeit (Minuten) nach Weckzeit für Weckernachdruck (Lautstärke erhöhung, Licht an, Wasser marsch etc.)
 					c_Property_EndTime  		  =>   60,           Zeit (Minuten) nach Weckzeit für weitere Aktion. Gedacht zum abschalten von Licht Radio, falls man nicht da war zum wecken.
 					c_Property_Schichtgruppe  =>   '',           Schichtbetrieb. Alle Schichtzeiten die zusammen gehören müssen die gleich Nr. Eintragen. '' = deaktiviert z.B. Papa die '1', Mama die'2'
+					c_Property_Schichtzyklus  =>   array(),      Kalenderwochen als Integer in dem dieser Wecker automatisch eingeschaltet wird. Voraussetzung ist Schichtgruppe ist nicht ''.
 		       ));
 		  }
 	* @endcode
@@ -123,7 +124,8 @@
 				c_Property_FrostTime		  =>   10,
 				c_Property_SnoozeTime     =>   5,
 				c_Property_EndTime  		  =>   60,
-				c_Property_Schichtgruppe  =>   '',
+            c_Property_Schichtgruppe  =>   '',
+				c_Property_Schichtzyklus  =>   array(),
 			),
 			c_WeckerCircle.'2'  =>	array(
 				c_Property_Name           =>   'Wochenende',
@@ -133,7 +135,8 @@
 				c_Property_FrostTime		  =>   10,
 				c_Property_SnoozeTime  	  =>   5,
 				c_Property_EndTime  		  =>   60,
-				c_Property_Schichtgruppe  =>   '',
+            c_Property_Schichtgruppe  =>   '',
+				c_Property_Schichtzyklus  =>   array(),
 			),
 		);
 	}

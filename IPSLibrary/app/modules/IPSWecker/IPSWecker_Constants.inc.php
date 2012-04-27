@@ -22,7 +22,7 @@
 	 * @file          IPSWecker_Constants.inc.php
 	 * @author        André Czwalina
 	 * @version
-	* Version 1.00.1, 22.04.2012<br/>
+	* Version 1.00.5, 22.04.2012<br/>
 	 *
 	 * Konstanten Definitionen für IPSWecker
 	 *
