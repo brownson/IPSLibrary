@@ -89,15 +89,15 @@
 	    * @param integer $instanceId - ID des EDIP Displays.
 		 */
 		public function __construct($instanceId){
-			$this->instanceId     = $instanceId;
-			$this->rootId         = GetValue(IPS_GetObjectIDbyIdent(EDIP_VAR_ROOT, $instanceId));
-			$this->currentId      = GetValue(IPS_GetObjectIDbyIdent(EDIP_VAR_CURRENT, $instanceId));
-			$this->registerId     = GetValue(IPS_GetObjectIDbyIdent(EDIP_VAR_REGISTER, $instanceId));
-			$this->objectIdsId    = IPS_GetObjectIDbyIdent(EDIP_VAR_OBJECTIDS, $instanceId);
-			$this->objectValuesId = IPS_GetObjectIDbyIdent(EDIP_VAR_OBJECTVALUES, $instanceId);
-			$this->objectBacklightId	=	IPS_GetObjectIDbyIdent(EDIP_VAR_BACKLIGHT, $instanceId);
-			$this->objectCmdsId   = IPS_GetObjectIDbyIdent(EDIP_VAR_OBJECTCMDS, $instanceId);
-			$this->objectEditId   = IPS_GetObjectIDbyIdent(EDIP_VAR_OBJECTEDIT, $instanceId);
+			$this->instanceId     		= $instanceId;
+			$this->rootId         		= GetValue(IPS_GetObjectIDbyIdent(EDIP_VAR_ROOT, $instanceId));
+			$this->currentId      		= GetValue(IPS_GetObjectIDbyIdent(EDIP_VAR_CURRENT, $instanceId));
+			$this->registerId     		= GetValue(IPS_GetObjectIDbyIdent(EDIP_VAR_REGISTER, $instanceId));
+			$this->objectIdsId    		= IPS_GetObjectIDbyIdent(EDIP_VAR_OBJECTIDS, $instanceId);
+			$this->objectValuesId 		= IPS_GetObjectIDbyIdent(EDIP_VAR_OBJECTVALUES, $instanceId);
+			$this->objectBacklightId	= IPS_GetObjectIDbyIdent(EDIP_VAR_BACKLIGHT, $instanceId);
+			$this->objectCmdsId   		= IPS_GetObjectIDbyIdent(EDIP_VAR_OBJECTCMDS, $instanceId);
+			$this->objectEditId   		= IPS_GetObjectIDbyIdent(EDIP_VAR_OBJECTEDIT, $instanceId);
 		}
 
 		abstract protected function AddMessageHeader();
@@ -233,6 +233,7 @@
 		   $result     = $default;
 			$object     = IPS_GetObject($id);
 			$objectInfo = $object['ObjectInfo'];
+
 			if (substr($objectInfo,0,2)=='##') {
 				$attributeList = explode(',',substr($objectInfo,2));
 				foreach ($attributeList as $keyValue) {
@@ -393,7 +394,7 @@
 			}
 			
 			$object['DisplayType'] = $this->GetDisplayAttributte($link, 'DisplayType', $object['DisplayType']);
-			if ($action==0 and $object['DisplayType']<>'Text' and $object['DisplayType']<>'BigText') {
+			if ($action==0 and $object['DisplayType']<>'Text' and $object['DisplayType']<>'BigText' and $object['DisplayType']<>'SmalText') {
 				$object['DisplayType'] = 'Text';
 			}
 

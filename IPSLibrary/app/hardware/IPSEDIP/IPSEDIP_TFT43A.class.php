@@ -93,15 +93,24 @@
 					$this->messageArray[] = "FZ,8,1"; // Textfarbe //[AC]
 					$this->messageArray[] = "ZL,180,$yPosT,$name"; // Text
 				}
-
+				
 				$this->messageArray[] = "FZ,".$txtFarbe.",1"; // Textfarbe //[AC]
 				switch($displayType) {
 					case 'Text':
 					case 'BigText':
 						$valueFormatted  = $variable['ValueFormatted'];
 						if ($displayType=='BigText') {
+							$this->messageArray[] = 'ZF,6'; // Schriftart
+							$this->messageArray[] = 'ZZ,1,1'; // SchriftZoom
+							$yPosT=$yPosT-5;
+						}
+						$this->messageArray[] = "ZR,470,$yPosT,$valueFormatted"; // Text
+						break;
+					case 'SmalText':
+						$valueFormatted  = $variable['ValueFormatted'];
+						if ($displayType=='SmalText') {
 							$this->messageArray[] = 'ZF,5'; // Schriftart
-							$this->messageArray[] = 'ZZ,2,2'; // SchriftZoom
+							$this->messageArray[] = 'ZZ,1,2'; // SchriftZoom
 							$yPosT=$yPosT-5;
 						}
 						$this->messageArray[] = "ZR,470,$yPosT,$valueFormatted"; // Text

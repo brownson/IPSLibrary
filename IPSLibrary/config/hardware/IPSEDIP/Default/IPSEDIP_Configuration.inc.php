@@ -112,9 +112,9 @@
       ##DisplayType=Select,Width0=30,Width1=30,Width2=30
       ##DisplayType=Block
       ##DisplayType=BigText
-      ##DisplayType=Color=3
+      ##DisplayType=Text,Color=3
       ##DisplayType=BarGraph
-      ##DisplayType=BarGraph,Color=3
+      ##DisplayType=BigText,Color=3
    *@endcode
    *
    */
