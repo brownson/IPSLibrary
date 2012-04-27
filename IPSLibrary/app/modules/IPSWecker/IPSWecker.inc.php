@@ -54,8 +54,7 @@
 			$ConfId 			= get_ControlId(c_Control_Optionen, $CircleId);
 			$objectIds 		= explode(',',GetValue($ConfId));
 
-			if ($WeckerData[c_Property_Schichtgruppe] <> ''){
-
+			if ($WeckerData[c_Property_Schichtgruppe] <> '' and count($WeckerData[c_Property_Schichtzyklus]) > 0){
 				if (in_array((int)date("W"), $WeckerData[c_Property_Schichtzyklus])){
 					$objectIds[10] = "1";
 				} else {
