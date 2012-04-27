@@ -124,7 +124,14 @@
 												c_ProgramId_Every3Day 	=> c_Program_Every3Day,
 												c_ProgramId_MonWedFri 	=> c_Program_MonWedFri,
 												c_ProgramId_MonTur 		=> c_Program_MonTur,
-												c_ProgramId_Sunday 		=> c_Program_Sunday));
+												c_ProgramId_Sunday 		=> c_Program_Sunday,
+												c_ProgramId_Monday 		=> c_Program_Monday,
+												c_ProgramId_Tuesday 	=> c_Program_Tuesday,
+												c_ProgramId_Wednesday 	=> c_Program_Wednesday,
+												c_ProgramId_Thursday 	=> c_Program_Thursday,
+												c_ProgramId_Friday 		=> c_Program_Friday,
+												c_ProgramId_Saturday 	=> c_Program_Saturday
+												));
 	CreateProfile_Associations ('IPSWatering_Sensor', array(
 												0	=> 'Aus',
 												1 	=> '1 mm',
