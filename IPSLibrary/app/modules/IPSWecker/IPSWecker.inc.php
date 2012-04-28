@@ -74,6 +74,7 @@
 				set_Overview($parentId, $CircleId);
 				$wecker	=	AddConfiguration($CircleId);
 				set_Control($wecker);
+				set_TimerEvents($parentId, $CircleId);
 			}
 			$Ass++;
 
@@ -454,6 +455,7 @@
 					}
 					SetValue($ConfId, implode(",", $objectIds));
 					set_Overview($parentId, $WeckerCf);
+					set_TimerEvents($parentId, $WeckerCf);
 				}
 			}
 
