@@ -327,7 +327,7 @@
    IPS_SetVariableProfileValues($vpn, 0, 10, 0);
 
 	foreach ($ZSUConfig as $ZSUName=>$ZSUData) {
-    	 	($vpn, $Ass, $ZSUData[c_Property_Name],"", -1);
+    	 	IPS_SetVariableProfileAssociation($vpn, $Ass, $ZSUData[c_Property_Name],"", -1);
 
 			$ZSUId              		= CreateCategory($ZSUName, $CategoryIdZSUs, $Idx);
 			$ControlIdStartzeit		= CreateVariable(c_Control_StartZeit,		3 /*String*/,  $ZSUId, 10, '~String',   null, '09:00');

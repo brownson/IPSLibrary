@@ -12,8 +12,8 @@
 	 */
 
 	// EZSU ZSUzeiten ID
-	define ('ZSU_ID_ZSUZEITEN',38293 );
-	define ('ZSU_ID_TIMER',20192 );
+	define ('ZSU_ID_ZSUZEITEN',56548 );
+	define ('ZSU_ID_TIMER',26787 );
 
 	/** @}*/
 ?>
