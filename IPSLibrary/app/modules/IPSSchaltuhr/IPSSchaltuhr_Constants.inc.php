@@ -92,18 +92,6 @@
 	define ("c_Property_Condition",		'Condition');
 	define ("c_Property_Value",  			'Value');
 
-//	define ("c_Property_StopName",	   'StopName');
-//	define ("c_Property_StopSensor", 	'StopSensor');
-//	define ("c_Property_StopSensorID", 	'StopSensorID');
-//	define ("c_Property_StopCondition",	'StopCondition');
-//	define ("c_Property_StopValue",  	'StopValue');
-
-//	define ("c_Property_RunName",	   	'RunName');
-//	define ("c_Property_RunSensor",   	'RunSensor');
-//	define ("c_Property_RunSensorID",  	'RunSensorID');
-//	define ("c_Property_RunCondition",	'RunCondition');
-//	define ("c_Property_RunValue",	  	'RunValue');
-
 //	define ("",  					'');
 
 //Webfront
@@ -118,9 +106,6 @@
 	define ("c_WFC_RunAktiv",  			'Laufzeit Bedingung');
 	define ("c_WFC_StartAktiv",  			'Start Bedingung');
 	define ("c_WFC_StopAktiv",  			'Stop Bedingung');
-	define ("c_WFC_Snooze",           	'Schlummerfunktion');
-	define ("c_WFC_End",              	'Endefunktion');
-	define ("c_WFC_Uebersicht",         'Übersicht');
 //	define ("c_WFC_",  					'');
 
 
