@@ -27,6 +27,7 @@
 	 * Konstanten Definitionen für IPSSchaltuhr
 	 *
 	 */
+	 
 	define ("c_ZSUCircles",					"Zeitschaltuhren");
 	define ("c_ZSUCircle",					"Zeitschaltuhr_");
 
@@ -46,17 +47,6 @@
 	define ("c_Control_StopAktiv",		"StopAktiv");
 	define ("c_Control_RunAktiv",			"RunActive");
 	define ("c_Control_Uebersicht",		"Uebersicht");
-
-
-//	define ("c_Control_Tag",					"Tag");
-//	define ("c_Control_LTag",					"LTag");
-//	define ("c_Control_Global",				"WochenZSU");
-//	define ("c_Control_Aktiv",				"Aktiv");
-//	define ("c_Control_Feiertag",				"Feiertag");
-//	define ("c_Control_Frost",					"Frost");
-//	define ("c_Control_Urlaub",				"Urlaub");
-//	define ("c_Control_Schlummer",			"Schlummer");
-//	define ("c_Control_End",					"End");
 
 // WochenZSU Daten
 //	define ("c_Control_Uebersicht",		"Uebersicht");
@@ -106,9 +96,9 @@
 	define ("c_WFC_RunAktiv",  			'Laufzeit Bedingung');
 	define ("c_WFC_StartAktiv",  			'Start Bedingung');
 	define ("c_WFC_StopAktiv",  			'Stop Bedingung');
-//	define ("c_WFC_",  					'');
-
-
+	define ("c_WFC_Snooze",           	'Schlummerfunktion');
+	define ("c_WFC_End",              	'Endefunktion');
+	define ("c_WFC_Uebersicht",         'Übersicht');
 
 	/** @}*/
 ?>
