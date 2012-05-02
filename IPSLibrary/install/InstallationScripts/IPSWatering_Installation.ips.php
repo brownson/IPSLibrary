@@ -198,7 +198,7 @@
 			CreateLinkByDestination ('Status',    get_WateringControlId(c_Control_ToBeDone, $CirclyId),  $WebFrontOverviewTop2, $Idx);
 
 			// Detailed CirclyData
-			$WebFrontDetailId  = CreateCategory($CircleName, $WebFrontId, 100+$Idx);
+			$WebFrontDetailId  = CreateCategory($CircleId, $WebFrontId, 100+$Idx);
 			CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_'.$Idx,$WFC10_TabPaneItem.'', 100+$Idx, $CircleName, '', $WebFrontDetailId /*BaseId*/, 'false' /*BarBottomVisible*/);
 			CreateLink('Status',             get_WateringControlId(c_Control_Active,     $CirclyId),  $WebFrontDetailId, 10);
 			CreateLink('Automatik',          get_WateringControlId(c_Control_Automatic,  $CirclyId),  $WebFrontDetailId, 20);
@@ -255,8 +255,33 @@
 		}
 	}
 
+	RemoveBlanksBeforePHPTags('IPSWatering_Configuration.inc.php', 'IPSLibrary::config::modules::IPSWatering::Default');
+	RemoveBlanksBeforePHPTags('IPSWatering_Configuration.inc.php', 'IPSLibrary::config::modules::IPSWatering');
+	RemoveBlanksBeforePHPTags('IPSUtils.inc.php',                  'IPSLibrary::app::core::IPSUtils');
 
-   // ------------------------------------------------------------------------------------------------
+	// ------------------------------------------------------------------------------------------------
+	function RemoveBlanksBeforePHPTags ($file, $namespace) {
+		if ($namespace<>'') {
+		   $namespace = str_replace('::','\\',$namespace).'\\';
+		}
+		$fileNameFull = IPS_GetKernelDir().'scripts\\'.$namespace.$file;
+		if (!file_exists($fileNameFull)) {
+			echo 'File '.$file.' not exists (Namespace='.$namespace.')'.PHP_EOL;
+			return;
+		}
+		
+		$fileContent = file_get_contents($fileNameFull, true);
+
+		$pos = strpos($fileContent, ' ');
+		if ($pos === false or $pos > 0) {
+		   return;
+		}
+		$fileContentNew = substr($fileContent, 1);
+		echo 'Remove Blanks before PHP Tag from File '.$file.'(Namespace='.$namespace.')'.PHP_EOL;
+		file_put_contents($fileNameFull, $fileContentNew);
+	}
+
+	// ------------------------------------------------------------------------------------------------
 	function get_WateringCirclyId($DeviceName, $ParentId) {
 		$CategoryId = IPS_GetObjectIDByIdent($DeviceName, $ParentId);
 		return $CategoryId;
