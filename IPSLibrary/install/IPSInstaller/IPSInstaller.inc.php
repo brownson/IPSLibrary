@@ -18,7 +18,6 @@
 	 *
 	 */
 
-
 	/** Anlegen einer Kategorie.
 	 *
 	 * Die Funktion legt eine Kategory, als übergeordnete ID dient dabei $ParentId. Sollte
@@ -180,6 +179,7 @@
 		$ident = str_replace(array('"','\'','%','&','(',')','=','#','<','>','|','\\'), '', $ident);
 		$ident = str_replace(array(',','.',':',';','!','?'), '', $ident);
 		$ident = str_replace(array('+','-','/','*'), '', $ident);
+		$ident = str_replace(array('ß'), 'ss', $ident);
 		return $ident;
 	}
 
@@ -1052,6 +1052,7 @@
 		if (isset($_IPS['MODULEMANAGER'])) {
 		   $moduleManager = $_IPS['MODULEMANAGER'];
 		   $moduleManager->LogHandler()->Debug($msg);
+		} elseif (isset($_IPS['SENDER']) and $_IPS['SENDER']=='WebFront') {
 		} else {
 		   echo $msg.PHP_EOL;
 		}
