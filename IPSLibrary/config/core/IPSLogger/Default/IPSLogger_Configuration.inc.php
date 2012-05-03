@@ -1,4 +1,4 @@
- <?
+<?
 	/**@defgroup ipslogger_configuration IPSLogger Konfiguration
 	 * @ingroup ipslogger
 	 * @{

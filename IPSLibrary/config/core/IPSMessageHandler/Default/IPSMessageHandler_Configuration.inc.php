@@ -1,4 +1,4 @@
- <?
+<?
 	/**@defgroup ipsmessagehandler_configuration IPSMessageHandler Konfiguration
 	 * @ingroup ipsmessagehandler
 	 * @{
