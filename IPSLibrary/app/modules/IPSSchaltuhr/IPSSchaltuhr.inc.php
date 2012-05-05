@@ -40,9 +40,6 @@
 	IPSUtils_Include ("IPSSchaltuhr_IDs.inc.php",            	"IPSLibrary::app::modules::IPSSchaltuhr");
 
 
-//print_r(IPS_GetVariableProfile('IPSSchaltuhr_StartTag'));
-
-
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function IPSSchaltuhr_ChangeName($ControlId, $Value) {
 		SetValueInteger ($ControlId,$Value);
@@ -53,6 +50,9 @@
 		$CircleId 		= get_CirclyIdByCircleIdent(c_ZSUCircle.$NameValue, $CirclesId );
 
 		get_CircleConf($CircleId, $Value);
+
+	   set_ControlValue(c_Control_Uebersicht, $parentId, get_ControlValue(c_Control_Uebersicht, $CircleId));
+
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
@@ -124,6 +124,7 @@
 		set_ControlValue(c_Control_StartTag, $CircleId, $ConfValue );
 
 		set_TimerEvents($CircleId);
+		set_Overview($CircleId);
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
@@ -141,6 +142,7 @@
 		set_ControlValue(c_Control_StopTag, $CircleId, $ConfValue );
 
 		set_TimerEvents($CircleId);
+		set_Overview($CircleId);
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
@@ -156,6 +158,7 @@
 		set_ControlValue(c_Control_StartZeit, $CircleId, $zeit);
 
 		set_TimerEvents($CircleId);
+		set_Overview($CircleId);
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
@@ -171,6 +174,7 @@
 		set_ControlValue(c_Control_StopZeit, $CircleId, $zeit);
 
 		set_TimerEvents($CircleId);
+		set_Overview($CircleId);
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
@@ -186,6 +190,7 @@
 		set_ControlValue(c_Control_StartZeit, $CircleId, $zeit);
 
 		set_TimerEvents($CircleId);
+		set_Overview($CircleId);
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
@@ -201,6 +206,7 @@
 		set_ControlValue(c_Control_StopZeit, $CircleId, $zeit);
 
 		set_TimerEvents($CircleId);
+		set_Overview($CircleId);
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
@@ -216,6 +222,7 @@
 
 		$ConfValue = get_AssoValue('IPSSchaltuhr_StartSensor');
 		set_ControlValue(c_Control_StartAktiv, $CircleId, $ConfValue );
+		set_Overview($CircleId);
 
 	}
 
@@ -232,6 +239,7 @@
 
 		$ConfValue = get_AssoValue('IPSSchaltuhr_StopSensor');
 		set_ControlValue(c_Control_StopAktiv, $CircleId, $ConfValue );
+		set_Overview($CircleId);
 
 	}
 
@@ -248,6 +256,7 @@
 
 		$ConfValue = get_AssoValue('IPSSchaltuhr_RunSensor');
 		set_ControlValue(c_Control_RunAktiv, $CircleId, $ConfValue );
+		set_Overview($CircleId);
 
 	}
 
@@ -422,182 +431,177 @@
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
-	function set_Overview($parentId, $CircleId){
-/*
+	function set_Overview($CircleId){
+
+ 		$property = get_ZSUConfiguration();
+ 		$property = $property[IPS_GetName($CircleId)];
+ 		
 		$html ="<style type='text/css'>\n";
-		$html.="		table.stundenplan { width: 100%; border-collapse: true;}\n";
-		$html.="		table.stundenplan td { border: 1px solid #444455; }\n";
+		$html.="		table.zeitplan { width: 100%; border-collapse: true;}\n";
+		$html.="		table.zeitplan td { border: 1px solid #444455; }\n";
 		$html.="</style>\n";
 
-		$html.="<table class='stundenplan'>\n\n";
+		$html.="<table class='zeitplan'>\n\n";
 		$html.="	<tr>";
-		$html.="		<td style='width: 50px;' align='center'>".c_WFC_Tag."</td>\n";
-		$html.="		<td style='width: 90px;' align='center'>".c_WFC_Stunde."</td>\n";
-		$html.="		<td style='width: 200px;' align='center'>".c_WFC_Active."</td>\n";
+		$html.="		<td style='width: 160px;' align='center'>".c_Control_StartZeit."</td>\n";
+		$html.="		<td style='width: 100px;' align='center'>".get_ControlValue(c_Control_StartZeit, $CircleId)."</td>\n";
 		$html.="		<td style='width: 100px; border: 0px;' align='center'>      </td>\n";
-		$html.="		<td style='width: 200px;' align='center'>".c_WFC_Feature."</td>\n";
-		$html.="		<td style='width: 200px;' align='center'>".c_WFC_Active."</td>\n";
-		$html.="		<td style='border: 0px;' align='center'></td>\n";
+		$html.="		<td style='width: 160px;' align='center'>".c_Control_StopZeit."</td>\n";
+		$html.="		<td style='width: 100px;' align='center'>".get_ControlValue(c_Control_StopZeit, $CircleId)."</td>\n";
+		$html.="		<td style='border: 0px;' align='center'>      </td>\n";
+		$html.="	</tr>";
+		$html.="	</table>";
 
-		$ConfId 					= get_ControlId(c_Control_Optionen, $CircleId);
-		$objectIds 				= explode(',',GetValue($ConfId));
+		$objectIds 				= explode(',',get_ControlValue(c_Control_StartTag, $CircleId));
+		$html.="<table class='zeitplan'>\n\n";
+		$html.="	<tr>";
+		$html.="		<td style='width: 160px;' align='center'>".c_WFC_Tage."</td>\n";
+		if ($objectIds[1] == '1')  	$farbe_tag = "		<td style='background: #008000;' colspan='1' align='center'>";
+		else $farbe_tag = "		<td style='background: #800000;' colspan='1' align='center'>";
+				$html.="$farbe_tag ".c_Program_Montag."</td>\n";
 
-		$ZSU_feiertag 		= $objectIds[7];
-		$ZSU_urlaub 		= $objectIds[8];
-		$ZSU_frost	 		= $objectIds[9];
-		$ZSU_aktiv_all 	= $objectIds[10];
-		$ZSU_snooze 	   = $objectIds[11];
-		$ZSU_end 			= $objectIds[12];
-		$ZSU_name 			= get_CirclyNameByID($CircleId);
-		$ZSU_urlaubszeit 	= get_ControlValue(c_Control_Urlaubszeit,	$CircleId);
+		if ($objectIds[2] == '1')  	$farbe_tag = "		<td style='background: #008000;' colspan='1' align='center'>";
+		else $farbe_tag = "		<td style='background: #800000;' colspan='1' align='center'>";
+				$html.="$farbe_tag ".c_Program_Dienstag."</td>\n";
 
-		if($ZSU_aktiv_all == 0)	{
-			$ZSU_global = c_Program_Off;
-			$farbe_global = "		<td style='background: #880000;' colspan='1' align='center'>";
-		}
-		else {
-			$ZSU_global = c_Program_On;
-			$farbe_global = "		<td style='background: #008000;' colspan='1' align='center'>";
-		}
+		if ($objectIds[3] == '1')  	$farbe_tag = "		<td style='background: #008000;' colspan='1' align='center'>";
+		else $farbe_tag = "		<td style='background: #800000;' colspan='1' align='center'>";
+				$html.="$farbe_tag ".c_Program_Mittwoch."</td>\n";
 
-		if($ZSU_feiertag  == 0)	{
-			$ZSU_feiertag = c_Program_NoZSU;
-			if($ZSU_aktiv_all) 	$farbe_feiertag = "		<td style='background: #880000;' colspan='1' align='center'>";
-			if(!$ZSU_aktiv_all)  $farbe_feiertag = "		<td style='background: #400000;' colspan='1' align='center'>";
-		}
-		else	{
-			$ZSU_feiertag = c_Program_ZSU;
-			if($ZSU_aktiv_all) 	$farbe_feiertag = "		<td style='background: #008000;' colspan='1' align='center'>";
-			if(!$ZSU_aktiv_all)  $farbe_feiertag = "		<td style='background: #002000;' colspan='1' align='center'>";
-		}
+		if ($objectIds[4] == '1')  	$farbe_tag = "		<td style='background: #008000;' colspan='1' align='center'>";
+		else $farbe_tag = "		<td style='background: #800000;' colspan='1' align='center'>";
+				$html.="$farbe_tag ".c_Program_Donnerstag."</td>\n";
 
-		if($ZSU_urlaub == 0)	{
-			$ZSU_urlaub = c_Program_NoZSU;
-			if($ZSU_aktiv_all) 	$farbe_urlaub = "		<td style='background: #880000;' colspan='1' align='center'>";
-			if(!$ZSU_aktiv_all)  $farbe_urlaub = "		<td style='background: #400000;' colspan='1' align='center'>";
-		}
-		else {
-			$ZSU_urlaub = c_Program_ZSU;
-			if($ZSU_aktiv_all) 	$farbe_urlaub = "		<td style='background: #008000;' colspan='1' align='center'>";
-			if(!$ZSU_aktiv_all) 	$farbe_urlaub = "		<td style='background: #002000;' colspan='1' align='center'>";
-		}
+		if ($objectIds[5] == '1')  	$farbe_tag = "		<td style='background: #008000;' colspan='1' align='center'>";
+		else $farbe_tag = "		<td style='background: #800000;' colspan='1' align='center'>";
+				$html.="$farbe_tag ".c_Program_Freitag."</td>\n";
 
-		if($ZSU_frost == 0)	{
-			$ZSU_frost = c_Program_NormZSU;
-			if($ZSU_aktiv_all) 	$farbe_frost = "		<td style='background: #880000;' colspan='1' align='center'>";
-			if(!$ZSU_aktiv_all)  $farbe_frost = "		<td style='background: #400000;' colspan='1' align='center'>";
-		}
-		else {
-			$ZSU_frost = c_Program_PrevZSU;
-			if($ZSU_aktiv_all) 	$farbe_frost = "		<td style='background: #008000;' colspan='1' align='center'>";
-			if(!$ZSU_aktiv_all)  $farbe_frost = "		<td style='background: #002000;' colspan='1' align='center'>";
-		}
+		if ($objectIds[6] == '1')  	$farbe_tag = "		<td style='background: #008000;' colspan='1' align='center'>";
+		else $farbe_tag = "		<td style='background: #800000;' colspan='1' align='center'>";
+				$html.="$farbe_tag ".c_Program_Samstag."</td>\n";
 
-		if($ZSU_snooze == 0){
-			$ZSU_snooze = c_Program_Off;
-			if($ZSU_aktiv_all) 	$farbe_schlummer = "		<td style='background: #880000;' colspan='1' align='center'>";
-			if(!$ZSU_aktiv_all)  $farbe_schlummer = "		<td style='background: #400000;' colspan='1' align='center'>";
-		}
-		else {
-			$ZSU_snooze = c_Program_On;
-			if($ZSU_aktiv_all) 	$farbe_schlummer = "		<td style='background: #008000;' colspan='1' align='center'>";
-			if(!$ZSU_aktiv_all)  $farbe_schlummer = "		<td style='background: #002000;' colspan='1' align='center'>";
-		}
-
-		if($ZSU_end == 0)	{
-			$ZSU_end = c_Program_Off;
-			if($ZSU_aktiv_all) 	$farbe_end = "		<td style='background: #880000;' colspan='1' align='center'>";
-			if(!$ZSU_aktiv_all)  $farbe_end = "		<td style='background: #400000;' colspan='1' align='center'>";
-		}
-		else {
-			$ZSU_end = c_Program_On;
-			if($ZSU_aktiv_all) 	$farbe_end = "		<td style='background: #008000;' colspan='1' align='center'>";
-			if(!$ZSU_aktiv_all)  $farbe_end = "		<td style='background: #002000;' colspan='1' align='center'>";
-		}
-
-
-
-		for ($tag = 0; $tag < 7; $tag++){
-			if ($tag == 0) $ZSU_tag = c_Control_Mo;
-			if ($tag == 1) $ZSU_tag = c_Control_Di;
-			if ($tag == 2) $ZSU_tag = c_Control_Mi;
-			if ($tag == 3) $ZSU_tag = c_Control_Do;
-			if ($tag == 4) $ZSU_tag = c_Control_Fr;
-			if ($tag == 5) $ZSU_tag = c_Control_Sa;
-			if ($tag == 6) $ZSU_tag = c_Control_So;
-
-
-			$ZSU_zeit	= get_ControlValue($ZSU_tag, 		$CircleId);
-			$ZSU_aktiv 		= $objectIds[$tag];
-
-
-			if($ZSU_aktiv 		== 0) {
-				$ZSU_aktiv = c_Program_NoZSU;
-				if($ZSU_aktiv_all) 	$farbe_aktiv = "		<td style='background: #880000;' colspan='1' align='center'>";
-				if(!$ZSU_aktiv_all)  $farbe_aktiv = "		<td style='background: #400000;' colspan='1' align='center'>";
-			}
-			else {
-				$ZSU_aktiv = c_Program_ZSU;
-				if($ZSU_aktiv_all) 	$farbe_aktiv = "		<td style='background: #008000;' colspan='1' align='center'>";
-				if(!$ZSU_aktiv_all)  $farbe_aktiv = "		<td style='background: #002000;' colspan='1' align='center'>";
-			}
-
-
-			$html.="	<tr>\n";
-			$html.="		<td align='center'> $ZSU_tag</td>\n";
-			$html.="		<td align='center'> $ZSU_zeit</td>\n";
-			$html.="$farbe_aktiv $ZSU_aktiv</td>\n";
-
-			switch ($tag){
-			case 0:
-					$html.="		<td style='width: 100px; border: 0px;' align='center'></td>\n";
-					$html.="		<td align='center'>".c_WFC_Global."</td>\n";
-					$html.="$farbe_global $ZSU_global</td>\n";
-				break;
-			case 1:
-					$html.="		<td style='width: 100px; border: 0px;' align='center'></td>\n";
-					$html.="		<td align='center'>".c_WFC_Urlaub."</td>\n";
-					$html.="$farbe_urlaub $ZSU_urlaub</td>\n";
-				break;
-			case 2:
-					$html.="		<td style='width: 100px; border: 0px;' align='center'></td>\n";
-					$html.="		<td align='center'>".c_WFC_Feiertag."</td>\n";
-					$html.="$farbe_feiertag $ZSU_feiertag</td>\n";
-				break;
-			case 3:
-					$html.="		<td style='width: 100px; border: 0px;' align='center'></td>\n";
-					$html.="		<td align='center'>".c_WFC_Frost."</td>\n";
-					$html.="$farbe_frost $ZSU_frost</td>\n";
-				break;
-			case 4:
-					$html.="		<td style='width: 100px; border: 0px;' align='center'></td>\n";
-					$html.="		<td align='center'>".c_WFC_Snooze."</td>\n";
-					$html.="$farbe_schlummer $ZSU_snooze</td>\n";
-				break;
-			case 5:
-					$html.="		<td style='width: 100px; border: 0px;' align='center'></td>\n";
-					$html.="		<td align='center'>".c_WFC_End."</td>\n";
-					$html.="$farbe_end $ZSU_end</td>\n";
-				break;
-			case 6:
-				break;
-			case 7:
-				break;
-			}
-			$html.="	</tr>\n";
-		}
-		$html.="</table>\n";
-
+		if ($objectIds[7] == '1')  	$farbe_tag = "		<td style='background: #008000;' colspan='1' align='center'>";
+		else $farbe_tag = "		<td style='background: #800000;' colspan='1' align='center'>";
+				$html.="$farbe_tag ".c_Program_Sonntag."</td>\n";
+		$html.="	</tr>";
+		$html.="	</table>";
+		$html.="&nbsp;\n";
 		$html.="&nbsp;\n";
 
-		$html.="<table>\n";
-		$html.="	<tr>\n";
-		$html.="		<td>".c_WFC_Urlaubszeit."</td>\n";
-		$html.="		<td>: ".$ZSU_urlaubszeit."</td>\n";
-		$html.="	</tr>\n";
-		$html.="</table>\n";
+
+		$objectIds 	= explode(',',get_ControlValue(c_Control_StartAktiv, $CircleId));
+		$html.="<table class='zeitplan'>\n\n";
+		$html.="	<tr>";
+		$html.="		<td style='width: 160px;' align='center'>".c_WFC_StartSensor."</td>\n";
+		foreach ($property[c_Property_StartSensoren] as $ID=>$Data) {
+				$variable     = IPS_GetVariable($Data[c_Property_SensorID]);
+				$cprofile      = $variable['VariableCustomProfile'];
+				$profile      = $variable['VariableProfile'];
+				if ($cprofile!=='') {
+					$profileData  = IPS_GetVariableProfile($cprofile);
+					$suffix = $profileData['Suffix'];
+				} elseif ($profile!=='') {
+					$profileData  = IPS_GetVariableProfile($profile);
+					$suffix = $profileData['Suffix'];
+				}
+
+		 		$res = false;
+				if ($Data[c_Property_Condition] == '>' and GetValue($Data[c_Property_SensorID]) > $Data[c_Property_Value]) $res = true;
+				if ($Data[c_Property_Condition] == '=' and GetValue($Data[c_Property_SensorID]) == $Data[c_Property_Value]) $res = true;
+				if ($Data[c_Property_Condition] == '<' and GetValue($Data[c_Property_SensorID]) < $Data[c_Property_Value]) $res = true;
+
+				if ($objectIds[$ID] == '1' and $res == true )	$farbe_tag = "		<td style='background: #008000;' colspan='1' align='center'>";
+				if ($objectIds[$ID] == '1' and $res == false )	$farbe_tag = "		<td style='background: #808000;' colspan='1' align='center'>";
+				if ($objectIds[$ID] == '0')	$farbe_tag = "		<td style='background: #800000;' colspan='1' align='center'>";
+				$html.="$farbe_tag ".$Data[c_Property_Name]."<br>".GetValue($Data[c_Property_SensorID])."$suffix  ".$Data[c_Property_Condition]."  ".$Data[c_Property_Value]." $suffix</td>\n";
+		}
+		$html.="	</tr>";
+
+
+		$objectIds 	= explode(',',get_ControlValue(c_Control_RunAktiv, $CircleId));
+		$html.="	<tr>";
+		$html.="		<td style='width: 160px;' align='center'>".c_WFC_RunSensor."</td>\n";
+		foreach ($property[c_Property_RunSensoren] as $ID=>$Data) {
+				$variable     = IPS_GetVariable($Data[c_Property_SensorID]);
+				$profile      = $variable['VariableCustomProfile'];
+				if ($profile<>'') {
+					$profileData  = IPS_GetVariableProfile($profile);
+					$suffix = $profileData['Suffix'];
+				}
+
+		 		$res = false;
+				if ($Data[c_Property_Condition] == '>' and GetValue($Data[c_Property_SensorID]) > $Data[c_Property_Value]) $res = true;
+				if ($Data[c_Property_Condition] == '=' and GetValue($Data[c_Property_SensorID]) == $Data[c_Property_Value]) $res = true;
+				if ($Data[c_Property_Condition] == '<' and GetValue($Data[c_Property_SensorID]) < $Data[c_Property_Value]) $res = true;
+
+				if ($objectIds[$ID] == '1' and $res == true )	$farbe_tag = "		<td style='background: #008000;' colspan='1' align='center'>";
+				if ($objectIds[$ID] == '1' and $res == false )	$farbe_tag = "		<td style='background: #808000;' colspan='1' align='center'>";
+				if ($objectIds[$ID] == '0')	$farbe_tag = "		<td style='background: #800000;' colspan='1' align='center'>";
+				$html.="$farbe_tag ".$Data[c_Property_Name]."<br>".GetValue($Data[c_Property_SensorID])."$suffix  ".$Data[c_Property_Condition]."  ".$Data[c_Property_Value]." $suffix</td>\n";
+		}
+		$html.="	</tr>";
+
+
+		$objectIds 	= explode(',',get_ControlValue(c_Control_StopAktiv, $CircleId));
+		$html.="	<tr>";
+		$html.="		<td style='width: 160px;' align='center'>".c_WFC_StopSensor."</td>\n";
+		foreach ($property[c_Property_StopSensoren] as $ID=>$Data) {
+				$variable     = IPS_GetVariable($Data[c_Property_SensorID]);
+				$profile      = $variable['VariableCustomProfile'];
+				if ($profile<>'') {
+					$profileData  = IPS_GetVariableProfile($profile);
+					$suffix = $profileData['Suffix'];
+				}
+
+		 		$res = false;
+				if ($Data[c_Property_Condition] == '>' and GetValue($Data[c_Property_SensorID]) > $Data[c_Property_Value]) $res = true;
+				if ($Data[c_Property_Condition] == '=' and GetValue($Data[c_Property_SensorID]) == $Data[c_Property_Value]) $res = true;
+				if ($Data[c_Property_Condition] == '<' and GetValue($Data[c_Property_SensorID]) < $Data[c_Property_Value]) $res = true;
+
+				if ($objectIds[$ID] == '1' and $res == true )	$farbe_tag = "		<td style='background: #008000;' colspan='1' align='center'>";
+				if ($objectIds[$ID] == '1' and $res == false )	$farbe_tag = "		<td style='background: #808000;' colspan='1' align='center'>";
+				if ($objectIds[$ID] == '0')	$farbe_tag = "		<td style='background: #800000;' colspan='1' align='center'>";
+				$html.="$farbe_tag ".$Data[c_Property_Name]."<br>".GetValue($Data[c_Property_SensorID])."$suffix  ".$Data[c_Property_Condition]."  ".$Data[c_Property_Value]." $suffix</td>\n";
+		}
+		$html.="	</tr>";
+		$html.="	</table>";
+		$html.="&nbsp;\n";
+		$html.="&nbsp;\n";
+		$html.="&nbsp;\n";
+
+		$html.="<table class='zeitplan'>\n\n";
+		$html.="	<tr>";
+		$html.="		<td style='width: 160px;' align='center'>".c_WFC_Ausgang."</td>\n";
+
+		if (get_ControlValue(c_Control_SollAusgang, $CircleId))  	$farbe_tag = "		<td style='background: #008000;' colspan='1' align='center'>";
+		else $farbe_tag = "		<td style='width: 160px; background: #800000;' colspan='1' align='center'>";
+				$html.="$farbe_tag ".c_WFC_SollZustand."</td>\n";
+
+		if (get_ControlValue(c_Control_IstAusgang, $CircleId))  	$farbe_tag = "		<td style='background: #008000;' colspan='1' align='center'>";
+		else $farbe_tag = "		<td style='width: 160px; background: #800000;' colspan='1' align='center'>";
+				$html.="$farbe_tag ".c_WFC_IstZustand."</td>\n";
+		$html.="		<td style='border: 0px;' align='center'>      </td>\n";
+
+		$html.="	</tr>";
+		$html.="	</table>";
+		$html.="&nbsp;\n";
+		$html.="&nbsp;\n";
+
+		$html.="<table class='zeitplan'>\n\n";
+		$html.="	<tr>";
+		$html.="		<td style='font-size:12px; width: 160px;' align='center'>".c_WFC_Legende."</td>\n";
+
+		$html.="<td style='font-size:12px; width: 160px; background: #800000;' colspan='1' align='center'>".c_WFC_Abgeschaltet."</td>\n";
+		$html.="<td style='font-size:12px; width: 160px; background: #808000;' colspan='1' align='center'>".c_WFC_EinOhneBeding."</td>\n";
+		$html.="<td style='font-size:12px; width: 160px; background: #008000;' colspan='1' align='center'>".c_WFC_EinMitBeding."</td>\n";
+		$html.="		<td style='border: 0px;' align='center'>      </td>\n";
+
+
+		$html.="	</tr>";
+		$html.="	</table>";
+		$html.="&nbsp;\n";
 		set_ControlValue(c_Control_Uebersicht, $CircleId, $html);
-*/
+
 		return $html;
 	}
 
