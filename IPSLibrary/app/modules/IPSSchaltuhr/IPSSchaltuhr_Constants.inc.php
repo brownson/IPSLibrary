@@ -80,7 +80,7 @@
 	define ("c_Property_Sensor",   		'Sensor');
 	define ("c_Property_SensorID", 		'SensorID');
 	define ("c_Property_Condition",		'Condition');
-	define ("c_Property_Value",  			'Value');
+	define ("c_Property_Value",  			'SensorValue');
 
 //	define ("",  					'');
 
@@ -88,7 +88,7 @@
 	define ("c_WFC_Name",        			'Schaltuhr Name');
 	define ("c_WFC_StartTag",  			'Start Tag');
 	define ("c_WFC_StopTag",  				'Stop Tag');
-	define ("c_WFC_StartMinute",  		'StartMinute');
+	define ("c_WFC_StartMinute",  		'Start Minute');
 	define ("c_WFC_StopMinute",		 	'Stop Minute');
 	define ("c_WFC_StartStunde",  		'Start Stunde');
 	define ("c_WFC_StopStunde",  			'Stop Stunde');
@@ -96,9 +96,21 @@
 	define ("c_WFC_RunAktiv",  			'Laufzeit Bedingung');
 	define ("c_WFC_StartAktiv",  			'Start Bedingung');
 	define ("c_WFC_StopAktiv",  			'Stop Bedingung');
-	define ("c_WFC_Snooze",           	'Schlummerfunktion');
-	define ("c_WFC_End",              	'Endefunktion');
 	define ("c_WFC_Uebersicht",         'Übersicht');
+
+	define ("c_WFC_Zeit",         		'Zeit');
+	define ("c_WFC_Tage",         		'Tag ');
+	define ("c_WFC_StartSensor", 	 		'Start Sensor(en)');
+	define ("c_WFC_StopSensor", 	 		'Stop Sensor(en)');
+	define ("c_WFC_RunSensor",  			'Laufzeit Sensor(en)');
+	define ("c_WFC_Ausgang",    			'Ausgangsfunktion');
+	define ("c_WFC_SollZustand",        'Soll Zustand');
+	define ("c_WFC_IstZustand",         'Ist Zustand');
+	define ("c_WFC_EinOhneBeding",      'Aktiv (Bedingung nicht erfüllt)');
+	define ("c_WFC_EinMitBeding",       'Aktiv (Bedingung erfüllt)');
+	define ("c_WFC_Abgeschaltet",       'Abgeschaltet');
+	define ("c_WFC_Legende", 	  	    	'Legende Farben');
+
 
 	/** @}*/
 ?>

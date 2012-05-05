@@ -338,7 +338,7 @@
 			$ControlIdStartAktiv		= CreateVariable(c_Control_StartAktiv,		3 /*String*/,  $ZSUId, 40, '~String',   null, '0,0,0,0,0,0,0,0,0,0,0,');
 			$ControlIdStopAktiv		= CreateVariable(c_Control_StopAktiv,		3 /*String*/,  $ZSUId, 50, '~String',   null, '0,0,0,0,0,0,0,0,0,0,0,');
 			$ControlIdRunAktiv		= CreateVariable(c_Control_RunAktiv,		3 /*String*/,  $ZSUId, 60, '~String',   null, '0,0,0,0,0,0,0,0,0,0,0,');
-//			$ControlIdUebersicht		= CreateVariable(c_Control_Uebersicht,		3 /*String*/,  $ZSUId, 70, '~HTMLBox',  null, '');
+			$ControlIdUebersicht		= CreateVariable(c_Control_Uebersicht,		3 /*String*/,  $ZSUId, 70, '~HTMLBox',  null, '');
 			$ControlIdSAusgang    	= CreateVariable(c_Control_SollAusgang,   0 /*Boolean*/, $ZSUId, 100, '',   null, false);
 			$ControlIdIAusgang    	= CreateVariable(c_Control_IstAusgang,    0 /*Boolean*/, $ZSUId, 110, '',   null, false);
 
@@ -349,7 +349,6 @@
 				}
 			$i++;
 			}
-
 
 // Timer Event erstellen
 			CreateTimerWeek ($ZSUName.'-Start', $ScriptIdTimer, 127,  9, 0, $Idx+1, true);
@@ -363,17 +362,17 @@
 	$ControlIdLog   = CreateVariable('LogMessages',  3 /*String*/,  $CategoryIdLog, 220, '~HTMLBox', null, '');
 	$ControlIdLogId = CreateVariable('LogId',        1 /*Integer*/, $CategoryIdLog, 230, '',         null, 0);
 
-	$ControlIdOVZSUName     	= CreateVariable(c_Control_Name,   			1 /*Integer*/, $CategoryIdData,  10, 'IPSSchaltuhr_Name', 		$ScriptIdChangeSettings, 0, '');
-	$ControlIdOVZSUStartTag   	= CreateVariable(c_Control_StartTag,		1 /*Integer*/, $CategoryIdData,  20, 'IPSSchaltuhr_StartTag',	$ScriptIdChangeSettings, 0, '');
-	$ControlIdOVZSUStopTag    	= CreateVariable(c_Control_StopTag,			1 /*Integer*/, $CategoryIdData,  25, 'IPSSchaltuhr_StopTag', 	$ScriptIdChangeSettings, 0, '');
-	$ControlIdOVZSUStartStunde = CreateVariable(c_Control_StartStunde,  	1 /*Integer*/, $CategoryIdData,  30, 'IPSSchaltuhr_LStunde', 	$ScriptIdChangeSettings, 0, '');
-	$ControlIdOVZSUStopStunde  = CreateVariable(c_Control_StopStunde,  	1 /*Integer*/, $CategoryIdData,  35, 'IPSSchaltuhr_LStunde', 	$ScriptIdChangeSettings, 0, '');
-	$ControlIdOVZSUStartMinute = CreateVariable(c_Control_StartMinute,  	1 /*Integer*/, $CategoryIdData,  40, 'IPSSchaltuhr_LMinute', 	$ScriptIdChangeSettings, 0, '');
-	$ControlIdOVZSUStopMinute  = CreateVariable(c_Control_StopMinute,  	1 /*Integer*/, $CategoryIdData,  45, 'IPSSchaltuhr_LMinute', 	$ScriptIdChangeSettings, 0, '');
+	$ControlIdOVZSUName     	= CreateVariable(c_Control_Name,   			1 /*Integer*/, $CategoryIdData,  10, 'IPSSchaltuhr_Name', 		$ScriptIdChangeSettings, 0, 'Title');
+	$ControlIdOVZSUStartTag   	= CreateVariable(c_Control_StartTag,		1 /*Integer*/, $CategoryIdData,  20, 'IPSSchaltuhr_StartTag',	$ScriptIdChangeSettings, 0, 'Calendar');
+	$ControlIdOVZSUStopTag    	= CreateVariable(c_Control_StopTag,			1 /*Integer*/, $CategoryIdData,  25, 'IPSSchaltuhr_StopTag', 	$ScriptIdChangeSettings, 0, 'Calendar');
+	$ControlIdOVZSUStartStunde = CreateVariable(c_Control_StartStunde,  	1 /*Integer*/, $CategoryIdData,  30, 'IPSSchaltuhr_LStunde', 	$ScriptIdChangeSettings, 0, 'Clock');
+	$ControlIdOVZSUStopStunde  = CreateVariable(c_Control_StopStunde,  	1 /*Integer*/, $CategoryIdData,  35, 'IPSSchaltuhr_LStunde', 	$ScriptIdChangeSettings, 0, 'Clock');
+	$ControlIdOVZSUStartMinute = CreateVariable(c_Control_StartMinute,  	1 /*Integer*/, $CategoryIdData,  40, 'IPSSchaltuhr_LMinute', 	$ScriptIdChangeSettings, 0, 'Clock');
+	$ControlIdOVZSUStopMinute  = CreateVariable(c_Control_StopMinute,  	1 /*Integer*/, $CategoryIdData,  45, 'IPSSchaltuhr_LMinute', 	$ScriptIdChangeSettings, 0, 'Clock');
 
-	$ControlIdOVStartAktiv		= CreateVariable(c_Control_StartAktiv,		1 /*Integer*/, $CategoryIdData,  60, 'IPSSchaltuhr_StartSensor', 	$ScriptIdChangeSettings, 0, '');
-	$ControlIdOVStopAktiv		= CreateVariable(c_Control_StopAktiv,		1 /*Integer*/, $CategoryIdData,  70, 'IPSSchaltuhr_StopSensor',  	$ScriptIdChangeSettings, 0, '');
-	$ControlIdOVRunAktiv			= CreateVariable(c_Control_RunAktiv,		1 /*Integer*/, $CategoryIdData,  80, 'IPSSchaltuhr_RunSensor',  	$ScriptIdChangeSettings, 0, '');
+	$ControlIdOVStartAktiv		= CreateVariable(c_Control_StartAktiv,		1 /*Integer*/, $CategoryIdData,  60, 'IPSSchaltuhr_StartSensor', 	$ScriptIdChangeSettings, 0, 'Intensity');
+	$ControlIdOVStopAktiv		= CreateVariable(c_Control_StopAktiv,		1 /*Integer*/, $CategoryIdData,  70, 'IPSSchaltuhr_StopSensor',  	$ScriptIdChangeSettings, 0, 'Intensity');
+	$ControlIdOVRunAktiv			= CreateVariable(c_Control_RunAktiv,		1 /*Integer*/, $CategoryIdData,  80, 'IPSSchaltuhr_RunSensor',  	$ScriptIdChangeSettings, 0, 'Intensity');
 //	$ControlIdOVUebersicht		= CreateVariable(c_Control_Uebersicht,		3 /*String*/,  $CategoryIdData, 200, '~HTMLBox',   null,	'');
 
 
@@ -383,26 +382,26 @@
 	if ($WFC_Enabled and $WFC_ConfigId <> '') {
 		$WebFrontId               = CreateCategoryPath($WFC_Path, 10);
 		EmptyCategory($WebFrontId);
-		$WebFrontOverviewId       = CreateCategory(    'Overview', 	$WebFrontId,    0);
-		$WebFrontOverviewTopL     = CreateCategory(    'Top_L',    	$WebFrontOverviewId,    10);
-		$WebFrontOverviewTopR     = CreateCategory(    'Top_R',    	$WebFrontOverviewId,    20);
-		$WebFrontOverviewBottomL  = CreateCategory(    'Bottom_L',  $WebFrontOverviewId,    30);
-		$WebFrontOverviewBottomR  = CreateCategory(    'Bottom_R',  $WebFrontOverviewId,    40);
+		$WebFrontOverviewCFG     = CreateCategory(    'Konfiguration',   $WebFrontId,    10);
+		$WebFrontOverviewMLD     = CreateCategory(     'Meldungen', 		$WebFrontId,    20);
+		$WebFrontOverview			  = CreateCategory(    'Overview',  		$WebFrontId,    30);
 
 		DeleteWFCItems($WFC_ConfigId, $WFC_TabPaneItem);
 
 		// Übersicht
-		CreateWFCItemSplitPane ($WFC_ConfigId, $WFC_TabPaneItem.'_OV',       	$WFC_TabPaneParent,     $WFC_TabPaneOrder, 		$WFC_TabName1, 	$WFC_TabIcon1, 	1 /*Vertical*/, 50 /*Hight*/, 	0 /*Target=Pane1*/, 0/*UsePixel*/, 'true');
-		CreateWFCItemCategory  ($WFC_ConfigId, $WFC_TabPaneItem.'_OVTopL',   	$WFC_TabPaneItem.'_OV',    10, 'Top_1', 		'', $WebFrontOverviewTopL /*BaseId*/,		'false' /*BarBottomVisible*/);
-		CreateWFCItemCategory  ($WFC_ConfigId, $WFC_TabPaneItem.'_OVTopR',  		$WFC_TabPaneItem.'_OV', 	20, 'Top_1', 		'', $WebFrontOverviewTopR /*BaseId*/, 		'false' /*BarBottomVisible*/);                             // integer $PercentageSlider
+		CreateWFCItemTabPane   ($WFC_ConfigId, $WFC_TabPaneItem,             	$WFC_TabPaneParent, 	$WFC_TabPaneOrder, 		$WFC_TabPaneName, $WFC_TabPaneIcon);
+		CreateWFCItemCategory  ($WFC_ConfigId, $WFC_TabPaneItem.'_Konfig',		$WFC_TabPaneItem,  		  	20, 		'Konfig', 			'', $WebFrontOverviewCFG /*BaseId*/,		'false' /*BarBottomVisible*/);
+		CreateWFCItemSplitPane ($WFC_ConfigId, $WFC_TabPaneItem.'_OV',       	$WFC_TabPaneItem,    		10, 		$WFC_TabName1, 	$WFC_TabIcon1, 	0 /*Horizontal*/, 40 /*Hight*/, 	0 /*Target=Pane1*/, 0/*UsePixel*/, 'true');
+		CreateWFCItemCategory  ($WFC_ConfigId, $WFC_TabPaneItem.'_OV_Overview', $WFC_TabPaneItem.'_OV',  	10, 'Übersicht', 		'', $WebFrontOverview /*BaseId*/, 'false' /*BarBottomVisible*/);
+		CreateWFCItemCategory  ($WFC_ConfigId, $WFC_TabPaneItem.'_OV_Log',  		$WFC_TabPaneItem.'_OV', 	20, 'Loging', 			'', $WebFrontOverviewMLD /*BaseId*/, 		'false' /*BarBottomVisible*/);                             // integer $PercentageSlider
 
-		$Dummy_Start_Id 	= CreateInstance ('Start',$WebFrontOverviewTopL, '{485D0419-BE97-4548-AA9C-C083EB82E61E}', 20);
-		$Dummy_Run_Id 		= CreateInstance ('Laufzeit', 	$WebFrontOverviewTopL, '{485D0419-BE97-4548-AA9C-C083EB82E61E}', 30);
-		$Dummy_Stop_Id 	= CreateInstance ('Stop', 	$WebFrontOverviewTopL, '{485D0419-BE97-4548-AA9C-C083EB82E61E}', 40);
-		$Dummy_Log_Id 		= CreateInstance ('Meldungen', 	$WebFrontOverviewTopR, '{485D0419-BE97-4548-AA9C-C083EB82E61E}', 50);
+		$Dummy_Start_Id 	= CreateInstance ('Start',			$WebFrontOverviewCFG, '{485D0419-BE97-4548-AA9C-C083EB82E61E}', 20);
+		$Dummy_Run_Id 		= CreateInstance ('Laufzeit', 	$WebFrontOverviewCFG, '{485D0419-BE97-4548-AA9C-C083EB82E61E}', 30);
+		$Dummy_Stop_Id 	= CreateInstance ('Stop', 			$WebFrontOverviewCFG, '{485D0419-BE97-4548-AA9C-C083EB82E61E}', 40);
+//		$Dummy_Log_Id 		= CreateInstance ('Meldungen', 	$WebFrontOverviewMLD, '{485D0419-BE97-4548-AA9C-C083EB82E61E}', 50);
 
 		// Top Left
-		CreateLink		(c_WFC_Name,				$ControlIdOVZSUName,  			$WebFrontOverviewTopL, 10);
+		CreateLink		(c_WFC_Name,				$ControlIdOVZSUName,  			$WebFrontOverviewCFG, 10);
 		CreateLink     (c_WFC_StartTag,			$ControlIdOVZSUStartTag,		$Dummy_Start_Id, 20);
 		CreateLink     (c_WFC_StartStunde,		$ControlIdOVZSUStartStunde,	$Dummy_Start_Id, 30);
 		CreateLink     (c_WFC_StartMinute,		$ControlIdOVZSUStartMinute,	$Dummy_Start_Id, 40);
@@ -416,11 +415,24 @@
 		CreateLink     (c_WFC_StopAktiv,			$ControlIdOVStopAktiv,			$Dummy_Stop_Id, 50);
 
 		// BottomL
-//		CreateLink     (c_WFC_Uebersicht,		$ControlIdOVUebersicht,				$WebFrontOverviewTopR, 10);
+//		CreateLink     (c_WFC_Uebersicht,		$ControlIdOVUebersicht,				$WebFrontOverviewMLD, 10);
 
 		// BottomR
-		CreateLink     (c_Control_MeldungID,		$ControlIdLogId,				$Dummy_Log_Id, 20);
-		CreateLink     (c_Control_Meldungen,		$ControlIdLog,					$Dummy_Log_Id, 30);
+		CreateLink     (c_Control_MeldungID,		$ControlIdLogId,				$WebFrontOverviewMLD, 20);
+		CreateLink     (c_Control_Meldungen,		$ControlIdLog,					$WebFrontOverviewMLD, 30);
+
+
+		// Übersicht
+		$Idx = 20;
+		foreach ($ZSUConfig as $ZSUName=>$ZSUData) {
+			$CirclyId   = get_ZSUCirclyId($ZSUName, $CategoryIdZSUs);
+
+			CreateLink($ZSUData[c_Property_Name],    	get_ZSUControlId(c_Control_Uebersicht,   	$CirclyId),		$WebFrontOverview,	$Idx);
+
+			$Idx = $Idx + 10;
+		}
+
+
 	}
 
 	ReloadAllWebFronts();

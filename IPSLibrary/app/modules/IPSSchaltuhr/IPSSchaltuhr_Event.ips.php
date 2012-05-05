@@ -42,6 +42,13 @@
 			if (function_exists($CircleName)) {
 					IPSLogger_Dbg(__file__, 'Zeitschaltuhr CallBack Funktion '.$Name.' Existiert in IPSSchaltuhr_Custom.');
 //					IPSSchaltuhr_Log('Zeitschaltuhr gestartet:  '.$Name.', Aktion: Sensor');
+//IPS_LogMessage('IPSSchaltuhr_Event','Zeitschaltuhr gestartet:  '.$Name.', Aktion: '.IPS_GetName($eventId));
+
+					$OVId = get_ControlId(c_Control_RunAktiv, $CircleId);
+					$LastDate = IPS_GetVariable($OVId);
+					if ($LastDate['VariableUpdated']+30 < time()){
+						set_Overview($CircleId);
+					}
 
 					$result = 0;
 					$RunAktiv =  explode(',', get_ControlValue(c_Control_RunAktiv, $CircleId));
@@ -89,56 +96,9 @@
 							}
 					}
 
-
-
-
 			} else {
 					IPSLogger_Err(__file__, "Zeitschaltuhr CallBack Funktion $CircleName in IPSSchaltuhr_Custom existiert nicht. Schaltuhr: ".$Name);
 			}
-
-/*	$eventId 	=  $_IPS['EVENT'];
-	$CircleName = IPS_GetName($eventId);
-
-	if (c_ZSUCircle == substr($CircleName,0,strlen(c_ZSUCircle))){
-			$CircleId 	= get_CirclyIdByCircleIdent($CircleName, ZSU_ID_ZSUZEITEN);
-			$eventTime 	= IPS_GetEvent($eventId)['CyclicTimeFrom'];
-
-			$ZSU     = AddConfiguration($CircleId);
-			IPSLogger_Dbg(__file__, ''.$ZSU['Property'][c_Property_Name]);
-			IPSSchaltuhr_Log('STOP Auslösung für '.$ZSU['Property']['Name'].' ('.$ZSU['Circle']['Name'].')');
-
-			if (function_exists($CircleName)) {
-					IPSLogger_Dbg(__file__, 'ZSUfunktion '.$ZSU['Circle']['Name'].' Existiert in IPSSchaltuhr_Custom.');
-					// --------------- Neue Eventzeit setzen -------------------
-					set_TimerEvents(0,$CircleId);
-
-					if ($ZSU['Circle'][c_Control_End] == true){
-							// --------------- Aktion -------------------
-							$eventMode = "StopEvent";
-							IPSLogger_Inf(__file__, 'STOP ausgelöst:  '.$ZSU['Property'][c_Property_Name].', Aktion: '.$eventMode);
-							$CircleName($CircleId, $ZSU['Property'][c_Property_Name], $eventMode);
-					}
-			} else {
-					IPSLogger_Err(__file__, "ZSUAktion $CircleName in IPSSchaltuhr_Custom existiert nicht. ".$ZSU['Property'][c_Property_Name]);
-			}
-	}
-
-	if ($CircleName == c_Control_LTag){
-			$ZSU = AddActiveControl();
-		   IPS_SetVariableProfileAssociation('IPSSchaltuhr_Tag', 0, $ZSU[c_Control_LTag],"", -1);
-	}
-
-	if ($CircleName == c_Control_LStunde){
-			$ZSU = AddActiveControl();
-		   IPS_SetVariableProfileAssociation('IPSSchaltuhr_Stunde', 0, $ZSU[c_Control_LStunde],"", -1);
-	}
-
-	if ($CircleName == c_Control_LMinute){
-			$ZSU = AddActiveControl();
-		   IPS_SetVariableProfileAssociation('IPSSchaltuhr_Minute', 0, $ZSU[c_Control_LMinute],"", -1);
-	}
-*/
-
 
 
 	/** @}*/
