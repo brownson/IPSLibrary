@@ -63,10 +63,10 @@
 	}
 
 	$moduleManager->VersionHandler()->CheckModuleVersion('IPS','2.50');
-	$moduleManager->VersionHandler()->CheckModuleVersion('IPSModuleManager','2.50.2');
+	$moduleManager->VersionHandler()->CheckModuleVersion('IPSModuleManager','2.50.1');
 	$moduleManager->VersionHandler()->CheckModuleVersion('IPSLogger','2.50.1');
 
-	IPSUtils_Include ("IPSInstaller.inc.php",              "IPSLibrary::install::IPSInstaller");
+	IPSUtils_Include ("IPSInstaller.inc.php",               "IPSLibrary::install::IPSInstaller");
 	IPSUtils_Include ("IPSTwilight_Configuration.inc.php", "IPSLibrary::config::modules::Weather::IPSTwilight");
 
 	$WFC10_Enabled        = $moduleManager->GetConfigValue('Enabled', 'WFC10');
@@ -105,6 +105,7 @@
 	$timerId_Refresh   = CreateTimer_OnceADay ('Refresh', $scriptId_Refresh, 0, 15) ;
 
 	// Graphics
+	$MondId 		          = CreateMedia ('IPSTwilight_Mond',          $categoryId_DataGraphics, IPS_GetKernelDir().'media\\IPSTwilight_Mond.jpg',          false,1,'Sun');
 	$YearMediaId          = CreateMedia ('IPSTwilight_Year',          $categoryId_DataGraphics, IPS_GetKernelDir().'media\\IPSTwilight_Year.gif',          false,1,'Sun');
 	$YearLimitedMediaId   = CreateMedia ('IPSTwilight_YearLimited',   $categoryId_DataGraphics, IPS_GetKernelDir().'media\\IPSTwilight_YearLimited.gif',   false,1,'Sun');
 	$YearUnlimitedMediaId = CreateMedia ('IPSTwilight_YearUnlimited', $categoryId_DataGraphics, IPS_GetKernelDir().'media\\IPSTwilight_YearUnlimited.gif', false,1,'Sun');
@@ -166,7 +167,8 @@
 
 		CreateLinkByDestination("Tag- und Nachtstunden in $Location",  $YearMediaId,      $categoryId_WebFrontBottom, 10);
 		CreateLinkByDestination('Show Limited',                        $DisplaySwitchId,  $categoryId_WebFrontRight,  10);
-		CreateLinkByDestination('Aktueller Tag',                       $DayMediaId,       $categoryId_WebFrontRight,  20);
+		CreateLinkByDestination('Mondphase',    		                  $MondId,       	 $categoryId_WebFrontRight,  20);
+		CreateLinkByDestination('Aktueller Tag',                       $DayMediaId,       $categoryId_WebFrontRight,  30);
 
 		$UId = date('Hi');
 		$tabItem = $WFC10_TabPaneItem.$WFC10_TabItem;

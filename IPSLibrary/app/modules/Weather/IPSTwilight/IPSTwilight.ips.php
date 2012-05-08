@@ -114,6 +114,7 @@
 		GenerateTwilightGraphic('IPSTwilight_YearLimited',   true,  4.4, 1.8);
 		GenerateClockGraphic('IPSTwilight_DayUnlimited',      false);
 		GenerateClockGraphic('IPSTwilight_DayLimited',        true);
+		GenerateMondphase('IPSTwilight_Mond');
 
 		CopyGraphics($variableId_Display);
 	}
@@ -193,7 +194,28 @@
 		SetLimitedValues('AstronomicLimits', 'AstronomicBeginLimited', 'AstronomicEndLimited', $astronomicTwilightStart, $astronomicTwilightEnd, $categoryId_Values, $scriptId_Refresh);
 	}
 
+	// ----------------------------------------------------------------------------------------------------------------------------
+	function GenerateMondphase($fileName) {
 
+	$file1 = "http://www.astronomie.info/observer/s_moon.jpg";
+	$file2 = IPS_GetKernelDir()."\\media\\".$fileName.".jpg";
+	$img = imagecreatefromjpeg($file1);
+	$imagex=imagesx($img); // Lesen von X-Kordinaten
+	$imagey=imagesy($img); // Lesen von Y-Kordinaten
+	for($y=0;$y < $imagey;$y++){
+		for($x=0; $x < $imagex; $x++){
+		$rgb = imagecolorat($img, $x, $y);
+		print $rgb."\n";
+			if($rgb<0x020202){ // RGB-Wert von dem ROT
+			imagesetpixel ($img, $x, $y, 0x14202b); // 0 = schwarz
+			}
+		}
+	}
+	//	header('Content-Type: image/jpeg');
+	imagejpeg($img, $file2); // Bild erstellen
+	imagedestroy($img);
+
+	}
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function GenerateClockGraphic($fileName, $useLimited=false, $Width=180) {
 		$clockWidth   = $Width;
