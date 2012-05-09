@@ -166,8 +166,8 @@
 		CreateLinkByDestination('Limits',                   $AstronomicLimits,  $categoryId_WebFrontTopRight, 40);
 
 		CreateLinkByDestination("Tag- und Nachtstunden in $Location",  $YearMediaId,      $categoryId_WebFrontBottom, 10);
-		CreateLinkByDestination('Show Limited',                        $DisplaySwitchId,  $categoryId_WebFrontRight,  10);
-		CreateLinkByDestination('Mondphase',    		                  $MondId,       	 $categoryId_WebFrontRight,  20);
+		CreateLinkByDestination('Mondphase',    		                  $MondId,       	 $categoryId_WebFrontRight,  10);
+		CreateLinkByDestination('Show Limited',                        $DisplaySwitchId,  $categoryId_WebFrontRight,  20);
 		CreateLinkByDestination('Aktueller Tag',                       $DayMediaId,       $categoryId_WebFrontRight,  30);
 
 		$UId = date('Hi');
