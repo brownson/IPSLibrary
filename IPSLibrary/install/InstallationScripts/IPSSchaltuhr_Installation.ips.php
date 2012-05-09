@@ -373,7 +373,7 @@
 	$ControlIdOVStartAktiv		= CreateVariable(c_Control_StartAktiv,		1 /*Integer*/, $CategoryIdData,  60, 'IPSSchaltuhr_StartSensor', 	$ScriptIdChangeSettings, 0, 'Intensity');
 	$ControlIdOVStopAktiv		= CreateVariable(c_Control_StopAktiv,		1 /*Integer*/, $CategoryIdData,  70, 'IPSSchaltuhr_StopSensor',  	$ScriptIdChangeSettings, 0, 'Intensity');
 	$ControlIdOVRunAktiv			= CreateVariable(c_Control_RunAktiv,		1 /*Integer*/, $CategoryIdData,  80, 'IPSSchaltuhr_RunSensor',  	$ScriptIdChangeSettings, 0, 'Intensity');
-//	$ControlIdOVUebersicht		= CreateVariable(c_Control_Uebersicht,		3 /*String*/,  $CategoryIdData, 200, '~HTMLBox',   null,	'');
+	$ControlIdOVUebersicht		= CreateVariable(c_Control_Uebersicht,		3 /*String*/,  $CategoryIdData, 200, '~HTMLBox',   null,	'');
 
 
 	// ----------------------------------------------------------------------------------------------------------------------------
