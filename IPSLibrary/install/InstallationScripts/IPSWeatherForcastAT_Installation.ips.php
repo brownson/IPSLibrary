@@ -14,7 +14,7 @@
 	 *
 	 * You should have received a copy of the GNU General Public License
 	 * along with the IPSLibrary. If not, see http://www.gnu.org/licenses/gpl.txt.
-	 */    
+	 */
 
 
 	/**@defgroup ipsweatherforcastat_visualization IPSWeatherForcastAT Visualisierung
@@ -140,7 +140,8 @@
 	$Forecast3TextLong        = CreateVariable("Tomorrow2ForecastShort",3 /*String*/,  $categoryId_Data,  440,  '~String',  null, '');
 	$Forecast3Icon            = CreateVariable("Tomorrow2Icon",         3 /*String*/,  $categoryId_Data,  450,  '~String',  null, '');
 
-	$iForecast                = CreateVariable("iForecast",             3 /*String*/,  $categoryId_Data,  1000, '~HTMLBox', null, '<iframe frameborder="0" width="100%" height="4000px" src="../user/Weather/Weather.php"</iframe>');
+	$iForecast                = CreateVariable("iForecast",             3 /*String*/,  $categoryId_Data,  1000, '~HTMLBox', null, '');
+	SetValue($iForecast, '<iframe frameborder="0" width="100%" height="4000px" src="/user/IPSWeatherForcastAT/Weather.php"</iframe>');
 
 	// Webfront Installation
 	if ($WFC10_Enabled) {
@@ -152,10 +153,12 @@
 
 	// iPhone Installation
 	if ($Mobile_Enabled) {
-		$mobileId  = CreateCategoryPath($Mobile_Path, $Mobile_PathOrder, $Mobile_PathIcon);
-		$mobileId  = CreateCategoryPath($Mobile_Path.'.'.$Mobile_Name, $Mobile_Order, $Mobile_Icon);
-
-		CreateLink('Vorhersage',      $iForecast, $mobileId, 10);
+		$mobileId   = CreateCategoryPath($Mobile_Path, $Mobile_PathOrder, $Mobile_PathIcon);
+		$categoryId = @IPS_GetObjectIDByIdent($Mobile_Name, $mobileId);
+		if ($categoryId!==false) {
+			DeleteCategory($categoryId);
+		}
+		CreateLink($Mobile_Name,      $iForecast, $mobileId, $Mobile_Order);
 	}
 
 	// Execute Data Refresh
