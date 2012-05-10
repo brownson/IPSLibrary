@@ -14,10 +14,10 @@
 	 *
 	 * You should have received a copy of the GNU General Public License
 	 * along with the IPSLibrary. If not, see http://www.gnu.org/licenses/gpl.txt.
-	 */    
+	 */
 
 
-	/**@defgroup ipstwilight IPSTwilight 
+	/**@defgroup ipstwilight IPSTwilight
 	 * @ingroup modules_weather
 	 * @{
 	 *
@@ -28,7 +28,7 @@
 	 *
 	 * Es gibt die Möglichkeit durch Angabe einer Minimal bzw. Maximal Range die jeweilige Dämmerungszeit zu begrenzen.
 	 *
-	 * So ist es z.B. möglich mit einer Beschattungssteuerung das Schließen der Jalousien an die Dämmerungszeit zu binden, aber gleichzeitig 
+	 * So ist es z.B. möglich mit einer Beschattungssteuerung das Schließen der Jalousien an die Dämmerungszeit zu binden, aber gleichzeitig
 	 * zu definieren, dass das Schließen frühestens um 18:00 aber spätestens um 20:00 zu geschehen hat.
 	 *
 	 * Es werden folgende Dämmerungszeiten berechnet:
@@ -36,10 +36,10 @@
 	 * - bürgerliche (zivile/ civil) Dämmerung - ist der Zeitpunkt, an dem die Sonne 6 Grad unter dem Horizont ist.
 	 * - nautische Dämmerung - ist der Zeitpunkt, an dem die Sonne 12 Grad unter dem Horizont ist.
 	 * - astronomische Dämmerung - ist der Zeitpunkt, an dem die Sonne 18 Grad unter dem Horizont ist.
-	 * 
-	 * Das Einsetzen der Dämmerung hängt vom Längengrand und somit vom jeweiligen Ort ab. Dazu muß im File "IPSTwilight_Configuraiton.inc.php" 
+	 *
+	 * Das Einsetzen der Dämmerung hängt vom Längengrand und somit vom jeweiligen Ort ab. Dazu muß im File "IPSTwilight_Configuraiton.inc.php"
 	 * der jeweilige Breiten und Längengrad gesetzt werden.'''
-	 * 
+	 *
 	 * @file          IPSTwilight.ips.php
 	 * @author        Andreas Brauneis
 	 * @version
@@ -74,7 +74,7 @@
 		case 'TimerEvent':
 			$eventName = IPS_GetName($_IPS['EVENT']);
 			if (function_exists($eventName)) {
-				$eventName(); 
+				$eventName();
 			} else {
 				CalculateCurrentValues($categoryId_Values, $scriptId_Refresh);
 				GenerateGraphics($variableId_Display);
@@ -99,7 +99,7 @@
 			$SourceYear = IPS_GetKernelDir().'media\\IPSTwilight_YearUnlimited.gif';
 			$SourceDay  = IPS_GetKernelDir().'media\\IPSTwilight_DayUnlimited.gif';
 		}
-	   
+
 		if (!copy($SourceYear, IPS_GetKernelDir().'media\\IPSTwilight_Year.gif')) {
 			IPSLogger_Err(__file__, "Error while coping $SourceYear to Destination File 'IPSTwilight_Year.gif'");
 		}
@@ -205,7 +205,7 @@
 	for($y=0;$y < $imagey;$y++){
 		for($x=0; $x < $imagex; $x++){
 		$rgb = imagecolorat($img, $x, $y);
-		print $rgb."\n";
+//		print $rgb."\n";
 			if($rgb<0x020202){ // RGB-Wert von dem ROT
 			imagesetpixel ($img, $x, $y, 0x14202b); // 0 = schwarz
 			}
