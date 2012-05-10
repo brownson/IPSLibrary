@@ -151,6 +151,7 @@
 	// ----------------------------------------------------------------------------------------------------------------------------
 	if ($WFC10_Enabled) {
 		$categoryId_WebFront         = CreateCategoryPath($WFC10_Path);
+		EmptyCategory($categoryId_WebFront);
 		$categoryId_WebFrontTopLeft  = CreateCategory(  'TopLeft',  $categoryId_WebFront, 10);
 		$categoryId_WebFrontTopRight = CreateCategory(  'TopRight', $categoryId_WebFront, 20);
 		$categoryId_WebFrontBottom   = CreateCategory(  'Bottom',   $categoryId_WebFront, 30);
@@ -165,9 +166,9 @@
 		CreateLinkByDestination('Astronomische Dämmerung',  $AstronomicDisplay, $categoryId_WebFrontTopLeft,  40);
 		CreateLinkByDestination('Limits',                   $AstronomicLimits,  $categoryId_WebFrontTopRight, 40);
 
-		CreateLinkByDestination("Tag- und Nachtstunden in $Location",  $YearMediaId,      $categoryId_WebFrontBottom, 10);
+		CreateLinkByDestination('Show Limited',                        $DisplaySwitchId,  $categoryId_WebFrontBottom,  10);
+		CreateLinkByDestination("Tag- und Nachtstunden in $Location",  $YearMediaId,      $categoryId_WebFrontBottom, 20);
 		CreateLinkByDestination('Mondphase',    		                  $MondId,       	 $categoryId_WebFrontRight,  10);
-		CreateLinkByDestination('Show Limited',                        $DisplaySwitchId,  $categoryId_WebFrontRight,  20);
 		CreateLinkByDestination('Aktueller Tag',                       $DayMediaId,       $categoryId_WebFrontRight,  30);
 
 		$UId = date('Hi');
