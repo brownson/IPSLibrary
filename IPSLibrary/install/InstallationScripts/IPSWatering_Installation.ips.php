@@ -124,7 +124,14 @@
 												c_ProgramId_Every3Day 	=> c_Program_Every3Day,
 												c_ProgramId_MonWedFri 	=> c_Program_MonWedFri,
 												c_ProgramId_MonTur 		=> c_Program_MonTur,
-												c_ProgramId_Sunday 		=> c_Program_Sunday));
+												c_ProgramId_Sunday 		=> c_Program_Sunday,
+												c_ProgramId_Monday 		=> c_Program_Monday,
+												c_ProgramId_Tuesday 	=> c_Program_Tuesday,
+												c_ProgramId_Wednesday 	=> c_Program_Wednesday,
+												c_ProgramId_Thursday 	=> c_Program_Thursday,
+												c_ProgramId_Friday 		=> c_Program_Friday,
+												c_ProgramId_Saturday 	=> c_Program_Saturday
+												));
 	CreateProfile_Associations ('IPSWatering_Sensor', array(
 												0	=> 'Aus',
 												1 	=> '1 mm',
@@ -191,7 +198,7 @@
 			CreateLinkByDestination ('Status',    get_WateringControlId(c_Control_ToBeDone, $CirclyId),  $WebFrontOverviewTop2, $Idx);
 
 			// Detailed CirclyData
-			$WebFrontDetailId  = CreateCategory($CircleName, $WebFrontId, 100+$Idx);
+			$WebFrontDetailId  = CreateCategory($CircleId, $WebFrontId, 100+$Idx);
 			CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_'.$Idx,$WFC10_TabPaneItem.'', 100+$Idx, $CircleName, '', $WebFrontDetailId /*BaseId*/, 'false' /*BarBottomVisible*/);
 			CreateLink('Status',             get_WateringControlId(c_Control_Active,     $CirclyId),  $WebFrontDetailId, 10);
 			CreateLink('Automatik',          get_WateringControlId(c_Control_Automatic,  $CirclyId),  $WebFrontDetailId, 20);
@@ -248,8 +255,7 @@
 		}
 	}
 
-
-   // ------------------------------------------------------------------------------------------------
+	// ------------------------------------------------------------------------------------------------
 	function get_WateringCirclyId($DeviceName, $ParentId) {
 		$CategoryId = IPS_GetObjectIDByIdent($DeviceName, $ParentId);
 		return $CategoryId;

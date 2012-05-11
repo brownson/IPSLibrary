@@ -61,7 +61,7 @@
 
 	// Bewässerung Starten
 	if ($SensorLimit > 0 and $SensorValue!==false and $SensorLimit<=$SensorValue) {
-		IPSWatering_LogNoActivationByRainfall($CircleId, $SensorLimit, $Rainfall);
+		IPSWatering_LogNoActivationByRainfall($CircleId, $SensorLimit, $SensorValue.' mm');
 		IPSWatering_CalcNextScheduleDateTime($CircleId);
 	} else {
 		IPSWatering_SetActive($ControlId, true, c_Mode_StartAutomatic);

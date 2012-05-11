@@ -52,7 +52,7 @@
 	define ("c_Control_ToBeDone",			"ToBeDone");
 
 	define ("c_Program_Manual",			"Manuell");
-	define ("c_Program_EveryDay",			"Jeden Tag");
+	define ("c_Program_EveryDay",		"Jeden Tag");
 	define ("c_Program_Every2Day",		"Jeden 2. Tag");
 	define ("c_Program_Every3Day",		"Jeden 3. Tag");
 	define ("c_Program_Every4Day",		"Jeden 4. Tag");
@@ -60,11 +60,11 @@
 	define ("c_Program_MonTur",			"Mon und Don");
 	define ("c_Program_Sunday",			"Sonntags");
 	define ("c_Program_Monday",			"Montags");
-	define ("c_Program_Tuesday",			"Dienstags");
-	define ("c_Program_Wednesday",		"Mitwochs");
-	define ("c_Program_Thursday",			"Donnerstags");
+	define ("c_Program_Tuesday",		"Dienstags");
+	define ("c_Program_Wednesday",		"Mittwochs");
+	define ("c_Program_Thursday",		"Donnerstags");
 	define ("c_Program_Friday",			"Freitags");
-	define ("c_Program_Saturday",			"Samstags");
+	define ("c_Program_Saturday",		"Samstags");
 
 	define ("c_ProgramId_Manual",			0);
 	define ("c_ProgramId_EveryDay",		1);
