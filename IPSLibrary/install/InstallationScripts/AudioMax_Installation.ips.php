@@ -92,6 +92,7 @@
 	 * “5”  => Error 5, Command Array 5, Out Of Range => Fehler im 5. Befehlsteil
 	 *
 	 */
+	/** @}*/
 
 	 /**@defgroup audiomax_install AudioMax Installation
 	 * @ingroup audiomax

@@ -3,7 +3,7 @@
 	 * @ingroup entertainment
 	 * @{
 	 *
-	 * @file          Entertainment_InterfaceIPSComponent.inc.php
+	 * @file          Entertainment_InterfaceIPSComponentAVControl.inc.php
 	 * @author        Andreas Brauneis
 	 * @version
 	 *  Version 2.50.1, 31.01.2012<br/>

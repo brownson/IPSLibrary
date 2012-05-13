@@ -32,6 +32,7 @@
 		 * Initialisierung eines IPSComponentSwitch_1WireD2408 Objektes
 		 *
 		 * @param integer $instanceId InstanceId des 1WireD2408 Devices
+		 * @param integer $channelId Kanal des 1WireD2408 Devices
 		 */
 		public function __construct($instanceId, $channelId) {
 			$this->instanceId = IPSUtil_ObjectIDByPath($instanceId);

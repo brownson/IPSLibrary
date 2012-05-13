@@ -22,7 +22,7 @@
 	 *
 	 * Diverse Helper Functions für IPSWeatherForcastAT
 	 *
-	 * @file          IPSWeatherForcastAT_Utils.ips.php
+	 * @file          IPSWeatherForcastAT_Utils.inc.php
 	 * @author        Andreas Brauneis
 	 * @version
 	 *  Version 2.50.1, 15.02.2012<br/>

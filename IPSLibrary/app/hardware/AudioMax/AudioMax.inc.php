@@ -311,8 +311,9 @@
 	 * Set Text
 	 *
 	 * @param int $instanceId  ID des AudioMax Servers
-	 * @param int $mode Mode (0-4)
-	 * @param string $value Array mit Texten
+	 * @param string $text1 Text Zeile 1
+	 * @param string $text2 Text Zeile 2
+	 * @param string $text3 Text Zeile 3
 	 * @return boolean Funktions Ergebnis, TRUE für OK, FALSE für Fehler
 	 */
 	function AudioMax_SetText($instanceId, $text1, $text2=null, $text3=null) {
