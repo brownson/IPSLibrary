@@ -158,10 +158,10 @@
 
 		// ----------------------------------------------------------------------------------------------------------------------------
 		public function MoveByEvent($Level) {
-			IPSLogger_Dbg(__file__, "Received StateChange from Shutter '".IPS_GetName($DeviceId)."', NewLevel=".round($Level).", CurrentLevel=".$this->GetVariableValue(c_Control_Position));
+			IPSLogger_Dbg(__file__, "Received StateChange from Shutter '".IPS_GetName($this->deviceId)."', NewLevel=".round($Level).", CurrentLevel=".$this->GetVariableValue(c_Control_Position));
 			if ($this->GetVariableValue(c_Control_Position) <> $Level and
 			    $this->GetVariableValue(c_Control_StepsToDo)=="") {
-				IPSLogger_Inf(__file__, "Apply StateChange from Shutter '".IPS_GetName($DeviceId)."', Level=".round($Level));
+				IPSLogger_Inf(__file__, "Apply StateChange from Shutter '".IPS_GetName($this->deviceId)."', Level=".round($Level));
 				$this->SetVariableValue(c_Control_Movement, c_MovementId_Stop);
 				$this->SetVariableValue(c_Control_Position, $Level);
 				if (!$this->GetVariableValue(c_Control_ManualChange) and
