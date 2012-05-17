@@ -306,6 +306,8 @@
 													c_MovementId_MovedIn			=> c_Movement_MovedIn,
 													c_MovementId_Stop				=> c_Movement_Stop),"", $IPSShadowing_MovementCol, true);
 
+	$CategoryIdDevices	= CreateCategory('Devices', $CategoryIdData, 20);
+
 	// Profile Manager
 	// ====================================================================================================================================
 	$CategoryIdProfiles         = CreateCategory('Profiles',   $CategoryIdData, 30);
@@ -352,7 +354,6 @@
 	if (count($Profiles)==0) {
 		$profileManager->CreateEndOfDay('Dämmerung');
 	}
-	$profileManager->CorrectDeletedDeviceProfiles();
 
 	// Scenario Manager
 	// ====================================================================================================================================
@@ -393,7 +394,6 @@
 
 	// Shadowing Devices
 	// ====================================================================================================================================
-	$CategoryIdDevices	= CreateCategory('Devices', $CategoryIdData, 20);
 	$DeviceConfig        = get_ShadowingConfiguration();
 	$Idx                 = 10;
 	foreach ($DeviceConfig as $DeviceName=>$DeviceData) {
@@ -440,6 +440,7 @@
 		}
 		$Idx = $Idx  + 10;
 	}
+	$profileManager->CorrectDeletedDeviceProfiles();
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 	// Webfront Definition
@@ -458,8 +459,8 @@
 		$WebFrontOverviewBottom1   = CreateCategory(  'Bottom1', $WebFrontOverviewId,    30);
 		$WebFrontOverviewBottom2   = CreateCategory(  'Bottom2', $WebFrontOverviewId,    40);
 		$UniqueId                  = date('H:i');
-		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OV',                 $WFC10_TabPaneItem.'',          10, $WFC10_TabName1, $WFC10_TabIcon1, 0 /*Horizontal*/, 170 /*Hight*/, 1 /*Target=Pane2*/, 1/*UsePixel*/, 'true');
-		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OVTop',              $WFC10_TabPaneItem.'_OV',       10, '', '', 1 /*Vertical*/, 310 /*Width*/, 1 /*Target=Pane2*/, 1/*UsePixel*/, 'true');
+		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OV',                 $WFC10_TabPaneItem.'',          10, $WFC10_TabName1, $WFC10_TabIcon1, 0 /*Horizontal*/, 160 /*Height*/, 1 /*Target=Pane2*/, 1/*UsePixel*/, 'true');
+		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OVTop',              $WFC10_TabPaneItem.'_OV',       10, '', '', 1 /*Vertical*/, 300 /*Width*/, 1 /*Target=Pane2*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OVBottom',           $WFC10_TabPaneItem.'_OV',       20, '', '', 1 /*Vertical*/, 430 /*Width*/, 1 /*Target=Pane2*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OVTop1'.$UniqueId,   $WFC10_TabPaneItem.'_OVTop',    10, 'Top1', '', $WebFrontOverviewTop1 /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OVTop2'.$UniqueId,   $WFC10_TabPaneItem.'_OVTop',    20, 'Top2', '', $WebFrontOverviewTop2 /*BaseId*/, 'false' /*BarBottomVisible*/);

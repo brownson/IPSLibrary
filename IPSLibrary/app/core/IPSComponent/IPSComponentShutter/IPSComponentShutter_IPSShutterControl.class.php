@@ -19,7 +19,9 @@
     * Version 2.50.1, 31.01.2012<br/>
     */
 
-	abstract class IPSComponentShutter_IPSShutterControl extends IPSComponentShutter {
+	IPSUtils_Include ('IPSComponentShutter.class.php', 'IPSLibrary::app::core::IPSComponent::IPSComponentShutter');
+
+	class IPSComponentShutter_IPSShutterControl extends IPSComponentShutter {
 
 		private $instanceId;
 	
@@ -32,6 +34,19 @@
 		 */
 		public function __construct($instanceId) {
 			$this->instanceId = IPSUtil_ObjectIDByPath($instanceId);
+		}
+
+		/**
+		 * @public
+		 *
+		 * Funktion liefert String IPSComponent Constructor String.
+		 * String kann dazu benützt werden, das Object mit der IPSComponent::CreateObjectByParams
+		 * wieder neu zu erzeugen.
+		 *
+		 * @return string Parameter String des IPSComponent Object
+		 */
+		public function GetComponentParams() {
+			return get_class($this).','.$this->instanceId;
 		}
 
 		/**

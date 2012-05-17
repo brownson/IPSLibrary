@@ -19,7 +19,9 @@
     * Version 2.50.1, 31.01.2012<br/>
     */
 
-	abstract class IPSComponentShutter_LCN extends IPSComponentShutter {
+	IPSUtils_Include ('IPSComponentShutter.class.php', 'IPSLibrary::app::core::IPSComponent::IPSComponentShutter');
+
+	class IPSComponentShutter_LCN extends IPSComponentShutter {
 
 		private $instanceId1;
 		private $instanceId2;
@@ -40,6 +42,19 @@
 			$this->instanceId2     = IPSUtil_ObjectIDByPath($instanceId2);
 			$this->directionSwitch = $directionSwitch;
 			$this->unitType        = LCN_GetUnit($this->instanceId1);
+		}
+
+		/**
+		 * @public
+		 *
+		 * Funktion liefert String IPSComponent Constructor String.
+		 * String kann dazu benützt werden, das Object mit der IPSComponent::CreateObjectByParams
+		 * wieder neu zu erzeugen.
+		 *
+		 * @return string Parameter String des IPSComponent Object
+		 */
+		public function GetComponentParams() {
+			return get_class($this).','.$this->instanceId1.','.$this->instanceId2;
 		}
 
 		/**

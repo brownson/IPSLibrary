@@ -30,7 +30,7 @@
 	include_once "IPSShadowing.inc.php";
 
 	$profileManager = new IPSShadowing_ProfileManager();
-	$profileManager->CreateSun('Neues Profil');
+	$profileManager->CreateTemp('Neues Profil');
 
 	/** @}*/
 ?>

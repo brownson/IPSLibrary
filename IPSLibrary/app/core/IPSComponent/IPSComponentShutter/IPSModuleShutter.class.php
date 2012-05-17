@@ -29,7 +29,7 @@
 		 *
 		 * @param string $position Aktuelle Position der Beschattung (Wertebereich 0-100)
 		 */
-		abstract public function SyncPosition($position);
+		abstract public function SyncPosition($position, IPSComponentShutter $component);
 
 
 	}

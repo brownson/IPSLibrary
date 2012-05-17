@@ -47,6 +47,20 @@
 		 * @param IPSModuleShutter $module Module Object an das das aufgetretene Event weitergeleitet werden soll
 		 */
 		public function HandleEvent($variable, $value, IPSModuleShutter $module){
+			$module->SyncPosition(100-($value*100), $this);
+		}
+
+		/**
+		 * @public
+		 *
+		 * Funktion liefert String IPSComponent Constructor String.
+		 * String kann dazu benützt werden, das Object mit der IPSComponent::CreateObjectByParams
+		 * wieder neu zu erzeugen.
+		 *
+		 * @return string Parameter String des IPSComponent Object
+		 */
+		public function GetComponentParams() {
+			return get_class($this).','.$this->instanceId;
 		}
 
 		/**
@@ -55,7 +69,7 @@
 		 * Hinauffahren der Beschattung
 		 */
 		public function MoveUp(){
-			HM_WriteValueFloat($this->InstanceId , 'LEVEL', 1);
+			HM_WriteValueFloat($this->instanceId , 'LEVEL', 1);
 		}
 		
 		/**
@@ -64,7 +78,7 @@
 		 * Hinunterfahren der Beschattung
 		 */
 		public function MoveDown(){
-			HM_WriteValueFloat($this->InstanceId , 'LEVEL', 0);
+			HM_WriteValueFloat($this->instanceId , 'LEVEL', 0);
 		}
 		
 		/**
@@ -73,7 +87,7 @@
 		 * Stop
 		 */
 		public function Stop() {
-			HM_WriteValueFloat($this->InstanceId , 'STOP', true);
+			HM_WriteValueBoolean($this->instanceId , 'STOP', true);
 		}
 
 	}
