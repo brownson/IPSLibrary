@@ -81,8 +81,8 @@
 		 * @param string $name Name des Scenarios
 		 * @return IPSShadowing_Scenario das erzeugte IPSShadowing_Scenario Object
 		 */
-		public function Create($name='Neues Szenario') {
-			$scenarioId =  IPSShadowing_Scenario::Create($name);
+		public function Create($name='Neues Szenario', $defaultValue=c_MovementId_NoAction) {
+			$scenarioId =  IPSShadowing_Scenario::Create($name, $defaultValue);
 			$this->Select($scenarioId);
 			return $scenarioId;
 		}
