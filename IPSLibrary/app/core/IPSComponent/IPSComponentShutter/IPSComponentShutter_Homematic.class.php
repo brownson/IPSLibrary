@@ -24,16 +24,19 @@
 	class IPSComponentShutter_Homematic extends IPSComponentShutter {
 
 		private $instanceId;
-	
+		private $reverseControl;
+
 		/**
 		 * @public
 		 *
 		 * Initialisierung eines IPSComponentShutter_Homematic Objektes
 		 *
 		 * @param integer $instanceId InstanceId des Homematic Devices
+		 * @param boolean $reverseControl Reverse Ansteuerung des Devices
 		 */
-		public function __construct($instanceId) {
-			$this->instanceId = IPSUtil_ObjectIDByPath($instanceId);
+		public function __construct($instanceId, $reverseControl=false) {
+			$this->instanceId     = IPSUtil_ObjectIDByPath($instanceId);
+			$this->reverseControl = $reverseControl;
 		}
 
 		/**
@@ -47,7 +50,11 @@
 		 * @param IPSModuleShutter $module Module Object an das das aufgetretene Event weitergeleitet werden soll
 		 */
 		public function HandleEvent($variable, $value, IPSModuleShutter $module){
-			$module->SyncPosition(100-($value*100), $this);
+		   if ($this->reverseControl) {
+				$module->SyncPosition(($value*100), $this);
+			} else {
+				$module->SyncPosition(100-($value*100), $this);
+			}
 		}
 
 		/**
@@ -69,7 +76,11 @@
 		 * Hinauffahren der Beschattung
 		 */
 		public function MoveUp(){
-			HM_WriteValueFloat($this->instanceId , 'LEVEL', 1);
+		   if ($this->reverseControl) {
+				HM_WriteValueFloat($this->instanceId , 'LEVEL', 0);
+			} else {
+				HM_WriteValueFloat($this->instanceId , 'LEVEL', 1);
+			}
 		}
 		
 		/**
@@ -78,7 +89,11 @@
 		 * Hinunterfahren der Beschattung
 		 */
 		public function MoveDown(){
-			HM_WriteValueFloat($this->instanceId , 'LEVEL', 0);
+		   if ($this->reverseControl) {
+				HM_WriteValueFloat($this->instanceId , 'LEVEL', 1);
+			} else {
+				HM_WriteValueFloat($this->instanceId , 'LEVEL', 0);
+			}
 		}
 		
 		/**
