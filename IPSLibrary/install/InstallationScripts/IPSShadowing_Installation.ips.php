@@ -14,7 +14,7 @@
      *
      * You should have received a copy of the GNU General Public License
      * along with the IPSLibrary. If not, see http://www.gnu.org/licenses/gpl.txt.
-     */    
+     */
 
 	/**@defgroup ipsshadowing_visualization IPSShadowing Visualisierung
 	 * @ingroup ipsshadowing
@@ -371,7 +371,7 @@
 		$scenarioId = $scenarioManager->Create('Alle Schliessen', c_MovementId_Closed);
 		$scenario = new IPSShadowing_Scenario($scenarioId);
 		$scenario->ResetEditMode();
-		
+
 	}
 	$ScenarioId = @IPS_GetObjectIDByIdent('Alle Öffnen', $CategoryIdScenarios);
 	if ($ScenarioId===false) {
@@ -441,6 +441,31 @@
 		$Idx = $Idx  + 10;
 	}
 	$profileManager->CorrectDeletedDeviceProfiles();
+
+	// Register Events for Device Synchronization
+	// ------------------------------------------
+	IPSUtils_Include ('IPSMessageHandler.class.php', 'IPSLibrary::app::core::IPSMessageHandler');
+	$messageHandler = new IPSMessageHandler();
+	foreach ($DeviceConfig as $DeviceName=>$DeviceData) {
+		$component = $DeviceConfig[$DeviceName][c_Property_Component];
+		$componentParams = explode(',', $component);
+		$componentClass = $componentParams[0];
+
+		// Homematic
+		if ($componentClass=='IPSComponentShutter_Homematic') {
+			$instanceId = IPSUtil_ObjectIDByPath($componentParams[1]);
+			$variableId = @IPS_GetObjectIDByName('LEVEL', $instanceId);
+			if ($variableId===false) {
+				$moduleManager->LogHandler()->Log('Variable with Name LEVEL could NOT be found for Homematic Instance='.$instanceId);
+			} else {
+				$moduleManager->LogHandler()->Log('Register OnChangeEvent vor Homematic Instance='.$instanceId);
+				$messageHandler->RegisterOnChangeEvent($variableId, $component, 'IPSModuleShutter_IPSShadowing,');
+			}
+		} else {
+			$moduleManager->LogHandler()->Log('Found Component '.$componentClass);
+		}
+	}
+
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 	// Webfront Definition
@@ -612,7 +637,7 @@
 		CreateLink('Msg Prio. Temparatur',   IPS_GetObjectIDByIdent(c_Control_MsgPrioTemp,     $CategoryIdSettings),  $WebFrontSettingId, 60);
 		CreateLink('Msg Prio. Programm',     IPS_GetObjectIDByIdent(c_Control_MsgPrioProg,     $CategoryIdSettings),  $WebFrontSettingId, 70);
 
-		// Application Logging 
+		// Application Logging
 		$WebFrontLoggingId = CreateCategory('Logging',         $categoryId_WebFront, 60);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Logging", $WFC10_TabPaneItem, 60, 'Meldungen', 'Window', $WebFrontLoggingId /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateLink('Meldungen', $ControlIdLog,  $WebFrontLoggingId, 10);
@@ -696,7 +721,7 @@
 		CreateLink('Profil Einstellungen', $CategoryIdProfileSunDisplay,    $MobileSettingProfileId,10);
 		//CreateLink('Profil Graph',         $CategoryIdProfileSunGraphs,     $MobileSettingProfileId,20);
 		CreateLink('Profil Graph',         $MediaIdAzimuth,                 $MobileSettingProfileId,20);
-		
+
 		CreateLink('Neues Profil',         $ScriptIdProfileSunCreate,       $MobileSettingProfileId, 30);
 		CreateLink('Profil löschen',       $ScriptIdProfileSunDelete,       $MobileSettingProfileId, 40);
 		$MobileSettingProfileId = CreateCategory('Wetter Profile', $MobileSettingsId, 30, 'Drops');
