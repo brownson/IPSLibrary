@@ -236,7 +236,7 @@
 		if (!Entertainment_Before_SendData($FunctionParameters)) {
 		   return;
 		}
-	   IPSLogger_Trc(__file__, 'SendData '.$CommInterface.'.'.$FunctionName.'('.implode(',',$FunctionParameters).')');
+	   IPSLogger_Trc(__file__, 'SendData '.$CommInterface.'.'.$FunctionName.'('.print_r($FunctionParameters, true).')');
 		try {
 			include_once $FunctionScript;
 			$Function       = new ReflectionFunction($FunctionName);
@@ -268,13 +268,22 @@
 	      return;
 		}
 	   $RoomName    = IPS_GetName($RoomId);
-      $DeviceTypes = get_SourceDeviceTypes($RoomId, $SourceIdx);
-      $SourceConf  = get_SourceConfiguration();
-      foreach ($DeviceTypes as $DeviceType=>$DeviceName) {
-	      $SourceData  = $SourceConf[$RoomName][$SourceIdx][$DeviceType];
-         if (array_key_exists(c_Property_CommSrc, $SourceData)) {
-         	Entertainment_SendData($DeviceName, c_Control_Source, $SourceData[c_Property_CommSrc], c_Property_CommSrc);
-         }
+        $DeviceTypes = get_SourceDeviceTypes($RoomId, $SourceIdx);
+        $SourceConf  = get_SourceConfiguration();
+        foreach ($DeviceTypes as $DeviceType=>$DeviceName) {
+            $SourcesData  = $SourceConf[$RoomName][$SourceIdx][$DeviceType];
+            
+            // wrap older/non array configuration in an array for downward compatibility
+            if(isset($SourcesData[c_Property_Device])) {
+                $SourcesData = array($SourcesData);
+            }
+            
+			foreach($SourcesData as $SourceData) {
+				$DeviceName = $SourceData[c_Property_Device];
+				if (array_key_exists(c_Property_CommSrc, $SourceData)) {
+					Entertainment_SendData($DeviceName, c_Control_Source, $SourceData[c_Property_CommSrc], c_Property_CommSrc);
+				}
+			}
       }
 	}
 
