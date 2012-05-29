@@ -74,8 +74,27 @@
 	   if ($Value) {
 			$RoomName    = IPS_GetName($RoomId);
 			$DeviceNames = get_DeviceNamesByRoomId($RoomId);
+            $DeviceData = get_DeviceConfiguration();
+            $first = true;
 			foreach ($DeviceNames as $DeviceName) {
-			   Entertainment_SetDevicePowerByDeviceName($DeviceName, true);
+                // no delay for first device
+                if($first) {
+                    $first = false;
+                    continue;
+                }
+                
+                if(isset($DeviceData[$DeviceName][c_Control_DevicePower])) {
+                    $devicePower = $DeviceData[$DeviceName][c_Control_DevicePower];
+                    if(isset($devicePower[c_Property_PowerDelay])) {
+                        $delaySeconds = $devicePower[c_Property_PowerDelay];
+                        if(!is_numeric($delaySeconds) || $delaySeconds < 0 || $delaySeconds > 5000) {
+                            IPSLogger_Wrn(__file__, "'c_Property_PowerDelay' for control 'c_Control_DevicePower' for device $DeviceName is not a number ($delaySeconds). Please use a value between 0 and 5000. Using default: 1000 (= 1 second)");
+                            $delaySeconds = 1000;
+                        }
+                        usleep($delaySeconds * 1000);
+                    }
+                }
+                Entertainment_SetDevicePowerByDeviceName($DeviceName, true);
 			}
 	   } else {
 	      Entertainment_PowerOffUnusedDevices();
