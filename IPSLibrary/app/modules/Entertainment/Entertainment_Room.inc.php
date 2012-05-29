@@ -80,12 +80,12 @@
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function Entertainment_SetRoomPowerByDeviceName($DeviceName, $Value) {
 	   if ($Value) {
-	      $SourceList = get_SourceListByDeviceName($DeviceName, $Value);
+	      $SourceList = get_SourceListByDeviceName($DeviceName);
 			if (count($SourceList)==1) {
 				$RoomKeys  = array_keys($SourceList);
 				$RoomId    = $RoomKeys[0];
-				$SourceIdx = $SourceList[$RoomId];
 				if (!IsRoomPoweredOn($RoomId)) {
+                    $SourceIdx = $SourceList[$RoomId];
 					Entertainment_SetRoomPowerByRoomId($RoomId, true, false);
 					Entertainment_SetSourceByRoomId($RoomId, $SourceIdx);
 				}
