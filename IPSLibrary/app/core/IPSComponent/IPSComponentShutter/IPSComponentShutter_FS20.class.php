@@ -104,7 +104,7 @@
 		 */
 		public function Stop() {
 			if(GetValue($this->isRunningId)) {
-				$value = GetValue(IPS_GetObjectIDByIdent($this->instanceId, "StatusVariable")
+				$value = GetValue(IPS_GetObjectIDByIdent($this->instanceId, "StatusVariable"));
 				FS20_SwitchMode($this->instanceId, $value);
 				SetValue($this->isRunningId, false);
 			}
