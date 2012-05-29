@@ -155,7 +155,7 @@
 				$tempIndoor = IPSUtil_ObjectIDByPath($tempIndoorPath);
 			}
 			if ($this->tempDiffOpening >= c_TempDiff_NoAction) {
-				return false; // No Action
+				return true; // No Action
 			}
 			//Example:
 			//Indoor-Outdoor >= Diff
