@@ -77,12 +77,6 @@
             $DeviceData = get_DeviceConfiguration();
             $first = true;
 			foreach ($DeviceNames as $DeviceName) {
-                // no delay for first device
-                if($first) {
-                    $first = false;
-                    continue;
-                }
-                
                 if(isset($DeviceData[$DeviceName][c_Control_DevicePower])) {
                     $devicePower = $DeviceData[$DeviceName][c_Control_DevicePower];
                     if(isset($devicePower[c_Property_PowerDelay])) {
@@ -91,7 +85,12 @@
                             IPSLogger_Wrn(__file__, "'c_Property_PowerDelay' for control 'c_Control_DevicePower' for device $DeviceName is not a number ($delaySeconds). Please use a value between 0 and 5000. Using default: 1000 (= 1 second)");
                             $delaySeconds = 1000;
                         }
-                        usleep($delaySeconds * 1000);
+                        // no delay for first device
+                        if($first) {
+                            $first = false;
+                        } else {
+                            usleep($delaySeconds * 1000);
+                        }
                     }
                 }
                 Entertainment_SetDevicePowerByDeviceName($DeviceName, true);
