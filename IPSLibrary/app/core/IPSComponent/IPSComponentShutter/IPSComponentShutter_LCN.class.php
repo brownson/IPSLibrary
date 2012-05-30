@@ -103,7 +103,7 @@
 					break;
 				case 2:
 					LCN_SwitchRelay($this->instanceId1, true);
-					LCN_SwitchRelay($this->instanceId2, $this->directionSwitch); 
+					LCN_SwitchRelay($this->instanceId2, !$this->directionSwitch); 
 					break;
 				default:
 					throw new IPSComponentException('Unknown Unittype '.$this->unitType.' for LCN Device with ID='.$this->instanceId1);

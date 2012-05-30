@@ -37,8 +37,8 @@
 			$this->instanceId = IPSUtil_ObjectIDByPath($instanceId);
 			$this->isRunningId  = @IPS_GetObjectIDByIdent('isrunning', $this->instanceId);
 			if($this->isRunningId===false) {
-				$this->isRunningId = IPS_CreateVariable($this->instanceId);
-				IPS_SetParent($this->isRunningId, $id);
+				$this->isRunningId = IPS_CreateVariable(0);
+				IPS_SetParent($this->isRunningId, $this->instanceId);
 				IPS_SetName($this->isRunningId, 'IsRunning');
 				IPS_SetIdent($this->isRunningId, 'isrunning');
 				IPS_SetInfo($this->isRunningId, "This Variable was created by Script IPSComponentShutter_FS20");

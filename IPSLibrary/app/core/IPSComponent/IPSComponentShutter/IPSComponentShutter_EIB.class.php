@@ -37,7 +37,9 @@
 		 */
 		public function __construct($instanceId1, $instanceId2=null, $reverseControl=false) {
 			$this->instanceId1     = IPSUtil_ObjectIDByPath($instanceId1);
-			$this->instanceId2     = IPSUtil_ObjectIDByPath($instanceId2);
+			if ($this->instanceId2<>null) {
+				$this->instanceId2     = IPSUtil_ObjectIDByPath($instanceId2);
+			}
 			$this->reverseControl  = IPSUtil_ObjectIDByPath($reverseControl);
 		}
 
