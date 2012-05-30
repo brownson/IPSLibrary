@@ -322,42 +322,57 @@
 
 
    // ------------------------------------------------------------------------------------------------
-	function get_DevicePropertybyParent($ParentId, $ControlType, $Property) {
-	   $Data = false;
-	   $DeviceConfig = get_DeviceConfiguration();
-	   $Name = IPS_GetName($ParentId);
-	   if (IPS_GetName(IPS_GetParent($ParentId)) == 'Devices') {
-	      $Data = $DeviceConfig[$Name][$ControlType][$Property];
-	   } else {
-	      $SourceConfig = get_SourceConfiguration();
-	      foreach ($SourceConfig as $RoomName=>$RoomData) {
-	   		foreach ($RoomData as $SourceIdx => $SourceIdxData) {
-	   	   	if (is_array($SourceIdxData)) {
-			   		foreach ($SourceIdxData as $SourceType => $SourceTypeData) {
-			   		   if ($SourceType==c_Property_Input or $SourceType==c_Property_Switch or $SourceType==c_Property_Output) {
-			   		      $DeviceName = $SourceTypeData[c_Property_Device];
-			   		      $DeviceControls = $DeviceConfig[$DeviceName];
-			   		      if (array_key_exists($ControlType, $DeviceControls)) {
-			   		         $Data = $DeviceConfig[$DeviceName][$ControlType][$Property];
-								}
-			   		   }
-			   		}
-			   	}
-				}
-	      }
-	   }
-	   if ($Data===false) {
-	      if ($ControlType==c_Control_iRemoteVolume) {
-            return get_DevicePropertybyParent($ParentId, c_Control_RemoteVolume, $Property);
-			}
-	      if ($ControlType==c_Control_iRemoteSource) {
-            return get_DevicePropertybyParent($ParentId, c_Control_RemoteSource, $Property);
-			}
-	      echo $Name.'.'.$ControlType.'.'.$Property." could NOT be found !!!/n";
-	      exit;
-	   }
-		return $Data;
-	}
+    function get_DevicePropertybyParent($ParentId, $ControlType, $Property) {
+        $Data = false;
+        $DeviceConfig = get_DeviceConfiguration();
+        $Name = IPS_GetName($ParentId);
+        if (IPS_GetName(IPS_GetParent($ParentId)) == 'Devices') {
+            $Data = $DeviceConfig[$Name][$ControlType][$Property];
+        } else {
+            $SourceConfig = get_SourceConfiguration();
+            $DeviceRoomName = $Name;
+            foreach ($SourceConfig as $RoomName=>$RoomData) {
+                if($RoomName != $DeviceRoomName) {
+                    continue;
+                }
+                foreach ($RoomData as $SourceIdx => $SourceIdxData) {
+                    if (is_array($SourceIdxData)) {
+                        foreach ($SourceIdxData as $SourceType => $SourceTypeData) {
+                            if ($SourceType==c_Property_Input or $SourceType==c_Property_Switch or $SourceType==c_Property_Output) {
+                                // ensure compatibilty to older or simpler configurations
+                                if(isset($SourceTypeData[c_Property_Device])) {
+                                    $SourceTypeData = array($SourceTypeData);
+                                }
+                                
+                                $DeviceNames = array();
+                                foreach($SourceTypeData as $SourceTypeDataX) {
+                                    $DeviceName = $SourceTypeDataX[c_Property_Device];
+                                    $DeviceNames[] = $DeviceName;
+                                }
+                                foreach($DeviceNames as $DeviceName) {
+                                    $DeviceControls = $DeviceConfig[$DeviceName];
+                                    if (array_key_exists($ControlType, $DeviceControls)) {
+                                        $Data = $DeviceControls[$ControlType][$Property];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if ($Data===false) {
+            if ($ControlType==c_Control_iRemoteVolume) {
+                return get_DevicePropertybyParent($ParentId, c_Control_RemoteVolume, $Property);
+            }
+            if ($ControlType==c_Control_iRemoteSource) {
+                return get_DevicePropertybyParent($ParentId, c_Control_RemoteSource, $Property);
+            }
+            echo $Name.'.'.$ControlType.'.'.$Property." could NOT be found !!!/n";
+            exit;
+        }
+        return $Data;
+    }
 
    // ------------------------------------------------------------------------------------------------
 	function CreateControl ($ControlType, $ControlData, $ParentId, $ActionScriptId, $Order) {
