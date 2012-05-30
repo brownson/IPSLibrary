@@ -20,17 +20,17 @@
 	   foreach ($PropertyData as $Idx=>$Property) {
 	      $CommParam = $CommParams[$Idx];
 	      
-	      if ($Property==$CommParams[$Idx]) {
+	      if ($Property === $CommParams[$Idx]) {
 	         //Ok, Continue
-	      } else if ($Property==c_Template_Value) {
+	      } else if ($Property === c_Template_Value) {
 		      $CommProperties[c_Template_Value] = $CommParams[$Idx];
-	      } else if ($Property==c_Template_Code and
+	      } else if ($Property === c_Template_Code and
 			           array_key_exists(c_Property_Codes,$ControlData) and
 						  array_key_exists($CommParam, array_flip($ControlData[c_Property_Codes])) ) {
 		      $CommProperties[c_Template_Code] = $CommParams[$Idx];
 		      $Codes = array_flip($ControlData[c_Property_Codes]);
 		      $CommProperties[c_Template_Value] = $Codes[$CommParams[$Idx]];
-	      } else if ($Property==c_Template_Code2 and
+	      } else if ($Property === c_Template_Code2 and
 			           array_key_exists(c_Property_Codes2,$ControlData) and
 						  array_key_exists($CommParam, array_flip($ControlData[c_Property_Codes2])) ) {
 		      $CommProperties[c_Template_Code2] = $CommParams[$Idx];
@@ -222,10 +222,10 @@
 		$FunctionName   = $CommConfig[$CommInterface][c_Property_FunctionSnd];
 		$FunctionScript = $CommConfig[$CommInterface][c_Property_ScriptSnd];
 		$FunctionParameters = array();
-		foreach ($CommParams as $CommIdx=>$CommParam) {
-		   if ($CommParam==c_Template_Value) {
+		foreach ($CommParams as $CommIdx => $CommParam) {
+		   if ($CommParam === c_Template_Value) {
 			   $FunctionParameters[] = GetValue(get_ControlIdByDeviceName($DeviceName, $ControlType));
-		   } else if ($CommParam==c_Template_Code) {
+		   } else if ($CommParam === c_Template_Code) {
 		      $DeviceConfig = get_DeviceConfiguration();
 		      $Value = GetValue(get_ControlIdByDeviceName($DeviceName, $ControlType));
 			   $FunctionParameters[] = $DeviceConfig[$DeviceName][$ControlType][c_Property_Codes][$Value];
