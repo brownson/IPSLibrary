@@ -21,8 +21,7 @@
 
     IPSUtils_Include ('IPSComponentSwitch.class.php', 'IPSLibrary::app::core::IPSComponent::IPSComponentSwitch');
     IPSUtils_Include ('IPSLogger.inc.php',      'IPSLibrary::app::core::IPSLogger');
-    IPSUtils_Include ("Device_AbstractPowerSwitch.inc.php", "IPSLibrary::app::modules::PowerSwitch");
-    IPSUtils_Include ('Device_NetIO230.inc.php',      'IPSLibrary::app::modules::PowerSwitch');
+    IPSUtils_Include ('NetIO230B.inc.php',      'IPSLibrary::app::hardware::NetIO230B');
 
     class IPSComponentSwitch_NetIO230B extends IPSComponentSwitch {
 
