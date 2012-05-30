@@ -60,7 +60,6 @@
          * @param boolean $value Wert für Schalter
          */
         public function SetState($value) {
-            IPSLogger_Trc(__file__, "Switching ".$this->instanceId.": ".$value);
             NetIO_setPortStatus($this->instanceId, $value);
         }
 
@@ -72,7 +71,6 @@
          * @return boolean aktueller Schaltzustand  
          */
         public function GetState() {
-            IPSLogger_Trc(__file__, "Getting statei for ".$this->instanceId);
             return GetValue($this->instanceId);
         }
 
