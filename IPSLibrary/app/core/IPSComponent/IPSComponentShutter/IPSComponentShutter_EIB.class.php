@@ -35,12 +35,12 @@
 		 * @param integer $instanceId2 InstanceId 2 des EIB Devices (Richtungs Relais für den Fall das normale EIB Switches verwendet werden)
 		 * @param boolean $reverseControl Richtungs Schalter (default=false)
 		 */
-		public function __construct($instanceId1, $instanceId2=null, $reverseControl=false) {
+		public function __construct($instanceId1, $instanceId2='', $reverseControl=false) {
 			$this->instanceId1     = IPSUtil_ObjectIDByPath($instanceId1);
-			if ($this->instanceId2<>null) {
+			if ($this->instanceId2<>'') {
 				$this->instanceId2     = IPSUtil_ObjectIDByPath($instanceId2);
 			}
-			$this->reverseControl  = IPSUtil_ObjectIDByPath($reverseControl);
+			$this->reverseControl  = $reverseControl;
 		}
 
 		/**
