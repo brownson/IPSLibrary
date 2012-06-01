@@ -23,17 +23,24 @@
 
 	class IPSComponentShutter_EIB extends IPSComponentShutter {
 
-		private $instanceId;
-	
+		private $instanceId1;
+		private $instanceId2;
+		private $reverseControl;
 		/**
 		 * @public
 		 *
 		 * Initialisierung eines IPSComponentShutter_EIB Objektes
 		 *
-		 * @param integer $instanceId InstanceId des EIB Devices
+		 * @param integer $instanceId1 InstanceId des EIB Devices 
+		 * @param integer $instanceId2 InstanceId 2 des EIB Devices (Richtungs Relais für den Fall das normale EIB Switches verwendet werden)
+		 * @param boolean $reverseControl Richtungs Schalter (default=false)
 		 */
-		public function __construct($instanceId) {
-			$this->instanceId = IPSUtil_ObjectIDByPath($instanceId);
+		public function __construct($instanceId1, $instanceId2='', $reverseControl=false) {
+			$this->instanceId1     = IPSUtil_ObjectIDByPath($instanceId1);
+			if ($this->instanceId2<>'') {
+				$this->instanceId2     = IPSUtil_ObjectIDByPath($instanceId2);
+			}
+			$this->reverseControl  = $reverseControl;
 		}
 
 		/**
@@ -59,7 +66,7 @@
 		 * @return string Parameter String des IPSComponent Object
 		 */
 		public function GetComponentParams() {
-			return get_class($this).','.$this->instanceId;
+			return get_class($this).','.$this->instanceId1.','.$this->instanceId2.','.$this->reverseControl;
 		}
 
 		/**
@@ -68,25 +75,48 @@
 		 * Hinauffahren der Beschattung
 		 */
 		public function MoveUp(){
-			EIB_Move($this->instanceId, 0); //0 = Open, 2 = Stop, 4 = Close
+			if ($this->instanceId2==null) {
+				if ($this->reverseControl) {
+					EIB_Move($this->instanceId1, 4); //0 = Open, 2 = Stop, 4 = Close
+				} else {
+					EIB_Move($this->instanceId1, 0); //0 = Open, 2 = Stop, 4 = Close
+				}
+			} else {
+				EIB_Switch($this->instanceId1, true);
+				EIB_Switch($this->instanceId2, $this->reverseControl);
+			}
 		}
-		
+
 		/**
 		 * @public
 		 *
 		 * Hinunterfahren der Beschattung
 		 */
 		public function MoveDown(){
-			EIB_Move($this->instanceId, 4); //0 = Open, 2 = Stop, 4 = Close
+			if ($this->instanceId2==null) {
+				if ($this->reverseControl) {
+					EIB_Move($this->instanceId1, 0); //0 = Open, 2 = Stop, 4 = Close
+				} else {
+					EIB_Move($this->instanceId1, 4); //0 = Open, 2 = Stop, 4 = Close
+				}
+			} else {
+				EIB_Switch($this->instanceId1, true);
+				EIB_Switch($this->instanceId2, !$this->reverseControl);
+			}
 		}
-		
+
 		/**
 		 * @public
 		 *
 		 * Stop
 		 */
 		public function Stop() {
-			EIB_Move($this->instanceId, 2); //0 = Open, 2 = Stop, 4 = Close
+			if ($this->instanceId2==null) {
+				EIB_Move($this->instanceId1, 2); //0 = Open, 2 = Stop, 4 = Close
+			} else {
+				EIB_Switch($this->instanceId1, false); 
+				EIB_Switch($this->instanceId2, false); 
+			}
 		}
 
 	}

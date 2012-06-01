@@ -263,7 +263,7 @@
 
 	CreateProfile_Associations ('IPSShadowing_TempDiffShadowing', array('Aussen >= Innen', '> 1°C', '> 2°C', '> 3°C', 'keine Aktion'));
 	CreateProfile_Associations ('IPSShadowing_TempDiffClosing',   array('Aussen >= Innen', '> 1°C', '> 2°C', '> 3°C', 'keine Aktion'));
-	CreateProfile_Associations ('IPSShadowing_TempDiffOpening',   array('Innen <= Aussen', '< 1°C', '< 2°C', '< 3°C', 'keine Aktion'));
+	CreateProfile_Associations ('IPSShadowing_TempDiffOpening',   array('Innen >= Aussen', '> 1°C', '> 2°C', '> 3°C', 'keine Aktion'));
 	CreateProfile_Count        ('IPSShadowing_Brightness', 0, 100, 10000, null, " Lux",    null);
 
 	CreateProfile_Count        ('IPSShadowing_AzimuthBgn', 0, 5,   360,   null, " °",  null);
