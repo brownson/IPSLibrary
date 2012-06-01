@@ -49,16 +49,8 @@
 	define ("c_Mail_Subject",     	'IPS Alert: logging.db nicht aktuell!');
 	define ("c_Mail_Content",     	'IPS meldet: die IPS-DB wurde zu lange nicht aktualisiert, siehe folgende Detaildaten:');
 	define ("c_Mail_Instanz",        23452 );
-<<<<<<< HEAD
-<<<<<<< HEAD
 	define ("c_SYS_Logging",        	true );
 	define ("c_SYS_HDD",             'HDD1'); //HDD auf dem IPS installiert ist
-=======
->>>>>>> origin/Development
-=======
-	define ("c_SYS_Logging",        	true );
-	define ("c_SYS_HDD",             'HDD1'); //HDD auf dem IPS installiert ist
->>>>>>> origin/Development
 
 	/**
 	*
@@ -76,21 +68,9 @@
 
          c_HealthCircle.'1'   => array(
 //		      	c_HealthTimer  	=>    70,
-<<<<<<< HEAD
-<<<<<<< HEAD
 		      	c_HealthTimeout  	=>    65,
 					c_HealthVariables =>		array(
 						12665  ,
-=======
-		      	c_HealthTimeout  	=>    70,
-					c_HealthVariables =>		array(
-//						15530  	  ,
->>>>>>> origin/Development
-=======
-		      	c_HealthTimeout  	=>    65,
-					c_HealthVariables =>		array(
-						12665  ,
->>>>>>> origin/Development
 					),
 			),
 
