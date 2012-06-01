@@ -57,7 +57,12 @@
 	define ("c_Property_DB_Fehler",  	'DB-Fehler');
 	define ("c_Property_lastWrite",  	'letzter Schreibvorgang vor');
 	define ("c_Property_LogDB_Groesse",	'aktuelle DB Größe');
+	
+	define ("c_Property_ServerZeit",    'Zeit');
+	define ("c_Property_ServerHDD",  	'freie HDD Kapazität');
+	define ("c_Property_ServerCPU",  	'CPU Auslastung');
 //	define ("",  					'');
+
 //	define ("",  					'');
 
 //Webfront

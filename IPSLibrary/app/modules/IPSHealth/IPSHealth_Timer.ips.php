@@ -29,48 +29,35 @@
 
 	include_once "IPSHealth.inc.php";
 
+
+
 	switch ($_IPS['SENDER']) {
 		case 'TimerEvent':
+			$CircleId     = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_Control_SysInfo);
 			$eventId 	=  $_IPS['EVENT'];
 			$strpos  	= strrpos(IPS_GetName($eventId), '-', 0);
-			$CircleName = substr(IPS_GetName($eventId),0, $strpos);
+			$EventName 	= substr(IPS_GetName($eventId),0, $strpos);
 			$EventMode 	= substr(IPS_GetName($eventId), $strpos+1, strlen(IPS_GetName($eventId))-$strpos-1);
-			$Properts   = get_HealthConfiguration()[$CircleName];
 
-			if (function_exists($CircleName)) {
-				IPSLogger_Dbg(__file__, 'Health CallBack Funktion '.$CircleName.' Existiert in IPSHealth_Custom.');
-				IPSHealth_Log($CircleName.' HealthCheck gestartet');
+			if ($EventMode == "Server")	set_SysInfo_Server($CircleId);
 
-				$i=0;
-				$r=0;
-				$timeout = $Properts[c_HealthTimeout];
-				foreach ($Properts[c_HealthVariables] as $ObjectID) {
-					$Object = IPS_GetVariable($ObjectID);
-					$lasttime = $Object['VariableUpdated'];
-					$diff = (int)round(time() - $lasttime);
-					$mld = 'OK';
-					if ($diff > $timeout) {
-						$mld = "Zeit ($diff Sek.) überschritten";
-						IPSHealth_Log($CircleName." Variable: ".IPS_GetName($ObjectID)."($ObjectID),  Ergebnis: $mld");
-						//IPSLogger_Err(__file__, $CircleName.",  Variable: ".IPS_GetName($ObjectID)."($ObjectID),  Zeit: $diff,  Ergebnis: $mld");
-						$r++;
-					}
-					$i++;
-				}
-				if ($r == 0 and $i > 0) IPSHealth_Log($CircleName.' HealthCheck Fehlerfrei beendet');
-				if ($i == 0) IPSHealth_Log($CircleName.' Keine Variablen zur Überwachung!');
+			if ($EventMode == "DBHealth") set_SysInfo_DBHealth($CircleId);
 
-			} else {
+			if ($EventMode == "Day") 		set_SysInfo_Statistik($CircleId);
 
-					IPSLogger_Err(__file__, "HealthCheck CallBack Funktion $CircleName in IPSHealth_Custom existiert nicht. Health: ".$Name);
-			}
+			if ($EventMode == "Timeout")	Check_VarTO($EventName);
+
 			break;
+
 		case 'WebFront':
 			break;
+
 		case 'Execute':
 			break;
+
 		case 'RunScript':
 			break;
+
 		default:
 			IPSLogger_Err(__file__, 'Unknown Sender '.$_IPS['SENDER']);
 			break;

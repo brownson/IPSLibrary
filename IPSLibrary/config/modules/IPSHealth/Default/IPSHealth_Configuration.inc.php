@@ -38,6 +38,20 @@
 	*/
 	define ("c_LogMessage_Count",			19);
 
+
+
+	/**
+	* SYSTEM - INFO
+	*	Definiert die Zeit bis Meldung, des letzte Schreibzugriffs in die Datenbank Logging.
+	*/
+	define ("c_Warn_Schwellwert",     180);
+	define ("c_Log_Content",     		'Alarm: die logging.db ist nicht mehr aktuell, die letzte Änderung vor: ');
+	define ("c_Mail_Subject",     	'IPS Alert: logging.db nicht aktuell!');
+	define ("c_Mail_Content",     	'IPS meldet: die IPS-DB wurde zu lange nicht aktualisiert, siehe folgende Detaildaten:');
+	define ("c_Mail_Instanz",        23452 );
+	define ("c_SYS_Logging",        	true );
+	define ("c_SYS_HDD",             'HDD1'); //HDD auf dem IPS installiert ist
+
 	/**
 	*
 	*
@@ -47,32 +61,36 @@
 	*
 	* @return string Liefert Array mit Bewässerungs Kreisen
 	*/
+//print_r(get_HealthConfiguration());
 
 	function get_HealthConfiguration() {
 		return array(
 
          c_HealthCircle.'1'   => array(
-		      	c_HealthTimeout  	=>    60,
-					c_HealthVariables  =>		array(
-						37772  	  ,
+//		      	c_HealthTimer  	=>    70,
+		      	c_HealthTimeout  	=>    65,
+					c_HealthVariables =>		array(
+						12665  ,
 					),
 			),
 
          c_HealthCircle.'2'   => array(
-					c_HealthTimeout  	=>    300,
-					c_HealthVariables  =>	array(
+//		      	c_HealthTimer  	=>    360,
+					c_HealthTimeout  	=>    360,
+					c_HealthVariables =>		array(
 						37772  ,
+						19278,
 						15530 ,
-						40599 ,
 						15256 ,
 						55970 ,
 					),
 			),
 
          c_HealthCircle.'3'   => array(
-					c_HealthTimeout  	=>    600,
-					c_HealthVariables  =>		array(
-						37772  	  ,
+//		      	c_HealthTimer  	=>    660,
+					c_HealthTimeout  	=>    25*60*60,
+					c_HealthVariables =>		array(
+						40599 ,
 					),
 			),
 		);

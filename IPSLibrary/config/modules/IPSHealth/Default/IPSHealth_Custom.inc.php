@@ -46,9 +46,40 @@
 	//
 	// ----------------------------------------------------------------------------------------------------------------------------
 
-	function Weckzeit_1($CycleId, $HealthName, $Mode) {
+	function Health_1($CycleId, $HealthName, $Mode) {
 		$CircleName = IPS_GetName($CycleId);
 
+	}
+
+	// ----------------------------------------------------------------------------------------------------------------------------
+	//
+	// Function wird aufgerufen bei Health auslösung
+	//
+	// Parameters:
+	//   $CycleId    - ID des auslösenden Healths ( Program.IPSHealth.Weckzeiten.Weckzeit_1)
+	//   $HealthName - Name des auslösenden Healths
+	//   $Mode       - Grund der auslösung, mögliche Werte: "FreezeTime", "AlarmTime", "SnoozeTime", "StopEvent", "EndTime"
+	//
+	// ----------------------------------------------------------------------------------------------------------------------------
+
+	function Health_2($CycleId, $HealthName, $Mode) {
+		$CircleName = IPS_GetName($CycleId);
+
+	}
+
+	// ----------------------------------------------------------------------------------------------------------------------------
+	//
+	// Function wird aufgerufen bei Health auslösung
+	//
+	// Parameters:
+	//   $CycleId    - ID des auslösenden Healths ( Program.IPSHealth.Weckzeiten.Weckzeit_1)
+	//   $HealthName - Name des auslösenden Healths
+	//   $Mode       - Grund der auslösung, mögliche Werte: "FreezeTime", "AlarmTime", "SnoozeTime", "StopEvent", "EndTime"
+	//
+	// ----------------------------------------------------------------------------------------------------------------------------
+
+	function Health_3($CycleId, $HealthName, $Mode) {
+		$CircleName = IPS_GetName($CycleId);
 
 	}
 
