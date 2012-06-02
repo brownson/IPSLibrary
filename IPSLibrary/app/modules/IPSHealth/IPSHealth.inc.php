@@ -102,22 +102,28 @@
 				// "Alter letzter Schreibvorgang" schreiben
 				SetValue($DB_Timestamp, $delta_unix);
 
-
 				// Datenbankgröße schreiben
 				SetValueFloat($DB_Size, get_DB_Groesse());
 
 				// Warrnstatus ermitteln und Aktionen auslösen
 				if ($delta_unix > c_Warn_Schwellwert) {
 					echo c_Log_Content." $delta_unix sec\n";
-					SMTP_SendMail( c_Mail_Instanz, c_Mail_Subject, c_Mail_Content." \nletzte Aktualisierung vor: $delta_unix sec,\num: $write_date Uhr!");
+					Send_EMail(c_Mail_Subject, c_Mail_Content." \nletzte Aktualisierung vor: $delta_unix sec,\num: $write_date Uhr!");
 					IPSLogger_Err(__file__, c_Mail_Content." \nletzte Aktualisierung vor: $delta_unix sec,\num: $write_date Uhr!");
 					setValueBoolean($Warnstatus , true);
-				} elseif ($delta_unix <60) {
+				} elseif ($delta_unix < c_Warn_Schwellwert) {
 					setValueBoolean($Warnstatus , false);
 				}
 
 	}
 
+	// ----------------------------------------------------------------------------------------------------------------------------
+	function Send_EMail($Subject, $Text) {
+				$ret = SMTP_SendMail( c_Mail_Instanz, $Subject, $Text );
+				if ($ret === false){
+					IPSLogger_Err(__file__, "EMail Versand fehlgeschlagen Instanz(".c_Mail_Instanz.") Beschreibung: $Subject");
+				}
+	}
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function set_SysInfo_Statistik($CircleId) {
 				$ips_db_groesse_id	= get_ControlId(c_Property_DB_Groesse, $CircleId);
@@ -207,6 +213,7 @@
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function set_AssoInteger($Association, $Profile, $Value) {
+
 		$objects = explode(',',$Value);
 		$i=1;
 		for ($i = 1; $i < count($objects)-1; $i++){
@@ -221,7 +228,6 @@
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function set_AssoValue($Association, $Position, $Profile, $Value) {
-
 
 			if ($Value == 1) {
 			  IPS_SetVariableProfileAssociation($Association, $Position, $Profile[$Position]['Name'],"", 0x00FF00);
@@ -322,14 +328,6 @@
 			exit;
 		}
 		SetValue ($VariableId, $Value);
-	}
-
-	// ----------------------------------------------------------------------------------------------------------------------------
-	function	get_AviableSensor($sensor){
-		$ret = 0;
-		if ($sensor !== '') $ret = 1;
-		if (IPS_VariableExists($sensor)) $ret = 2;
-		return $ret;
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------

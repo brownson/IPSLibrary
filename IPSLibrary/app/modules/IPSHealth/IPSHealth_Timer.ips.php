@@ -30,7 +30,6 @@
 	include_once "IPSHealth.inc.php";
 
 
-
 	switch ($_IPS['SENDER']) {
 		case 'TimerEvent':
 			$CircleId     = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_Control_SysInfo);
@@ -53,6 +52,20 @@
 			break;
 
 		case 'Execute':
+			$CircleId     = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_Control_SysInfo);
+			set_SysInfo_Statistik($CircleId);
+
+
+	// Archiv Handler
+	$archiveHandlerID = IPS_GetInstanceIDByName("Archive Handler", 0);
+
+	// Event Handler
+	$eventeHandlerID = IPS_GetInstanceIDByName("Event Handler", 0);
+
+	// I/O Instanzen
+	$ioInstanzenID = IPS_GetInstanceIDByName("I/O Instanzen", 0);
+print_r( IPS_GetObject($ioInstanzenID));
+
 			break;
 
 		case 'RunScript':
