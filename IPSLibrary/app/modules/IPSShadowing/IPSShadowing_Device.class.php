@@ -494,76 +494,74 @@
 			$openByTemp          = $profileManager->OpenByTemp($profileIdSun, $profileIdTemp, $tempIndoorPath);
 			$activationByWeather = $profileManager->ActivationByWeather($profileIdWeather);
 
-			$profileInfo = $profileManager->GetProfileInfo($profileIdBgnOfDay, $profileIdEndOfDay, $profileIdTemp, $tempIndoorPath);
-			SetValue(IPS_GetObjectIDByIdent(c_Control_ProfileInfo, $this->deviceId), (string)$profileInfo);
-			
-			$deviceName = IPSShadowing_GetDeviceName($this->deviceId);
-			
 			// Automatic Off ...
 			if (!$automaticActive) {
-				echo "$deviceName -> Automatic Off ... \n";
+				$programInfo = 'Automatic Off';
 
 			// Activation by Wind/Rain
 			} elseif ($activationByWeather and $programWeather<>c_ProgramId_Manual) {
-				echo "$deviceName -> ActivationByWeather ... \n";
+				$programInfo = 'Wetterprogramm';
 				$this->MoveByProgram($programWeather, 'Wetterprogramm');
 
 			// Manual Change ...
 			} elseif ($changeByUser) {
-				echo "$deviceName -> ManualChange ... \n";
+				$programInfo = 'Manuelle Änderung';
 
 			// Custom
 			} elseif (IPSShadowing_ProgramCustom($this->deviceId, $isDay)) {
-				echo "$deviceName -> ProgramCustom \n";
+				$programInfo = 'CustomProgram';
 				// Action done in Custom Procedure
 
 			// Present ...
 			} elseif ($profileManager->GetPresent() and $programPresent==c_ProgramId_OpenedDay and $isDay) {
-				echo "$deviceName -> ProgramByPresent=OpenedDay \n";
+				$programInfo = 'Anwesenheit (Tag)';
 				$this->MoveByProgram($programPresent, 'Anwesenheitsprogramm');
 			} elseif ($profileManager->GetPresent() and $programPresent==c_ProgramId_OpenedNight and !$isDay) {
-				echo "$deviceName -> ProgramByPresent=OpenedNight \n";
+				$programInfo = 'Anwesenheit (Nacht)';
 				$this->MoveByProgram($programPresent, 'Anwesenheitsprogramm');
 			} elseif ($profileManager->GetPresent() and $programPresent==c_ProgramId_Opened) {
-				echo "$deviceName -> ProgramByPresent=Opened \n";
+				$programInfo = 'Anwesenheit';
 				$this->MoveByProgram($programPresent, 'Anwesenheitsprogramm');
 			} elseif ($profileManager->GetPresent() and $programPresent==c_ProgramId_MovedOutTemp and $isDay and $closeByTemp) {
-				echo "$deviceName -> ProgramByPresent=MovedOutTemp \n";
+				$programInfo = 'Anwesenheit (Temperatur)';
 				$this->MoveByProgram($programPresent, 'Anwesenheitsprogramm (Beschattung bei Temp und Anwesenheit)');
 
-			// Temperature
+			// Temperature/Sun
 			} elseif ($isDay and ($closeByTemp or $shadowingByTemp) and $programTemp<>c_ProgramId_Manual) {
-				if ($closeByTemp and ($programTemp==c_ProgramId_Closed or $programTemp==c_ProgramId_Dimout or 
-				                      $programTemp==c_ProgramId_MovedOut or $programTemp==c_ProgramId_90 or $programTemp==c_ProgramId_75)) {
-					echo "$deviceName -> ProgramByTemperature (Close/Dimout/Moveout) \n";
+				if ($closeByTemp) {
+					$programInfo = 'Temperatur';
 					$this->MoveByProgram($programTemp, 'Temperaturprogramm', true/*DimoutOption*/, true/*TriggeredByTemp*/);
 				} elseif ($changeByTemp) {
-					echo "$deviceName -> ProgramByTemperature (ShadowingDoNothing) \n";
+					$programInfo = 'Temperatur (Warte Öffnen)';
 				} elseif ($shadowingByTemp) {
-					echo "$deviceName -> ProgramByTemperature (Shadowing) \n";
+					$programInfo = 'Temperatur (Beschattung)';
 					$this->MoveByProgram($programTemp, 'Temperaturprogramm (Beschattung)', false/*DimoutOption*/, true/*TriggeredByTemp*/);
 				} else {
-					echo "$deviceName -> ProgramByTemperature (Else) \n";
+					$programInfo = 'Temperatur (Error)';
 				}
 
 			// Day
 			} elseif ($isDay) {
 				if (!$openByTemp and $changeByTemp) {
-					echo "$deviceName -> ProgramByDay (TemperaturDoNothing) \n";
+					$programInfo = 'Tag (Warte Öffnen)';
 				} elseif ($openByTemp and $changeByTemp) {
-					echo "$deviceName -> ProgramByDay (TemperaturReset) \n";
+					$programInfo = 'Tag (Reset)';
 					SetValue(IPS_GetObjectIDByIdent(c_Control_TempChange, $this->deviceId), false);
 					$this->MoveByProgram($programDay, 'Tagesprogramm (Temperatur Reset)');
 				} else {
-					echo "$deviceName -> ProgramByDay \n";
+					$programInfo = 'Tagesprogramm';
 					$this->MoveByProgram($programDay, 'Tagesprogramm');
 				}
 				
 			// Night
 			} else {
-				echo "$deviceName -> ProgramByNight \n";
+				$programInfo = 'Nachtprogramm';
 				$this->MoveByProgram($programNight, '"Nachtprogramm"');
 			}
+			$profileInfo = $profileManager->GetProfileInfo($profileIdBgnOfDay, $profileIdEndOfDay, $profileIdTemp, $tempIndoorPath);
+			$deviceName = IPSShadowing_GetDeviceName($this->deviceId);
+			echo "$deviceName -> $programInfo, $profileInfo \n";
+			SetValue(IPS_GetObjectIDByIdent(c_Control_ProfileInfo, $this->deviceId), $programInfo.', '.$profileInfo);
 		}
 	}
 

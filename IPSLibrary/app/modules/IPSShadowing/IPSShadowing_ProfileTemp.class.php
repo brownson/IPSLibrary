@@ -47,6 +47,8 @@
 		 */
 		private $activationByTemp;
 
+		private $brightnessLevel;
+		private $brightnessValue;
 		private $tempOutdoor;
 		private $tempIndoor;
 		private $tempDiffShadowing;
@@ -72,47 +74,56 @@
 		 *
 		 */
 		private function Init() {
+			$this->brightnessLevel   = GetValue(IPS_GetObjectIDByIdent(c_Control_Brightness, $this->instanceId));
 			$this->tempDiffShadowing = GetValue(IPS_GetObjectIDByIdent(c_Control_TempDiffShadowing, $this->instanceId));
 			$this->tempDiffClosing   = GetValue(IPS_GetObjectIDByIdent(c_Control_TempDiffClosing, $this->instanceId));
 			$this->tempDiffOpening   = GetValue(IPS_GetObjectIDByIdent(c_Control_TempDiffOpening, $this->instanceId));
-			$this->tempIndoor=22;
+			$this->tempIndoor        = null;
+			$this->tempOutdoor       = null;
+			$this->brightnessValue   = null;
+			$this->activationByTemp  = true;
 			if (IPSSHADOWING_TEMPSENSORINDOOR <> '') {
-				$this->tempIndoor = GetValue(IPSUtil_ObjectIDByPath(IPSSHADOWING_TEMPSENSORINDOOR));
+				$this->tempIndoor = round(GetValue(IPSUtil_ObjectIDByPath(IPSSHADOWING_TEMPSENSORINDOOR)),1);
 			}
-			$this->tempOutdoor=25;
 			if (IPSSHADOWING_TEMPSENSOROUTDOOR <> '') {
-				$this->tempOutdoor = GetValue(IPSUtil_ObjectIDByPath(IPSSHADOWING_TEMPSENSOROUTDOOR));
+				$this->tempOutdoor = round(GetValue(IPSUtil_ObjectIDByPath(IPSSHADOWING_TEMPSENSOROUTDOOR)),1);
 			}
-			$brightnessLevel   = GetValue(IPS_GetObjectIDByIdent(c_Control_Brightness, $this->instanceId));
-
-			$activationByTemp = true;
 			if (IPSSHADOWING_BRIGHTNESSSENSOR <> '') {
-				$activationByTemp = ($activationByTemp and GetValue(IPSUtil_ObjectIDByPath(IPSSHADOWING_BRIGHTNESSSENSOR))>=$brightnessLevel);
+				$this->brightnessValue  = round(GetValue(IPSUtil_ObjectIDByPath(IPSSHADOWING_BRIGHTNESSSENSOR)),1);
+				$this->activationByTemp = ($this->activationByTemp and $this->brightnessValue>=$this->brightnessLevel);
 			}
-			$this->activationByTemp = $activationByTemp;
 		}
 		
-		private function GetActivationByTemp($tempIndoorPath, $tempDiff) {
+		private function GetActivationByTemp($tempIndoorPath, $tempDiff, $reverse=false) {
+			//Example:
+			// Aussen >= Innen+Diff
+			// Outdoor=16,Indoor=22,  -->  -6 >= 2 -> false
+			// Outdoor=20,Indoor=22,  -->  -2 >= 2 -> false
+			// Outdoor=26,Indoor=22,  -->   4 >= 2 -> true
 			$activationByTemp = $this->activationByTemp;
-			$tempIndoor = $this->tempIndoor;
-			if ($tempIndoorPath <> '') {
-				$tempIndoor = IPSUtil_ObjectIDByPath($tempIndoorPath);
-			}
-			if (IPSSHADOWING_TEMPSENSORINDOOR <> '' and IPSSHADOWING_TEMPSENSOROUTDOOR <> '') {
-				$activationByTemp = ($activationByTemp and (($this->tempOutdoor-$tempIndoor) >= $tempDiff 
-				                                             or $this->tempDiffShadowing==c_TempDiff_NoAction));
+			$tempIndoor       = $this->tempIndoor;
+			if ($tempDiff<>c_TempDiff_NoAction) {
+				if ($tempIndoorPath <> '') {
+					$tempIndoor = round(GetValue(IPSUtil_ObjectIDByPath($tempIndoorPath)),1);
+				}
+				if ((IPSSHADOWING_TEMPSENSORINDOOR<>'' or $tempIndoorPath<>'') and IPSSHADOWING_TEMPSENSOROUTDOOR <> '') {
+					if ($reverse) {
+						$activationByTemp = ($activationByTemp and (($tempIndoor-$this->tempOutdoor) >= $tempDiff));
+					} else {
+						$activationByTemp = ($activationByTemp and (($this->tempOutdoor-$tempIndoor) >= $tempDiff));
+					}
+				}
 			}
 			return $activationByTemp;
 		}
 		
 		public function UpdateProfileInfo() {
-			$info = '';
-			$tempIndoor  = (IPSSHADOWING_TEMPSENSORINDOOR<>'' ? GetValue(IPSUtil_ObjectIDByPath(IPSSHADOWING_TEMPSENSORINDOOR)).'°C'  :'"nicht vorhanden"');
-			$tempOutdoor = (IPSSHADOWING_TEMPSENSOROUTDOOR<>''? GetValue(IPSUtil_ObjectIDByPath(IPSSHADOWING_TEMPSENSOROUTDOOR)).'°C' :'"nicht vorhanden"');
-			$brightness  = (IPSSHADOWING_BRIGHTNESSSENSOR<>'' ? GetValue(IPSUtil_ObjectIDByPath(IPSSHADOWING_BRIGHTNESSSENSOR)).' Lux':'"nicht vorhanden"');
+			$tempIndoor       = (IPSSHADOWING_TEMPSENSORINDOOR<>'' ? $this->tempIndoor.'°C'  :'"nicht vorhanden"');
+			$tempOutdoor      = (IPSSHADOWING_TEMPSENSOROUTDOOR<>''? $this->tempOutdoor.'°C' :'"nicht vorhanden"');
+			$brightness       = (IPSSHADOWING_BRIGHTNESSSENSOR<>'' ? $this->brightnessValue.' Lux':'"nicht vorhanden"');
 			$activationByTemp = $this->GetActivationByTemp('', $this->tempDiffShadowing);
-			$info = ''.($activationByTemp?'Profil aktiv':'Profil inaktiv').' (Innen='.$tempIndoor.', Aussen='.$tempOutdoor.', Helligkeit='.$brightness.')';
-			if (GetValue(IPS_GetObjectIDByIdent(c_Control_ProfileInfo, $this->instanceId)) <> $info or true) {
+			$info             = ''.($activationByTemp?'Profil aktiv':'Profil inaktiv').' (Innen='.$tempIndoor.', Aussen='.$tempOutdoor.', Helligkeit='.$brightness.')';
+			if (GetValue(IPS_GetObjectIDByIdent(c_Control_ProfileInfo, $this->instanceId)) <> $info) {
 				SetValue(IPS_GetObjectIDByIdent(c_Control_ProfileInfo, $this->instanceId), $info);
 				IPS_SetVariableProfileAssociation('IPSShadowing_ProfileTemp', 
 												  $this->instanceId,  
@@ -125,44 +136,31 @@
 		public function GetProfileInfo($tempIndoorPath) {
 			$info = '';
 			if ($tempIndoorPath <> '') {
-				$info .= ' Innen='.IPSUtil_ObjectIDByPath($tempIndoorPath).'°';
+				$info .= ' Innen='.round(GetValue(IPSUtil_ObjectIDByPath($tempIndoorPath)),1).'°C';
 			} elseif (IPSSHADOWING_TEMPSENSORINDOOR <> '') {
-				$info .= ' Innen='.GetValue(IPSUtil_ObjectIDByPath(IPSSHADOWING_TEMPSENSORINDOOR)).'°C';
+				$info .= ' Innen='.$this->tempIndoor.'°C';
 			}
 			if (IPSSHADOWING_TEMPSENSOROUTDOOR <> '') {
 				if ($info<>'') { $info.=', ';}
-				$info .= ' Aussen='.GetValue(IPSUtil_ObjectIDByPath(IPSSHADOWING_TEMPSENSOROUTDOOR)).'°C';
+				$info .= ' Aussen='.$this->tempOutdoor.'°C';
 			}
 			return $info;
 		}
 		
 		public function ShadowingByTemp($tempIndoorPath) {
-			return $this->GetActivationByTemp($tempIndoorPath, $this->tempDiffShadowing);
+			if ($this->tempDiffShadowing==c_TempDiff_NoAction) {
+				return $this->GetActivationByTemp($tempIndoorPath, $this->tempDiffClosing);
+			} else {
+				return $this->GetActivationByTemp($tempIndoorPath, $this->tempDiffShadowing);
+			}
 		}
 
 		public function CloseByTemp($tempIndoorPath) {
-			//Example:
-			// Aussen >= Innen+Diff
-			//Outdoor=16,Indoor=22,  -->  -6 >= 2 -> false
-			//Outdoor=20,Indoor=22,  -->  -2 >= 2 -> false
-			//Outdoor=26,Indoor=22,  -->   4 >= 2 -> true
 			return $this->GetActivationByTemp($tempIndoorPath, $this->tempDiffClosing);
 		}
 
 		public function OpenByTemp($tempIndoorPath) {
-			$tempIndoor = $this->tempIndoor;
-			if ($tempIndoorPath <> '') {
-				$tempIndoor = IPSUtil_ObjectIDByPath($tempIndoorPath);
-			}
-			if ($this->tempDiffOpening >= c_TempDiff_NoAction) {
-				return true; // No Action
-			}
-			//Example:
-			//Indoor-Outdoor >= Diff
-			//Outdoor=16,Indoor=22,  -->   6 >= 0 -> true
-			//Outdoor=20,Indoor=22,  -->   2 >= 2 -> true
-			//Outdoor=26,Indoor=22,  -->  -4 >= 2 -> false
-			return ($tempIndoor - $this->tempOutdoor) >= $this->tempDiffOpening;
+			return $this->GetActivationByTemp($tempIndoorPath, $this->tempDiffOpening, true);
 		}
 
 		/**
@@ -210,7 +208,12 @@
 			CreateLink('Differenz Beschattung',  IPS_GetObjectIDByIdent(c_Control_TempDiffShadowing,   $this->instanceId), $instanceId, 10);
 			CreateLink('Differenz Abdunkelung',  IPS_GetObjectIDByIdent(c_Control_TempDiffClosing,   $this->instanceId), $instanceId, 20);
 			CreateLink('Differenz Öffnen',       IPS_GetObjectIDByIdent(c_Control_TempDiffOpening,   $this->instanceId), $instanceId, 30);
-			$instanceId = CreateDummyInstance("Hellingkeits Grenze", $categoryId, 30);
+			$id = @IPS_GetObjectIdByName("Hellingkeits Grenze", $categoryId);
+			if ($id!==false) {
+				EmptyCategory($id);
+				IPS_DeleteInstance($id);
+			}
+			$instanceId = CreateDummyInstance("Helligkeits Grenze", $categoryId, 30);
 			CreateLink('Helligkeit',   IPS_GetObjectIDByIdent(c_Control_Brightness, $this->instanceId), $instanceId, 10);
 			CreateLink('Profil Info',  IPS_GetObjectIDByIdent(c_Control_ProfileInfo, $this->instanceId), $categoryId, 40);
 		}
