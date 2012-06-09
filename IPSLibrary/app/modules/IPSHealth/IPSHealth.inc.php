@@ -38,6 +38,103 @@
 	IPSUtils_Include ("IPSHealth_Custom.inc.php",         	"IPSLibrary::config::modules::IPSHealth");
 	IPSUtils_Include ("IPSHealth_Logging.inc.php",        	"IPSLibrary::app::modules::IPSHealth");
 
+
+	// ----------------------------------------------------------------------------------------------------------------------------
+	function DB_Reaggregieren($ControlId, $instanceId, $Value) {
+		
+		$timestamp           = date("d.m.Y,", time())." ".date("H:i", time())." Uhr";
+		$Fortschritt 			= get_ControlValue(c_Property_DBSteps, $ControlId);
+		$archiveHandlerID    = IPS_GetInstanceIDByName("Archive Handler", 0);
+
+		if (($Value == true) && ($Fortschritt >= 100)) {
+			 set_ControlValue(c_Property_DBStart, $ControlId,$timestamp);
+			 SetValueBoolean($instanceId, $Value);
+          // Anzahl geloggte Variablen ermitteln
+          $AggeratedVars = AC_GetAggregationVariables($archiveHandlerID, false);
+          $AggeratedVars = count($AggeratedVars);
+          set_ControlValue(c_Property_DBVarGes, $ControlId, $AggeratedVars);
+          set_ControlValue(c_Property_DBHistory, $ControlId, "");
+          set_ControlValue(c_Property_DBSteps, $ControlId, 0);
+		}
+	}
+
+	// ----------------------------------------------------------------------------------------------------------------------------
+	function DB_Wartung() {
+		$CircleId     = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_Control_DBWartung);
+
+		// Quelle: http://www.ip-symcon.de/service/dokumentation/modulreferenz/archive-control/datenbankwiederherstellung/
+
+		/*****
+		*
+		* Automatische Reaggregation aller geloggten Variablen
+		*
+		* Dieses Skript reaggregiert automatisch alle geloggten Variablen nacheinander
+		* automatishert bei Ausführung. Nach Abschluss des Vorgangs wird der Skript-Timer
+		* gestoppt. Zur erneuten kompletten Reaggregation ist der Inhalt der automatisch
+		* unterhalb des Skripts angelegten Variable 'History' zu löschen.
+		*
+		*****/
+		$archiveHandlerID          = IPS_GetInstanceIDByName("Archive Handler", 0);
+
+		$uhrzeit                   = date("H:i.s");
+		$datum                     = date("d.m.Y");
+		$timestamp                 = date("d.m.Y,", time())." ".date("H:i", time())." Uhr";
+
+		//
+		$Fortschritt               = get_ControlValue(c_Property_DBSteps, $CircleId);
+		$geloggte_variablen    		= get_ControlValue(c_Property_DBVarGes, $CircleId);
+		$Neuaggegation_val     		= get_ControlValue(c_Property_DBNeuagg, $CircleId);
+		$finished              		= true;
+		$history               		= explode(',', get_ControlValue(c_Property_DBHistory, $CircleId));
+		$variableIDs           		= IPS_GetVariableList();
+
+		if ($Neuaggegation_val == true) {
+          foreach ($variableIDs as $variableID) {
+	            if (AC_GetLoggingStatus($archiveHandlerID, $variableID) && !in_array($variableID, $history)) {
+							$finished = false;
+		              	if (@AC_ReAggregateVariable($archiveHandlerID, $variableID)) {
+//					          $AggeratedVars = AC_GetAggregationVariables($archiveHandlerID, false);
+//					          $AggeratedVars = count($AggeratedVars);
+//					          set_ControlValue(c_Property_DBVarGes, $CircleId, $AggeratedVars);
+			                $history[] = $variableID;
+								 $id = ips_getobject($variableID)['ParentID'];
+								 $txt = IPS_GetName($id)."/".IPS_GetName($variableID);
+			                set_ControlValue(c_Property_DBaktVar, $CircleId, $txt);
+			                set_ControlValue(c_Property_DBHistory, $CircleId, implode(',', $history));
+		              	}
+		              	break;
+	            }
+          }
+		}
+
+		$history_count         = count($history);
+		$Fortschritt_val       = ($history_count / $geloggte_variablen) *100;
+		set_ControlValue(c_Property_DBSteps, $CircleId, round($Fortschritt_val, 1));
+		set_ControlValue(c_Property_DBVarReady, $CircleId, $history_count);
+
+		// Text für Abschlußmail
+		$mailsubject           = "IPS: Reaggregation ist abgeschlossen";
+		$mailcontend           = "IPS meldet: die Reaggregation ist am $datum um $uhrzeit Uhr abgeschlossen worden. Es wurden $history_count Variablen reaggregiert";
+		$mailsubject_nr        = "IPS: Reaggregation wurde vorzeitig beendet";
+		$mailcontend_nr        = "IPS meldet: die Reaggregation ist am $datum um $uhrzeit Uhr abgebrochen worden. Es wurden $history_count von $geloggte_variablen Variablen (= $Fortschritt %) reaggregiert";
+
+		if (($finished) && ($Neuaggegation_val == true))
+		{
+				Send_EMail($mailsubject, $mailcontend);
+				set_ControlValue(c_Property_DBReady, $CircleId,$timestamp);
+				IPS_LogMessage('Reaggregation', 'Reaggregation completed!');
+				get_ControlValue(c_Property_DBNeuagg, $CircleId, false);
+            set_ControlValue(c_Property_DBaktVar, $CircleId, "");
+		}
+		elseif (($finished == true) && ($Neuaggegation_val == false) && ($history_count < $geloggte_variablen))
+		{
+				Send_EMail($mailsubject_nr, $mailcontend_nr);
+				set_ControlValue(c_Property_DBReady, $CircleId,$timestamp);
+				set_ControlValue(c_Property_DBVarReady, $CircleId, $history_count);
+		}
+	}
+
+
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function Check_VarTO($CircleName) {
 			$Properts   = get_HealthConfiguration()[$CircleName];
@@ -72,23 +169,118 @@
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
-	function set_SysInfo_Server($CircleId) {
-				$ips_serverzeit_id	= get_ControlId(c_Property_ServerZeit, $CircleId);
-				$ips_servercpu_id		= get_ControlId(c_Property_ServerCPU, $CircleId);
-				$ips_serverhdd_id		= get_ControlId(c_Property_ServerHDD, $CircleId);
+	function set_SysInfo_Server() {
+				$Circle0Id     = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth');
+				$Circle1Id     = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_Control_Server);
+				$Circle2Id     = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_Control_Statistik);
+				$Circle3Id     = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_Control_DBWartung);
 
+				$ips_uebersicht_id	= get_ControlId(c_Control_Uebersicht, $Circle0Id);
+
+				$ips_serverzeit_id	= get_ControlId(c_Property_ServerZeit, $Circle1Id);
+				$ips_servercpu_id		= get_ControlId(c_Property_ServerCPU, $Circle1Id);
+				$ips_serverhdd_id		= get_ControlId(c_Property_ServerHDD, $Circle1Id);
+
+				$ips_laufzeit_id        = get_ControlId(c_Property_Uptime, $Circle2Id);
+//				$ips_laufzeithuman_id   = get_ControlId(c_Property_UptimeHuman, $Circle2Id);
+
+				$ips_betriebszeiti_id   = get_ControlId(c_Property_BetriebStdI, $Circle2Id);
+//				$ips_betriebszeits_id   = get_ControlId(c_Property_BetriebStdS, $Circle2Id);
+
+
+				// CPU Auslastung
 				$arr = Sys_GetCPUInfo();
 				SetValue($ips_servercpu_id ,$arr['CPU_AVG']);
 
+				// Freie HDD Kapazität
 				$hdd = Sys_GetHardDiskInfo();
 				SetValue($ips_serverhdd_id ,$hdd[c_SYS_HDD]['FREE']/1024/1024/1024);
 
+				// Server Zeit
 				SetValueString($ips_serverzeit_id , formatTag(Date('D'))." ".Date('H:i'));
+
+				// Laufzeit ermitteln
+				$Laufzeit            = time() - IPS_GetUptime();
+				$d                   = floor(($Laufzeit / (60*60*24)));
+				$h                   = floor(($Laufzeit - ($d*60*60*24)) / (60*60));
+				$m                   = floor(($Laufzeit - ($d*60*60*24) - ($h*60*60)) / (60));
+				setValueInteger($ips_laufzeit_id, $Laufzeit);
+//				setValueString($ips_laufzeithuman_id, "$d Tage, $h Stunden, $m Minuten");
+
+
+				$Betriebszeit = getValueInteger($ips_betriebszeiti_id);
+				$Betriebszeit = $Betriebszeit + 60 ;
+				setValueInteger($ips_betriebszeiti_id, $Betriebszeit);
+
+				$by = floor($Betriebszeit / (60*60*24*365));
+				$Betriebszeit = $Betriebszeit - ($by * (60*60*24*365));
+
+				$bd = floor($Betriebszeit / (60*60*24));
+				$Betriebszeit = $Betriebszeit - ($bd * (60*60*24));
+
+				$bh = floor($Betriebszeit / (60*60));
+				$Betriebszeit = $Betriebszeit - ($bh * (60*60));
+
+				$bm = floor($Betriebszeit / 60);
+				$Betriebszeit = $Betriebszeit - ($bm * 60);
+//				setValueString($ips_betriebszeits_id, "$by Jahre,  $bd Tage, $bh Stunden, $bm Minuten");
+
+				if (get_ControlValue(c_Property_DBNeuagg, $Circle3Id) == true) DB_Wartung($Circle3Id);
+
+
+		$systemstatus  = "Alles gut";
+		$systemcolor = "green";
+		$hintergrundfarbe = "#003366";
+		$fontsize = "17px";
+
+
+		$html1 = "";
+		$html1 = $html1 . "<table border='0' bgcolor=$hintergrundfarbe width='100%' height='200' cellspacing='0'  >";
+
+		$html1 = $html1 . "<tr>";
+		$html1 = $html1 . "<td style='text-align:left;'>";
+		$html1 = $html1 . "<span style='font-family:arial;color:white;font-size:15px;'>Aktuell<br></span>";
+		$html1 = $html1 . "<span style='font-family:arial;color:white;font-size:15px;'></span></td>";
+		$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:white;font-size:20px;'>".formatTag(Date('D'))." ".Date('H:i')."</span></td>";
+		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:20px;'>Uhr</span></td>";
+		$html1 = $html1 . "</tr>";
+
+		$html1 = $html1 . "<tr>";
+		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:15px'>Uptime</span></td>";
+		$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:yellow;font-size:20px'>$d Tage, $h Stunden, $m Minuten</span></td>";
+//		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:25px;'>Watt</span></td>";
+		$html1 = $html1 . "</tr>";
+
+		$html1 = $html1 . "<tr>";
+		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:15px;'>Betriebszeit</span></td>";
+		$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:yellow;font-size:20px;'>$by Jahre,  $bd Tage, $bh Stunden, $bm Minuten</span></td>";
+//		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:25px;'>$waehrung</span></td>";
+		$html1 = $html1 . "</tr>";
+		$html1 = $html1 . "<br>";
+
+		$html1 = $html1 . "<tr>";
+		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:15px;'>System Status</span></td>";
+		$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:$systemcolor;font-size:40px;'>$systemstatus</span></td>";
+//		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:25px;'>$waehrung</span></td>";
+		$html1 = $html1 . "</tr>";
+
+//		$html1 = $html1 . "<tr>";
+//		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:12px;'>Tarif</span></td>";
+//		$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight;color:white;font-size:12px;'>$akt_tarif</span></td>";
+//		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:12px;'></span></td>";
+//		$html1 = $html1 . "</tr>";
+
+		$html1 = $html1 . "</table>";
+
+   SetValueString($ips_uebersicht_id,$html1);
+
 
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
-	function set_SysInfo_DBHealth($CircleId) {
+	function set_SysInfo_DBHealth() {
+				$CircleId     = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_Control_DBMonitor);
+
 			   $DB_Timestamp        = get_ControlId(c_Property_lastWrite, $CircleId);
 				$DB_Size					= get_ControlId(c_Property_LogDB_Groesse, $CircleId);
 			   $Warnstatus          = get_ControlId(c_Property_DB_Fehler, $CircleId);
@@ -125,18 +317,19 @@
 				}
 	}
 	// ----------------------------------------------------------------------------------------------------------------------------
-	function set_SysInfo_Statistik($CircleId) {
-				$ips_db_groesse_id	= get_ControlId(c_Property_DB_Groesse, $CircleId);
-				$ips_db_zuwachs_id 	= get_ControlId(c_Property_DB_Zuwachs, $CircleId);
-				$ips_objects_id 	 	= get_ControlId(c_Property_Objects, $CircleId);
-				$ips_profiles_id 	 	= get_ControlId(c_Property_Profiles, $CircleId);
-				$ips_scripts_id 	 	= get_ControlId(c_Property_Scripts, $CircleId);
-				$ips_variables_id  	= get_ControlId(c_Property_Variable, $CircleId);
-				$ips_instances_id  	= get_ControlId(c_Property_Instances, $CircleId);
-				$ips_categories_id 	= get_ControlId(c_Property_Categorys, $CircleId);
-				$ips_links_id 		 	= get_ControlId(c_Property_Links, $CircleId);
-				$ips_modules_id 	 	= get_ControlId(c_Property_Modules, $CircleId);
-				$ips_events_id	  	 	= get_ControlId(c_Property_Events, $CircleId);
+	function set_SysInfo_Statistik() {
+				$CircleId     = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_Control_Statistik);
+				$ips_db_groesse_id		= get_ControlId(c_Property_DB_Groesse, $CircleId);
+				$ips_db_zuwachs_id 		= get_ControlId(c_Property_DB_Zuwachs, $CircleId);
+				$ips_objects_id 	 		= get_ControlId(c_Property_Objects, $CircleId);
+				$ips_profiles_id 	 		= get_ControlId(c_Property_Profiles, $CircleId);
+				$ips_scripts_id 	 		= get_ControlId(c_Property_Scripts, $CircleId);
+				$ips_variables_id  		= get_ControlId(c_Property_Variable, $CircleId);
+				$ips_instances_id  		= get_ControlId(c_Property_Instances, $CircleId);
+				$ips_categories_id 		= get_ControlId(c_Property_Categorys, $CircleId);
+				$ips_links_id 		 		= get_ControlId(c_Property_Links, $CircleId);
+				$ips_modules_id 	 		= get_ControlId(c_Property_Modules, $CircleId);
+				$ips_events_id	  	 		= get_ControlId(c_Property_Events, $CircleId);
 
 				// DB-Werte in Var schreiben
 				setValueFloat($ips_db_zuwachs_id, get_DB_Groesse()-getValueFloat($ips_db_groesse_id));

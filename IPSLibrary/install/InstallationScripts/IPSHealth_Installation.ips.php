@@ -142,7 +142,9 @@
 	$CategoryIdApp  = CreateCategoryPath($AppPath);
 
 	// Add Scripts
-	$ScriptIdTimer  	= IPS_GetScriptIDByName('IPSHealth_Timer'			, $CategoryIdApp);
+	$ScriptIdTimer  	= IPS_GetScriptIDByName('IPSHealth_Timer'				, $CategoryIdApp);
+	$ScriptIdCS  		= IPS_GetScriptIDByName('IPSHealth_ChangeSettings'	, $CategoryIdApp);
+	$ScriptIdhc  		= IPS_GetScriptIDByName('IPSHealth_HighChart_Queue'	, $CategoryIdApp);
 //   $ScriptIdSysInfo 	= IPS_GetScriptIDByName('IPSHealth_SystemInfo'	, $CategoryIdApp);
 
 	// Archiv Handler
@@ -162,30 +164,50 @@
 												1  	=>	0xFF0000,
 												));
 
+ 	CreateProfile_Associations ('IPSHealth_NA', array(
+												0	=> 'Aus',
+												1	=> 'läuft ..',
+												),'',
+
+											array(
+												0  	=>	0x00FF00,
+												1  	=>	0xFF0000,
+												));
+
+
+
  	CreateProfile ('IPSHealth_Pro', '', '', '', true, '', ' %', 0);
  	CreateProfile ('IPSHealth_Sec', '', '', '', true, '', ' Sek.', 0);
  	CreateProfile ('IPSHealth_MB', '', '', '', true, '', ' MB', 2);
  	CreateProfile ('IPSHealth_GB', '', '', '', true, '', ' GB', 2);
 
 
-	$CategoryIds	= CreateCategory(c_HealthCircles, $CategoryIdData, 300);
-	$CategoryIdSYS	= CreateCategory(c_Control_SysInfo, $CategoryIdData, 310);
+	$CategoryIds		= CreateCategory(c_HealthCircles			, $CategoryIdData, 300);
+	$CategoryIdSATI	= CreateCategory(c_Control_Statistik	, $CategoryIdData, 300);
+	$CategoryIdDBW		= CreateCategory(c_Control_DBWartung	, $CategoryIdData, 300);
+	$CategoryIdDBM		= CreateCategory(c_Control_DBMonitor	, $CategoryIdData, 300);
+	$CategoryIdSVR		= CreateCategory(c_Control_Server		, $CategoryIdData, 300);
+	$CategoryIdHC		= CreateCategory(c_Control_HightChart	, $CategoryIdData, 300);
+//	$CategoryIdCTRL	= CreateCategory(c_Control_CTRL			, $CategoryIdData, 300);
 
 	$Idx  = 1;
 	$configData = get_HealthConfiguration();
 
 	foreach ($configData as $Name=>$Data) {
-			$ZSUId     = CreateCategory($Name, $CategoryIds, $Idx);
-			$intervall = $Data[c_HealthTimeout];
+			$CircleId     			= CreateCategory($Name, $CategoryIds, $Idx);
+			$CircleUebersichtId	= CreateVariable(c_Control_Uebersicht, 3 /*String*/,  $CircleId, 10, '~HTMLBox', null, '');
+			$intervall 				= $Data[c_HealthTimeout];
 			CreateTimer_BySeconds ($Name.'-Timeout', $ScriptIdTimer, $intervall, true) ;
 	}
 
-   CreateTimer_OnceADay("SysInfo-Day", $ScriptIdTimer, 0, 0); 						// Tages Timer für Datenbankgröße
-	CreateTimer_BySeconds("SysInfo-Server"	, $ScriptIdTimer, 60						, true) ;     // Timer 1 min. für Server Info
-	CreateTimer_BySeconds("SysInfo-DBHealth"	, $ScriptIdTimer, c_Warn_Schwellwert	, true) ;     // Timer gemäß Para für Datenbank Überwachung.
-
+   CreateTimer_OnceADay("SysInfo-Day"			, $ScriptIdTimer	, 0						, 0); 		// Tages Timer für Datenbankgröße
+	CreateTimer_BySeconds("SysInfo-Server"		, $ScriptIdTimer	, 60						, true);		// Timer 1 min. für Server Info
+	CreateTimer_BySeconds("SysInfo-DBHealth"	, $ScriptIdTimer	, c_Warn_Schwellwert	, true);		// Timer gemäß Para für Datenbank Überwachung.
+	CreateTimer_BySeconds("High"		, $ScriptIdhc		, 3553					, true);    // Timer für Hight Chart
+	
 	// Übersicht
-	$UebersichtId	 = CreateVariable(c_Control_Uebersicht, 3 /*String*/,  $CategoryIdData, 10, '~HTMLBox', null, '');
+	$UebersichtId	 = CreateVariable(c_Control_Uebersicht			, 3 /*String*/,  $CategoryIdData, 10, '~HTMLBox', null, '');
+//	$Uebersicht3Id	 = CreateVariable(c_Control_UebersichtCircle	, 3 /*String*/,  $CategoryIdData, 30, '~HTMLBox', null, '');
 
 	// Logging
 	$CategoryIdLog	 = CreateCategory('Log', $CategoryIdData, 210);
@@ -194,27 +216,44 @@
 
 	//System Info
 	// Statistik
-	$SysCategoryID 	= CreateVariable(c_Property_Categorys,      1 /*Integer*/, $CategoryIdSYS, 10, '',         null, 0);
-	$SysEventsID 		= CreateVariable(c_Property_Events,         1 /*Integer*/, $CategoryIdSYS, 20, '',         null, 0);
-	$SysInstancesID 	= CreateVariable(c_Property_Instances,      1 /*Integer*/, $CategoryIdSYS, 30, '',         null, 0);
-	$SysLinksID 		= CreateVariable(c_Property_Links,          1 /*Integer*/, $CategoryIdSYS, 40, '',         null, 0);
-	$SysModulesID 		= CreateVariable(c_Property_Modules,        1 /*Integer*/, $CategoryIdSYS, 50, '',         null, 0);
-	$SysObjectsID 		= CreateVariable(c_Property_Objects,        1 /*Integer*/, $CategoryIdSYS, 60, '',         null, 0);
-	$SysProfilesID 	= CreateVariable(c_Property_Profiles,       1 /*Integer*/, $CategoryIdSYS, 70, '',         null, 0);
-	$SysScriptsID 		= CreateVariable(c_Property_Scripts,        1 /*Integer*/, $CategoryIdSYS, 80, '',         null, 0);
-	$SysVariableID 	= CreateVariable(c_Property_Variable,       1 /*Integer*/, $CategoryIdSYS, 90, '',         null, 0);
-	$SysDBGroesseID 	= CreateVariable(c_Property_DB_Groesse,     2 /*Float*/,   $CategoryIdSYS, 100, 'IPSHealth_MB',        null, 0);
-	$SysDBZuwachsID 	= CreateVariable(c_Property_DB_Zuwachs,     2 /*Float*/,   $CategoryIdSYS, 110, 'IPSHealth_MB',        null, 0);
+	$SysCategoryID 	= CreateVariable(c_Property_Categorys,      	1 /*Integer*/	, $CategoryIdSATI, 10, '',         null, 0);
+	$SysEventsID 		= CreateVariable(c_Property_Events,         	1 /*Integer*/	, $CategoryIdSATI, 20, '',         null, 0);
+	$SysInstancesID 	= CreateVariable(c_Property_Instances,      	1 /*Integer*/	, $CategoryIdSATI, 30, '',         null, 0);
+	$SysLinksID 		= CreateVariable(c_Property_Links,          	1 /*Integer*/	, $CategoryIdSATI, 40, '',         null, 0);
+	$SysModulesID 		= CreateVariable(c_Property_Modules,        	1 /*Integer*/	, $CategoryIdSATI, 50, '',         null, 0);
+	$SysObjectsID 		= CreateVariable(c_Property_Objects,        	1 /*Integer*/	, $CategoryIdSATI, 60, '',         null, 0);
+	$SysProfilesID 	= CreateVariable(c_Property_Profiles,       	1 /*Integer*/	, $CategoryIdSATI, 70, '',         null, 0);
+	$SysScriptsID 		= CreateVariable(c_Property_Scripts,        	1 /*Integer*/	, $CategoryIdSATI, 80, '',         null, 0);
+	$SysVariableID 	= CreateVariable(c_Property_Variable,       	1 /*Integer*/	, $CategoryIdSATI, 90, '',         null, 0);
+	$SysDBGroesseID 	= CreateVariable(c_Property_DB_Groesse,     	2 /*Float*/		, $CategoryIdSATI, 100, 'IPSHealth_MB',        null, 0);
+	$SysDBZuwachsID 	= CreateVariable(c_Property_DB_Zuwachs,     	2 /*Float*/		, $CategoryIdSATI, 110, 'IPSHealth_MB',        null, 0);
+	$SysUptimeID 		= CreateVariable(c_Property_Uptime,     	  	1 /*Integer*/	, $CategoryIdSATI, 120, '',        null, 0);
+//	$SysUptimeHumanID = CreateVariable(c_Property_UptimeHuman,    	3 /*String*/	, $CategoryIdSATI, 130, '',        null, '');
+	$SysBetriebStdIID = CreateVariable(c_Property_BetriebStdI,    	1 /*Integer*/	, $CategoryIdSATI, 140, ''					, null, 0);
+//	$SysBetriebStdSID = CreateVariable(c_Property_BetriebStdS,    	3 /*String*/	, $CategoryIdSATI, 150, ''					, null, '');
 
 	// Datenbank Health
-	$SysDBFehlerID 	= CreateVariable(c_Property_DB_Fehler,      	0 /*Boolean*/, $CategoryIdSYS, 120, 'IPSHealth_Err',       null, 0);
-	$SyslastWriteID 	= CreateVariable(c_Property_lastWrite,      	1 /*Integer*/, $CategoryIdSYS, 130, 'IPSHealth_Sec',       null, 0);
-	$SysLogDBGroesseID = CreateVariable(c_Property_LogDB_Groesse,  2 /*Float*/,  	$CategoryIdSYS, 140, 'IPSHealth_MB',       null, 0);
+	$SysDBFehlerID 	= CreateVariable(c_Property_DB_Fehler,      	0 /*Boolean*/	, $CategoryIdDBM, 10, 'IPSHealth_Err'	, null, 0);
+	$SyslastWriteID 	= CreateVariable(c_Property_lastWrite,      	1 /*Integer*/	, $CategoryIdDBM, 20, 'IPSHealth_Sec'	, null, 0);
+	$SysLogDBGroesseID= CreateVariable(c_Property_LogDB_Groesse,  	2 /*Float*/		, $CategoryIdDBM, 30, 'IPSHealth_MB'	, null, 0);
+
+	// Datenbank Wartung
+	$SysDBHistory  	= CreateVariable(c_Property_DBHistory,    	3 /*String*/	, $CategoryIdDBW, 10, '',        null, '');
+	$SysDBNeuagg  		= CreateVariable(c_Property_DBNeuagg,    		0 /*Boolean*/	, $CategoryIdDBW, 20, 'IPSHealth_NA', $ScriptIdCS, 0);
+	$SysDBVarGes  		= CreateVariable(c_Property_DBVarGes,    		1 /*Integer*/	, $CategoryIdDBW, 30, '',        null, 0);
+	$SysDBSteps  		= CreateVariable(c_Property_DBSteps,    		2 /*Float*/		, $CategoryIdDBW, 40, 'IPSHealth_Pro',        null, 100);
+	$SysDBVarReady		= CreateVariable(c_Property_DBVarReady,    	1 /*Integer*/	, $CategoryIdDBW, 50, '',        null, 0);
+	$SysDBaktVar		= CreateVariable(c_Property_DBaktVar,	    	3 /*String*/	, $CategoryIdDBW, 60, '',        null, '');
+	$SysDBStart			= CreateVariable(c_Property_DBStart,    		3 /*String*/	, $CategoryIdDBW, 70, '',        null, '');
+	$SysDBReady			= CreateVariable(c_Property_DBReady,    		3 /*String*/	, $CategoryIdDBW, 80, '',        null, '');
 
 	// Server Info
-	$SysServerZeit 	= CreateVariable(c_Property_ServerZeit,		3 /*String*/,  $CategoryIdSYS, 150, '',       null, 0);
-	$SysServerHDD 		= CreateVariable(c_Property_ServerHDD,  		2 /*Float*/,  $CategoryIdSYS, 160, 'IPSHealth_GB',        null, 0);
-	$SysServerCPU 		= CreateVariable(c_Property_ServerCPU,  		1 /*Integer*/,  $CategoryIdSYS, 170, 'IPSHealth_Pro',      null, 0);
+	$SysServerZeit 	= CreateVariable(c_Property_ServerZeit,		3 /*String*/	, $CategoryIdSVR, 10, '',       null, '');
+	$SysServerHDD 		= CreateVariable(c_Property_ServerHDD,  		2 /*Float*/		, $CategoryIdSVR, 20, 'IPSHealth_GB',        null, 0);
+	$SysServerCPU 		= CreateVariable(c_Property_ServerCPU,  		1 /*Integer*/	, $CategoryIdSVR, 30, 'IPSHealth_Pro',      null, 0);
+
+	// HightChart
+	$SysHCQueue 		= CreateVariable(c_Control_HCQueue,		3 /*String*/	, $CategoryIdHC, 10, '~HTMLBox',       null, '');
 
 	// Datenbank Logging einschalten
 	AC_SetLoggingStatus($archiveHandlerID, $SysCategoryID		, c_SYS_Logging);
@@ -229,6 +268,7 @@
 	AC_SetLoggingStatus($archiveHandlerID, $SysDBGroesseID	, c_SYS_Logging);
 	AC_SetLoggingStatus($archiveHandlerID, $SysDBZuwachsID	, c_SYS_Logging);
 	AC_SetLoggingStatus($archiveHandlerID, $SysLogDBGroesseID, c_SYS_Logging);
+	AC_SetLoggingStatus($archiveHandlerID, $SysUptimeID		, c_SYS_Logging);
 	AC_SetLoggingStatus($archiveHandlerID, $SysServerHDD		, c_SYS_Logging);
 	AC_SetLoggingStatus($archiveHandlerID, $SysServerCPU		, c_SYS_Logging);
 
@@ -238,24 +278,40 @@
 	if ($WFC_Enabled and $WFC_ConfigId <> '') {
 		$WebFrontId               = CreateCategoryPath($WFC_Path, 10);
 		EmptyCategory($WebFrontId);
-		$WebFrontOverviewSYS     = CreateCategory( 'SystemInfo',     $WebFrontId,    10);
-		$WebFrontOverviewMLD     = CreateCategory( 'Meldungen', 		 $WebFrontId,    20);
-		$WebFrontOverview			 = CreateCategory( 'Overview',  		 $WebFrontId,    30);
+		$WebFrontOverview1		 = CreateCategory( 'Overview_1'		, $WebFrontId,    10);
+		$WebFrontOverview2		 = CreateCategory( 'Overview_2'		, $WebFrontId,    20);
+		$WebFrontOverview3		 = CreateCategory( 'Overview_3'		, $WebFrontId,    30);
+		$WebFrontOverview4		 = CreateCategory( 'Overview_4'		, $WebFrontId,    40);
+		$WebFrontOverviewSYSL    = CreateCategory( 'Statistik'		, $WebFrontId,    50);
+		$WebFrontOverviewSYSR    = CreateCategory( 'System Info'		, $WebFrontId,    60);
+		$WebFrontOverviewMLD     = CreateCategory( 'Meldungen'		, $WebFrontId,    70);
 
 		DeleteWFCItems($WFC_ConfigId, $WFC_TabPaneItem);
 
 		// Übersicht
 		CreateWFCItemTabPane   ($WFC_ConfigId, $WFC_TabPaneItem,             	$WFC_TabPaneParent, 	$WFC_TabPaneOrder, 		$WFC_TabPaneName, $WFC_TabPaneIcon);
-		CreateWFCItemCategory  ($WFC_ConfigId, $WFC_TabPaneItem.'_SysInfo',		$WFC_TabPaneItem,  		  	20, 'System Info'	, ''				, $WebFrontOverviewSYS /*BaseId*/, 'false' /*BarBottomVisible*/);
-//		CreateWFCItemSplitPane ($WFC_ConfigId, $WFC_TabPaneItem.'_OV',       	$WFC_TabPaneItem,    		10, $WFC_TabName1	, $WFC_TabIcon1, 0 /*Horizontal*/					, 40 /*Hight*/	, 	0 /*Target=Pane1*/, 0/*UsePixel*/, 'true');
-//		CreateWFCItemCategory  ($WFC_ConfigId, $WFC_TabPaneItem.'_OV_Overview', $WFC_TabPaneItem.'_OV',  	10, 'Übersicht'	, ''				, $WebFrontOverview /*BaseId*/	, 'false' /*BarBottomVisible*/);
-		CreateWFCItemCategory  ($WFC_ConfigId, $WFC_TabPaneItem.'_OV_Log',  		$WFC_TabPaneItem, 			20, 'Logging'		, ''				, $WebFrontOverviewMLD /*BaseId*/, 'false' /*BarBottomVisible*/);                             // integer $PercentageSlider
+//		CreateWFCItemCategory  ($WFC_ConfigId, $WFC_TabPaneItem.'_OV_Overview'	, $WFC_TabPaneItem					, 	10, 'Übersicht'	, '', $WebFrontOverview /*BaseId*/	, 'false' /*BarBottomVisible*/);
+		CreateWFCItemSplitPane ($WFC_ConfigId, $WFC_TabPaneItem.'_OV_Overview'	, $WFC_TabPaneItem					,	10, 'Übersicht'	, '', 0 /*Horizontal*/	, 50 /*Width*/	, 	0 /*Target=Pane1*/, 0/*UsePixel*/, 'true');
+		CreateWFCItemSplitPane ($WFC_ConfigId, $WFC_TabPaneItem.'_OV_1'			, $WFC_TabPaneItem.'_OV_Overview',	10, ''	, '', 1 /*Vertical*/	, 66 /*Width*/	, 	0 /*Target=Pane1*/, 0/*UsePixel*/, 'true');
+		CreateWFCItemSplitPane ($WFC_ConfigId, $WFC_TabPaneItem.'_OV_2'			, $WFC_TabPaneItem.'_OV_1'			,	10, ''	, '', 1 /*Vertical*/	, 50 /*Width*/	, 	0 /*Target=Pane1*/, 0/*UsePixel*/, 'true');
 
-		$Dummy_SysInfoId 	= CreateInstance ('IPS Statistik',	$WebFrontOverviewSYS, '{485D0419-BE97-4548-AA9C-C083EB82E61E}', 20);
-		$Dummy_DBHealthId	= CreateInstance ('IPS Datenbank', 	$WebFrontOverviewSYS, '{485D0419-BE97-4548-AA9C-C083EB82E61E}', 30);
-		$Dummy_ServerId 	= CreateInstance ('Server Info', 	$WebFrontOverviewSYS, '{485D0419-BE97-4548-AA9C-C083EB82E61E}', 40);
+		CreateWFCItemCategory  ($WFC_ConfigId, $WFC_TabPaneItem.'_OV4'				, $WFC_TabPaneItem.'_OV_Overview', 	20, 'Queue'		, '', $WebFrontOverview4 /*BaseId*/, 'false' /*BarBottomVisible*/);
+		CreateWFCItemCategory  ($WFC_ConfigId, $WFC_TabPaneItem.'_OV3'				, $WFC_TabPaneItem.'_OV_1'			, 	20, 'Circle'	, '', $WebFrontOverview3 /*BaseId*/, 'false' /*BarBottomVisible*/);
+		CreateWFCItemCategory  ($WFC_ConfigId, $WFC_TabPaneItem.'_OV2'				, $WFC_TabPaneItem.'_OV_2'			, 	20, 'Circle'	, '', $WebFrontOverview2 /*BaseId*/, 'false' /*BarBottomVisible*/);
+		CreateWFCItemCategory  ($WFC_ConfigId, $WFC_TabPaneItem.'_OV1'				, $WFC_TabPaneItem.'_OV_2'			, 	10, 'Circle'	, '', $WebFrontOverview1 /*BaseId*/, 'false' /*BarBottomVisible*/);
+
+		CreateWFCItemSplitPane ($WFC_ConfigId, $WFC_TabPaneItem.'_SysInfo_SP', 	$WFC_TabPaneItem					,	20, 'System Info'	, '', 1 /*Vertikal*/	, 50 /*Width*/	, 	0 /*Target=Pane1*/, 0/*UsePixel*/, 'true');
+		CreateWFCItemCategory  ($WFC_ConfigId, $WFC_TabPaneItem.'_SysInfoL',		$WFC_TabPaneItem.'_SysInfo_SP', 	10, 'Statistik'	, '', $WebFrontOverviewSYSL /*BaseId*/, 'false' /*BarBottomVisible*/);
+		CreateWFCItemCategory  ($WFC_ConfigId, $WFC_TabPaneItem.'_SysInfoR',		$WFC_TabPaneItem.'_SysInfo_SP', 	20, 'System Info'	, '', $WebFrontOverviewSYSR /*BaseId*/, 'false' /*BarBottomVisible*/);
+		CreateWFCItemCategory  ($WFC_ConfigId, $WFC_TabPaneItem.'_OV_Log',  		$WFC_TabPaneItem					, 	30, 'Logging'		, '', $WebFrontOverviewMLD /*BaseId*/, 'false' /*BarBottomVisible*/);                             // integer $PercentageSlider
+
+		$Dummy_SysInfoId 	= CreateInstance ('IPS Statistik'		, $WebFrontOverviewSYSL, '{485D0419-BE97-4548-AA9C-C083EB82E61E}', 10);
+		$Dummy_DBHealthId	= CreateInstance ('IPS DB-Monitoring'	, $WebFrontOverviewSYSR, '{485D0419-BE97-4548-AA9C-C083EB82E61E}', 20);
+		$Dummy_DBWartungId= CreateInstance ('IPS DB-Wartung'		, $WebFrontOverviewSYSR, '{485D0419-BE97-4548-AA9C-C083EB82E61E}', 30);
+		$Dummy_ServerId 	= CreateInstance ('Server Info'			, $WebFrontOverviewSYSR, '{485D0419-BE97-4548-AA9C-C083EB82E61E}', 40);
 //		$Dummy_Log_Id 		= CreateInstance ('Meldungen', 	$WebFrontOverviewMLD, '{485D0419-BE97-4548-AA9C-C083EB82E61E}', 50);
 
+		// Statistik
 		CreateLink		(c_Property_Categorys,				$SysCategoryID,  			$Dummy_SysInfoId, 10);
 		CreateLink		(c_Property_Events,					$SysEventsID,  			$Dummy_SysInfoId, 20);
 		CreateLink		(c_Property_Instances,				$SysInstancesID,  		$Dummy_SysInfoId, 30);
@@ -267,34 +323,67 @@
 		CreateLink		(c_Property_Variable,				$SysVariableID,  			$Dummy_SysInfoId, 90);
 		CreateLink		(c_Property_DB_Groesse,				$SysDBGroesseID,  		$Dummy_SysInfoId, 100);
 		CreateLink		(c_Property_DB_Zuwachs,				$SysDBZuwachsID,  		$Dummy_SysInfoId, 110);
+		CreateLink		(c_Property_Uptime,					$SysUptimeID,  			$Dummy_SysInfoId, 120);
 
+		// DB Monitoring
 		CreateLink		(c_Property_DB_Fehler,				$SysDBFehlerID,  			$Dummy_DBHealthId, 10);
 		CreateLink		(c_Property_lastWrite,				$SyslastWriteID,  		$Dummy_DBHealthId, 20);
 		CreateLink		(c_Property_LogDB_Groesse,			$SysLogDBGroesseID,  	$Dummy_DBHealthId, 30);
 
+		// DB Wartung
+		CreateLink		(c_Property_DBNeuagg,				$SysDBNeuagg,  			$Dummy_DBWartungId, 10);
+		CreateLink		(c_Property_DBVarGes,				$SysDBVarGes,  			$Dummy_DBWartungId, 20);
+		CreateLink		(c_Property_DBVarReady,				$SysDBVarReady,  			$Dummy_DBWartungId, 30);
+		CreateLink		(c_Property_DBaktVar,				$SysDBaktVar,  			$Dummy_DBWartungId, 40);
+		CreateLink		(c_Property_DBSteps,					$SysDBSteps,  				$Dummy_DBWartungId, 50);
+		CreateLink		(c_Property_DBStart,					$SysDBStart,  				$Dummy_DBWartungId, 60);
+		CreateLink		(c_Property_DBReady,					$SysDBReady,  				$Dummy_DBWartungId, 70);
+//		CreateLink		(c_Property_DBHistory,				$SysDBHistory,  			$Dummy_DBWartungId, 10);
+
+		// Server Info
 		CreateLink		(c_Property_ServerZeit,				$SysServerZeit,  			$Dummy_ServerId, 10);
 		CreateLink		(c_Property_ServerHDD,				$SysServerHDD,  			$Dummy_ServerId, 20);
 		CreateLink		(c_Property_ServerCPU,				$SysServerCPU,  			$Dummy_ServerId, 30);
 
-		CreateLink     (c_Control_MeldungID,		$ControlIdLogId,				$WebFrontOverviewMLD, 20);
-		CreateLink     (c_Control_Meldungen,		$ControlIdLog,					$WebFrontOverviewMLD, 30);
+		// Log Meldungen
+		CreateLink     (c_Control_MeldungID,				$ControlIdLogId,			$WebFrontOverviewMLD, 20);
+		CreateLink     (c_Control_Meldungen,				$ControlIdLog,				$WebFrontOverviewMLD, 30);
 
+		// Unten
+		CreateLink     (c_Control_HCQueue,					$SysHCQueue,				$WebFrontOverview4, 10);
 
-		// Übersicht
-//			$Idx = 20;
-//		foreach ($ZSUConfig as $ZSUName=>$ZSUData) {
-//			$CirclyId   = get_ZSUCirclyId($ZSUName, $CategoryIdZSUs);
+		// Oben Links
+//		CreateLink		(c_Property_UptimeHuman,			$SysUptimeHumanID,  		$WebFrontOverview1, 100);
+//		CreateLink     (c_Control_BetriebStd,				$SysBetriebStdSID,		$WebFrontOverview1, 110);
 
-//			CreateLink($ZSUData[c_Property_Name],    	get_ZSUControlId(c_Control_Uebersicht,   	$CirclyId),		$WebFrontOverview,	$Idx);
+		// Oben Mitte
+		CreateLink		(c_Control_Info,			$UebersichtId,  		$WebFrontOverview2, 100);
 
-//			$Idx = $Idx + 10;
-//		}
+		// Oben Rechts
+//		CreateLink		('Circle',			$Uebersicht3Id,  		$WebFrontOverview3, 100);
 
-
+		$Idx = 10;
+		foreach ($configData as $Name=>$Data) {
+			$CirclyId   	= get_CirclyId($Name, $CategoryIds);
+			$ControlId 		= get_ControlId(c_Control_Uebersicht,$CircleId);
+			CreateLink(c_Control_Uebersicht." ".$Data[c_HealthTimeout]." Sekunden",		$ControlId,	$WebFrontOverview3,	$Idx);
+			$Idx = $Idx + 10;
+		}
 	}
 
 	ReloadAllWebFronts();
 
+   // ------------------------------------------------------------------------------------------------
+	function get_CirclyId($DeviceName, $ParentId) {
+		$CategoryId = IPS_GetObjectIDByIdent($DeviceName, $ParentId);
+		return $CategoryId;
+	}
+
+   // ------------------------------------------------------------------------------------------------
+	function get_ControlId($ControlName, $CirclyId) {
+	   $VariableId = IPS_GetObjectIDByIdent($ControlName, $CirclyId);
+	   return $VariableId;
+	}
 	/** Anlegen eines Profils mit Associations
 	 *
 	 * der Befehl legt ein Profile an und erzeugt für die übergebenen Werte Assoziationen

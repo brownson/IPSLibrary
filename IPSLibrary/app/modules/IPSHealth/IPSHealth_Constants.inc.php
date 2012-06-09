@@ -28,17 +28,26 @@
 	 *
 	 */
 
-	define ("c_HealthCircles",				"Healths");
-	define ("c_HealthCircle",				"Health_");
+	define ("c_HealthCircles",				"Circles");
+	define ("c_HealthCircle",				"Circle_");
 	define ("c_HealthTimer",				"Timer");
 	define ("c_HealthTimeout",				"Timeout");
 	define ("c_HealthVariables",			"Variable");
 
 	define ("c_Control_SysInfo",			"System Info");
+	define ("c_Control_Statistik",      "Statistik");
+	define ("c_Control_DBMonitor",      "DB-Monitoring");
+	define ("c_Control_DBWartung",      "DB-Wartung");
+	define ("c_Control_Server",         "Server");
+	define ("c_Control_HightChart",     "HightChart");
 	define ("c_Control_MeldungID",		"letzte Meldungs ID");
 	define ("c_Control_Meldungen",		"Meldungen");
 
 	define ("c_Control_Uebersicht",		"Uebersicht");
+	define ("c_Control_UebersichtCircle",		"Uebersicht_Circle");
+	define ("c_Control_HCQueue",        "HighChart Queue");
+	define ("c_Control_BetriebStd",     "Betriebsstunden");
+	define ("c_Control_Info",           "Information");
 
 	define ("c_Property_Timeout",			'Timeout');
 	define ("c_Property_Variables", 		'Variablen');
@@ -57,13 +66,27 @@
 	define ("c_Property_DB_Fehler",  	'DB-Fehler');
 	define ("c_Property_lastWrite",  	'letzter Schreibvorgang vor');
 	define ("c_Property_LogDB_Groesse",	'aktuelle DB Größe');
-	
+	define ("c_Property_Uptime",        'Laufzeit (Sekunden)');
+	define ("c_Property_UptimeHuman",   'Laufzeit');
+	define ("c_Property_BetriebStdI",   'Betriebsstunden Integer');
+	define ("c_Property_BetriebStdS",   'Betriebsstunden String');
+
 	define ("c_Property_ServerZeit",    'Zeit');
 	define ("c_Property_ServerHDD",  	'freie HDD Kapazität');
 	define ("c_Property_ServerCPU",  	'CPU Auslastung');
-//	define ("",  					'');
+	
 
-//	define ("",  					'');
+	define ("c_Property_DBHistory",  	'History');
+	define ("c_Property_DBNeuagg",  		'DB Neuaggregation');
+	define ("c_Property_DBVarGes",  		'Variablen gesamt');
+	define ("c_Property_DBaktVar",  		'in Arbeit');
+	define ("c_Property_DBVarReady", 	'Variablen Fertig');
+	define ("c_Property_DBSteps",  		'Fortschritt');
+	define ("c_Property_DBReady", 		'Beendet');
+	define ("c_Property_DBStart", 		'Gestartet');
+//	define ("", 			'');
+//	define ("", 			'');
+//	define ("", 			'');
 
 //Webfront
 	define ("c_WFC_Name",        			'Health Name');

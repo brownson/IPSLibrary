@@ -32,17 +32,16 @@
 
 	switch ($_IPS['SENDER']) {
 		case 'TimerEvent':
-			$CircleId     = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_Control_SysInfo);
 			$eventId 	=  $_IPS['EVENT'];
 			$strpos  	= strrpos(IPS_GetName($eventId), '-', 0);
 			$EventName 	= substr(IPS_GetName($eventId),0, $strpos);
 			$EventMode 	= substr(IPS_GetName($eventId), $strpos+1, strlen(IPS_GetName($eventId))-$strpos-1);
 
-			if ($EventMode == "Server")	set_SysInfo_Server($CircleId);
+			if ($EventMode == "Server")	set_SysInfo_Server();
 
-			if ($EventMode == "DBHealth") set_SysInfo_DBHealth($CircleId);
+			if ($EventMode == "DBHealth") set_SysInfo_DBHealth();
 
-			if ($EventMode == "Day") 		set_SysInfo_Statistik($CircleId);
+			if ($EventMode == "Day") 		set_SysInfo_Statistik();
 
 			if ($EventMode == "Timeout")	Check_VarTO($EventName);
 
@@ -52,8 +51,8 @@
 			break;
 
 		case 'Execute':
-			$CircleId     = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_Control_SysInfo);
-			set_SysInfo_Statistik($CircleId);
+			$ControlId     = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_Control_SysInfo);
+			set_SysInfo_Statistik($ControlId);
 
 			break;
 
