@@ -67,7 +67,7 @@
 		return array(
 
          c_HealthCircle.'1'   => array(
-//		      	c_HealthTimer  	=>    70,
+               c_CircleName      =>    '60 Sekunden Überwachung',
 		      	c_HealthTimeout  	=>    65,
 					c_HealthVariables =>		array(
 						12665  ,
@@ -75,7 +75,7 @@
 			),
 
          c_HealthCircle.'2'   => array(
-//		      	c_HealthTimer  	=>    360,
+               c_CircleName      =>    '360 Sekunden Überwachung',
 					c_HealthTimeout  	=>    360,
 					c_HealthVariables =>		array(
 						37772  ,
@@ -87,7 +87,7 @@
 			),
 
          c_HealthCircle.'3'   => array(
-//		      	c_HealthTimer  	=>    660,
+               c_CircleName      =>    '25 Stunden Überwachung',
 					c_HealthTimeout  	=>    25*60*60,
 					c_HealthVariables =>		array(
 						40599 ,

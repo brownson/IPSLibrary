@@ -46,7 +46,7 @@
 	//
 	// ----------------------------------------------------------------------------------------------------------------------------
 
-	function Health_1($CycleId, $HealthName, $Mode) {
+	function Circle_1($CycleId, $HealthName, $Mode) {
 		$CircleName = IPS_GetName($CycleId);
 
 	}
@@ -62,7 +62,7 @@
 	//
 	// ----------------------------------------------------------------------------------------------------------------------------
 
-	function Health_2($CycleId, $HealthName, $Mode) {
+	function Circle_2($CycleId, $HealthName, $Mode) {
 		$CircleName = IPS_GetName($CycleId);
 
 	}
@@ -78,7 +78,7 @@
 	//
 	// ----------------------------------------------------------------------------------------------------------------------------
 
-	function Health_3($CycleId, $HealthName, $Mode) {
+	function Circle_3($CycleId, $HealthName, $Mode) {
 		$CircleName = IPS_GetName($CycleId);
 
 	}

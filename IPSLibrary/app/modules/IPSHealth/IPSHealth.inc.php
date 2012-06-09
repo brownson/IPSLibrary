@@ -137,7 +137,14 @@
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function Check_VarTO($CircleName) {
-			$Properts   = get_HealthConfiguration()[$CircleName];
+			$Properts   	= get_HealthConfiguration()[$CircleName];
+			$CategoryIds   = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_HealthCircles);
+			$CirclyId   	= get_CirclyId($CircleName, $CategoryIds);
+			$CircleId 		= get_ControlId(c_Control_Error,$CirclyId);
+
+			$hintergrundfarbe = "#000000";
+			$html1 = "";
+			$html1 = $html1 . "<table border='0' bgcolor=$hintergrundfarbe width='100%' height='300' cellspacing='0'  >";
 
 			if (function_exists($CircleName)) {
 				IPSLogger_Dbg(__file__, 'Health CallBack Funktion '.$CircleName.' Existiert in IPSHealth_Custom.');
@@ -148,32 +155,71 @@
 				$timeout = $Properts[c_HealthTimeout];
 				foreach ($Properts[c_HealthVariables] as $ObjectID) {
 					$Object = IPS_GetVariable($ObjectID);
+					$ObjectName = IPS_GetName($ObjectID);
 					$lasttime = $Object['VariableUpdated'];
 					$diff = (int)round(time() - $lasttime);
+					$Prozent = floor(($diff/$timeout) * 100);
 					$mld = 'OK';
 					if ($diff > $timeout) {
 						$mld = "Zeit ($diff Sek.) überschritten";
-						IPSHealth_Log($CircleName." Variable: ".IPS_GetName($ObjectID)."($ObjectID),  Ergebnis: $mld");
-						IPSLogger_Err(__file__, $CircleName.",  Variable: ".IPS_GetName($ObjectID)."($ObjectID),  Zeit: $diff,  Ergebnis: $mld");
+						IPSHealth_Log($CircleName." Variable: $ObjectName ($ObjectID),  Ergebnis: $mld");
+						IPSLogger_Err(__file__, $CircleName.",  Variable: $ObjectName ($ObjectID),  Zeit: $diff,  Ergebnis: $mld");
 						$r++;
 					}
+
+					if ($Prozent < 51){
+						$backgroundcolor = "#008800";
+					} else if (($Prozent > 50) and ($Prozent < 76)){
+						$backgroundcolor = "#668800";
+					} else if (($Prozent > 75) and ($Prozent < 101)){
+						$backgroundcolor = "#AA8800";
+					} else if ($Prozent > 100){
+						$backgroundcolor = "#FF0000";
+					}
+					
+					$html1 = $html1 . "<tr>";
+					$html1 = $html1 . "<td style='text-align:left;background-color:$backgroundcolor;'>";
+					$html1 = $html1 . "<span style='font-family:arial;color:black;font-size:16px;'>$ObjectName:<br></span>";
+					$html1 = $html1 . "<td style='text-align:center;background-color:$backgroundcolor;>";
+					$html1 = $html1 . "<span style='font-family:arial;color:black;font-size:20px;font-weight:bold;'>$diff ($Prozent%)</span></td>";
+					$html1 = $html1 . "<td style='text-align:left;background-color:$backgroundcolor;'>";
+					$html1 = $html1 . "<span style='font-family:arial;color:black;font-size:16px;'>Sekunden</span></td>";
+					$html1 = $html1 . "</tr>";
+
 					$i++;
 				}
-				if ($r == 0 and $i > 0) IPSHealth_Log($CircleName.' HealthCheck Fehlerfrei beendet');
-				if ($i == 0) IPSHealth_Log($CircleName.' Keine Variablen zur Überwachung!');
+				$html1 = $html1 . "</table>";
+				Set_ControlValue(c_Control_Uebersicht, $CirclyId, $html1);
+
+				if ($r == 0 and $i > 0) {
+						IPSHealth_Log($CircleName.' HealthCheck Fehlerfrei beendet');
+						SetValue($CircleId,false);
+				}
+				if ($i == 0){
+						IPSHealth_Log($CircleName.' Keine Variablen zur Überwachung!');
+						SetValue($CircleId,false);
+				}
+				if ($r > 0 and $i > 0){
+						IPSHealth_Log($CircleName.' Summen Fehler gesetzt!');
+						SetValue($CircleId,true);
+				}
 
 			} else {
 
 					IPSLogger_Err(__file__, "HealthCheck CallBack Funktion $CircleName in IPSHealth_Custom existiert nicht. Health: ".$Name);
+					
 			}
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function set_SysInfo_Server() {
-				$Circle0Id     = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth');
-				$Circle1Id     = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_Control_Server);
-				$Circle2Id     = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_Control_Statistik);
-				$Circle3Id     = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_Control_DBWartung);
+				$Circle0Id     		= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth');
+				$Circle1Id     		= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_Control_Server);
+				$Circle2Id     		= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_Control_Statistik);
+				$Circle3Id     		= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_Control_DBWartung);
+				$Circle4Id     		= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_HealthCircles);
+				$Circle5Id     		= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_Control_DBMonitor);
+				$configData 			= get_HealthConfiguration();
 
 				$ips_uebersicht_id	= get_ControlId(c_Control_Uebersicht, $Circle0Id);
 
@@ -181,11 +227,9 @@
 				$ips_servercpu_id		= get_ControlId(c_Property_ServerCPU, $Circle1Id);
 				$ips_serverhdd_id		= get_ControlId(c_Property_ServerHDD, $Circle1Id);
 
-				$ips_laufzeit_id        = get_ControlId(c_Property_Uptime, $Circle2Id);
-//				$ips_laufzeithuman_id   = get_ControlId(c_Property_UptimeHuman, $Circle2Id);
+				$ips_laufzeit_id     = get_ControlId(c_Property_Uptime, $Circle2Id);
 
 				$ips_betriebszeiti_id   = get_ControlId(c_Property_BetriebStdI, $Circle2Id);
-//				$ips_betriebszeits_id   = get_ControlId(c_Property_BetriebStdS, $Circle2Id);
 
 
 				// CPU Auslastung
@@ -205,7 +249,6 @@
 				$h                   = floor(($Laufzeit - ($d*60*60*24)) / (60*60));
 				$m                   = floor(($Laufzeit - ($d*60*60*24) - ($h*60*60)) / (60));
 				setValueInteger($ips_laufzeit_id, $Laufzeit);
-//				setValueString($ips_laufzeithuman_id, "$d Tage, $h Stunden, $m Minuten");
 
 
 				$Betriebszeit = getValueInteger($ips_betriebszeiti_id);
@@ -223,19 +266,42 @@
 
 				$bm = floor($Betriebszeit / 60);
 				$Betriebszeit = $Betriebszeit - ($bm * 60);
-//				setValueString($ips_betriebszeits_id, "$by Jahre,  $bd Tage, $bh Stunden, $bm Minuten");
 
 				if (get_ControlValue(c_Property_DBNeuagg, $Circle3Id) == true) DB_Wartung($Circle3Id);
 
 
-		$systemstatus  = "Alles gut";
-		$systemcolor = "green";
-		$hintergrundfarbe = "#003366";
-		$fontsize = "17px";
+				// Datenbank Neuuaggregierung Fortschritt
+				$DBWartung_Fertig = get_ControlValue(c_Property_DBSteps,$Circle3Id);
+
+				// Suche Cirlce Fehler
+				$err = 0;
+				foreach ($configData as $Name=>$Data) {
+						$CirclyId   = get_CirclyId($Name, $Circle4Id);
+						$CircleId 	= get_ControlId(c_Control_Error,$CirclyId);
+					   if (getValue($CircleId) == true) $err++;
+				}
+
+				// Datenbank Fehler?
+			   if (get_ControlValue(c_Property_DB_Fehler,$Circle5Id) == true) $err++;
+
+				// Sonstiger Fehler?
+			   if (get_ControlValue(c_Control_Error,$Circle0Id) == true) $err++;
+
+
+		// Generiere HTML Übersicht
+		if ($err > 0){
+					$hintergrundfarbe = "#661100";
+					$systemstatus  = "Fehler im System";
+					$systemcolor = "gray";
+		} else {
+					$hintergrundfarbe = "#003366";
+					$systemstatus  = "Alles gut";
+					$systemcolor = "green";
+		}
 
 
 		$html1 = "";
-		$html1 = $html1 . "<table border='0' bgcolor=$hintergrundfarbe width='100%' height='200' cellspacing='0'  >";
+		$html1 = $html1 . "<table border='0' bgcolor=$hintergrundfarbe width='100%' height='300' cellspacing='0'  >";
 
 		$html1 = $html1 . "<tr>";
 		$html1 = $html1 . "<td style='text-align:left;'>";
@@ -256,6 +322,15 @@
 		$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:yellow;font-size:20px;'>$by Jahre,  $bd Tage, $bh Stunden, $bm Minuten</span></td>";
 //		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:25px;'>$waehrung</span></td>";
 		$html1 = $html1 . "</tr>";
+
+		if (get_ControlValue(c_Property_DBNeuagg,$Circle3Id) == true){
+		$html1 = $html1 . "<tr>";
+		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:15px;'>Neuaggregierung</span></td>";
+		$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:yellow;font-size:20px;'>$DBWartung_Fertig %</span></td>";
+//		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:25px;'>Fertig</span></td>";
+		$html1 = $html1 . "</tr>";
+		}
+
 		$html1 = $html1 . "<br>";
 
 		$html1 = $html1 . "<tr>";
@@ -391,6 +466,27 @@
 
 	}
 
+	// ----------------------------------------------------------------------------------------------------------------------------
+	function  CircleSelect($ControlId, $instanceId, $Value){
+			$CategoryIds     	= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_HealthCircles);
+			$VisualisationIds	= IPSUtil_ObjectIDByPath('Visualization.WebFront.IPSHealth.Overview_3');
+			$configData 		= get_HealthConfiguration();
+
+			foreach ($configData as $Name=>$Data) {
+					$VisuId 		= IPS_GetLinkIDByName($Data[c_CircleName], $VisualisationIds);
+					$CirclyId   = get_CirclyId($Name, $CategoryIds);
+					$CircleId 	= get_ControlId(c_Control_Select,$CirclyId);
+
+					if ($CircleId == $instanceId){
+						   SetValueInteger($CircleId, 1);
+						   IPS_SetHidden($VisuId, false);
+
+					} else {
+						   SetValueInteger($CircleId, 0);
+						   IPS_SetHidden($VisuId, true);
+					}
+			}
+	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function get_DB_Groesse() {
@@ -489,6 +585,12 @@
 			exit;
 		}
 		return $CirclyId;
+	}
+	
+   // ------------------------------------------------------------------------------------------------
+	function get_CirclyId($DeviceName, $ParentId) {
+		$CategoryId = IPS_GetObjectIDByIdent($DeviceName, $ParentId);
+		return $CategoryId;
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------

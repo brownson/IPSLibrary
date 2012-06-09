@@ -30,6 +30,8 @@
 	 */
 
 	include_once "IPSHealth.inc.php";
+	$AppPath        = "Program.IPSLibrary.app.modules.IPSHealth";
+	$IdApp     = get_ObjectIDByPath($AppPath);
 
 	if ($_IPS['SENDER']=='WebFront') {
 		$instanceId   = $_IPS['VARIABLE'];
@@ -37,13 +39,21 @@
 		$ControlType = get_ControlType($instanceId);
 
 		switch($ControlType) {
+			case c_Control_Select:
+			   CircleSelect($ControlId, $instanceId, $_IPS['VALUE']);
+				break;
+
 			case c_Property_DBNeuagg:
 			   DB_Reaggregieren($ControlId, $instanceId, $_IPS['VALUE']);
 			   break;
 
+			case c_Control_Modul:
+			IPS_RunScript(IPS_GetScriptIDByName("IPSHealth_ModulUpdate",$IdApp));
+
+				break;
 
 			default:
-				IPSLogger_Err(__file__, "Error Unknown ControlType $ControlType");
+				IPSLogger_Err(__file__, "Error Unknown ControlType");// $ControlType");
 				break;
 	   }
 

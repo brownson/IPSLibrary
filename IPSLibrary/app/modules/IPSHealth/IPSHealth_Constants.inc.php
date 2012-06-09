@@ -33,7 +33,8 @@
 	define ("c_HealthTimer",				"Timer");
 	define ("c_HealthTimeout",				"Timeout");
 	define ("c_HealthVariables",			"Variable");
-
+	define ("c_CircleName",             "Name");
+	
 	define ("c_Control_SysInfo",			"System Info");
 	define ("c_Control_Statistik",      "Statistik");
 	define ("c_Control_DBMonitor",      "DB-Monitoring");
@@ -48,6 +49,9 @@
 	define ("c_Control_HCQueue",        "HighChart Queue");
 	define ("c_Control_BetriebStd",     "Betriebsstunden");
 	define ("c_Control_Info",           "Information");
+	define ("c_Control_Select",         "Select");
+	define ("c_Control_Error",          "Fehler");
+	define ("c_Control_Modul",          "IPSHealth Updaten");
 
 	define ("c_Property_Timeout",			'Timeout');
 	define ("c_Property_Variables", 		'Variablen');
@@ -66,10 +70,8 @@
 	define ("c_Property_DB_Fehler",  	'DB-Fehler');
 	define ("c_Property_lastWrite",  	'letzter Schreibvorgang vor');
 	define ("c_Property_LogDB_Groesse",	'aktuelle DB Größe');
-	define ("c_Property_Uptime",        'Laufzeit (Sekunden)');
-	define ("c_Property_UptimeHuman",   'Laufzeit');
-	define ("c_Property_BetriebStdI",   'Betriebsstunden Integer');
-	define ("c_Property_BetriebStdS",   'Betriebsstunden String');
+	define ("c_Property_Uptime",        'Laufzeit');
+	define ("c_Property_BetriebStdI",   'Betriebszeit');
 
 	define ("c_Property_ServerZeit",    'Zeit');
 	define ("c_Property_ServerHDD",  	'freie HDD Kapazität');

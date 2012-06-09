@@ -16,9 +16,11 @@ Global $CfgDaten; // damit kann der Script auch von anderen Scripten aufgerufen 
 	$ts_yet  														= date("(D) d.m.Y H:i", $CfgDaten["StartTime"]);
 	$te_yet  														= date("(D) d.m.Y H:i", time());
 
+//   $CfgDaten['chart']['backgroundColor'] = "#003366";
+
 	// Überschriften
-	$CfgDaten['title']['text'] 								= "";
 	$CfgDaten['title']['text'] 								= NULL;
+	$CfgDaten['title']['style']['color'] = "#FFFFFF";
 	$CfgDaten['subtitle']['text'] 							= "Zeitraum: $ts_yet - $te_yet"; // "" = Automatisch über Zeitraum
 	$CfgDaten['subtitle']['Ips']['DateTimeFormat'] 		= "(D) d.m.Y H:i"; 			// z.B.: "(D) d.m.Y H:i" (wird auch als Default herangezogen wenn nichts konfiguriert wurde)
 

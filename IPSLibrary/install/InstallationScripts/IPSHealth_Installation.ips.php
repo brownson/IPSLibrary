@@ -174,6 +174,13 @@
 												1  	=>	0xFF0000,
 												));
 
+ 	CreateProfile_Associations ('IPSHealth_Select', array(
+												1	=> '---',
+												),'',
+
+											array(
+												1  	=>	0x0066CC,
+												));
 
 
  	CreateProfile ('IPSHealth_Pro', '', '', '', true, '', ' %', 0);
@@ -194,10 +201,13 @@
 	$configData = get_HealthConfiguration();
 
 	foreach ($configData as $Name=>$Data) {
-			$CircleId     			= CreateCategory($Name, $CategoryIds, $Idx);
-			$CircleUebersichtId	= CreateVariable(c_Control_Uebersicht, 3 /*String*/,  $CircleId, 10, '~HTMLBox', null, '');
+			$CircleId     			= CreateCategory($Name, $CategoryIds, 10+$Idx);
+			$CircleUebersichtId	= CreateVariable(c_Control_Uebersicht	, 3 /*String*/		, $CircleId, 10, '~HTMLBox', null, '');
+			$CricleSWId			 	= CreateVariable(c_Control_Select		, 1 /*Integer*/	, $CircleId, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);
+			$CricleErrId		 	= CreateVariable(c_Control_Error			, 0 /*Boolean*/	, $CircleId, 30, 'IPSHealth_Err'	, null, 0);
 			$intervall 				= $Data[c_HealthTimeout];
 			CreateTimer_BySeconds ($Name.'-Timeout', $ScriptIdTimer, $intervall, true) ;
+
 	}
 
    CreateTimer_OnceADay("SysInfo-Day"			, $ScriptIdTimer	, 0						, 0); 		// Tages Timer für Datenbankgröße
@@ -206,7 +216,9 @@
 	CreateTimer_BySeconds("High"		, $ScriptIdhc		, 3553					, true);    // Timer für Hight Chart
 	
 	// Übersicht
-	$UebersichtId	 = CreateVariable(c_Control_Uebersicht			, 3 /*String*/,  $CategoryIdData, 10, '~HTMLBox', null, '');
+	$UebersichtId	 = CreateVariable(c_Control_Uebersicht			, 3 /*String*/,  $CategoryIdData, 10, '~HTMLBox'		, null, '');
+	$CricleErrId	 = CreateVariable(c_Control_Error				, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Err'	, null, 0);
+	$ModulUpdateId	 = CreateVariable(c_Control_Modul				, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);
 //	$Uebersicht3Id	 = CreateVariable(c_Control_UebersichtCircle	, 3 /*String*/,  $CategoryIdData, 30, '~HTMLBox', null, '');
 
 	// Logging
@@ -268,7 +280,6 @@
 	AC_SetLoggingStatus($archiveHandlerID, $SysDBGroesseID	, c_SYS_Logging);
 	AC_SetLoggingStatus($archiveHandlerID, $SysDBZuwachsID	, c_SYS_Logging);
 	AC_SetLoggingStatus($archiveHandlerID, $SysLogDBGroesseID, c_SYS_Logging);
-	AC_SetLoggingStatus($archiveHandlerID, $SysUptimeID		, c_SYS_Logging);
 	AC_SetLoggingStatus($archiveHandlerID, $SysServerHDD		, c_SYS_Logging);
 	AC_SetLoggingStatus($archiveHandlerID, $SysServerCPU		, c_SYS_Logging);
 
@@ -324,6 +335,7 @@
 		CreateLink		(c_Property_DB_Groesse,				$SysDBGroesseID,  		$Dummy_SysInfoId, 100);
 		CreateLink		(c_Property_DB_Zuwachs,				$SysDBZuwachsID,  		$Dummy_SysInfoId, 110);
 		CreateLink		(c_Property_Uptime,					$SysUptimeID,  			$Dummy_SysInfoId, 120);
+		CreateLink		(c_Property_BetriebStdI,			$SysBetriebStdIID,  		$Dummy_SysInfoId, 130);
 
 		// DB Monitoring
 		CreateLink		(c_Property_DB_Fehler,				$SysDBFehlerID,  			$Dummy_DBHealthId, 10);
@@ -360,13 +372,18 @@
 		CreateLink		(c_Control_Info,			$UebersichtId,  		$WebFrontOverview2, 100);
 
 		// Oben Rechts
-//		CreateLink		('Circle',			$Uebersicht3Id,  		$WebFrontOverview3, 100);
+		CreateLink		(c_Control_Modul,			$ModulUpdateId,  		$WebFrontOverview1, 1);
 
 		$Idx = 10;
 		foreach ($configData as $Name=>$Data) {
 			$CirclyId   	= get_CirclyId($Name, $CategoryIds);
-			$ControlId 		= get_ControlId(c_Control_Uebersicht,$CircleId);
-			CreateLink(c_Control_Uebersicht." ".$Data[c_HealthTimeout]." Sekunden",		$ControlId,	$WebFrontOverview3,	$Idx);
+
+			$ControlId 		= get_ControlId(c_Control_Uebersicht,$CirclyId);
+			IPS_SetHidden(CreateLink($Data[c_CircleName],		$ControlId,	$WebFrontOverview3,	$Idx),true);
+
+			$ControlId 		= get_ControlId(c_Control_Select,$CirclyId);
+			CreateLink($Data[c_CircleName],		$ControlId,	$WebFrontOverview1,	$Idx);
+
 			$Idx = $Idx + 10;
 		}
 	}
