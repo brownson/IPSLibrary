@@ -1,16 +1,34 @@
 <?
-//Lofile-heute laden
-$logFile 					= IPS_GetKernelDir() . "logs\logfile.log";  	// für jede ScriptID wird eine eigene Tmp-Datei erzeugt
-$logKeyWord             = 'KernelMT';
-$logKeyWord2            = 'Message';
-$Message_Type1        	= 'Queue';
-$Message_Type2        	= 'VM_UPDATE';
+################ IPS Log Queue Analysis by Raketenschnecke #####################
+/*
+	bereitet die IPS-Logdaten des aktuellen tages für eine grafische Darstellung via HighCharts auf.
+	Ausgelesen und aufbereitet werden werden Log-Einträge:
 
-$file = file ($logFile);
-//print_r($file);
+	09.06.2012 11:29:51.129 | 0 | 0 | KernelMT | Message Queue: 35 items, Delay 125 ms
+	09.06.2012 11:30:07.111 | 0 | 0 | KernelMT | Message VM_UPDATE for ID 49626 took 54 ms
+
+	diese werden als Array aufbereitet an das dazugehörige HighChart-Config Script übergeben.
+	Im HC-Diagramm sind dann die Anzahl der Queue-Einträge (items), das Delay der Queue (Delay)
+	und das Delay des VM-Updates zu sehen.
+	Dies lässt Rückschlüsse auf die Stabilität/Performance des IPS-Systems zu.
+	Dieses Script wird im Normalfall vom Highchart-Scipt aufgerufen. Wird das Script manuell aus der Konsole gestartet,
+	werden die gefilterten Log-Einträge zusätzlich im Meldungsfenster ausgeworfen
+*/
+################ IPS Log Queue Analysis by Raketenschnecke #####################
+
+// 1. Lofile-heute laden
+	$logFile 					= IPS_GetKernelDir() . "logs\logfile.log";  	// für jede ScriptID wird eine eigene Tmp-Datei erzeugt
+	$logKeyWord             = 'KernelMT';
+	$logKeyWord2            = 'Message';
+	$Message_Type1        	= 'Queue';
+	$Message_Type2        	= 'VM_UPDATE';
+
+	$file = file ($logFile);
+	//print_r($file);
 
 
-// Array auf "KernelMT" -Messages reduzieren
+// 2. Array auf "KernelMT" -Messages reduzieren
+   $temp       = array();
 	for($i=0;$i<count($file);$i++)
 	{
 	   if((strpos($file[$i], $logKeyWord) > 0) && (strpos($file[$i], $logKeyWord2) > 0))
@@ -22,14 +40,21 @@ $file = file ($logFile);
 	// array "$file" löschen
 	$file       = array();
 
-// Listenausgabe für Konsole
-	for($i=0;$i<count($temp);$i++)
+// 3. Listenausgabe für Konsole (nur beim manuellen Scriptaufruf)
+	if ($_IPS['SENDER'] == 'Execute')
 	{
-		//echo $temp[$i][0]."|".$temp[$i][1]."|".$temp[$i][1]."|".$temp[$i][3]."|".$temp[$i][4];
+		for($i=0;$i<count($temp);$i++)
+		{
+			echo $temp[$i][0]."|".$temp[$i][1]."|".$temp[$i][1]."|".$temp[$i][3]."|".$temp[$i][4];
+		}
+		//print_r($temp);
 	}
-	//print_r($temp);
 
-// Array für HighCharts
+// 4. 3 Arrays für HighCharts aufbauen
+   $HC_Data_MQ_Items    = array();
+   $HC_Data_MQ_Delay    = array();
+   $HC_Data_VM_Delay    = array();
+
 	for($i=0;$i<count($temp);$i++)
 	{
 	   // Ausgabe-Arrays für Message Queue -Logeinträge
@@ -65,7 +90,7 @@ $file = file ($logFile);
 
 	}
 
-//print_r($HC_Data_Items);
-//print_r($HC_Data_Delay);
-// print_r($HC_Data_VMDelay);
+	//print_r($HC_Data_Items);
+	//print_r($HC_Data_Delay);
+	// print_r($HC_Data_VMDelay);
 ?>

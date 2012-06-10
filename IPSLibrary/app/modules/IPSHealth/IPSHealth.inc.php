@@ -40,6 +40,42 @@
 
 
 	// ----------------------------------------------------------------------------------------------------------------------------
+	function get_ModulVersion($ControlId, $instanceId, $Value) {
+
+				$Circle0Id     		= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth');
+				$ips_uebersicht_id	= get_ControlId(c_Control_Uebersicht, $Circle0Id);
+
+			   IPSUtils_Include ('IPSModuleManager.class.php', 'IPSLibrary::install::IPSModuleManager');
+				$moduleManager = new IPSModuleManager('IPSHealth');
+				$version = $moduleManager->VersionHandler()->GetModuleVersion();
+
+				$html1 = "";
+				$html1 = $html1 . "<table border='0' bgcolor=#006600 width='100%' height='300' cellspacing='0'  >";
+
+				$html1 = $html1 . "<tr>";
+				$html1 = $html1 . "<td style='text-align:left;'>";
+				$html1 = $html1 . "<span style='font-family:arial;color:white;font-size:15px;'><br></span>";
+				$html1 = $html1 . "<span style='font-family:arial;color:white;font-size:15px;'></span></td>";
+				$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:white;font-size:50px;'>IPSHealth</span></td>";
+				$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:20px;'></span></td>";
+				$html1 = $html1 . "</tr>";
+
+				$html1 = $html1 . "<tr>";
+				$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:15px'></span></td>";
+				$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:yellow;font-size:50px'>Version</span></td>";
+				$html1 = $html1 . "</tr>";
+
+				$html1 = $html1 . "<tr>";
+				$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:15px;'></span></td>";
+				$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:yellow;font-size:50px;'>" .$version ."</span></td>";
+				$html1 = $html1 . "</tr>";
+
+				$html1 = $html1 . "</table>";
+			   SetValueString($ips_uebersicht_id,$html1);
+
+}
+
+	// ----------------------------------------------------------------------------------------------------------------------------
 	function DB_Reaggregieren($ControlId, $instanceId, $Value) {
 		
 		$timestamp           = date("d.m.Y,", time())." ".date("H:i", time())." Uhr";
@@ -179,7 +215,7 @@
 					
 					$html1 = $html1 . "<tr>";
 					$html1 = $html1 . "<td style='text-align:left;background-color:$backgroundcolor;'>";
-					$html1 = $html1 . "<span style='font-family:arial;color:black;font-size:16px;'>$ObjectName:<br></span>";
+					$html1 = $html1 . "<span style='font-family:arial;color:black;font-size:16px;'>$ObjectName ($ObjectID):<br></span>";
 					$html1 = $html1 . "<td style='text-align:center;background-color:$backgroundcolor;>";
 					$html1 = $html1 . "<span style='font-family:arial;color:black;font-size:20px;font-weight:bold;'>$diff ($Prozent%)</span></td>";
 					$html1 = $html1 . "<td style='text-align:left;background-color:$backgroundcolor;'>";
@@ -245,33 +281,25 @@
 
 				// Laufzeit ermitteln
 				$Laufzeit            = time() - IPS_GetUptime();
-				$d                   = floor(($Laufzeit / (60*60*24)));
-				$h                   = floor(($Laufzeit - ($d*60*60*24)) / (60*60));
-				$m                   = floor(($Laufzeit - ($d*60*60*24) - ($h*60*60)) / (60));
+//				$d                   = floor(($Laufzeit / (60*60*24)));
+//				$h                   = floor(($Laufzeit - ($d*60*60*24)) / (60*60));
+//				$m                   = floor(($Laufzeit - ($d*60*60*24) - ($h*60*60)) / (60));
 				setValueInteger($ips_laufzeit_id, $Laufzeit);
-
+				$LZ	= 	DurationToUhrzeit(time() - IPS_GetUptime());
 
 				$Betriebszeit = getValueInteger($ips_betriebszeiti_id);
 				$Betriebszeit = $Betriebszeit + 60 ;
 				setValueInteger($ips_betriebszeiti_id, $Betriebszeit);
-
-				$by = floor($Betriebszeit / (60*60*24*365));
-				$Betriebszeit = $Betriebszeit - ($by * (60*60*24*365));
-
-				$bd = floor($Betriebszeit / (60*60*24));
-				$Betriebszeit = $Betriebszeit - ($bd * (60*60*24));
-
-				$bh = floor($Betriebszeit / (60*60));
-				$Betriebszeit = $Betriebszeit - ($bh * (60*60));
-
-				$bm = floor($Betriebszeit / 60);
-				$Betriebszeit = $Betriebszeit - ($bm * 60);
+				$BZ	= 	DurationToUhrzeit($Betriebszeit);
 
 				if (get_ControlValue(c_Property_DBNeuagg, $Circle3Id) == true) DB_Wartung($Circle3Id);
 
 
 				// Datenbank Neuuaggregierung Fortschritt
 				$DBWartung_Fertig = get_ControlValue(c_Property_DBSteps,$Circle3Id);
+
+				// Datenbank Variable Fortschritt
+				$DBVariable = get_ControlValue(c_Property_DBaktVar,$Circle3Id);
 
 				// Suche Cirlce Fehler
 				$err = 0;
@@ -307,26 +335,31 @@
 		$html1 = $html1 . "<td style='text-align:left;'>";
 		$html1 = $html1 . "<span style='font-family:arial;color:white;font-size:15px;'>Aktuell<br></span>";
 		$html1 = $html1 . "<span style='font-family:arial;color:white;font-size:15px;'></span></td>";
-		$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:white;font-size:20px;'>".formatTag(Date('D'))." ".Date('H:i')."</span></td>";
+		$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:white;font-size:24px;'>".formatTag(Date('D'))." ".Date('H:i')."</span></td>";
 		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:20px;'>Uhr</span></td>";
 		$html1 = $html1 . "</tr>";
 
 		$html1 = $html1 . "<tr>";
-		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:15px'>Uptime</span></td>";
-		$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:yellow;font-size:20px'>$d Tage, $h Stunden, $m Minuten</span></td>";
+		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:15px'>IPS-Uptime</span></td>";
+		$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:yellow;font-size:20px'>$LZ</span></td>";
 //		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:25px;'>Watt</span></td>";
 		$html1 = $html1 . "</tr>";
 
 		$html1 = $html1 . "<tr>";
-		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:15px;'>Betriebszeit</span></td>";
-		$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:yellow;font-size:20px;'>$by Jahre,  $bd Tage, $bh Stunden, $bm Minuten</span></td>";
+		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:15px;'>IPS-Betriebszeit</span></td>";
+		$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:yellow;font-size:20px;'>$BZ</span></td>";
 //		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:25px;'>$waehrung</span></td>";
 		$html1 = $html1 . "</tr>";
 
 		if (get_ControlValue(c_Property_DBNeuagg,$Circle3Id) == true){
 		$html1 = $html1 . "<tr>";
-		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:15px;'>Neuaggregierung</span></td>";
-		$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:yellow;font-size:20px;'>$DBWartung_Fertig %</span></td>";
+		$html1 = $html1 . "<td style='text-align:left;font-family:arial;color:white;font-size:15px;'>Neuaggregierung</td>";
+		$html1 = $html1 . "<td style='text-align:center;font-family:arial;font-weight:bold;color:yellow;font-size:20px;'>$DBWartung_Fertig %</td>";
+//		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:25px;'>Fertig</span></td>";
+		$html1 = $html1 . "</tr>";
+		$html1 = $html1 . "<tr>";
+		$html1 = $html1 . "<td style='text-align:left;font-family:arial;color:white;font-size:15px;'>Aggregiere</span></td>";
+		$html1 = $html1 . "<td style='text-align:center;font-family:arial;color:yellow;font-size:14px;'>$DBVariable</span></td>";
 //		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:25px;'>Fertig</span></td>";
 		$html1 = $html1 . "</tr>";
 		}
@@ -839,6 +872,65 @@
 		return $Translation[$DateItem];
 	}
 
+	// ----------------------------------------------------------------------------------------------------------------------------
+	function DurationToUhrzeitRS($s) {
+	 if($s >= 60*60*24)
+	 {
+	  $d       = floor($s / (3600*24));
+	  $s       -= $d *3600*24;
+	  $h   = floor($s / 3600);
+	  $s   -= $h * 3600;
+	  $m   = floor($s / 60);
+	  $s   -= $m * 60;
 
+	  return sprintf("%3d".'d'." %02d:%02d", $d, $h, $m);
+	 }
+	 else
+	 {
+
+	  $h   = floor($s / 3600);
+	  $s   -= $h * 3600;
+	  $m   = floor($s / 60);
+	  $s   -= $m * 60;
+
+	  return sprintf("%2d:%02d", $h, $m);
+	 }
+
+	}
+
+	// ----------------------------------------------------------------------------------------------------------------------------
+	function DurationToUhrzeit($Betriebszeit) {
+
+				$y = floor($Betriebszeit / (60*60*24*365));
+				$Betriebszeit -=($y * (60*60*24*365));
+
+				$d = floor($Betriebszeit / (60*60*24));
+				$Betriebszeit -= ($d * (60*60*24));
+
+				$h = floor($Betriebszeit / (60*60));
+				$Betriebszeit -= ($h * (60*60));
+
+				$m = floor($Betriebszeit / 60);
+				$Betriebszeit -= ($m * 60);
+
+				if ($y > 0 )  return sprintf("%2d".' jahre '." %3d".' tage '."%02d".' stunden '."%02d".' minuten ', $y , $d, $h, $m);
+
+				if ($d > 0 )  return sprintf("%3d".' tage '."%02d".' stunden '."%02d".' minuten ', $d, $h, $m);
+
+				if ($h > 0 )  return sprintf("%02d".' stunden '."%02d".' minuten ', $h, $m);
+
+				if ($m > 0 )  return sprintf("%02d".' minuten ', $m);
+	}
+
+
+	// ----------------------------------------------------------------------------------------------------------------------------
+	function DurationToUhrzeitRS1($rawTS) {
+		$y          = floor(($rawTS / (60*60*24*365)));
+		$d          = round((($rawTS - ($y * 60*60*24*365)) / (60*60*24)), 2);
+
+		return $y.'J, '.$d."T";
+//		return sprintf("%02d".'J '."%03d".'D ' , $y, $d);
+
+		}
 	/** @}*/
 ?>

@@ -52,6 +52,7 @@
 	define ("c_Control_Select",         "Select");
 	define ("c_Control_Error",          "Fehler");
 	define ("c_Control_Modul",          "IPSHealth Updaten");
+	define ("c_Control_Version",        "IPSHealth Version");
 
 	define ("c_Property_Timeout",			'Timeout');
 	define ("c_Property_Variables", 		'Variablen');

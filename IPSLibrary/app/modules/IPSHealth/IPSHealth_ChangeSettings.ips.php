@@ -48,9 +48,12 @@
 			   break;
 
 			case c_Control_Modul:
-			IPS_RunScript(IPS_GetScriptIDByName("IPSHealth_ModulUpdate",$IdApp));
-
+				IPS_RunScript(IPS_GetScriptIDByName("IPSHealth_ModulUpdate",$IdApp));
 				break;
+				
+			case c_Control_Version:
+			   get_ModulVersion($ControlId, $instanceId, $_IPS['VALUE']);
+			   break;
 
 			default:
 				IPSLogger_Err(__file__, "Error Unknown ControlType");// $ControlType");

@@ -215,10 +215,41 @@
 	CreateTimer_BySeconds("SysInfo-DBHealth"	, $ScriptIdTimer	, c_Warn_Schwellwert	, true);		// Timer gemäß Para für Datenbank Überwachung.
 	CreateTimer_BySeconds("High"		, $ScriptIdhc		, 3553					, true);    // Timer für Hight Chart
 	
+   IPSUtils_Include ('IPSModuleManager.class.php', 'IPSLibrary::install::IPSModuleManager');
+	$moduleManager = new IPSModuleManager('IPSHealth');
+	$version = $moduleManager->VersionHandler()->GetModuleVersion();
+	$version = str_replace("..Installing", "", $version);
+
+	$html1 = "";
+	$html1 = $html1 . "<table border='0' bgcolor=#006600 width='100%' height='300' cellspacing='0'  >";
+
+	$html1 = $html1 . "<tr>";
+	$html1 = $html1 . "<td style='text-align:left;'>";
+	$html1 = $html1 . "<span style='font-family:arial;color:white;font-size:15px;'><br></span>";
+	$html1 = $html1 . "<span style='font-family:arial;color:white;font-size:15px;'></span></td>";
+	$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:white;font-size:50px;'>IPSHealth</span></td>";
+	$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:20px;'></span></td>";
+	$html1 = $html1 . "</tr>";
+
+	$html1 = $html1 . "<tr>";
+	$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:15px'></span></td>";
+	$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:yellow;font-size:50px'>Version</span></td>";
+	$html1 = $html1 . "</tr>";
+
+	$html1 = $html1 . "<tr>";
+	$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:15px;'></span></td>";
+	$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:yellow;font-size:50px;'>" .$version ."</span></td>";
+	$html1 = $html1 . "</tr>";
+
+	$html1 = $html1 . "</table>";
+
+
 	// Übersicht
-	$UebersichtId	 = CreateVariable(c_Control_Uebersicht			, 3 /*String*/,  $CategoryIdData, 10, '~HTMLBox'		, null, '');
+	$UebersichtId	 = CreateVariable(c_Control_Uebersicht			, 3 /*String*/,  $CategoryIdData, 10, '~HTMLBox'		, $html1, '');
+	setvalue($UebersichtId, $html1);
 	$CricleErrId	 = CreateVariable(c_Control_Error				, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Err'	, null, 0);
 	$ModulUpdateId	 = CreateVariable(c_Control_Modul				, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);
+	$ModulVersionId	 = CreateVariable(c_Control_Version				, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);
 //	$Uebersicht3Id	 = CreateVariable(c_Control_UebersichtCircle	, 3 /*String*/,  $CategoryIdData, 30, '~HTMLBox', null, '');
 
 	// Logging
@@ -372,11 +403,12 @@
 		CreateLink		(c_Control_Info,			$UebersichtId,  		$WebFrontOverview2, 100);
 
 		// Oben Rechts
-		CreateLink		(c_Control_Modul,			$ModulUpdateId,  		$WebFrontOverview1, 1);
+		CreateLink		(c_Control_Version,		$ModulVersionId,  	$WebFrontOverview1, 1);
+		CreateLink		(c_Control_Modul,			$ModulUpdateId,  		$WebFrontOverview1, 2);
 
 		$Idx = 10;
 		foreach ($configData as $Name=>$Data) {
-			$CirclyId   	= get_CirclyId($Name, $CategoryIds);
+			$CirclyId   	= get_CirclyIdi($Name, $CategoryIds);
 
 			$ControlId 		= get_ControlId(c_Control_Uebersicht,$CirclyId);
 			IPS_SetHidden(CreateLink($Data[c_CircleName],		$ControlId,	$WebFrontOverview3,	$Idx),true);
@@ -391,7 +423,7 @@
 	ReloadAllWebFronts();
 
    // ------------------------------------------------------------------------------------------------
-	function get_CirclyId($DeviceName, $ParentId) {
+	function get_CirclyIdi($DeviceName, $ParentId) {
 		$CategoryId = IPS_GetObjectIDByIdent($DeviceName, $ParentId);
 		return $CategoryId;
 	}
