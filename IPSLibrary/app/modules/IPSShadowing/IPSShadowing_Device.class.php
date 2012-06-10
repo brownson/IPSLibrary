@@ -377,8 +377,8 @@
 				$this->SetVariableValue(c_Control_StartTime, time());
 			} else {
 				IPSLogger_Dbg(__file__, "Finished all Steps for Device '$DeviceName'");
-				$this->SetVariableValue(c_Control_StepsToDo, "");
 				$this->SetVariableValue(c_Control_Step,      -1);
+				$this->SetVariableValue(c_Control_StepsToDo, "");
 				$this->SetVariableValue(c_Control_StartTime, -1);
 				$this->StartRefreshTimer(false);
 				$this->SetStatus();
