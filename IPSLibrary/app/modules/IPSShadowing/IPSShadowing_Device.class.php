@@ -319,8 +319,8 @@
 				$SecNullToPos  = $SecTotal*$Position/100;
 				$SecPosTo100   = $SecTotal-$SecNullToPos;
 				if ($ToBeMoved==c_MovementId_90) {
-					$SecNullToNew = $SecTotal*75/100;
-					$Position     = 75;
+					$SecNullToNew = $SecTotal*90/100;
+					$Position     = 90;
 				} elseif ($ToBeMoved==c_MovementId_75) {
 					$SecNullToNew = $SecTotal*75/100;
 					$Position     = 75;
