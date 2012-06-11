@@ -52,6 +52,29 @@
 	define ("c_SYS_Logging",        	true );
 	define ("c_SYS_HDD",             'HDD1'); //HDD auf dem IPS installiert ist
 
+
+	/*
+	* CCU Konfiguration
+	*
+	*/
+	define ("c_CCU_Control",        	true);               // CCU Überwachung Ein/Aus
+	define ("c_CCU_IP",     			'192.168.1.10');     // IP-Adresse der CCU
+	define ("c_CCU_IPSID",           '14603');            // CCU ID Systemvariable zur Triggerung (ID aus der CCU nicht IPS)
+	// Die ID ist in http://IP-CCU/config/xmlapi/sysvarlist.cgi zufinden. Variable in der CCU vorher anlegen. Typ Boolean
+
+
+	/*
+	* LAN Adapter Konfiguration
+	*
+	*/
+	function get_CCU_LANAdapter() {
+		return array(
+				"LAN1" 	=>    'HEQ0136842',     // Lan-AdapterName =>  GeräteID
+				"LAN2"   =>    'GEQ0208307',
+				"LAN3"   =>    'IEQ0245026',
+		);
+	}
+
 	/**
 	*
 	*

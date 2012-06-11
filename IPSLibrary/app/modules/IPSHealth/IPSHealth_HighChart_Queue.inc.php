@@ -6,7 +6,7 @@ Global $CfgDaten; // damit kann der Script auch von anderen Scripten aufgerufen 
 // RS-Special: Konfig/externe Daten --------------------------------------------
 	include_once "IPSHealth.inc.php";
    include 				IPS_GetKernelDir() .  "scripts\IPSLibrary\app\modules\IPSHealth\IPSHealth_Log_raw_Analysis.inc.php";         // IPS Log Analyse-Script eintragen
-   include 				IPS_GetKernelDir() .  "scripts\IPSLibrary\app\modules\IPSHealth\IPSHelath_Highchart.inc.php";         // IPS Log Analyse-Script eintragen
+   include 				IPS_GetKernelDir() .  "scripts\IPSLibrary\app\modules\IPSHealth\IPSHealth_Highchart.inc.php";         // IPS Log Analyse-Script eintragen
 
 // RS-Special: Ende ------------------------------------------------------------
 

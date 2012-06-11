@@ -267,6 +267,10 @@
 
 				$ips_betriebszeiti_id   = get_ControlId(c_Property_BetriebStdI, $Circle2Id);
 
+				// CCU Variable setzen/triggern
+				if ((c_CCU_Control == true) and (c_CCU_IPSID <> "")){
+            		fopen('http://'.c_CCU_IP.'/config/xmlapi/statechange.cgi?ise_id='.c_CCU_IPSID.'&new_value=0', 'r');
+				}
 
 				// CPU Auslastung
 				$arr = Sys_GetCPUInfo();

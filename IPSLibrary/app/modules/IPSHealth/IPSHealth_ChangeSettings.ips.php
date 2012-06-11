@@ -48,10 +48,6 @@
 			   break;
 
 			case c_Control_Modul:
-
-//					$Circle0Id     		= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth');
-					$ips_uebersicht_id	= get_ControlId(c_Control_Uebersicht, $ControlId);
-
 					$html1 = "";
 					$html1 = $html1 . "<table border='0' bgcolor=#ff6611 width='100%' height='300' cellspacing='0'  >";
 
@@ -75,6 +71,7 @@
 
 					$html1 = $html1 . "</table>";
 
+					$ips_uebersicht_id	= get_ControlId(c_Control_Uebersicht, $ControlId);
 					SetValueString($ips_uebersicht_id,$html1);
 
 				IPS_RunScript(IPS_GetScriptIDByName("IPSHealth_ModulUpdate",$IdApp));
