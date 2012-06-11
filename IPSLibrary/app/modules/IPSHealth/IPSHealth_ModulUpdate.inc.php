@@ -1,6 +1,5 @@
 <?
 
-
 		$remoteRepository = 'https://raw.github.com/MCS-51/IPSLibrary/Development/';
 		$component = 'IPSHealth';
 
