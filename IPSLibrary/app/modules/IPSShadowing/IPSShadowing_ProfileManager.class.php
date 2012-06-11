@@ -90,7 +90,7 @@
 			$profileBgnOfDayInfo = date('H:i', $profileBgnOfDay->GetTime());
 			$profileEndOfDayInfo = date('H:i', $profileEndOfDay->GetTime());
 			$profileTemp         = $this->GetProfileTemp($profileIdTemp);
-			$profileTempInfo     = $profileTemp->GetProfileInfo($tempIndoorPath='');
+			$profileTempInfo     = $profileTemp->GetProfileInfo($tempIndoorPath);
 			
 			$info = 'Tag='.$profileBgnOfDayInfo.'-'.$profileEndOfDayInfo.', '.$profileTempInfo;
 			return $info;
@@ -204,7 +204,7 @@
 		public function OpenByTemp($profileIdSun, $profileIdTemp, $tempIndoorPath='') {
 			$profileTemp = $this->profilesTemp[$profileIdTemp];
 			$profileSun  = $this->profilesSun[$profileIdSun];
-			return ($profileTemp->OpenByTemp($tempIndoorPath) and $profileSun->ActivationBySun());
+			return ($profileTemp->OpenByTemp($tempIndoorPath));
 		}
 
 		public function ActivationByWeather($profileIdWeather) {
