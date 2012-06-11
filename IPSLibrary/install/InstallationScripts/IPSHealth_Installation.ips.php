@@ -248,8 +248,9 @@
 	$UebersichtId	 = CreateVariable(c_Control_Uebersicht			, 3 /*String*/,  $CategoryIdData, 10, '~HTMLBox'		, $html1, '');
 	setvalue($UebersichtId, $html1);
 	$CricleErrId	 = CreateVariable(c_Control_Error				, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Err'	, null, 0);
+	$ModulSYSId		 = CreateVariable(c_Control_System				, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);
 	$ModulUpdateId	 = CreateVariable(c_Control_Modul				, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);
-	$ModulVersionId	 = CreateVariable(c_Control_Version				, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);
+	$ModulVersionId = CreateVariable(c_Control_Version				, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);
 //	$Uebersicht3Id	 = CreateVariable(c_Control_UebersichtCircle	, 3 /*String*/,  $CategoryIdData, 30, '~HTMLBox', null, '');
 
 	// Logging
@@ -396,15 +397,16 @@
 		CreateLink     (c_Control_HCQueue,					$SysHCQueue,				$WebFrontOverview4, 10);
 
 		// Oben Links
+		CreateLink		(c_Control_System,					$ModulSYSId,  				$WebFrontOverview1, 1);
 //		CreateLink		(c_Property_UptimeHuman,			$SysUptimeHumanID,  		$WebFrontOverview1, 100);
 //		CreateLink     (c_Control_BetriebStd,				$SysBetriebStdSID,		$WebFrontOverview1, 110);
 
 		// Oben Mitte
-		CreateLink		(c_Control_Info,			$UebersichtId,  		$WebFrontOverview2, 100);
+		CreateLink		(c_Control_Info,						$UebersichtId,  			$WebFrontOverview2, 100);
 
 		// Oben Rechts
-		CreateLink		(c_Control_Version,		$ModulVersionId,  	$WebFrontOverview1, 1);
-		CreateLink		(c_Control_Modul,			$ModulUpdateId,  		$WebFrontOverview1, 2);
+		CreateLink		(c_Control_Version,					$ModulVersionId,  		$WebFrontOverview3, 1);
+		CreateLink		(c_Control_Modul,						$ModulUpdateId,  			$WebFrontOverview3, 2);
 
 		$Idx = 10;
 		foreach ($configData as $Name=>$Data) {

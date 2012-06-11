@@ -39,6 +39,10 @@
 		$ControlType = get_ControlType($instanceId);
 
 		switch($ControlType) {
+			case c_Control_System:
+			   SystemControl($ControlId, $instanceId, $_IPS['VALUE']);
+			   break;
+
 			case c_Control_Select:
 			   CircleSelect($ControlId, $instanceId, $_IPS['VALUE']);
 				break;

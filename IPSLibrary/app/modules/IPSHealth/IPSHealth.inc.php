@@ -523,6 +523,33 @@
 						   IPS_SetHidden($VisuId, true);
 					}
 			}
+			$VisuId 		= IPS_GetLinkIDByName(c_Control_Modul, $VisualisationIds);
+		   IPS_SetHidden($VisuId, true);
+			$VisuId 		= IPS_GetLinkIDByName(c_Control_Version, $VisualisationIds);
+		   IPS_SetHidden($VisuId, true);
+
+	}
+	
+	// ----------------------------------------------------------------------------------------------------------------------------
+	function  SystemControl($ControlId, $instanceId, $Value){
+			$CategoryIds     	= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_HealthCircles);
+			$VisualisationIds	= IPSUtil_ObjectIDByPath('Visualization.WebFront.IPSHealth.Overview_3');
+			$configData 		= get_HealthConfiguration();
+
+			foreach ($configData as $Name=>$Data) {
+					$VisuId 		= IPS_GetLinkIDByName($Data[c_CircleName], $VisualisationIds);
+					$CirclyId   = get_CirclyId($Name, $CategoryIds);
+					$CircleId 	= get_ControlId(c_Control_Select,$CirclyId);
+
+				   IPS_SetHidden($VisuId, true);
+			}
+
+			$VisuId 		= IPS_GetLinkIDByName(c_Control_Modul, $VisualisationIds);
+		   IPS_SetHidden($VisuId, false);
+			$VisuId 		= IPS_GetLinkIDByName(c_Control_Version, $VisualisationIds);
+		   IPS_SetHidden($VisuId, false);
+
+
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
