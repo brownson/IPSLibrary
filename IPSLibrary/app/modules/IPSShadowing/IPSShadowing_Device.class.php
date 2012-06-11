@@ -387,10 +387,10 @@
 
 		// ----------------------------------------------------------------------------------------------------------------------------
 		public function Refresh() {
-			if ($this->GetVariableValue(c_Control_Step) >= 0) {
-				$NextStepsToDo = Explode('|', $this->GetVariableValue(c_Control_StepsToDo));
-				$StepCount     = count($NextStepsToDo);
-				$Step          = $this->GetVariableValue(c_Control_Step);
+			$NextStepsToDo = Explode('|', $this->GetVariableValue(c_Control_StepsToDo));
+			$StepCount     = count($NextStepsToDo);
+			$Step          = $this->GetVariableValue(c_Control_Step);
+			if ($StepCount >= ($Step+4) and $Step>=0) {
 				$StartTime     = $this->GetVariableValue(c_Control_StartTime);
 				$SecsDone      = time()-$StartTime;
 				$SecsToDo      = $NextStepsToDo[$Step+1];
