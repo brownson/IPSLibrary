@@ -220,33 +220,8 @@
 	$version = $moduleManager->VersionHandler()->GetModuleVersion();
 	$version = str_replace("..Installing", "", $version);
 
-	$html1 = "";
-	$html1 = $html1 . "<table border='0' bgcolor=#006600 width='100%' height='300' cellspacing='0'  >";
-
-	$html1 = $html1 . "<tr>";
-	$html1 = $html1 . "<td style='text-align:left;'>";
-	$html1 = $html1 . "<span style='font-family:arial;color:white;font-size:15px;'><br></span>";
-	$html1 = $html1 . "<span style='font-family:arial;color:white;font-size:15px;'></span></td>";
-	$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:white;font-size:50px;'>IPSHealth</span></td>";
-	$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:20px;'></span></td>";
-	$html1 = $html1 . "</tr>";
-
-	$html1 = $html1 . "<tr>";
-	$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:15px'></span></td>";
-	$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:yellow;font-size:50px'>Version</span></td>";
-	$html1 = $html1 . "</tr>";
-
-	$html1 = $html1 . "<tr>";
-	$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:15px;'></span></td>";
-	$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:yellow;font-size:50px;'>" .$version ."</span></td>";
-	$html1 = $html1 . "</tr>";
-
-	$html1 = $html1 . "</table>";
-
-
 	// Übersicht
-	$UebersichtId	 = CreateVariable(c_Control_Uebersicht			, 3 /*String*/,  $CategoryIdData, 10, '~HTMLBox'		, $html1, '');
-	setvalue($UebersichtId, $html1);
+	$UebersichtId	 = CreateVariable(c_Control_Uebersicht			, 3 /*String*/,  $CategoryIdData, 10, '~HTMLBox'		, null, '');
 	$CricleErrId	 = CreateVariable(c_Control_Error				, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Err'	, null, 0);
 	$ModulSYSId		 = CreateVariable(c_Control_System				, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);
 	$ModulUpdateId	 = CreateVariable(c_Control_Modul				, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);

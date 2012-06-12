@@ -505,13 +505,14 @@
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function  CircleSelect($ControlId, $instanceId, $Value){
-			$CategoryIds     	= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_HealthCircles);
+			$CategoryIds     	= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth');
+			$CircleIds     	= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_HealthCircles);
 			$VisualisationIds	= IPSUtil_ObjectIDByPath('Visualization.WebFront.IPSHealth.Overview_3');
 			$configData 		= get_HealthConfiguration();
 
 			foreach ($configData as $Name=>$Data) {
 					$VisuId 		= IPS_GetLinkIDByName($Data[c_CircleName], $VisualisationIds);
-					$CirclyId   = get_CirclyId($Name, $CategoryIds);
+					$CirclyId   = get_CirclyId($Name, $CircleIds);
 					$CircleId 	= get_ControlId(c_Control_Select,$CirclyId);
 
 					if ($CircleId == $instanceId){
@@ -523,8 +524,11 @@
 						   IPS_SetHidden($VisuId, true);
 					}
 			}
+			set_ControlValue(c_Control_System,$CategoryIds, 0);
+
 			$VisuId 		= IPS_GetLinkIDByName(c_Control_Modul, $VisualisationIds);
 		   IPS_SetHidden($VisuId, true);
+
 			$VisuId 		= IPS_GetLinkIDByName(c_Control_Version, $VisualisationIds);
 		   IPS_SetHidden($VisuId, true);
 
@@ -532,18 +536,21 @@
 	
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function  SystemControl($ControlId, $instanceId, $Value){
-			$CategoryIds     	= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_HealthCircles);
+			$CategoryIds     	= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth');
+			$CircleIds     	= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_HealthCircles);
 			$VisualisationIds	= IPSUtil_ObjectIDByPath('Visualization.WebFront.IPSHealth.Overview_3');
 			$configData 		= get_HealthConfiguration();
 
 			foreach ($configData as $Name=>$Data) {
 					$VisuId 		= IPS_GetLinkIDByName($Data[c_CircleName], $VisualisationIds);
-					$CirclyId   = get_CirclyId($Name, $CategoryIds);
+					$CirclyId   = get_CirclyId($Name, $CircleIds);
 					$CircleId 	= get_ControlId(c_Control_Select,$CirclyId);
+				   SetValueInteger($CircleId, 0);
 
 				   IPS_SetHidden($VisuId, true);
 			}
 
+			set_ControlValue(c_Control_System,$CategoryIds, 1);
 			$VisuId 		= IPS_GetLinkIDByName(c_Control_Modul, $VisualisationIds);
 		   IPS_SetHidden($VisuId, false);
 			$VisuId 		= IPS_GetLinkIDByName(c_Control_Version, $VisualisationIds);

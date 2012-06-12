@@ -16,17 +16,15 @@ Global $CfgDaten; // damit kann der Script auch von anderen Scripten aufgerufen 
 	$ts_yet  														= date("(D) d.m.Y H:i", $CfgDaten["StartTime"]);
 	$te_yet  														= date("(D) d.m.Y H:i", time());
 
-//   $CfgDaten['chart']['backgroundColor'] = "#003366";
-
 	// Überschriften
+	$CfgDaten['title']['text'] 								= "";
 	$CfgDaten['title']['text'] 								= NULL;
-	$CfgDaten['title']['style']['color'] = "#FFFFFF";
 	$CfgDaten['subtitle']['text'] 							= "Zeitraum: $ts_yet - $te_yet"; // "" = Automatisch über Zeitraum
 	$CfgDaten['subtitle']['Ips']['DateTimeFormat'] 		= "(D) d.m.Y H:i"; 			// z.B.: "(D) d.m.Y H:i" (wird auch als Default herangezogen wenn nichts konfiguriert wurde)
 
 	// IPS Variablen ID´s
-	$CfgDaten["ContentVarableId"]								= get_ControlId(c_Control_HCQueue,get_CirclyIdByCircleIdent(c_Control_HightChart));
-//	$CfgDaten["ContentVarableId"]								= 15439 ;  // ID der String Variable in welche die Daten geschrieben werden (-1 oder überhaupt nicht angeben wenn die Content Variable das übergordnete Element ist)
+	$CfgDaten["ContentVarableId"]								= -1;  // ID der String Variable in welche die Daten geschrieben werden (-1 oder überhaupt nicht angeben wenn die Content Variable das übergordnete Element ist)
+	$CfgDaten["HighChartScriptId"]							= 35562 ;  				// ID des Highcharts Scripts
 
 	// damit wird die Art des Aufrufes festgelegt
 	$CfgDaten["RunMode"] 										= "file"; 	// file, script oder popup
@@ -94,8 +92,8 @@ Global $CfgDaten; // damit kann der Script auch von anderen Scripten aufgerufen 
 	$CfgDaten["Series"][] 										= $serie;
 
 	// IPS Delay
-   $serie['Data'] 												= $HC_Data_VM_Delay;
-   $serie['Name'] 												= "VM Delay";
+   $serie['Data'] 												= $HC_Data_SM_Delay;
+   $serie['Name'] 												= "Single Message Delay";
    $serie['Unit'] 												= "ms";
 	$serie['type'] 												= "spline";
 	$serie['AggValue'] 											= "Avg";
@@ -116,6 +114,7 @@ Global $CfgDaten; // damit kann der Script auch von anderen Scripten aufgerufen 
 	$serie['marker']['states']['hover']['lineWidth'] 	= 1;
 	$CfgDaten["Series"][] 										= $serie;
 
+
 //print_r($CfgDaten);
 
 	// Achsen-Definitionen +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -123,7 +122,7 @@ Global $CfgDaten; // damit kann der Script auch von anderen Scripten aufgerufen 
    // Definition Y-Achse 1
    // Definition Y-Achse 2
    $Ai                                                = 0;
-	$CfgDaten["yAxis"][$Ai]['title']['text'] 				= "Items";
+	$CfgDaten["yAxis"][$Ai]['title']['text'] 				= "Message Queue Items";
 	$CfgDaten["yAxis"][$Ai]['opposite'] 					= false;
 	$CfgDaten["yAxis"][$Ai]['tickInterval'] 				= NULL;
 	$CfgDaten["yAxis"][$Ai]['min'] 							= 0;
@@ -134,7 +133,7 @@ Global $CfgDaten; // damit kann der Script auch von anderen Scripten aufgerufen 
    // Definition Y-Achse 2
    $Ai                                                = 1;
 	$CfgDaten["yAxis"][$Ai]['title']['text'] 				= "Message Queue Delay (ms)";
-	$CfgDaten["yAxis"][$Ai]['opposite'] 					= true;
+	$CfgDaten["yAxis"][$Ai]['opposite'] 					= false;
 	$CfgDaten["yAxis"][$Ai]['tickInterval'] 				= NULL;
 	$CfgDaten["yAxis"][$Ai]['min'] 							= 0;
 	$CfgDaten["yAxis"][$Ai]['max'] 							= NULL;
@@ -143,7 +142,7 @@ Global $CfgDaten; // damit kann der Script auch von anderen Scripten aufgerufen 
 
    // Definition Y-Achse 3
    $Ai                                                = 2;
-	$CfgDaten["yAxis"][$Ai]['title']['text'] 				= "VM Delay (ms)";
+	$CfgDaten["yAxis"][$Ai]['title']['text'] 				= "SingleMessage Delay (ms)";
 	$CfgDaten["yAxis"][$Ai]['opposite'] 					= true;
 	$CfgDaten["yAxis"][$Ai]['tickInterval'] 				= NULL;
 	$CfgDaten["yAxis"][$Ai]['min'] 							= 0;
@@ -202,8 +201,8 @@ Global $CfgDaten; // damit kann der Script auch von anderen Scripten aufgerufen 
 
 	// -------------------------------------------------------------------------------------------------------------------------------------
 	// und jetzt los ......
-//	$s=IPS_GetScript($CfgDaten["HighChartScriptId"]);      // Id des Highcharts-Scripts
-//	include($s['ScriptFile']);
+	$s=IPS_GetScript($CfgDaten["HighChartScriptId"]);      // Id des Highcharts-Scripts
+	include($s['ScriptFile']);
 
   	// => ab V1.0003
   	// hier werden die CfgDaten geprüft und bei Bedarf vervollständigt
