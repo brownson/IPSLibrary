@@ -90,7 +90,7 @@
 			$profileBgnOfDayInfo = date('H:i', $profileBgnOfDay->GetTime());
 			$profileEndOfDayInfo = date('H:i', $profileEndOfDay->GetTime());
 			$profileTemp         = $this->GetProfileTemp($profileIdTemp);
-			$profileTempInfo     = $profileTemp->GetProfileInfo($tempIndoorPath='');
+			$profileTempInfo     = $profileTemp->GetProfileInfo($tempIndoorPath);
 			
 			$info = 'Tag='.$profileBgnOfDayInfo.'-'.$profileEndOfDayInfo.', '.$profileTempInfo;
 			return $info;
