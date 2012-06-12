@@ -119,9 +119,9 @@
 	 * @param $LogContext - Context of Logging (Identifier or Filename).
 	 * @param $LogMessage - Message to be logged
 	 */
-   function IPSLogger_Fat($LogContext, $LogMessage) {
+    function IPSLogger_Fat($LogContext, $LogMessage) {
       IPSLogger_Out(c_LogLevel_Fatal, c_LogType_Fatal, $LogContext, $LogMessage);
-   }
+    }
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	/** Procedure to log a Error
@@ -203,5 +203,15 @@
    function IPSLogger_Trc($LogContext, $LogMessage) {
       IPSLogger_Out(c_LogLevel_Trace, c_LogType_Trace, $LogContext, $LogMessage);
    }
+
+    // ---------------------------------------------------------------------------------------------------------------------------
+    /** Procedure to set a custom trace level for a specific logcontext
+     *
+     * @param $LogContext - Context of Logging (Identifier or Filename).
+     * @param $LogLevel - the level at which logging should start
+     */
+    function IPSLogger_SetLoggingLevel($LogContext, $LogLevel) {
+        IPSLogger_SetContextLoggingLevel($LogContext, $LogLevel);
+    }
    /** @}*/
 ?>

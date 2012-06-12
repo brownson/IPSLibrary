@@ -14,6 +14,10 @@
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function IPSLogger_Out($LogLevel, $LogType, $Context, $Msg, $Priority=0) {
+        if (!IPSLogger_ShouldLogContext($Context, $LogLevel)) {
+            return;
+        }
+        
 		if (strrpos($Context, '\\') !== false) {
 			if (strpos($Context, '.') !== false) {
 				$Context = substr($Context, strrpos($Context, '\\')+1, strpos($Context, '.')-strrpos($Context, '\\')-1);
@@ -299,5 +303,23 @@
 			}
 			SetValue($HtmlId, $TablePrefix.$MsgList.$Out.'</table>');
 	}
+    
+    $IPSLogger_contextLoggingLevel = array();
+    
+    function IPSLogger_SetContextLoggingLevel($Context, $LogLevel) {
+        global $IPSLogger_contextLoggingLevel;
+        
+        $IPSLogger_contextLoggingLevel[$Context] = $LogLevel;
+    }
+    
+    function IPSLogger_ShouldLogContext($Context, $LogLevel) {
+        global $IPSLogger_contextLoggingLevel;
+        
+        if(!isset($IPSLogger_contextLoggingLevel[$Context])) {
+            return true;
+        }
+        
+        return $LogLevel <= $IPSLogger_contextLoggingLevel[$Context];
+    }
    /** @}*/
 ?>
