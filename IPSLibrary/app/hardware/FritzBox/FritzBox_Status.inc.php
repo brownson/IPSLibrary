@@ -6,52 +6,10 @@
     IPSUtils_Include ('FritzBox_Configuration.inc.php',      'IPSLibrary::config::hardware::FritzBox');
     IPSUtils_Include ('Utils_Variable.inc.php',      'IPSLibrary::app::modules::Utils');
     
-    define("FRITZBOX_DATA_BASE_PATH", "Program.IPSLibrary.data.hardware.FritzBox");
-    
     // prevent simultaneous logins to the devices 
     $semaphoreName = "SemaphoreFritzBoxStatus";
     if(!IPS_SemaphoreEnter($semaphoreName, 1)) {
         return;
-    }
-    
-    $i18n["DslMaxDataRate"] = array("de" => "Datenrate Max.");
-    $i18n["DslCableCapacity"] = array("de" => "Leitungskapazität");
-    $i18n["DslAtmRate"] = array("de" => "Aktuelle Datenrate");
-    $i18n["DslSignalNoiseDistance"] = array("de" => "Störabstandsmarge");
-    $i18n["DslLineLoss"] = array("de" => "Leitungsdämpfung");
-    
-    $fritzBoxSettings = array(
-        "LOG"                   => array(
-            "MINUTES_BETWEEN_LOGS"          => 30,
-            "dB"        => array(
-                // log when the value has changed at least by the given amount
-                //"MIN_CHANGE"                => 3,
-                // log when the value has changed at least by the given amount
-                "MIN_CHANGE_PERCENT"         => 35,
-                // force log when the value has changed at least by the given amount
-                "MIN_CHANGE_PERCENT_FORCE"   => 70,
-                // force log every x minutes
-                "MINUTES_BETWEEN_LOGS"       => 5,
-                // log when the value has changed at least by the given amount
-                "MINUTES_BETWEEN_LOGS_MIN_CHANGE"         => 20,
-            ),
-        ),
-    );
-    
-    function getTdContent($element) {
-        $ret = array();
-        foreach($element->childNodes as $childNode) {
-            if($childNode->nodeType === XML_ELEMENT_NODE) {
-                $ret[] = utf8_decode($childNode->nodeValue);
-            }
-        }
-        return $ret;
-    }
-    
-    function setVariableLogging($varId, $enabled = true) {
-        $archiveHandlerId = IPS_GetInstanceIDByName("Archive Handler", 0);
-        AC_SetLoggingStatus($archiveHandlerId, $varId, $enabled);
-        @IPS_ApplyChanges($varId);
     }
     
     function CreateProfile_Unit($Name, $unit) {
@@ -63,12 +21,6 @@
         IPS_SetVariableProfileIcon($Name, "");
     }
     
-    function getI18N($key, $lang = "de") {
-        global $i18n;
-        
-        return utf8_decode($i18n[$key][$lang]);
-    }
-    
     function createVariableWithUnitProfile($varName, $categoryId, $unitProfiles, $unitName) {
         $unitNameClean = str_replace("/", "", $unitName);
         if(!array_key_exists($unitNameClean, $unitProfiles)) {
@@ -76,12 +28,14 @@
             CreateProfile_Unit($unitProfiles[$unitNameClean], $unitName);
         }
         $variable = new Variable($varName, $categoryId, 1, 10, $unitProfiles[$unitNameClean]);
-        setVariableLogging($variable->variableId, true);
+        $variable->setLogging(true);
         
         return $variable;
     }
     
-    function evaluateShouldUpdate($logSettings, $unitName, $variable, $newValue) {
+    function evaluateShouldUpdate($unitName, $variable, $newValue) {
+        $logSettings = get_FritzBoxSettings()["LOG"];
+    
         $oldValue = $variable->value;
         $minValue = max(1, min($oldValue, $newValue));
         $percChange = round(abs($newValue - $oldValue) / $minValue, 2);
@@ -129,8 +83,6 @@
     }
     
     function handleVariable($varName, $categoryId, $unitProfiles, $newValue, $unitName) {
-        global $fritzBoxSettings;
-        
         $varId = @IPS_GetVariableIDByName($varName, $categoryId);
         if ($varId === false) {
             $variable = createVariableWithUnitProfile($varName, $categoryId, $unitProfiles, $unitName);
@@ -138,7 +90,7 @@
             $variable = new Variable($varId);
         }
         
-        $shouldUpdateValue = evaluateShouldUpdate($fritzBoxSettings["LOG"], $unitName, $variable, $newValue);
+        $shouldUpdateValue = evaluateShouldUpdate($unitName, $variable, $newValue);
         if($shouldUpdateValue) {
             $variable->value = $newValue;
         }

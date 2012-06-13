@@ -11,6 +11,7 @@
     */
 
     IPSUtils_Include ('IPSLogger.inc.php',      'IPSLibrary::app::core::IPSLogger');
+    IPSUtils_Include ('Utils_Variable.inc.php',      'IPSLibrary::app::modules::Utils');
     
     class FritzBox {
         private $pageLogin = "../html/login_sid.xml";
@@ -45,8 +46,8 @@
             curl_setopt($this->connection, CURLOPT_RETURNTRANSFER, 1);
             
             if($sidValid) {
-                // write state variable back into local state
                 if(!isset($this->SID) || $this->SID == null) {
+                    // use stored session variable
                     $this->SID = $sidVariable->value;
                 }
                 $diff = (int) ($now - $lastChanged);
@@ -145,6 +146,16 @@
                 $return[] = array($elementName, $data);
             }
             return $return;
+        }
+        
+        public function getDectMonitorData() {
+            $data = $this->requestPage("../html/de/dect/dectmonidaten.xml", "");
+            
+            $data = utf8_decode($data);
+            $doc = new DOMDocument("2.0", "UTF-8");
+            @$doc->loadHTML($data);
+            
+            return $doc;
         }
         
         public function getOverview() {
