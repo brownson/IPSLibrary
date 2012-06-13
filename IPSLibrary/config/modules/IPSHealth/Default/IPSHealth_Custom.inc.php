@@ -35,6 +35,7 @@
 	 *
 	 */
 
+
 	// ----------------------------------------------------------------------------------------------------------------------------
 	//
 	// Function wird aufgerufen bei Health auslösung
@@ -46,8 +47,47 @@
 	//
 	// ----------------------------------------------------------------------------------------------------------------------------
 
-	function Circle_1($CycleId, $HealthName, $Mode) {
-		$CircleName = IPS_GetName($CycleId);
+	function Interfaces($ObjectID, $ObjectName, $Mode) {
+		IPSLogger_Err(__file__, "I/O Interface: $ObjectName Variable: $ObjectID,  Ergebnis: $Mode");      // Eintrag für den IPSLogger
+
+
+	}
+
+
+	// ----------------------------------------------------------------------------------------------------------------------------
+	//
+	// Function wird aufgerufen bei Health auslösung
+	//
+	// Parameters:
+	//   $CycleId    - ID des auslösenden Healths ( Program.IPSHealth.Weckzeiten.Weckzeit_1)
+	//   $HealthName - Name des auslösenden Healths
+	//   $Mode       - Grund der auslösung, mögliche Werte: "FreezeTime", "AlarmTime", "SnoozeTime", "StopEvent", "EndTime"
+	//
+	// ----------------------------------------------------------------------------------------------------------------------------
+
+	function LANAdapter($CircleId, $ObjectID, $ObjectName, $Mode) {
+		$CircleName = IPS_GetName($CircleId);
+		IPSLogger_Err(__file__, "$CircleId - $CircleName Variable: $ObjectName ($ObjectID),  Ergebnis: $Mode");
+
+
+	}
+
+
+	// ----------------------------------------------------------------------------------------------------------------------------
+	//
+	// Function wird aufgerufen bei Health auslösung
+	//
+	// Parameters:
+	//   $CycleId    - ID des auslösenden Healths ( Program.IPSHealth.Weckzeiten.Weckzeit_1)
+	//   $HealthName - Name des auslösenden Healths
+	//   $Mode       - Grund der auslösung, mögliche Werte: "FreezeTime", "AlarmTime", "SnoozeTime", "StopEvent", "EndTime"
+	//
+	// ----------------------------------------------------------------------------------------------------------------------------
+
+	function Circle_1($CircleId, $ObjectID, $ObjectName, $Mode) {
+		$CircleName = IPS_GetName($CircleId);
+		IPSLogger_Err(__file__, "$CircleId - $CircleName Variable: $ObjectName ($ObjectID),  Ergebnis: $Mode");
+
 
 	}
 
@@ -62,8 +102,10 @@
 	//
 	// ----------------------------------------------------------------------------------------------------------------------------
 
-	function Circle_2($CycleId, $HealthName, $Mode) {
-		$CircleName = IPS_GetName($CycleId);
+	function Circle_2($CircleId, $ObjectID, $ObjectName, $Mode) {
+		$CircleName = IPS_GetName($CircleId);
+		IPSLogger_Err(__file__, "$CircleId - $CircleName Variable: $ObjectName ($ObjectID),  Ergebnis: $Mode");
+
 
 	}
 
@@ -78,8 +120,10 @@
 	//
 	// ----------------------------------------------------------------------------------------------------------------------------
 
-	function Circle_3($CycleId, $HealthName, $Mode) {
-		$CircleName = IPS_GetName($CycleId);
+	function Circle_3($CircleId, $ObjectID, $ObjectName, $Mode) {
+		$CircleName = IPS_GetName($CircleId);
+		IPSLogger_Err(__file__, "$CircleId - $CircleName Variable: $ObjectName ($ObjectID),  Ergebnis: $Mode");
+
 
 	}
 

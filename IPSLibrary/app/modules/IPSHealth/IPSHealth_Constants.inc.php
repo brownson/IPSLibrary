@@ -41,8 +41,10 @@
 	define ("c_Control_DBWartung",      "DB-Wartung");
 	define ("c_Control_Server",         "Server");
 	define ("c_Control_HightChart",     "HightChart");
+	define ("c_Control_Interfaces",     "Interfaces");
 	define ("c_Control_MeldungID",		"letzte Meldungs ID");
 	define ("c_Control_Meldungen",		"Meldungen");
+	define ("c_Control_IOInterfaces",   "IO-Interfaces");
 
 	define ("c_Control_Uebersicht",		"Uebersicht");
 	define ("c_Control_UebersichtCircle",		"Uebersicht_Circle");

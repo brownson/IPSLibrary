@@ -43,7 +43,7 @@
 
 			if ($EventMode == "Day") 		set_SysInfo_Statistik();
 
-			if ($EventMode == "Timeout")	Check_VarTO($EventName);
+			if ($EventMode == "Timeout")	Check_VarTimeout($EventName);
 
 			break;
 

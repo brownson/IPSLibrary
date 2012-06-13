@@ -40,6 +40,69 @@
 
 
 	// ----------------------------------------------------------------------------------------------------------------------------
+	function CheckIOInterfaces($instanceId, $name, $status) {
+				$ControlId     		= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_Control_Interfaces);
+				$CallBack      = c_Control_Interfaces;
+
+			// Prüfen ob Callback existiert
+			if (function_exists($CallBack)) {
+					IPSLogger_Dbg(__file__, 'Health CallBack Funktion '.$name.' Existiert in IPSHealth_Custom.');
+					$VariableId = @IPS_GetVariableIDByName($name, $ControlId);
+					if ($VariableId === false) {
+                        $VariableId		 = CreateVariable($name	, 0 /*Boolean*/, $ControlId, 20, 'IPSHealth_Err', null, 0);
+								IPS_SetInfo($VariableId, $instanceId);
+								IPSHealth_Log("Interface Variable nicht vorhanden. Variable angelegt.");
+					}
+					if ($status == 'Active'){
+								setvalue($VariableId, false);
+								IPSHealth_Log("Interface Meldung! Interface: $name Status: $status");
+					} else {
+								setvalue($VariableId, true);
+								IPSHealth_Log("Interface Meldung! Interface: $name Status: $status");
+					}
+
+					$html1 = "";
+					$html1 = $html1 . "<table border='0' bgcolor=#006600 width='100%' height='300' cellspacing='0'  >";
+
+					$variablesIDs = IPS_GetObject($ControlId);
+					$variablesIDs = $variablesIDs['ChildrenIDs'];
+
+					foreach ($variablesIDs as $variableID) {
+							if (IPS_GetName($variableID) <> c_Control_Uebersicht) {
+										$ObjectName = IPS_GetName($variableID);
+										if (getvalue($variableID) == true) {
+												$backgroundcolor =  "#FF0000";
+												$zustand = "Ausgefallen";
+												$object     = IPS_GetObject($variableID);
+												$objectInfo = $object['ObjectInfo'];
+										} else {
+												$backgroundcolor =  "#008800";
+												$zustand = "in Betrieb";
+												$object     = IPS_GetObject($variableID);
+												$objectInfo = $object['ObjectInfo'];
+										}
+
+										$html1 = $html1 . "<tr>";
+										$html1 = $html1 . "<td style='text-align:left;background-color:$backgroundcolor;'>";
+										$html1 = $html1 . "<span style='font-family:arial;color:black;font-size:16px;'>$ObjectName ($objectInfo):<br></span>";
+										$html1 = $html1 . "<td style='text-align:center;background-color:$backgroundcolor;>";
+										$html1 = $html1 . "<span style='font-family:arial;color:black;font-size:20px;font-weight:bold;'></span></td>";
+										$html1 = $html1 . "<td style='text-align:left;background-color:$backgroundcolor;'>";
+										$html1 = $html1 . "<span style='font-family:arial;color:black;font-size:16px;'>$zustand</span></td>";
+										$html1 = $html1 . "</tr>";
+							}
+					}
+					$html1 = $html1 . "</table>";
+					set_ControlValue(c_Control_Uebersicht, $ControlId, $html1);
+
+					$CallBack($instanceId, $name, $status);  //Callback
+			} else {
+					IPSLogger_Err(__file__, "HealthCheck CallBack Funktion $CallBack in IPSHealth_Custom existiert nicht. Health: Interfaces");
+			}
+	}
+	
+	
+	// ----------------------------------------------------------------------------------------------------------------------------
 	function get_ModulVersion($ControlId, $instanceId, $Value) {
 
 				$Circle0Id     		= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth');
@@ -73,7 +136,7 @@
 				$html1 = $html1 . "</table>";
 			   SetValueString($ips_uebersicht_id,$html1);
 
-}
+	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function DB_Reaggregieren($ControlId, $instanceId, $Value) {
@@ -129,9 +192,9 @@
 	            if (AC_GetLoggingStatus($archiveHandlerID, $variableID) && !in_array($variableID, $history)) {
 							$finished = false;
 		              	if (@AC_ReAggregateVariable($archiveHandlerID, $variableID)) {
-//					          $AggeratedVars = AC_GetAggregationVariables($archiveHandlerID, false);
-//					          $AggeratedVars = count($AggeratedVars);
-//					          set_ControlValue(c_Property_DBVarGes, $CircleId, $AggeratedVars);
+					          $AggeratedVars = AC_GetAggregationVariables($archiveHandlerID, false);
+					          $AggeratedVars = count($AggeratedVars);
+					          set_ControlValue(c_Property_DBVarGes, $CircleId, $AggeratedVars);
 			                $history[] = $variableID;
 								 $id = ips_getobject($variableID)['ParentID'];
 								 $txt = IPS_GetName($id)."/".IPS_GetName($variableID);
@@ -172,7 +235,7 @@
 
 
 	// ----------------------------------------------------------------------------------------------------------------------------
-	function Check_VarTO($CircleName) {
+	function Check_VarTimeout($CircleName) {
 			$Properts   	= get_HealthConfiguration()[$CircleName];
 			$CategoryIds   = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_HealthCircles);
 			$CirclyId   	= get_CirclyId($CircleName, $CategoryIds);
@@ -184,7 +247,7 @@
 
 			if (function_exists($CircleName)) {
 				IPSLogger_Dbg(__file__, 'Health CallBack Funktion '.$CircleName.' Existiert in IPSHealth_Custom.');
-				IPSHealth_Log($CircleName.' HealthCheck gestartet');
+//				IPSHealth_Log($CircleName.' HealthCheck gestartet');
 
 				$i=0;
 				$r=0;
@@ -198,8 +261,10 @@
 					$mld = 'OK';
 					if ($diff > $timeout) {
 						$mld = "Zeit ($diff Sek.) überschritten";
-						IPSHealth_Log($CircleName." Variable: $ObjectName ($ObjectID),  Ergebnis: $mld");
-						IPSLogger_Err(__file__, $CircleName.",  Variable: $ObjectName ($ObjectID),  Zeit: $diff,  Ergebnis: $mld");
+						if (GetValue($CircleId) == false){
+								IPSHealth_Log($CircleName." Variable: $ObjectName ($ObjectID),  Ergebnis: $mld");
+								$CircleName($CirclyId, $ObjectID, $ObjectName, "Error");
+						}
 						$r++;
 					}
 
@@ -228,7 +293,10 @@
 				Set_ControlValue(c_Control_Uebersicht, $CirclyId, $html1);
 
 				if ($r == 0 and $i > 0) {
-						IPSHealth_Log($CircleName.' HealthCheck Fehlerfrei beendet');
+						if (GetValue($CircleId) == true){
+								$CircleName($CircleId, $ObjectID, $ObjectName, "Good");
+								IPSHealth_Log($CircleName.' HealthCheck Fehlerfrei beendet');
+						}
 						SetValue($CircleId,false);
 				}
 				if ($i == 0){
@@ -236,7 +304,9 @@
 						SetValue($CircleId,false);
 				}
 				if ($r > 0 and $i > 0){
-						IPSHealth_Log($CircleName.' Summen Fehler gesetzt!');
+						if (GetValue($CircleId) == false){
+								IPSHealth_Log($CircleName.' Summen Fehler gesetzt!');
+						}
 						SetValue($CircleId,true);
 				}
 
@@ -504,6 +574,37 @@
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
+	function InterfacesSelect($ControlId, $instanceId, $Value) {
+			$CategoryIds     	= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth');
+			$CircleIds     	= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_HealthCircles);
+			$VisualisationIds	= IPSUtil_ObjectIDByPath('Visualization.WebFront.IPSHealth.Overview_3');
+			$configData 		= get_HealthConfiguration();
+
+			foreach ($configData as $Name=>$Data) {
+					$VisuId 		= IPS_GetLinkIDByName($Data[c_CircleName], $VisualisationIds);
+					$CirclyId   = get_CirclyId($Name, $CircleIds);
+					$CircleId 	= get_ControlId(c_Control_Select,$CirclyId);
+				   SetValueInteger($CircleId, 0);
+
+				   IPS_SetHidden($VisuId, true);
+			}
+
+			set_ControlValue(c_Control_IOInterfaces,$CategoryIds, 1);
+			set_ControlValue(c_Control_System,$CategoryIds, 0);
+
+			$VisuId 		= IPS_GetLinkIDByName(c_Control_Modul, $VisualisationIds);
+		   IPS_SetHidden($VisuId, true);
+
+			$VisuId 		= IPS_GetLinkIDByName(c_Control_Version, $VisualisationIds);
+		   IPS_SetHidden($VisuId, true);
+
+			$VisuId 		= IPS_GetLinkIDByName(c_Control_IOInterfaces, $VisualisationIds);
+		   IPS_SetHidden($VisuId, false);
+
+
+	}
+
+	// ----------------------------------------------------------------------------------------------------------------------------
 	function  CircleSelect($ControlId, $instanceId, $Value){
 			$CategoryIds     	= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth');
 			$CircleIds     	= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_HealthCircles);
@@ -525,6 +626,7 @@
 					}
 			}
 			set_ControlValue(c_Control_System,$CategoryIds, 0);
+			set_ControlValue(c_Control_IOInterfaces,$CategoryIds, 0);
 
 			$VisuId 		= IPS_GetLinkIDByName(c_Control_Modul, $VisualisationIds);
 		   IPS_SetHidden($VisuId, true);
@@ -532,10 +634,13 @@
 			$VisuId 		= IPS_GetLinkIDByName(c_Control_Version, $VisualisationIds);
 		   IPS_SetHidden($VisuId, true);
 
+			$VisuId 		= IPS_GetLinkIDByName(c_Control_IOInterfaces, $VisualisationIds);
+		   IPS_SetHidden($VisuId, true);
+
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------
-	function  SystemControl($ControlId, $instanceId, $Value){
+	function  SystemSelect($ControlId, $instanceId, $Value){
 			$CategoryIds     	= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth');
 			$CircleIds     	= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_HealthCircles);
 			$VisualisationIds	= IPSUtil_ObjectIDByPath('Visualization.WebFront.IPSHealth.Overview_3');
@@ -551,11 +656,16 @@
 			}
 
 			set_ControlValue(c_Control_System,$CategoryIds, 1);
+			set_ControlValue(c_Control_IOInterfaces,$CategoryIds, 0);
+
 			$VisuId 		= IPS_GetLinkIDByName(c_Control_Modul, $VisualisationIds);
 		   IPS_SetHidden($VisuId, false);
+
 			$VisuId 		= IPS_GetLinkIDByName(c_Control_Version, $VisualisationIds);
 		   IPS_SetHidden($VisuId, false);
 
+  			$VisuId 		= IPS_GetLinkIDByName(c_Control_IOInterfaces, $VisualisationIds);
+		   IPS_SetHidden($VisuId, true);
 
 	}
 

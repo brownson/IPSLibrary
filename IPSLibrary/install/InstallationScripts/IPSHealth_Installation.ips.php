@@ -195,6 +195,7 @@
 	$CategoryIdDBM		= CreateCategory(c_Control_DBMonitor	, $CategoryIdData, 300);
 	$CategoryIdSVR		= CreateCategory(c_Control_Server		, $CategoryIdData, 300);
 	$CategoryIdHC		= CreateCategory(c_Control_HightChart	, $CategoryIdData, 300);
+	$CategoryIdIFS    = CreateCategory(c_Control_Interfaces , $CategoryIdData, 300);
 //	$CategoryIdCTRL	= CreateCategory(c_Control_CTRL			, $CategoryIdData, 300);
 
 	$Idx  = 1;
@@ -207,7 +208,6 @@
 			$CricleErrId		 	= CreateVariable(c_Control_Error			, 0 /*Boolean*/	, $CircleId, 30, 'IPSHealth_Err'	, null, 0);
 			$intervall 				= $Data[c_HealthTimeout];
 			CreateTimer_BySeconds ($Name.'-Timeout', $ScriptIdTimer, $intervall, true) ;
-
 	}
 
    CreateTimer_OnceADay("SysInfo-Day"			, $ScriptIdTimer	, 0						, 0); 		// Tages Timer für Datenbankgröße
@@ -223,10 +223,15 @@
 	// Übersicht
 	$UebersichtId	 = CreateVariable(c_Control_Uebersicht			, 3 /*String*/,  $CategoryIdData, 10, '~HTMLBox'		, null, '');
 	$CricleErrId	 = CreateVariable(c_Control_Error				, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Err'	, null, 0);
-	$ModulSYSId		 = CreateVariable(c_Control_System				, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);
-	$ModulUpdateId	 = CreateVariable(c_Control_Modul				, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);
+	$ModulSYSId		 = CreateVariable(c_Control_System				, 0 /*Boolean*/, $CategoryIdData, 10, 'IPSHealth_Select'	, $ScriptIdCS, 0);
+	$ModulIFSId		 = CreateVariable(c_Control_IOInterfaces			, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);
+	$ModulUpdateId	 = CreateVariable(c_Control_Modul				, 0 /*Boolean*/, $CategoryIdData, 10, 'IPSHealth_Select'	, $ScriptIdCS, 0);
 	$ModulVersionId = CreateVariable(c_Control_Version				, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);
 //	$Uebersicht3Id	 = CreateVariable(c_Control_UebersichtCircle	, 3 /*String*/,  $CategoryIdData, 30, '~HTMLBox', null, '');
+
+	//Interfaces
+	$UebersichtIFSId	 = CreateVariable(c_Control_Uebersicht		, 3 /*String*/,  $CategoryIdIFS, 1, '~HTMLBox'		, null, '');
+
 
 	// Logging
 	$CategoryIdLog	 = CreateCategory('Log', $CategoryIdData, 210);
@@ -373,6 +378,7 @@
 
 		// Oben Links
 		CreateLink		(c_Control_System,					$ModulSYSId,  				$WebFrontOverview1, 1);
+		CreateLink		(c_Control_IOInterfaces,			$ModulIFSId,  				$WebFrontOverview1, 1);
 //		CreateLink		(c_Property_UptimeHuman,			$SysUptimeHumanID,  		$WebFrontOverview1, 100);
 //		CreateLink     (c_Control_BetriebStd,				$SysBetriebStdSID,		$WebFrontOverview1, 110);
 
@@ -380,8 +386,9 @@
 		CreateLink		(c_Control_Info,						$UebersichtId,  			$WebFrontOverview2, 100);
 
 		// Oben Rechts
-		CreateLink		(c_Control_Version,					$ModulVersionId,  		$WebFrontOverview3, 1);
-		CreateLink		(c_Control_Modul,						$ModulUpdateId,  			$WebFrontOverview3, 2);
+		IPS_SetHidden(CreateLink		(c_Control_Version,					$ModulVersionId,  		$WebFrontOverview3, 1), true);
+		IPS_SetHidden(CreateLink		(c_Control_Modul,						$ModulUpdateId,  			$WebFrontOverview3, 2), true) ;
+		IPS_SetHidden(CreateLink		(c_Control_IOInterfaces,			$UebersichtIFSId, 		$WebFrontOverview3, 3), true);
 
 		$Idx = 10;
 		foreach ($configData as $Name=>$Data) {
@@ -410,6 +417,8 @@
 	   $VariableId = IPS_GetObjectIDByIdent($ControlName, $CirclyId);
 	   return $VariableId;
 	}
+	
+	
 	/** Anlegen eines Profils mit Associations
 	 *
 	 * der Befehl legt ein Profile an und erzeugt für die übergebenen Werte Assoziationen
