@@ -3,8 +3,12 @@
     IPSUtils_Include ('IPSLogger.inc.php',      'IPSLibrary::app::core::IPSLogger');
     IPSUtils_Include ('IPSInstaller.inc.php',      'IPSLibrary::install::IPSInstaller');
     IPSUtils_Include ('FritzBox.inc.php',      'IPSLibrary::app::hardware::FritzBox');
+    IPSUtils_Include ('FritzBox_Configuration.inc.php',      'IPSLibrary::config::hardware::FritzBox');
     IPSUtils_Include ('Utils_Variable.inc.php',      'IPSLibrary::app::modules::Utils');
     
+    define("FRITZBOX_DATA_BASE_PATH", "Program.IPSLibrary.data.hardware.FritzBox");
+    
+    // prevent simultaneous logins to the devices 
     $semaphoreName = "SemaphoreFritzBoxStatus";
     if(!IPS_SemaphoreEnter($semaphoreName, 1)) {
         return;
@@ -140,41 +144,36 @@
         }
     }
     
+    function handleDevice($device) {
+        $ip = $device[DEVICE_IP];
+        
+        $PathToDevice = FRITZBOX_DATA_BASE_PATH.".IP".str_replace(".", "-", $ip);
+        $PathToDeviceState = $PathToDevice.".State";
+        $PathToDeviceStateReceive = $PathToDeviceState.".Receive";
+        $PathToDeviceStateSend = $PathToDeviceState.".Send";
+        $CategoryIdRoot = IPSUtil_ObjectIDByPath($PathToDevice);
+        $CategoryIdState = IPSUtil_ObjectIDByPath($PathToDeviceState);
+        $CategoryIdStateReceive = IPSUtil_ObjectIDByPath($PathToDeviceStateReceive);
+        $CategoryIdStateSend = IPSUtil_ObjectIDByPath($PathToDeviceStateSend);
+        
+        $fritzBox = new FritzBox($ip, $device[DEVICE_PASSWORD], $CategoryIdRoot);
+        $internetDslStatus = $fritzBox->getInternetDSL();
+        $profiles = array();
+        foreach($internetDslStatus as $measure) {
+            $varName = $measure[0];
+            $data = $measure[1];
+            $unit = $data[1];
+            
+            handleVariable($varName, $CategoryIdStateReceive, $profiles, (int) $data[2], $unit);
+            handleVariable($varName, $CategoryIdStateSend, $profiles, (int) $data[3], $unit);
+        }
+    }
+    
     if(isset($IPS_SENDER)) {
         if ($IPS_SENDER == "RunScript" || $IPS_SENDER == "Execute" || $IPS_SENDER == "TimerEvent") {
-            $ip = "192.168.178.1";
-            
-            $CategoryPath = "Program.IPSLibrary.data.hardware.FritzBox";
-            $fritzBoxCatId = CreateCategoryPath($CategoryPath);
-            $CategoryIdRoot = CreateCategory("IP".$ip, $fritzBoxCatId, false);
-            $CategoryIdState = CreateCategory('State', $CategoryIdRoot, 20);
-            $CategoryIdStateReceive = CreateDummyInstance("Receive", $CategoryIdState, 10);
-            $CategoryIdStateSend = CreateDummyInstance("Send", $CategoryIdState, 10);
-            
-            $fritzBox = new FritzBox($ip, "ama1Vane", $CategoryIdRoot);
-            
-            $ProgramDeleteExistingProfiles = false;
-            if ($ProgramDeleteExistingProfiles) {
-                $Profiles = IPS_GetVariableProfileList();
-                foreach ($Profiles as $Profile) {
-                   if (strpos( $Profile, 'FritzBox_') === 0) {
-                      echo "Delete Profile '$Profile'\n";
-                      IPS_DeleteVariableProfile($Profile);
-                   }
-                }
-            }
-            $profiles = array();
-            $profiles["RECEIVE"] = array();
-            $profiles["SEND"] = array();
-            
-            $measures = $fritzBox->getInternetDSL();
-            foreach($measures as $measure) {
-                $varName = $measure[0];
-                $data = $measure[1];
-                $unit = $data[1];
-                
-                handleVariable($varName, $CategoryIdStateReceive, $profiles["RECEIVE"], (int) $data[2], $unit);
-                handleVariable($varName, $CategoryIdStateSend, $profiles["SEND"], (int) $data[3], $unit);
+            $devices = get_FritzBoxDevices();
+            foreach($devices as $device) {
+                handleDevice($device);
             }
         } else {
             IPSLogger_Wrn(__file__, "Unhandled IPS_SENDER: ".$IPS_SENDER);

@@ -33,7 +33,7 @@
             if($this->isConnected === true) {
                 return true;
             }
-        
+            
             $sidVariable = new Variable("SID", $this->categoryIdRoot, VARIABLE_TYPE_STRING, 10);
             $lastChanged = $sidVariable->getVariableMetadata()["VariableChanged"];
             $now = time();

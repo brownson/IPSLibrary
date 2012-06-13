@@ -72,17 +72,20 @@
     
     // get configuration and create a category for each box
     $devices = get_FritzBoxDevices();
-    foreach($devices as $device) {
+    foreach($devices as &$device) {
+        //echo "Creating device ".$device[DEVICE_IP]."in $CategoryIdData \n";
         createModule($device, $CategoryIdData);
     }
     
-    function createModule($device, $categoryId) {
-        $CategoryIdDevice        = CreateCategory('IP'.$device[DEVICE_IP],     $categoryId, 20);
-        CreateVariable('SID',  3 /*String*/, $CategoryIdDevice, 0);
+    function createModule(&$device, $categoryId) {
+        $ip = str_replace(".", "-", $device[DEVICE_IP]);
+        $CategoryIdDevice        = CreateCategory("IP$ip",     $categoryId, 20);
+        CreateVariable('SID',  3 /*String*/, $CategoryIdDevice, 10);
         $CategoryIdState        = CreateCategory('State',     $CategoryIdDevice, 50);
         
         $receiveInstanceId = createDslInformationNode("Receive", $CategoryIdState, 0);
         $sendInstanceId = createDslInformationNode("Send", $CategoryIdState, 10);
+        $device["STATE_ID"] = $CategoryIdState;
         $device["RECEIVE_ID"] = $receiveInstanceId;
         $device["SEND_ID"] = $sendInstanceId;
     }
@@ -94,22 +97,33 @@
     
     // Get Scripts Ids
     $ID_ScriptFritzBoxStatus  = IPS_GetScriptIDByName('FritzBox_Status',  $CategoryIdApp);
-    CreateTimer ('FritzBox_GetStatus', $ID_ScriptFritzBoxStatus, 45);
+    CreateTimer_CyclicBySeconds ('FritzBox_GetStatus', $ID_ScriptFritzBoxStatus, 45, false);
 
     // ----------------------------------------------------------------------------------------------------------------------------
     // Webfront Installation
     // ----------------------------------------------------------------------------------------------------------------------------
     if ($WFC10_Enabled) {
-        $ID_CategoryWebFront         = CreateCategoryPath($WFC10_Path);
-        $ID_CategoryOutput           = CreateCategory('FritzBox',    $ID_CategoryWebFront, 10);
+        $ID_CategoryWebFront        = CreateCategoryPath($WFC10_Path);
+        $ID_CategoryOutput          = CreateCategory('FritzBox',    $ID_CategoryWebFront, 10);
+        $ID_CategoryLeft            = CreateCategory('Left',      $ID_CategoryOutput,         100);
+        $ID_CategoryRight           = CreateCategory('Right',        $ID_CategoryOutput,  10);
 
         $UniqueId = date('Hi');
         DeleteWFCItems($WFC10_ConfigId, 'SystemTP_FritzBox');
-        DeleteWFCItems($WFC10_ConfigId, $WFC10_TabPaneItem.$WFC10_TabItem1);
-        CreateWFCItemTabPane   ($WFC10_ConfigId, $WFC10_TabPaneItem,  $WFC10_TabPaneParent, $WFC10_TabPaneOrder, $WFC10_TabPaneName, $WFC10_TabPaneIcon);
-        CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.$WFC10_TabItem1.$UniqueId, $WFC10_TabPaneItem, $WFC10_TabOrder1, $WFC10_TabName1, $WFC10_TabIcon1, $ID_CategoryOutput /*BaseId*/, 'false' /*BarBottomVisible*/);
+        DeleteWFCItems($WFC10_ConfigId, $WFC10_TabPaneItem.'_OvSPLeft');
+        DeleteWFCItems($WFC10_ConfigId, $WFC10_TabPaneItem.'_OvSPRight');
+        //CreateWFCItemTabPane   ($WFC10_ConfigId, $WFC10_TabPaneItem,  $WFC10_TabPaneParent, $WFC10_TabPaneOrder, $WFC10_TabPaneName, $WFC10_TabPaneIcon);
+        //CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.$WFC10_TabItem1.$UniqueId, $WFC10_TabPaneItem, $WFC10_TabOrder1, $WFC10_TabName1, $WFC10_TabIcon1, $ID_CategoryOutput /*BaseId*/, 'false' /*BarBottomVisible*/);
         
-        //CreateLink('FritzBox',   $ID_HtmlOutMsgList,    $ID_CategoryOutput, 10);
+        CreateWFCItemTabPane   ($WFC10_ConfigId, $WFC10_TabPaneItem,                          $WFC10_TabPaneParent,         $WFC10_TabPaneOrder, $WFC10_TabPaneName, $WFC10_TabPaneIcon);
+        CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OvSP',              $WFC10_TabPaneItem,              0, $WFC10_TabName1, $WFC10_TabIcon1, 1 /*Vertical*/, 50 /*Width*/, 0 /*Target=Pane1*/, 0 /*Percent*/, 'true');
+        CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OvCatLeft'.$UniqueId,   $WFC10_TabPaneItem.'_OvSP',  $WFC10_TabOrder1, $WFC10_TabName1, $WFC10_TabIcon1, $ID_CategoryLeft /*BaseId*/, 'false' /*BarBottomVisible*/);
+        //CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OvSPRight',             $WFC10_TabPaneItem,  0, '', '', 0 /*Horizontal*/, 50 /*Width*/, 0 /*Target=Pane1*/, 0 /*Percent*/, 'true');
+        CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OvCatRight.'.$UniqueId,   $WFC10_TabPaneItem.'_OvSP', $WFC10_TabOrder1, $WFC10_TabName1, $WFC10_TabIcon1, $ID_CategoryRight /*BaseId*/, 'false' /*BarBottomVisible*/);
+        foreach($devices as $device) {
+            CreateLink($device[DEVICE_IP]." - Receive", $device["RECEIVE_ID"],    $ID_CategoryLeft, 10);
+            CreateLink($device[DEVICE_IP]." - Send", $device["SEND_ID"],    $ID_CategoryRight, 10);
+        }
 
         ReloadAllWebFronts();
     }
@@ -119,7 +133,10 @@
     // ----------------------------------------------------------------------------------------------------------------------------
     if ($Mobile_Enabled) {
         $ID_CategoryiPhone    = CreateCategoryPath($Mobile_Path, $Mobile_PathOrder, $Mobile_PathIcon);
-
+        
+        foreach($devices as $device) {
+            CreateLink("FritzBox@".$device[DEVICE_IP], $device["STATE_ID"],    $ID_CategoryiPhone, 10);
+        }
         /*$ID_Output = CreateDummyInstance("Widget", $ID_CategoryiPhone, 100);
         CreateLink('Receive',   $ID_SingleOutEnabled,             $ID_Output,   10);
         CreateLink('Send',      $ID_SingleOutLevel,               $ID_Output,   20);*/
@@ -144,25 +161,6 @@
             $moduleManager->LogHandler()->Log('Register Php ErrorHandler of IPSLogger in File __autoload.php');
             file_put_contents($file, $FileContent);
         }
-    }
-
-    // ------------------------------------------------------------------------------------------------
-    function CreateTimer ($Name, $Parent, $Seconds) {
-        $TimerId = @IPS_GetEventIDByName($Name, $Parent);
-        if ($TimerId === false) {
-            $TimerId = IPS_CreateEvent(1 /*Cyclic Event*/);
-            IPS_SetName($TimerId, $Name);
-            IPS_SetParent($TimerId, $Parent);
-            if (!IPS_SetEventCyclic($TimerId, 2 /**Daily*/, 1,0,0,0,0)) {
-                echo "IPS_SetEventCyclic failed !!!\n";
-            }
-            if (!IPS_SetEventCyclicTimeBounds($TimerId, mktime(0, 0, $Hour), 0)) {
-                echo "IPS_SetEventCyclicTimeBounds failed !!!\n";
-            }
-            IPS_SetEventActive($TimerId, true);
-            echo 'Created Timer '.$Name.'='.$TimerId."\n";
-        }
-        return $TimerId;
     }
 
     /** @}*/
