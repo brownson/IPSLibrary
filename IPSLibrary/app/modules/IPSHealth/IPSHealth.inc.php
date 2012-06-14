@@ -41,6 +41,7 @@
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function CheckIOInterfaces($instanceId, $name, $status) {
+				$Control0Id     		= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth');
 				$ControlId     		= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_Control_Interfaces);
 				$CallBack      = c_Control_Interfaces;
 
@@ -66,6 +67,7 @@
 
 					$variablesIDs = IPS_GetObject($ControlId);
 					$variablesIDs = $variablesIDs['ChildrenIDs'];
+					$err = false;
 
 					foreach ($variablesIDs as $variableID) {
 							if (IPS_GetName($variableID) <> c_Control_Uebersicht) {
@@ -75,6 +77,7 @@
 												$zustand = "Ausgefallen";
 												$object     = IPS_GetObject($variableID);
 												$objectInfo = $object['ObjectInfo'];
+												$err = true;
 										} else {
 												$backgroundcolor =  "#008800";
 												$zustand = "in Betrieb";
@@ -93,6 +96,7 @@
 							}
 					}
 					$html1 = $html1 . "</table>";
+					set_ControlValue(c_Control_Error, $Control0Id ,$err);
 					set_ControlValue(c_Control_Uebersicht, $ControlId, $html1);
 
 					$CallBack($instanceId, $name, $status);  //Callback
@@ -247,7 +251,6 @@
 
 			if (function_exists($CircleName)) {
 				IPSLogger_Dbg(__file__, 'Health CallBack Funktion '.$CircleName.' Existiert in IPSHealth_Custom.');
-//				IPSHealth_Log($CircleName.' HealthCheck gestartet');
 
 				$i=0;
 				$r=0;
@@ -327,15 +330,12 @@
 				$Circle5Id     		= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_Control_DBMonitor);
 				$configData 			= get_HealthConfiguration();
 
-				$ips_uebersicht_id	= get_ControlId(c_Control_Uebersicht, $Circle0Id);
-
-				$ips_serverzeit_id	= get_ControlId(c_Property_ServerZeit, $Circle1Id);
-				$ips_servercpu_id		= get_ControlId(c_Property_ServerCPU, $Circle1Id);
-				$ips_serverhdd_id		= get_ControlId(c_Property_ServerHDD, $Circle1Id);
-
-				$ips_laufzeit_id     = get_ControlId(c_Property_Uptime, $Circle2Id);
-
-				$ips_betriebszeiti_id   = get_ControlId(c_Property_BetriebStdI, $Circle2Id);
+				$ips_uebersicht_id	= get_ControlId(c_Control_Uebersicht	, $Circle0Id);
+				$ips_serverzeit_id	= get_ControlId(c_Property_ServerZeit	, $Circle1Id);
+				$ips_servercpu_id		= get_ControlId(c_Property_ServerCPU	, $Circle1Id);
+				$ips_serverhdd_id		= get_ControlId(c_Property_ServerHDD	, $Circle1Id);
+				$ips_laufzeit_id     = get_ControlId(c_Property_Uptime		, $Circle2Id);
+				$ips_betriebszeiti_id= get_ControlId(c_Property_BetriebStdI	, $Circle2Id);
 
 				// CCU Variable setzen/triggern
 				if ((c_CCU_Control == true) and (c_CCU_IPSID <> "")){
@@ -355,9 +355,6 @@
 
 				// Laufzeit ermitteln
 				$Laufzeit            = time() - IPS_GetUptime();
-//				$d                   = floor(($Laufzeit / (60*60*24)));
-//				$h                   = floor(($Laufzeit - ($d*60*60*24)) / (60*60));
-//				$m                   = floor(($Laufzeit - ($d*60*60*24) - ($h*60*60)) / (60));
 				setValueInteger($ips_laufzeit_id, $Laufzeit);
 				$LZ	= 	DurationToUhrzeit(time() - IPS_GetUptime());
 
@@ -390,73 +387,59 @@
 			   if (get_ControlValue(c_Control_Error,$Circle0Id) == true) $err++;
 
 
-		// Generiere HTML Übersicht
-		if ($err > 0){
-					$hintergrundfarbe = "#661100";
-					$systemstatus  = "Fehler im System";
-					$systemcolor = "gray";
-		} else {
-					$hintergrundfarbe = "#003366";
-					$systemstatus  = "Alles gut";
-					$systemcolor = "green";
-		}
+				// Generiere HTML Übersicht
+				if ($err > 0){
+							$hintergrundfarbe = "#661100";
+							$systemstatus  = "Fehler im System";
+							$systemcolor = "gray";
+				} else {
+							$hintergrundfarbe = "#003366";
+							$systemstatus  = "Alles gut";
+							$systemcolor = "green";
+				}
 
 
-		$html1 = "";
-		$html1 = $html1 . "<table border='0' bgcolor=$hintergrundfarbe width='100%' height='300' cellspacing='0'  >";
+				$html1 = "";
+				$html1 = $html1 . "<table border='0' bgcolor=$hintergrundfarbe width='100%' height='300' cellspacing='0'  >";
 
-		$html1 = $html1 . "<tr>";
-		$html1 = $html1 . "<td style='text-align:left;'>";
-		$html1 = $html1 . "<span style='font-family:arial;color:white;font-size:15px;'>Aktuell<br></span>";
-		$html1 = $html1 . "<span style='font-family:arial;color:white;font-size:15px;'></span></td>";
-		$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:white;font-size:24px;'>".formatTag(Date('D'))." ".Date('H:i')."</span></td>";
-		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:20px;'>Uhr</span></td>";
-		$html1 = $html1 . "</tr>";
+				$html1 = $html1 . "<tr>";
+				$html1 = $html1 . "<td style='text-align:left;'>";
+				$html1 = $html1 . "<span style='font-family:arial;color:white;font-size:15px;'>Aktuell<br></span>";
+				$html1 = $html1 . "<span style='font-family:arial;color:white;font-size:15px;'></span></td>";
+				$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:white;font-size:24px;'>".formatTag(Date('D'))." ".Date('H:i')."</span></td>";
+				$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:20px;'>Uhr</span></td>";
+				$html1 = $html1 . "</tr>";
 
-		$html1 = $html1 . "<tr>";
-		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:15px'>IPS-Uptime</span></td>";
-		$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:yellow;font-size:20px'>$LZ</span></td>";
-//		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:25px;'>Watt</span></td>";
-		$html1 = $html1 . "</tr>";
+				$html1 = $html1 . "<tr>";
+				$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:15px'>IPS-Uptime</span></td>";
+				$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:yellow;font-size:20px'>$LZ</span></td>";
+				$html1 = $html1 . "</tr>";
 
-		$html1 = $html1 . "<tr>";
-		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:15px;'>IPS-Betriebszeit</span></td>";
-		$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:yellow;font-size:20px;'>$BZ</span></td>";
-//		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:25px;'>$waehrung</span></td>";
-		$html1 = $html1 . "</tr>";
+				$html1 = $html1 . "<tr>";
+				$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:15px;'>IPS-Betriebszeit</span></td>";
+				$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:yellow;font-size:20px;'>$BZ</span></td>";
+				$html1 = $html1 . "</tr>";
 
 		if (get_ControlValue(c_Property_DBNeuagg,$Circle3Id) == true){
-		$html1 = $html1 . "<tr>";
-		$html1 = $html1 . "<td style='text-align:left;font-family:arial;color:white;font-size:15px;'>Neuaggregierung</td>";
-		$html1 = $html1 . "<td style='text-align:center;font-family:arial;font-weight:bold;color:yellow;font-size:20px;'>$DBWartung_Fertig %</td>";
-//		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:25px;'>Fertig</span></td>";
-		$html1 = $html1 . "</tr>";
-		$html1 = $html1 . "<tr>";
-		$html1 = $html1 . "<td style='text-align:left;font-family:arial;color:white;font-size:15px;'>Aggregiere</span></td>";
-		$html1 = $html1 . "<td style='text-align:center;font-family:arial;color:yellow;font-size:14px;'>$DBVariable</span></td>";
-//		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:25px;'>Fertig</span></td>";
-		$html1 = $html1 . "</tr>";
-		}
+				$html1 = $html1 . "<tr>";
+				$html1 = $html1 . "<td style='text-align:left;font-family:arial;color:white;font-size:15px;'>Neuaggregierung</td>";
+				$html1 = $html1 . "<td style='text-align:center;font-family:arial;font-weight:bold;color:yellow;font-size:20px;'>$DBWartung_Fertig %</td>";
+				$html1 = $html1 . "</tr>";
 
-		$html1 = $html1 . "<br>";
+				$html1 = $html1 . "<tr>";
+				$html1 = $html1 . "<td style='text-align:left;font-family:arial;color:white;font-size:15px;'>Aggregiere</span></td>";
+				$html1 = $html1 . "<td style='text-align:center;font-family:arial;color:yellow;font-size:14px;'>$DBVariable</span></td>";
+				$html1 = $html1 . "</tr>";
+		}
 
 		$html1 = $html1 . "<tr>";
 		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:15px;'>System Status</span></td>";
 		$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:$systemcolor;font-size:40px;'>$systemstatus</span></td>";
-//		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:25px;'>$waehrung</span></td>";
 		$html1 = $html1 . "</tr>";
-
-//		$html1 = $html1 . "<tr>";
-//		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:12px;'>Tarif</span></td>";
-//		$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight;color:white;font-size:12px;'>$akt_tarif</span></td>";
-//		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:12px;'></span></td>";
-//		$html1 = $html1 . "</tr>";
 
 		$html1 = $html1 . "</table>";
 
-   SetValueString($ips_uebersicht_id,$html1);
-
-
+	   SetValueString($ips_uebersicht_id,$html1);
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
