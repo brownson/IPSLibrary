@@ -96,24 +96,16 @@
         }
     }
     
-    function handleDevice($device) {
-        $ip = $device[DEVICE_IP];
+    function FritzBox_ReadDslInformation($fritzBox) {
+        $CategoryIdStateReceive = $fritzBox->getStateCategoryId("Receive");
+        $CategoryIdStateSend = $fritzBox->getStateCategoryId("Send");
         
-        $PathToDevice = FRITZBOX_DATA_BASE_PATH.".IP".str_replace(".", "-", $ip);
-        $PathToDeviceState = $PathToDevice.".State";
-        $PathToDeviceStateReceive = $PathToDeviceState.".Receive";
-        $PathToDeviceStateSend = $PathToDeviceState.".Send";
-        $CategoryIdRoot = IPSUtil_ObjectIDByPath($PathToDevice);
-        $CategoryIdState = IPSUtil_ObjectIDByPath($PathToDeviceState);
-        $CategoryIdStateReceive = IPSUtil_ObjectIDByPath($PathToDeviceStateReceive);
-        $CategoryIdStateSend = IPSUtil_ObjectIDByPath($PathToDeviceStateSend);
-        
-        $fritzBox = new FritzBox($ip, $device[DEVICE_PASSWORD], $CategoryIdRoot);
         $internetDslStatus = $fritzBox->getInternetDSL();
         $profiles = array();
         foreach($internetDslStatus as $measure) {
             $varName = $measure[0];
             $data = $measure[1];
+            if(count($data) < 4) continue;
             $unit = $data[1];
             
             handleVariable($varName, $CategoryIdStateReceive, $profiles, (int) $data[2], $unit);
@@ -121,11 +113,52 @@
         }
     }
     
+    function FritzBox_ReadDectMonitorData($fritzBox) {
+        $data = $fritzBox->getDectMonitorData();
+        $xpath = new DOMXPath($data);
+        $CategoryIdDect = $fritzBox->getStateCategoryId("Dect");
+        
+        function copyVar($sourceElement, $varName, $parentId, $type, $profile = '') {
+            $value = $sourceElement->nodeValue;
+            $variable = new Variable($varName, $parentId, $type, 10, $profile);
+            $variable->value = $value;
+            return $variable;
+        }
+        
+        $visibleElements = array("State", "FullName", "Quality");
+        // get active dect nodes
+        $pos = 0;
+        foreach($xpath->query('//DectMoniInfo/DECTHG[Subscribed = "1"]') as $e) {
+            $id = $e->getAttribute("id");
+            $instanceId = CreateDummyInstance($id, $CategoryIdDect, $pos++);
+            
+            foreach($e->childNodes as $childNode) {
+                if($childNode->nodeType !== XML_ELEMENT_NODE) continue;
+                
+                $nodeName = $childNode->nodeName;
+                if($nodeName == "State") {
+                    $var = copyVar($childNode, $nodeName, $instanceId, 1, "FritzBox_DectStatus");
+                } else {
+                    $var = copyVar($childNode, $nodeName, $instanceId, 3);
+                }
+                IPS_SetHidden($var->variableId, !in_array($nodeName, $visibleElements));
+            }
+        }
+    }
+    
+    function FritzBox_ReadStatus($deviceName, $deviceConfig) {
+        $fritzBox = new FritzBox($deviceName, $deviceConfig[DEVICE_IP], $deviceConfig[DEVICE_PASSWORD]);
+        
+        FritzBox_ReadDslInformation($fritzBox);
+        // execute this based on a boolean switch for people without call monitoring
+        FritzBox_ReadDectMonitorData($fritzBox);
+    }
+    
     if(isset($IPS_SENDER)) {
         if ($IPS_SENDER == "RunScript" || $IPS_SENDER == "Execute" || $IPS_SENDER == "TimerEvent") {
             $devices = get_FritzBoxDevices();
-            foreach($devices as $device) {
-                handleDevice($device);
+            foreach($devices as $deviceName => $deviceConfig) {
+                FritzBox_ReadStatus($deviceName, $deviceConfig);
             }
         } else {
             IPSLogger_Wrn(__file__, "Unhandled IPS_SENDER: ".$IPS_SENDER);

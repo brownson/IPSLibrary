@@ -72,27 +72,24 @@
     
     // get configuration and create a category for each box
     $devices = get_FritzBoxDevices();
-    foreach($devices as &$device) {
+    foreach($devices as $deviceName => &$deviceConfig) {
         //echo "Creating device ".$device[DEVICE_IP]."in $CategoryIdData \n";
-        createModule($device, $CategoryIdData);
+        createModule($deviceName, $deviceConfig, $CategoryIdData);
     }
     
-    function createModule(&$device, $categoryId) {
-        $ip = str_replace(".", "-", $device[DEVICE_IP]);
-        $CategoryIdDevice        = CreateCategory("IP$ip",     $categoryId, 20);
+    function createModule($deviceName, &$deviceConfig, $categoryId) {
+        $CategoryIdDevice = CreateCategory($deviceName, $categoryId, 20);
         CreateVariable('SID',  3 /*String*/, $CategoryIdDevice, 10);
-        $CategoryIdState        = CreateCategory('State',     $CategoryIdDevice, 50);
+        $CategoryIdState = CreateCategory('State', $CategoryIdDevice, 50);
         
-        $receiveInstanceId = createDslInformationNode("Receive", $CategoryIdState, 0);
-        $sendInstanceId = createDslInformationNode("Send", $CategoryIdState, 10);
-        $device["STATE_ID"] = $CategoryIdState;
-        $device["RECEIVE_ID"] = $receiveInstanceId;
-        $device["SEND_ID"] = $sendInstanceId;
-    }
-    
-    function createDslInformationNode($name, $categoryId, $position) {
-        $instanceId      = CreateDummyInstance($name, $categoryId, $position);
-        return $instanceId;
+        $CategoryIdDect = CreateCategory('Dect', $CategoryIdDevice, 50);
+        $deviceConfig["DECT_ID"] = $CategoryIdDect;
+        
+        $receiveInstanceId = CreateDummyInstance("Receive", $CategoryIdState, 0);
+        $sendInstanceId = CreateDummyInstance("Send", $CategoryIdState, 10);
+        $deviceConfig["STATE_ID"] = $CategoryIdState;
+        $deviceConfig["RECEIVE_ID"] = $receiveInstanceId;
+        $deviceConfig["SEND_ID"] = $sendInstanceId;
     }
     
     // Get Scripts Ids
@@ -110,8 +107,7 @@
 
         $UniqueId = date('Hi');
         DeleteWFCItems($WFC10_ConfigId, 'SystemTP_FritzBox');
-        DeleteWFCItems($WFC10_ConfigId, $WFC10_TabPaneItem.'_OvSPLeft');
-        DeleteWFCItems($WFC10_ConfigId, $WFC10_TabPaneItem.'_OvSPRight');
+        DeleteWFCItems($WFC10_ConfigId, $WFC10_TabPaneItem.'_OvSP');
         
         CreateWFCItemTabPane   ($WFC10_ConfigId, $WFC10_TabPaneItem,                          $WFC10_TabPaneParent,         $WFC10_TabPaneOrder, $WFC10_TabPaneName, $WFC10_TabPaneIcon);
         CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OvSP',              $WFC10_TabPaneItem,              0, $WFC10_TabName1, $WFC10_TabIcon1, 1 /*Vertical*/, 50 /*Width*/, 0 /*Target=Pane1*/, 0 /*Percent*/, 'true');
@@ -121,6 +117,7 @@
             CreateLink($device[DEVICE_IP]." - Receive", $device["RECEIVE_ID"], $ID_CategoryLeft, 10);
             CreateLink($device[DEVICE_IP]." - Send", $device["SEND_ID"], $ID_CategoryRight, 10);
         }
+        CreateLink($device[DEVICE_IP]." - DECT Status", $device["DECT_ID"], $ID_CategoryLeft, 50);
 
         ReloadAllWebFronts();
     }
@@ -135,6 +132,15 @@
             CreateLink("FritzBox@".$device[DEVICE_IP], $device["STATE_ID"],    $ID_CategoryiPhone, 10);
         }
     }
+    
+    if(class_exists('FritzBox')) {
+        echo 'Register FritzBox for MessageHandler';
+        //$instanceIdAudioMax = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.hardware.FritzBox.AudioMax_Server');
+        //$instanceIdVariable = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.hardware.FritzBox.AudioMax_Server.LAST_COMMAND');
+        //IPSMessageHandler::RegisterOnChangeEvent($instanceIdVariable/*Var*/, 'IPSComponentAVControl_AudioMax,'.$instanceIdAudioMax, 'IPSModuleAVControl_Entertainment');
+    }
+    
+    CreateProfile_DectStatus();
 
     Register_PhpErrorHandler($moduleManager);
 
@@ -155,6 +161,21 @@
             $moduleManager->LogHandler()->Log('Register Php ErrorHandler of IPSLogger in File __autoload.php');
             file_put_contents($file, $FileContent);
         }
+    }
+    
+    function CreateProfile_DectStatus() {
+        $Name = "FritzBox_DectStatus";
+        @IPS_DeleteVariableProfile($Name);
+        IPS_CreateVariableProfile($Name, 1);
+        IPS_SetVariableProfileText($Name, "", "");
+        IPS_SetVariableProfileValues($Name, 0, 0, 0);
+        IPS_SetVariableProfileDigits($Name, 0);
+        IPS_SetVariableProfileIcon($Name, "");
+        IPS_SetVariableProfileAssociation($Name, 0, "Getrennt", "", 0xaaaaaa);
+        IPS_SetVariableProfileAssociation($Name, 1, "1", "Paging", 0xaaaaaa);
+        IPS_SetVariableProfileAssociation($Name, 2, "2", "Verbunden", 0xaaaaaa);
+        IPS_SetVariableProfileAssociation($Name, 3, "3", "Verbunden", 0xaaaaaa);
+        IPS_SetVariableProfileAssociation($Name, 4, "Verbindungsaufbau", "", 0xaaaaaa);
     }
 
     /** @}*/

@@ -19,15 +19,27 @@
         // validity of session in minutes
         private static $sessionValidity = 30;
         
-        public function __construct($ip, $password, $categoryId) {
+        public function __construct($deviceName, $ip, $password) {
             $this->ip = $ip;
             $this->password = $password;
             $this->connection = null;
             $this->isConnected = false;
-            if(!IPS_CategoryExists($categoryId)) {
-                throw new Exception("Category $categoryId does not exist");
+            
+            $this->deviceName = $deviceName;
+            $this->categoryPath = FRITZBOX_DATA_BASE_PATH.".".$this->deviceName;
+            $this->categoryId = IPSUtil_ObjectIDByPath($this->categoryPath);
+            if(!IPS_CategoryExists($this->categoryId)) {
+                throw new Exception("Category ".$this->categoryId." does not exist");
             }
-            $this->categoryIdRoot = $categoryId;
+            
+            $this->categoryStatePath = $this->categoryPath.".State";
+            $this->categoryStateId = IPSUtil_ObjectIDByPath($this->categoryStatePath);
+        }
+        
+        public function getStateCategoryId($name) {
+            $path = $this->categoryStatePath.".".$name;
+            $categoryId = IPSUtil_ObjectIDByPath($path);
+            return $categoryId;
         }
         
         private function setupConnectionAndLogin() {
@@ -35,11 +47,11 @@
                 return true;
             }
             
-            $sidVariable = new Variable("SID", $this->categoryIdRoot, VARIABLE_TYPE_STRING, 10);
-            $lastChanged = $sidVariable->getVariableMetadata()["VariableChanged"];
+            $this->sidVariable = new Variable("SID", $this->categoryId, VARIABLE_TYPE_STRING, 10);
+            $lastChanged = $this->sidVariable->getVariableMetadata()["VariableChanged"];
             $now = time();
             $sidExpired = $lastChanged < $now - (60 * self::$sessionValidity);
-            $sidValid = $sidVariable->value != 0 && !$sidExpired;
+            $sidValid = $this->sidVariable->value != 0 && !$sidExpired;
             
             // setup connection
             $this->connection = curl_init("http://" . $this->ip . "/cgi-bin/webcm");
@@ -48,10 +60,8 @@
             if($sidValid) {
                 if(!isset($this->SID) || $this->SID == null) {
                     // use stored session variable
-                    $this->SID = $sidVariable->value;
+                    $this->SID = $this->sidVariable->value;
                 }
-                $diff = (int) ($now - $lastChanged);
-                //IPSLogger_Trc(__file__, "Already connected with SID ".$this->SID." for ".date("i:s", $diff)."min");
                 
                 $this->isConnected = true;
             } else {
@@ -61,9 +71,9 @@
                 $session_status_simplexml = simplexml_load_string($login);
 
                 if ($session_status_simplexml->iswriteaccess == 1) {
-                    //IPSLogger_Inf(__file__, "Already connected with SID ".$this->SID." for ".date("H:i", $sidVariable->value)."h");
+                    IPSLogger_Inf(__file__, "Already connected with SID ".$this->SID." for ".date("H:i", $this->sidVariable->value)."h");
                     $this->SID = $session_status_simplexml->SID;
-                    $sidVariable->value = $this->SID;
+                    $this->sidVariable->value = $this->SID;
                     
                     $this->isConnected = true;
                 } else {
@@ -75,7 +85,7 @@
                     if (isset($matches[1]) && $matches[1] != '0000000000000000') {
                         $newSID = $matches[1];
                         $this->SID = $newSID;
-                        $sidVariable->value = $this->SID;
+                        $this->sidVariable->value = $this->SID;
                         
                         //IPSLogger_Trc(__file__, "Aquired new SID ".$newSID);
                         $this->isConnected = true;
@@ -85,7 +95,6 @@
                 }
             }
             
-            //IPSLogger_Trc(__file__, "Using SID: ".$this->SID);
             if(!isset($this->SID) || $this->SID == null) {
                 echo "Error: 'SID' is not defined";
                 return false;
@@ -94,20 +103,28 @@
             return $this->isConnected;
         }
         
-        public function requestPage($page, $var) {
-            if($page == null || $var == null) {
-                echo "Error: 'page' or 'var' parameter is null";
+        public function requestPage($page, $var = null) {
+            if($page == null) {
+                echo "Error: 'page' parameter is null";
                 return false;
             }
             
-            if($this->setupConnectionAndLogin()) {
-                curl_setopt($this->connection, CURLOPT_POSTFIELDS, "getpage={$page}&sid=".$this->SID."&".$var);
+            $retries = 2;
+            while($retries > 0 && $this->setupConnectionAndLogin()) {
+                curl_setopt($this->connection, CURLOPT_POSTFIELDS, "getpage={$page}&sid=".$this->SID.($var != null && count($var) > 0 ? "&".$var : ""));
                 try {
                     $data = curl_exec($this->connection);
+                    if(preg_match("/FRITZ!Box Anmeldung/", $data)) {
+                        $this->sidVariable->value = "";
+                        $this->isConnected = false;
+                    } else {
+                        //echo "Received data: $page\n";
+                        return $data;
+                    }
                 } catch (Exception $e) {
                     return false;
                 }
-                return $data;
+                --$retries;
             }
             return false;
         }
@@ -141,6 +158,8 @@
             $return = array();
             foreach($elementNames as $elementName) {
                 $element = $doc->getElementById($elementName);
+                if($element == null) continue;
+                
                 $data = $this->getTdContent($element);
                 
                 $return[] = array($elementName, $data);
@@ -151,9 +170,9 @@
         public function getDectMonitorData() {
             $data = $this->requestPage("../html/de/dect/dectmonidaten.xml", "");
             
-            $data = utf8_decode($data);
+            //$data = utf8_decode($data);
             $doc = new DOMDocument("2.0", "UTF-8");
-            @$doc->loadHTML($data);
+            @$doc->loadXML($data);
             
             return $doc;
         }
