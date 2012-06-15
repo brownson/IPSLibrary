@@ -195,7 +195,8 @@
 	$CategoryIdDBM		= CreateCategory(c_Control_DBMonitor	, $CategoryIdData, 300);
 	$CategoryIdSVR		= CreateCategory(c_Control_Server		, $CategoryIdData, 300);
 	$CategoryIdHC		= CreateCategory(c_Control_HightChart	, $CategoryIdData, 300);
-	$CategoryIdIFS    = CreateCategory(c_Control_Interfaces , $CategoryIdData, 300);
+	$CategoryIdIFS    = CreateCategory(c_Control_Interfaces 	, $CategoryIdData, 300);
+	$CategoryIdIFS    = CreateCategory(c_Control_Homematic	, $CategoryIdData, 300);
 //	$CategoryIdCTRL	= CreateCategory(c_Control_CTRL			, $CategoryIdData, 300);
 
 	$Idx  = 1;
@@ -206,8 +207,8 @@
 			$CircleUebersichtId	= CreateVariable(c_Control_Uebersicht	, 3 /*String*/		, $CircleId, 10, '~HTMLBox', null, '');
 			$CricleSWId			 	= CreateVariable(c_Control_Select		, 1 /*Integer*/	, $CircleId, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);
 			$CricleErrId		 	= CreateVariable(c_Control_Error			, 0 /*Boolean*/	, $CircleId, 30, 'IPSHealth_Err'	, null, 0);
-			$intervall 				= $Data[c_CircleIntervall];
-			$TimerId					= CreateTimer_BySeconds ($Name.'-Timeout', $ScriptIdTimer, $intervall, true);
+//			$intervall 				= $Data[c_CircleIntervall];
+//			$TimerId					= CreateTimer_BySeconds ($Name.'-Timeout', $ScriptIdTimer, $intervall, true);
 			
 	}
 
@@ -225,7 +226,7 @@
 	$UebersichtId	 = CreateVariable(c_Control_Uebersicht			, 3 /*String*/,  $CategoryIdData, 10, '~HTMLBox'		, null, '');
 	$CricleErrId	 = CreateVariable(c_Control_Error				, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Err'	, null, 0);
 	$ModulSYSId		 = CreateVariable(c_Control_System				, 0 /*Boolean*/, $CategoryIdData, 10, 'IPSHealth_Select'	, $ScriptIdCS, 0);
-	$ModulIFSId		 = CreateVariable(c_Control_IOInterfaces			, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);
+	$ModulIFSId		 = CreateVariable(c_Control_IOInterfaces		, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);
 	$ModulUpdateId	 = CreateVariable(c_Control_Modul				, 0 /*Boolean*/, $CategoryIdData, 10, 'IPSHealth_Select'	, $ScriptIdCS, 0);
 	$ModulVersionId = CreateVariable(c_Control_Version				, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);
 //	$Uebersicht3Id	 = CreateVariable(c_Control_UebersichtCircle	, 3 /*String*/,  $CategoryIdData, 30, '~HTMLBox', null, '');
@@ -379,7 +380,7 @@
 
 		// Oben Links
 		CreateLink		(c_Control_System,					$ModulSYSId,  				$WebFrontOverview1, 1);
-		CreateLink		(c_Control_IOInterfaces,			$ModulIFSId,  				$WebFrontOverview1, 1);
+		CreateLink		(c_Control_IOInterfaces,			$ModulIFSId,  				$WebFrontOverview1, 2);
 //		CreateLink		(c_Property_UptimeHuman,			$SysUptimeHumanID,  		$WebFrontOverview1, 100);
 //		CreateLink     (c_Control_BetriebStd,				$SysBetriebStdSID,		$WebFrontOverview1, 110);
 

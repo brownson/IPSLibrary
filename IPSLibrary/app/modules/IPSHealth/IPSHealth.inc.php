@@ -239,84 +239,95 @@
 
 
 	// ----------------------------------------------------------------------------------------------------------------------------
-	function Check_VarTimeout($CircleName) {
-			$Properts   	= get_HealthConfiguration()[$CircleName];
+	function Check_VarTimeout() {
+			$Properts   	= get_HealthConfiguration();//[$CircleName];
 			$CategoryIds   = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_HealthCircles);
-			$CirclyId   	= get_CirclyId($CircleName, $CategoryIds);
-			$CircleId 		= get_ControlId(c_Control_Error,$CirclyId);
 
-			$hintergrundfarbe = "#000000";
-			$html1 = "";
-			$html1 = $html1 . "<table border='0' bgcolor=$hintergrundfarbe width='100%' height='300' cellspacing='0'  >";
 
-			if (function_exists($CircleName)) {
-				IPSLogger_Dbg(__file__, 'Health CallBack Funktion '.$CircleName.' Existiert in IPSHealth_Custom.');
 
-				$i=0;
-				$r=0;
-				$timeout = $Properts[c_CircleTimeout];
-				foreach ($Properts[c_CircleVariables] as $ObjectID) {
-					$Object = IPS_GetVariable($ObjectID);
-					$ObjectName = IPS_GetName($ObjectID);
-					$lasttime = $Object['VariableUpdated'];
-					$diff = (int)round(time() - $lasttime);
-					$Prozent = floor(($diff/$timeout) * 100);
-					$mld = 'OK';
-					if ($diff > $timeout) {
-						$mld = "Zeit ($diff Sek.) überschritten";
-						if (GetValue($CircleId) == false){
-								IPSHealth_Log($CircleName." Variable: $ObjectName ($ObjectID),  Ergebnis: $mld");
-								$CircleName($CirclyId, $ObjectID, $ObjectName, "Error");
+			foreach ($Properts as $CircleName => $Data){
+					$CirclyId   	= get_CirclyId($CircleName, $CategoryIds);
+					$CircleId 		= get_ControlId(c_Control_Error,$CirclyId);
+
+					if (function_exists($CircleName)) {
+						IPSLogger_Dbg(__file__, 'Health CallBack Funktion '.$CircleName.' Existiert in IPSHealth_Custom.');
+
+						$hintergrundfarbe = "#000000";
+						$html1 = "";
+						$html1 = $html1 . "<table border='0' bgcolor=$hintergrundfarbe width='100%' height='300' cellspacing='0'  >";
+						$i=0;
+						$r=0;
+						$timeout = $Data[c_CircleTimeout];
+						foreach ($Data[c_CircleVariables] as $ObjectID) {
+							$Object = IPS_GetVariable($ObjectID);
+							$ObjectName = IPS_GetName($ObjectID);
+							$lasttime = $Object['VariableUpdated'];
+							$diff = (int)round(time() - $lasttime);
+							$Prozent = floor(($diff/$timeout) * 100);
+							$mld = 'OK';
+IPS_LogMessage('DEBUG',"$ObjectName $ObjectID  $diff>$timeout=$Prozent%");
+
+							if ($diff > $timeout) {
+								$mld = "Zeit ($diff Sek.) überschritten";
+								if (GetValue($CircleId) == false){
+										IPSHealth_Log($CircleName." Variable: $ObjectName ($ObjectID),  Ergebnis: $mld");
+										$CircleName($CirclyId, $ObjectID, $ObjectName, "Error");
+								}
+								$r++;
+							}
+
+							if ($Prozent < 51){
+								$backgroundcolor = "#008800";
+							} else if (($Prozent > 50) and ($Prozent < 76)){
+								$backgroundcolor = "#668800";
+							} else if (($Prozent > 75) and ($Prozent < 101)){
+								$backgroundcolor = "#AA8800";
+							} else if ($Prozent > 100){
+								$backgroundcolor = "#FF0000";
+							}
+
+							$html1 = $html1 . "<tr>";
+							$html1 = $html1 . "<td style='text-align:left;background-color:$backgroundcolor;'>";
+							$html1 = $html1 . "<span style='font-family:arial;color:black;font-size:16px;'>$ObjectName ($ObjectID):<br></span>";
+							$html1 = $html1 . "<td style='text-align:center;background-color:$backgroundcolor;>";
+							$html1 = $html1 . "<span style='font-family:arial;color:black;font-size:20px;font-weight:bold;'>$diff ($Prozent%)</span></td>";
+							$html1 = $html1 . "<td style='text-align:left;background-color:$backgroundcolor;'>";
+							$html1 = $html1 . "<span style='font-family:arial;color:black;font-size:16px;'>Sekunden</span></td>";
+							$html1 = $html1 . "</tr>";
+
+							$i++;
 						}
-						$r++;
+						
+						$html1 = $html1 . "</table>";
+IPS_LogMessage('DEBUG',"$ObjectName $r=$i $CirclyId");
+
+						Set_ControlValue(c_Control_Uebersicht, $CirclyId, $html1);
+
+						if ($r == 0 and $i > 0) {
+								if (GetValue($CircleId) == true){
+										$CircleName($CircleId, $ObjectID, $ObjectName, "Good");
+										IPSHealth_Log($CircleName.' HealthCheck Fehlerfrei beendet');
+								}
+								SetValue($CircleId,false);
+						}
+
+						if ($i == 0){
+								IPSHealth_Log($CircleName.' Keine Variablen zur Überwachung!');
+								SetValue($CircleId,false);
+						}
+
+						if ($r > 0 and $i > 0){
+								if (GetValue($CircleId) == false){
+										IPSHealth_Log($CircleName.' Summen Fehler gesetzt!');
+								}
+								SetValue($CircleId,true);
+						}
+
+					} else {
+
+							IPSLogger_Err(__file__, "HealthCheck CallBack Funktion $CircleName in IPSHealth_Custom existiert nicht. Health: ".$Name);
+
 					}
-
-					if ($Prozent < 51){
-						$backgroundcolor = "#008800";
-					} else if (($Prozent > 50) and ($Prozent < 76)){
-						$backgroundcolor = "#668800";
-					} else if (($Prozent > 75) and ($Prozent < 101)){
-						$backgroundcolor = "#AA8800";
-					} else if ($Prozent > 100){
-						$backgroundcolor = "#FF0000";
-					}
-					
-					$html1 = $html1 . "<tr>";
-					$html1 = $html1 . "<td style='text-align:left;background-color:$backgroundcolor;'>";
-					$html1 = $html1 . "<span style='font-family:arial;color:black;font-size:16px;'>$ObjectName ($ObjectID):<br></span>";
-					$html1 = $html1 . "<td style='text-align:center;background-color:$backgroundcolor;>";
-					$html1 = $html1 . "<span style='font-family:arial;color:black;font-size:20px;font-weight:bold;'>$diff ($Prozent%)</span></td>";
-					$html1 = $html1 . "<td style='text-align:left;background-color:$backgroundcolor;'>";
-					$html1 = $html1 . "<span style='font-family:arial;color:black;font-size:16px;'>Sekunden</span></td>";
-					$html1 = $html1 . "</tr>";
-
-					$i++;
-				}
-				$html1 = $html1 . "</table>";
-				Set_ControlValue(c_Control_Uebersicht, $CirclyId, $html1);
-
-				if ($r == 0 and $i > 0) {
-						if (GetValue($CircleId) == true){
-								$CircleName($CircleId, $ObjectID, $ObjectName, "Good");
-								IPSHealth_Log($CircleName.' HealthCheck Fehlerfrei beendet');
-						}
-						SetValue($CircleId,false);
-				}
-				if ($i == 0){
-						IPSHealth_Log($CircleName.' Keine Variablen zur Überwachung!');
-						SetValue($CircleId,false);
-				}
-				if ($r > 0 and $i > 0){
-						if (GetValue($CircleId) == false){
-								IPSHealth_Log($CircleName.' Summen Fehler gesetzt!');
-						}
-						SetValue($CircleId,true);
-				}
-
-			} else {
-
-					IPSLogger_Err(__file__, "HealthCheck CallBack Funktion $CircleName in IPSHealth_Custom existiert nicht. Health: ".$Name);
-					
 			}
 	}
 

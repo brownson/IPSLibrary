@@ -45,6 +45,7 @@
 	define ("c_Control_MeldungID",		"letzte Meldungs ID");
 	define ("c_Control_Meldungen",		"Meldungen");
 	define ("c_Control_IOInterfaces",   "IO-Interfaces");
+	define ("c_Control_Homematic",      "Homematic");
 
 	define ("c_Control_Uebersicht",		"Uebersicht");
 	define ("c_Control_UebersichtCircle",		"Uebersicht_Circle");

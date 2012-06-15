@@ -37,13 +37,16 @@
 			$EventName 	= substr(IPS_GetName($eventId),0, $strpos);
 			$EventMode 	= substr(IPS_GetName($eventId), $strpos+1, strlen(IPS_GetName($eventId))-$strpos-1);
 
-			if ($EventMode == "Server")	set_SysInfo_Server();
+			if ($EventMode == "Server"){
+					set_SysInfo_Server();
+					Check_VarTimeout();
+			}
 
 			if ($EventMode == "DBHealth") set_SysInfo_DBHealth();
 
 			if ($EventMode == "Day") 		set_SysInfo_Statistik();
 
-			if ($EventMode == "Timeout")	Check_VarTimeout($EventName);
+//			if ($EventMode == "Timeout")	Check_VarTimeout($EventName);
 
 			break;
 
