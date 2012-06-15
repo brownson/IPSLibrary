@@ -118,14 +118,14 @@
         $xpath = new DOMXPath($data);
         $CategoryIdDect = $fritzBox->getStateCategoryId("Dect");
         
-        function copyVar($sourceElement, $varName, $parentId, $type, $profile = '') {
+        function copyVar($sourceElement, $varName, $parentId, $type, $position, $profile = '') {
             $value = $sourceElement->nodeValue;
-            $variable = new Variable($varName, $parentId, $type, 10, $profile);
+            $variable = new Variable($varName, $parentId, $type, $position, $profile);
             $variable->value = $value;
             return $variable;
         }
         
-        $visibleElements = array("State", "FullName", "Quality");
+        $visibleElements = array("State", "FullName", "Slot", "Frequency", "RSSI");
         // get active dect nodes
         $pos = 0;
         foreach($xpath->query('//DectMoniInfo/DECTHG[Subscribed = "1"]') as $e) {
@@ -136,12 +136,21 @@
                 if($childNode->nodeType !== XML_ELEMENT_NODE) continue;
                 
                 $nodeName = $childNode->nodeName;
+                
+                $nodeVisible = in_array($nodeName, $visibleElements);
+                $position = $nodeVisible ? array_search($nodeName, $visibleElements) : 100;
                 if($nodeName == "State") {
-                    $var = copyVar($childNode, $nodeName, $instanceId, 1, "FritzBox_DectStatus");
+                    $var = copyVar($childNode, $nodeName, $instanceId, 1, $position, "FritzBox_DectStatus");
+                } else if($nodeName == "RSSI") {
+                    $var = copyVar($childNode, $nodeName, $instanceId, 2, $position, "FritzBox_dB");
+                } else if($nodeName == "Slot") {
+                    $var = copyVar($childNode, $nodeName, $instanceId, 1, $position);
+                } else if($nodeName == "Encryption" || $nodeName == "NoEmission" || $nodeName == "Subscribed") {
+                    $var = copyVar($childNode, $nodeName, $instanceId, 0, $position);
                 } else {
-                    $var = copyVar($childNode, $nodeName, $instanceId, 3);
+                    $var = copyVar($childNode, $nodeName, $instanceId, 3, $position);
                 }
-                IPS_SetHidden($var->variableId, !in_array($nodeName, $visibleElements));
+                IPS_SetHidden($var->variableId, !$nodeVisible);
             }
         }
     }
