@@ -25,8 +25,6 @@
         }
         $deviceConfig = $devices[$deviceName];
         $fritzBox = new FritzBox($deviceName, $deviceConfig[DEVICE_IP], $deviceConfig[DEVICE_PASSWORD]);
-        
-        // TODO: is this realiable or should we rather only set the device state based on the $action?
         FritzBox_ReadDectMonitorData($fritzBox);
         
         $parts = explode(";", $IPS_VALUE);
