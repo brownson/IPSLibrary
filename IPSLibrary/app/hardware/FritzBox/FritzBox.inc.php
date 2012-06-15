@@ -20,6 +20,12 @@
         private static $sessionValidity = 30;
         
         public function __construct($deviceName, $ip, $password) {
+            // check if device is available at port 80
+            $resp = @fsockopen($ip, 80, $errno, $errstr, 1);
+            if(!$resp) {
+                throw new Exception("No FritzBox at '$ip' available.");
+            }
+        
             $this->ip = $ip;
             $this->password = $password;
             $this->connection = null;
