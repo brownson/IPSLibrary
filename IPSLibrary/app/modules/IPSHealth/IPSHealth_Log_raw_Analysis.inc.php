@@ -41,6 +41,7 @@
 	$logKeyWord4            = 'ms (';
 	$Message_Type1        	= 'Queue';
 	$Message_Type2        	= 'Message Queue';
+   $temp                   = array();
 
 // 2. Logfile auslesen und nach $logKeyWord gefilterte Zeilen in Array einlesen
 

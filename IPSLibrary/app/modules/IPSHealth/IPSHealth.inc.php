@@ -254,8 +254,8 @@
 
 				$i=0;
 				$r=0;
-				$timeout = $Properts[c_HealthTimeout];
-				foreach ($Properts[c_HealthVariables] as $ObjectID) {
+				$timeout = $Properts[c_CircleTimeout];
+				foreach ($Properts[c_CircleVariables] as $ObjectID) {
 					$Object = IPS_GetVariable($ObjectID);
 					$ObjectName = IPS_GetName($ObjectID);
 					$lasttime = $Object['VariableUpdated'];

@@ -206,8 +206,9 @@
 			$CircleUebersichtId	= CreateVariable(c_Control_Uebersicht	, 3 /*String*/		, $CircleId, 10, '~HTMLBox', null, '');
 			$CricleSWId			 	= CreateVariable(c_Control_Select		, 1 /*Integer*/	, $CircleId, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);
 			$CricleErrId		 	= CreateVariable(c_Control_Error			, 0 /*Boolean*/	, $CircleId, 30, 'IPSHealth_Err'	, null, 0);
-			$intervall 				= $Data[c_HealthTimeout];
-			CreateTimer_BySeconds ($Name.'-Timeout', $ScriptIdTimer, $intervall, true) ;
+			$intervall 				= $Data[c_CircleIntervall];
+			$TimerId					= CreateTimer_BySeconds ($Name.'-Timeout', $ScriptIdTimer, $intervall, true);
+			
 	}
 
    CreateTimer_OnceADay("SysInfo-Day"			, $ScriptIdTimer	, 0						, 0); 		// Tages Timer für Datenbankgröße
@@ -476,9 +477,9 @@
 		if (!IPS_SetEventCyclic($TimerId, 2 /*Daily*/, 1 /*Int*/,0 /*Days*/,0/*DayInt*/,1/*TimeType Sec*/,$Seconds/*Sec*/)) {
 			Error ("IPS_SetEventCyclic failed !!!");
 		}
+		IPS_SetEventCyclicTimeBounds($TimerId,mktime(0, 0, date('s')),0);
 		IPS_SetEventActive($TimerId, $Active);
 		return $TimerId;
 	}
-
 	/** @}*/
 ?>

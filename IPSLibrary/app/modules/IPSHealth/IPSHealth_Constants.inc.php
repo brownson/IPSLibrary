@@ -30,9 +30,9 @@
 
 	define ("c_HealthCircles",				"Circles");
 	define ("c_HealthCircle",				"Circle_");
-	define ("c_HealthTimer",				"Timer");
-	define ("c_HealthTimeout",				"Timeout");
-	define ("c_HealthVariables",			"Variable");
+	define ("c_CircleIntervall",			"Intervall");
+	define ("c_CircleTimeout",				"Timeout");
+	define ("c_CircleVariables",			"Variable");
 	define ("c_CircleName",             "Name");
 	
 	define ("c_Control_SysInfo",			"System Info");
