@@ -2,6 +2,8 @@
     // constants
     define("FRITZBOX_DATA_BASE_PATH", "Program.IPSLibrary.data.hardware.FritzBox");
     
+    define("c_FritzBox_1", "FB1921681781");
+    
     define("DEVICE_IP", "ip");
     define("DEVICE_PASSWORD", "pass");
 
@@ -9,14 +11,12 @@
     // Definition of FritzBoxes
     // ========================================================================================================================
     function get_FritzBoxDevices () {
-        $devices = array();
-        
-        $devices[] = array(
-            DEVICE_IP       => "192.168.178.1",
-            DEVICE_PASSWORD => "ama1Vane",
+        return array(
+            c_FritzBox_1 => array(
+                DEVICE_IP       => "192.168.178.1",
+                DEVICE_PASSWORD => "ama1Vane",
+            )
         );
-        
-        return $devices;
     }
     
     // ========================================================================================================================

@@ -65,24 +65,25 @@
     // ----------------------------------------------------------------------------------------------------------------------------
     // Program Installation
     // ----------------------------------------------------------------------------------------------------------------------------
-
     $CategoryIdApp      = $moduleManager->GetModuleCategoryID('app');
     $CategoryIdData     = $moduleManager->GetModuleCategoryID('data');
     $CategoryIdConfig   = $moduleManager->GetModuleCategoryID('config');
+    
+    // Get Scripts Ids
+    $ID_ScriptFritzBoxStatus  = IPS_GetScriptIDByName('FritzBox_Status',  $CategoryIdApp);
+    CreateTimer_CyclicBySeconds ('FritzBox_GetStatus', $ID_ScriptFritzBoxStatus, 45);
+    
+    $ID_ScriptFritzBoxCallMonitor  = IPS_GetScriptIDByName('FritzBox_CallMonitor', $CategoryIdApp);
     
     // get configuration and create a category for each box
     $devices = get_FritzBoxDevices();
     foreach($devices as $deviceName => &$deviceConfig) {
         //echo "Creating device ".$device[DEVICE_IP]."in $CategoryIdData \n";
-        createModule($deviceName, $deviceConfig, $CategoryIdData);
-    }
-    
-    function createModule($deviceName, &$deviceConfig, $categoryId) {
-        $CategoryIdDevice = CreateCategory($deviceName, $categoryId, 20);
+        $CategoryIdDevice = CreateCategory($deviceName, $CategoryIdData, 20);
         CreateVariable('SID',  3 /*String*/, $CategoryIdDevice, 10);
         $CategoryIdState = CreateCategory('State', $CategoryIdDevice, 50);
         
-        $CategoryIdDect = CreateCategory('Dect', $CategoryIdDevice, 50);
+        $CategoryIdDect = CreateCategory('Dect', $CategoryIdState, 50);
         $deviceConfig["DECT_ID"] = $CategoryIdDect;
         
         $receiveInstanceId = CreateDummyInstance("Receive", $CategoryIdState, 0);
@@ -90,12 +91,46 @@
         $deviceConfig["STATE_ID"] = $CategoryIdState;
         $deviceConfig["RECEIVE_ID"] = $receiveInstanceId;
         $deviceConfig["SEND_ID"] = $sendInstanceId;
+        
+        // ----------------------------------------------------------------------------------------------------------------------------
+        // Create Socket
+        // ----------------------------------------------------------------------------------------------------------------------------
+        $socketId = @IPS_GetInstanceIDByName($deviceName, 0);
+        if($socketId === false) {
+            echo "Socket Instance with name '$deviceName' not found. Creating...\n";
+            $socketId = IPS_CreateInstance(GetModuleId("Client Socket"));
+            IPS_SetName($socketId, $deviceName);
+            CSCK_SetHost($socketId, $deviceConfig[DEVICE_IP]);
+            CSCK_SetPort($socketId, 1012);
+            CSCK_SetOpen($socketId, true);
+            IPS_ApplyChanges($socketId);
+        } else echo "Socket Instance with name '$deviceName' found @ $socketId\n";
+        // ----------------------------------------------------------------------------------------------------------------------------
+        // Create Register Variable
+        // ----------------------------------------------------------------------------------------------------------------------------
+        $regVarId = @IPS_GetInstanceIDByName("Call Monitor", $CategoryIdDevice);
+        if($regVarId === false) {
+            echo "RegVar Instance with name 'Call Monitor' not found. Creating...\n";
+            $regVarId = IPS_CreateInstance(GetModuleId("Register Variable"));
+            IPS_SetParent($regVarId, $CategoryIdDevice);
+            IPS_SetName($regVarId, "Call Monitor");
+        } else echo "RegVar Instance with name 'Call Monitor' found @ $regVarId\n";
+        
+        RegVar_SetRXObjectID($regVarId, $ID_ScriptFritzBoxCallMonitor);
+        IPS_ConnectInstance($regVarId, $socketId);
+        IPS_ApplyChanges($regVarId);
     }
     
-    // Get Scripts Ids
-    $ID_ScriptFritzBoxStatus  = IPS_GetScriptIDByName('FritzBox_Status',  $CategoryIdApp);
-    CreateTimer_CyclicBySeconds ('FritzBox_GetStatus', $ID_ScriptFritzBoxStatus, 45);
-
+    function GetModuleId($moduleName) {
+        foreach (IPS_GetModuleList() as $moduleId) {
+            $module = IPS_GetModule($moduleId);
+            if ($module['ModuleName'] == $moduleName) {
+                return $moduleId;
+            }
+        }
+        return '';
+    }
+    
     // ----------------------------------------------------------------------------------------------------------------------------
     // Webfront Installation
     // ----------------------------------------------------------------------------------------------------------------------------
@@ -113,11 +148,22 @@
         CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OvSP',              $WFC10_TabPaneItem,              0, $WFC10_TabName1, $WFC10_TabIcon1, 1 /*Vertical*/, 50 /*Width*/, 0 /*Target=Pane1*/, 0 /*Percent*/, 'true');
         CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OvCatLeft'.$UniqueId,   $WFC10_TabPaneItem.'_OvSP',  $WFC10_TabOrder1, $WFC10_TabName1, $WFC10_TabIcon1, $ID_CategoryLeft /*BaseId*/, 'false' /*BarBottomVisible*/);
         CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OvCatRight.'.$UniqueId,   $WFC10_TabPaneItem.'_OvSP', $WFC10_TabOrder1, $WFC10_TabName1, $WFC10_TabIcon1, $ID_CategoryRight /*BaseId*/, 'false' /*BarBottomVisible*/);
-        foreach($devices as $device) {
-            CreateLink($device[DEVICE_IP]." - Receive", $device["RECEIVE_ID"], $ID_CategoryLeft, 10);
-            CreateLink($device[DEVICE_IP]." - Send", $device["SEND_ID"], $ID_CategoryRight, 10);
+        
+        $count = count($devices);
+        if($count == 1) {
+            foreach($devices as $device) {
+                CreateLink($device[DEVICE_IP]." - Receive", $device["RECEIVE_ID"], $ID_CategoryLeft, 10);
+                CreateLink($device[DEVICE_IP]." - Send", $device["SEND_ID"], $ID_CategoryLeft, 10);
+            }
+            CreateLink($device[DEVICE_IP]." - DECT Status", $device["DECT_ID"], $ID_CategoryRight, 50);
+        } else {
+            // TODO: create categories?
+            foreach($devices as $device) {
+                CreateLink($device[DEVICE_IP]." - Receive", $device["RECEIVE_ID"], $ID_CategoryLeft, 10);
+                CreateLink($device[DEVICE_IP]." - Send", $device["SEND_ID"], $ID_CategoryLeft, 10);
+            }
+            CreateLink($device[DEVICE_IP]." - DECT Status", $device["DECT_ID"], $ID_CategoryRight, 50);
         }
-        CreateLink($device[DEVICE_IP]." - DECT Status", $device["DECT_ID"], $ID_CategoryLeft, 50);
 
         ReloadAllWebFronts();
     }
@@ -172,10 +218,10 @@
         IPS_SetVariableProfileDigits($Name, 0);
         IPS_SetVariableProfileIcon($Name, "");
         IPS_SetVariableProfileAssociation($Name, 0, "Getrennt", "", 0xaaaaaa);
-        IPS_SetVariableProfileAssociation($Name, 1, "1", "Paging", 0xaaaaaa);
-        IPS_SetVariableProfileAssociation($Name, 2, "2", "Verbunden", 0xaaaaaa);
-        IPS_SetVariableProfileAssociation($Name, 3, "3", "Verbunden", 0xaaaaaa);
-        IPS_SetVariableProfileAssociation($Name, 4, "Verbindungsaufbau", "", 0xaaaaaa);
+        IPS_SetVariableProfileAssociation($Name, 1, "Paging", "", 0x0000CD);
+        IPS_SetVariableProfileAssociation($Name, 2, "Verbunden", "", 0x32CD32);
+        IPS_SetVariableProfileAssociation($Name, 3, "Verbunden", "", 0x32CD32);
+        IPS_SetVariableProfileAssociation($Name, 4, "Verbindungsaufbau", "", 0xFFFF00);
     }
 
     /** @}*/
