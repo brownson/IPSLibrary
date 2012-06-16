@@ -142,7 +142,7 @@
 			$Out =  '<tr id="'.$CurrentMsgId.'" style="'.IPSLogger_LogTypeStyle($LogType).'">';
 			$Out .=    '<td>IPS</td>';
 			$Out .=    '<td>-'.IPSLogger_LogTypeShort($LogType).'-</td>';
-			$Out .=    '<td>'.IPSLogger_HtmlEncode(substr($Context,0,c_Format_LogOutContextLen)).'</td>';
+			$Out .=    '<td title="'.$Context.'">'.IPSLogger_HtmlEncode(substr($Context,0,c_Format_LogOutContextLen)).'</td>';
 			$Out .=    '<td>'.date(c_Format_LogOutDate).substr(microtime(),1,c_Format_LogOutMicroLen).'</td>';
 			$Out .=    '<td>'.$Msg.'</td>';
 			$Out .= '</tr>';
