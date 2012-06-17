@@ -24,7 +24,7 @@ Global $CfgDaten; // damit kann der Script auch von anderen Scripten aufgerufen 
 
 	// IPS Variablen ID´s
 	$CfgDaten["ContentVarableId"]								= -1;  // ID der String Variable in welche die Daten geschrieben werden (-1 oder überhaupt nicht angeben wenn die Content Variable das übergordnete Element ist)
-	$CfgDaten["HighChartScriptId"]							= 35562 ;  				// ID des Highcharts Scripts
+//	$CfgDaten["HighChartScriptId"]							= 35888  ;  				// ID des Highcharts Scripts
 
 	// damit wird die Art des Aufrufes festgelegt
 	$CfgDaten["RunMode"] 										= "file"; 	// file, script oder popup
@@ -201,8 +201,8 @@ Global $CfgDaten; // damit kann der Script auch von anderen Scripten aufgerufen 
 
 	// -------------------------------------------------------------------------------------------------------------------------------------
 	// und jetzt los ......
-	$s=IPS_GetScript($CfgDaten["HighChartScriptId"]);      // Id des Highcharts-Scripts
-	include($s['ScriptFile']);
+//	$s=IPS_GetScript($CfgDaten["HighChartScriptId"]);      // Id des Highcharts-Scripts
+//	include($s['ScriptFile']);
 
   	// => ab V1.0003
   	// hier werden die CfgDaten geprüft und bei Bedarf vervollständigt

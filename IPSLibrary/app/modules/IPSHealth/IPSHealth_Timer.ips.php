@@ -36,6 +36,7 @@
 			$strpos  	= strrpos(IPS_GetName($eventId), '-', 0);
 			$EventName 	= substr(IPS_GetName($eventId),0, $strpos);
 			$EventMode 	= substr(IPS_GetName($eventId), $strpos+1, strlen(IPS_GetName($eventId))-$strpos-1);
+			$AppId  		= IPSUtil_ObjectIDByPath('Program.IPSLibrary.app.modules.IPSHealth');
 
 			if ($EventMode == "Server"){
 					set_SysInfo_Server();
@@ -44,7 +45,10 @@
 
 			if ($EventMode == "DBHealth") set_SysInfo_DBHealth();
 
-			if ($EventMode == "Day") 		set_SysInfo_Statistik();
+			if ($EventMode == "Day") {
+					set_SysInfo_Statistik();
+					IPS_RunScript(IPS_GetScriptIDByName("IPSHealth_HMInventory",$AppId));
+			}
 
 //			if ($EventMode == "Timeout")	Check_VarTimeout($EventName);
 

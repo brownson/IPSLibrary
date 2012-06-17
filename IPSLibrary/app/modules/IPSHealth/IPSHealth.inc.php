@@ -265,7 +265,7 @@
 							$diff = (int)round(time() - $lasttime);
 							$Prozent = floor(($diff/$timeout) * 100);
 							$mld = 'OK';
-IPS_LogMessage('DEBUG',"$ObjectName $ObjectID  $diff>$timeout=$Prozent%");
+//IPS_LogMessage('DEBUG',"$ObjectName $ObjectID  $diff>$timeout=$Prozent%");
 
 							if ($diff > $timeout) {
 								$mld = "Zeit ($diff Sek.) überschritten";
@@ -299,7 +299,7 @@ IPS_LogMessage('DEBUG',"$ObjectName $ObjectID  $diff>$timeout=$Prozent%");
 						}
 						
 						$html1 = $html1 . "</table>";
-IPS_LogMessage('DEBUG',"$ObjectName $r=$i $CirclyId");
+//IPS_LogMessage('DEBUG',"$ObjectName $r=$i $CirclyId");
 
 						Set_ControlValue(c_Control_Uebersicht, $CirclyId, $html1);
 
@@ -344,6 +344,7 @@ IPS_LogMessage('DEBUG',"$ObjectName $r=$i $CirclyId");
 				$ips_uebersicht_id	= get_ControlId(c_Control_Uebersicht	, $Circle0Id);
 				$ips_serverzeit_id	= get_ControlId(c_Property_ServerZeit	, $Circle1Id);
 				$ips_servercpu_id		= get_ControlId(c_Property_ServerCPU	, $Circle1Id);
+				$ips_servermem_id		= get_ControlId(c_Property_ServerMEM	, $Circle1Id);
 				$ips_serverhdd_id		= get_ControlId(c_Property_ServerHDD	, $Circle1Id);
 				$ips_laufzeit_id     = get_ControlId(c_Property_Uptime		, $Circle2Id);
 				$ips_betriebszeiti_id= get_ControlId(c_Property_BetriebStdI	, $Circle2Id);
@@ -356,6 +357,10 @@ IPS_LogMessage('DEBUG',"$ObjectName $r=$i $CirclyId");
 				// CPU Auslastung
 				$arr = Sys_GetCPUInfo();
 				SetValue($ips_servercpu_id ,$arr['CPU_AVG']);
+
+				// Arbeitsspeicher Auslastung
+				$mem = Sys_GetMemoryInfo();
+				SetValue($ips_servermem_id ,floor(100-($mem['AVAILPHYSICAL']/$mem['TOTALPHYSICAL']) *100));
 
 				// Freie HDD Kapazität
 				$hdd = Sys_GetHardDiskInfo();
@@ -568,6 +573,39 @@ IPS_LogMessage('DEBUG',"$ObjectName $r=$i $CirclyId");
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
+	function HomematicSelect($ControlId, $instanceId, $Value) {
+			$CategoryIds     	= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth');
+			$CircleIds     	= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_HealthCircles);
+			$VisualisationIds	= IPSUtil_ObjectIDByPath('Visualization.WebFront.IPSHealth.Overview_3');
+			$configData 		= get_HealthConfiguration();
+
+			foreach ($configData as $Name=>$Data) {
+					$VisuId 		= IPS_GetLinkIDByName($Data[c_CircleName], $VisualisationIds);
+					$CirclyId   = get_CirclyId($Name, $CircleIds);
+					$CircleId 	= get_ControlId(c_Control_Select,$CirclyId);
+				   SetValueInteger($CircleId, 0);
+
+				   IPS_SetHidden($VisuId, true);
+			}
+
+			set_ControlValue(c_Control_HomematicSelect,$CategoryIds, 1);
+			set_ControlValue(c_Control_InterfaceSelect,$CategoryIds, 0);
+			set_ControlValue(c_Control_System,$CategoryIds, 0);
+
+			$VisuId 		= IPS_GetLinkIDByName(c_Control_Modul, $VisualisationIds);
+		   IPS_SetHidden($VisuId, true);
+
+			$VisuId 		= IPS_GetLinkIDByName(c_Control_Version, $VisualisationIds);
+		   IPS_SetHidden($VisuId, true);
+
+			$VisuId 		= IPS_GetLinkIDByName(c_Control_Interfaces, $VisualisationIds);
+		   IPS_SetHidden($VisuId, true);
+
+			$VisuId 		= IPS_GetLinkIDByName(c_Control_Homematic, $VisualisationIds);
+		   IPS_SetHidden($VisuId, false);
+	}
+	
+	// ----------------------------------------------------------------------------------------------------------------------------
 	function InterfacesSelect($ControlId, $instanceId, $Value) {
 			$CategoryIds     	= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth');
 			$CircleIds     	= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_HealthCircles);
@@ -583,8 +621,9 @@ IPS_LogMessage('DEBUG',"$ObjectName $r=$i $CirclyId");
 				   IPS_SetHidden($VisuId, true);
 			}
 
-			set_ControlValue(c_Control_IOInterfaces,$CategoryIds, 1);
+			set_ControlValue(c_Control_InterfaceSelect,$CategoryIds, 1);
 			set_ControlValue(c_Control_System,$CategoryIds, 0);
+			set_ControlValue(c_Control_HomematicSelect,$CategoryIds, 0);
 
 			$VisuId 		= IPS_GetLinkIDByName(c_Control_Modul, $VisualisationIds);
 		   IPS_SetHidden($VisuId, true);
@@ -592,9 +631,11 @@ IPS_LogMessage('DEBUG',"$ObjectName $r=$i $CirclyId");
 			$VisuId 		= IPS_GetLinkIDByName(c_Control_Version, $VisualisationIds);
 		   IPS_SetHidden($VisuId, true);
 
-			$VisuId 		= IPS_GetLinkIDByName(c_Control_IOInterfaces, $VisualisationIds);
+			$VisuId 		= IPS_GetLinkIDByName(c_Control_Interfaces, $VisualisationIds);
 		   IPS_SetHidden($VisuId, false);
 
+			$VisuId 		= IPS_GetLinkIDByName(c_Control_Homematic, $VisualisationIds);
+		   IPS_SetHidden($VisuId, true);
 
 	}
 
@@ -620,7 +661,8 @@ IPS_LogMessage('DEBUG',"$ObjectName $r=$i $CirclyId");
 					}
 			}
 			set_ControlValue(c_Control_System,$CategoryIds, 0);
-			set_ControlValue(c_Control_IOInterfaces,$CategoryIds, 0);
+			set_ControlValue(c_Control_InterfaceSelect,$CategoryIds, 0);
+			set_ControlValue(c_Control_HomematicSelect,$CategoryIds, 0);
 
 			$VisuId 		= IPS_GetLinkIDByName(c_Control_Modul, $VisualisationIds);
 		   IPS_SetHidden($VisuId, true);
@@ -628,7 +670,10 @@ IPS_LogMessage('DEBUG',"$ObjectName $r=$i $CirclyId");
 			$VisuId 		= IPS_GetLinkIDByName(c_Control_Version, $VisualisationIds);
 		   IPS_SetHidden($VisuId, true);
 
-			$VisuId 		= IPS_GetLinkIDByName(c_Control_IOInterfaces, $VisualisationIds);
+			$VisuId 		= IPS_GetLinkIDByName(c_Control_Interfaces, $VisualisationIds);
+		   IPS_SetHidden($VisuId, true);
+
+			$VisuId 		= IPS_GetLinkIDByName(c_Control_Homematic, $VisualisationIds);
 		   IPS_SetHidden($VisuId, true);
 
 	}
@@ -650,7 +695,8 @@ IPS_LogMessage('DEBUG',"$ObjectName $r=$i $CirclyId");
 			}
 
 			set_ControlValue(c_Control_System,$CategoryIds, 1);
-			set_ControlValue(c_Control_IOInterfaces,$CategoryIds, 0);
+			set_ControlValue(c_Control_InterfaceSelect,$CategoryIds, 0);
+			set_ControlValue(c_Control_HomematicSelect,$CategoryIds, 0);
 
 			$VisuId 		= IPS_GetLinkIDByName(c_Control_Modul, $VisualisationIds);
 		   IPS_SetHidden($VisuId, false);
@@ -658,7 +704,10 @@ IPS_LogMessage('DEBUG',"$ObjectName $r=$i $CirclyId");
 			$VisuId 		= IPS_GetLinkIDByName(c_Control_Version, $VisualisationIds);
 		   IPS_SetHidden($VisuId, false);
 
-  			$VisuId 		= IPS_GetLinkIDByName(c_Control_IOInterfaces, $VisualisationIds);
+  			$VisuId 		= IPS_GetLinkIDByName(c_Control_Interfaces, $VisualisationIds);
+		   IPS_SetHidden($VisuId, true);
+
+			$VisuId 		= IPS_GetLinkIDByName(c_Control_Homematic, $VisualisationIds);
 		   IPS_SetHidden($VisuId, true);
 
 	}

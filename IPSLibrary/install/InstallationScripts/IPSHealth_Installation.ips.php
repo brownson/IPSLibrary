@@ -145,6 +145,7 @@
 	$ScriptIdTimer  	= IPS_GetScriptIDByName('IPSHealth_Timer'				, $CategoryIdApp);
 	$ScriptIdCS  		= IPS_GetScriptIDByName('IPSHealth_ChangeSettings'	, $CategoryIdApp);
 	$ScriptIdhc  		= IPS_GetScriptIDByName('IPSHealth_HighChart_Queue'	, $CategoryIdApp);
+	$ScriptIdhm  		= IPS_GetScriptIDByName('IPSHealth_HMInventory'	, $CategoryIdApp);
 //   $ScriptIdSysInfo 	= IPS_GetScriptIDByName('IPSHealth_SystemInfo'	, $CategoryIdApp);
 
 	// Archiv Handler
@@ -196,8 +197,10 @@
 	$CategoryIdSVR		= CreateCategory(c_Control_Server		, $CategoryIdData, 300);
 	$CategoryIdHC		= CreateCategory(c_Control_HightChart	, $CategoryIdData, 300);
 	$CategoryIdIFS    = CreateCategory(c_Control_Interfaces 	, $CategoryIdData, 300);
-	$CategoryIdIFS    = CreateCategory(c_Control_Homematic	, $CategoryIdData, 300);
+	$CategoryIdHM     = CreateCategory(c_Control_Homematic	, $CategoryIdData, 300);
 //	$CategoryIdCTRL	= CreateCategory(c_Control_CTRL			, $CategoryIdData, 300);
+
+	IPS_Sleep(2000); // Warten bis Catergorien angelegt wurden
 
 	$Idx  = 1;
 	$configData = get_HealthConfiguration();
@@ -212,33 +215,37 @@
 			
 	}
 
-   CreateTimer_OnceADay("SysInfo-Day"			, $ScriptIdTimer	, 0						, 0); 		// Tages Timer für Datenbankgröße
-	CreateTimer_BySeconds("SysInfo-Server"		, $ScriptIdTimer	, 60						, true);		// Timer 1 min. für Server Info
-	CreateTimer_BySeconds("SysInfo-DBHealth"	, $ScriptIdTimer	, c_Warn_Schwellwert	, true);		// Timer gemäß Para für Datenbank Überwachung.
-	CreateTimer_BySeconds("High"		, $ScriptIdhc		, 3553					, true);    // Timer für Hight Chart
+   $TimerId = CreateTimer_OnceADay("SysInfo-Day"			, $ScriptIdTimer	, 0						, 0); 		// Tages Timer für Datenbankgröße
+	IPS_SetEventCyclicTimeBounds($TimerId,mktime(0, 0, 11),0);
+   $TimerId = 	CreateTimer_BySeconds("SysInfo-Server"		, $ScriptIdTimer	, 60						, true);		// Timer 1 min. für Server Info
+	IPS_SetEventCyclicTimeBounds($TimerId,mktime(0, 0, 1),0);
+   $TimerId = 	CreateTimer_BySeconds("SysInfo-DBHealth"	, $ScriptIdTimer	, c_Warn_Schwellwert	, true);		// Timer gemäß Para für Datenbank Überwachung.
+	IPS_SetEventCyclicTimeBounds($TimerId,mktime(0, 0, 22),0);
+	CreateTimer_BySeconds("High"		, $ScriptIdhc		, 3553					, false);    // Timer für Hight Chart
 	
-   IPSUtils_Include ('IPSModuleManager.class.php', 'IPSLibrary::install::IPSModuleManager');
-	$moduleManager = new IPSModuleManager('IPSHealth');
-	$version = $moduleManager->VersionHandler()->GetModuleVersion();
-	$version = str_replace("..Installing", "", $version);
-
-	// Übersicht
+	// Übersicht / Select
 	$UebersichtId	 = CreateVariable(c_Control_Uebersicht			, 3 /*String*/,  $CategoryIdData, 10, '~HTMLBox'		, null, '');
 	$CricleErrId	 = CreateVariable(c_Control_Error				, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Err'	, null, 0);
 	$ModulSYSId		 = CreateVariable(c_Control_System				, 0 /*Boolean*/, $CategoryIdData, 10, 'IPSHealth_Select'	, $ScriptIdCS, 0);
-	$ModulIFSId		 = CreateVariable(c_Control_IOInterfaces		, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);
+	$ModulIFSId		 = CreateVariable(c_Control_InterfaceSelect		, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);
+	$ModulHMId		 = CreateVariable(c_Control_HomematicSelect	, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);
 	$ModulUpdateId	 = CreateVariable(c_Control_Modul				, 0 /*Boolean*/, $CategoryIdData, 10, 'IPSHealth_Select'	, $ScriptIdCS, 0);
 	$ModulVersionId = CreateVariable(c_Control_Version				, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);
 //	$Uebersicht3Id	 = CreateVariable(c_Control_UebersichtCircle	, 3 /*String*/,  $CategoryIdData, 30, '~HTMLBox', null, '');
 
-	//Interfaces
-	$UebersichtIFSId	 = CreateVariable(c_Control_Uebersicht		, 3 /*String*/,  $CategoryIdIFS, 1, '~HTMLBox'		, null, '');
-
+	IPS_Sleep(2000); // Warten bis Catergorien angelegt wurden
 
 	// Logging
 	$CategoryIdLog	 = CreateCategory('Log', $CategoryIdData, 210);
 	$ControlIdLog   = CreateVariable('LogMessages',  3 /*String*/,  $CategoryIdLog, 220, '~HTMLBox', null, '');
 	$ControlIdLogId = CreateVariable('LogId',        1 /*Integer*/, $CategoryIdLog, 230, '',         null, 0);
+
+	//Interfaces
+	$UebersichtIFSId	 = CreateVariable(c_Control_Uebersicht		, 3 /*String*/,  $CategoryIdIFS, 1, '~HTMLBox'		, null, '');
+
+	//Homematic
+	$UebersichtHMId	 = CreateVariable(c_Control_Uebersicht		, 3 /*String*/,  $CategoryIdHM, 1, '~HTMLBox'		, null, '');
+	$InventoryHMId	 	 = CreateVariable(c_Control_Inventory		, 3 /*String*/,  $CategoryIdHM, 1, '~HTMLBox'		, null, '');
 
 	//System Info
 	// Statistik
@@ -275,8 +282,9 @@
 
 	// Server Info
 	$SysServerZeit 	= CreateVariable(c_Property_ServerZeit,		3 /*String*/	, $CategoryIdSVR, 10, '',       null, '');
-	$SysServerHDD 		= CreateVariable(c_Property_ServerHDD,  		2 /*Float*/		, $CategoryIdSVR, 20, 'IPSHealth_GB',        null, 0);
+	$SysServerHDD 		= CreateVariable(c_Property_ServerHDD,  		2 /*Float*/		, $CategoryIdSVR, 20, 'IPSHealth_GB',       null, 0);
 	$SysServerCPU 		= CreateVariable(c_Property_ServerCPU,  		1 /*Integer*/	, $CategoryIdSVR, 30, 'IPSHealth_Pro',      null, 0);
+	$SysServerMEM 		= CreateVariable(c_Property_ServerMEM,  		1 /*Integer*/	, $CategoryIdSVR, 40, 'IPSHealth_Pro', 	  null, 0);
 
 	// HightChart
 	$SysHCQueue 		= CreateVariable(c_Control_HCQueue,		3 /*String*/	, $CategoryIdHC, 10, '~HTMLBox',       null, '');
@@ -296,6 +304,7 @@
 	AC_SetLoggingStatus($archiveHandlerID, $SysLogDBGroesseID, c_SYS_Logging);
 	AC_SetLoggingStatus($archiveHandlerID, $SysServerHDD		, c_SYS_Logging);
 	AC_SetLoggingStatus($archiveHandlerID, $SysServerCPU		, c_SYS_Logging);
+	AC_SetLoggingStatus($archiveHandlerID, $SysServerMEM		, c_SYS_Logging);
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 	// Webfront > 19" Definition
@@ -310,6 +319,7 @@
 		$WebFrontOverviewSYSL    = CreateCategory( 'Statistik'		, $WebFrontId,    50);
 		$WebFrontOverviewSYSR    = CreateCategory( 'System Info'		, $WebFrontId,    60);
 		$WebFrontOverviewMLD     = CreateCategory( 'Meldungen'		, $WebFrontId,    70);
+		$WebFrontOverviewHM 	    = CreateCategory( 'Homemaitc'		, $WebFrontId,    80);
 
 		DeleteWFCItems($WFC_ConfigId, $WFC_TabPaneItem);
 
@@ -329,6 +339,7 @@
 		CreateWFCItemCategory  ($WFC_ConfigId, $WFC_TabPaneItem.'_SysInfoL',		$WFC_TabPaneItem.'_SysInfo_SP', 	10, 'Statistik'	, '', $WebFrontOverviewSYSL /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC_ConfigId, $WFC_TabPaneItem.'_SysInfoR',		$WFC_TabPaneItem.'_SysInfo_SP', 	20, 'System Info'	, '', $WebFrontOverviewSYSR /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC_ConfigId, $WFC_TabPaneItem.'_OV_Log',  		$WFC_TabPaneItem					, 	30, 'Logging'		, '', $WebFrontOverviewMLD /*BaseId*/, 'false' /*BarBottomVisible*/);                             // integer $PercentageSlider
+		CreateWFCItemCategory  ($WFC_ConfigId, $WFC_TabPaneItem.'_OV_HM',  		$WFC_TabPaneItem					, 	30, c_Control_Homematic		, '', $WebFrontOverviewHM /*BaseId*/, 'false' /*BarBottomVisible*/);                             // integer $PercentageSlider
 
 		$Dummy_SysInfoId 	= CreateInstance ('IPS Statistik'		, $WebFrontOverviewSYSL, '{485D0419-BE97-4548-AA9C-C083EB82E61E}', 10);
 		$Dummy_DBHealthId	= CreateInstance ('IPS DB-Monitoring'	, $WebFrontOverviewSYSR, '{485D0419-BE97-4548-AA9C-C083EB82E61E}', 20);
@@ -370,17 +381,23 @@
 		CreateLink		(c_Property_ServerZeit,				$SysServerZeit,  			$Dummy_ServerId, 10);
 		CreateLink		(c_Property_ServerHDD,				$SysServerHDD,  			$Dummy_ServerId, 20);
 		CreateLink		(c_Property_ServerCPU,				$SysServerCPU,  			$Dummy_ServerId, 30);
+		CreateLink		(c_Property_ServerMEM,				$SysServerMEM,  			$Dummy_ServerId, 30);
 
 		// Log Meldungen
 		CreateLink     (c_Control_MeldungID,				$ControlIdLogId,			$WebFrontOverviewMLD, 20);
 		CreateLink     (c_Control_Meldungen,				$ControlIdLog,				$WebFrontOverviewMLD, 30);
+
+		// Homematic
+		CreateLink     ("aktualisieren",                $ScriptIdhm,            $WebFrontOverviewHM, 10);
+		CreateLink     (c_Control_Homematic,				$InventoryHMId,			$WebFrontOverviewHM, 20);
 
 		// Unten
 		CreateLink     (c_Control_HCQueue,					$SysHCQueue,				$WebFrontOverview4, 10);
 
 		// Oben Links
 		CreateLink		(c_Control_System,					$ModulSYSId,  				$WebFrontOverview1, 1);
-		CreateLink		(c_Control_IOInterfaces,			$ModulIFSId,  				$WebFrontOverview1, 2);
+		CreateLink		(c_Control_Interfaces,				$ModulIFSId,  				$WebFrontOverview1, 2);
+		CreateLink		(c_Control_Homematic,				$ModulHMId,  				$WebFrontOverview1, 3);
 //		CreateLink		(c_Property_UptimeHuman,			$SysUptimeHumanID,  		$WebFrontOverview1, 100);
 //		CreateLink     (c_Control_BetriebStd,				$SysBetriebStdSID,		$WebFrontOverview1, 110);
 
@@ -390,7 +407,8 @@
 		// Oben Rechts
 		IPS_SetHidden(CreateLink		(c_Control_Version,					$ModulVersionId,  		$WebFrontOverview3, 1), true);
 		IPS_SetHidden(CreateLink		(c_Control_Modul,						$ModulUpdateId,  			$WebFrontOverview3, 2), true) ;
-		IPS_SetHidden(CreateLink		(c_Control_IOInterfaces,			$UebersichtIFSId, 		$WebFrontOverview3, 3), true);
+		IPS_SetHidden(CreateLink		(c_Control_Interfaces,				$UebersichtIFSId, 		$WebFrontOverview3, 3), true);
+		IPS_SetHidden(CreateLink		(c_Control_Homematic,				$UebersichtHMId, 			$WebFrontOverview3, 3), true);
 
 		$Idx = 10;
 		foreach ($configData as $Name=>$Data) {
@@ -478,7 +496,7 @@
 		if (!IPS_SetEventCyclic($TimerId, 2 /*Daily*/, 1 /*Int*/,0 /*Days*/,0/*DayInt*/,1/*TimeType Sec*/,$Seconds/*Sec*/)) {
 			Error ("IPS_SetEventCyclic failed !!!");
 		}
-		IPS_SetEventCyclicTimeBounds($TimerId,mktime(0, 0, date('s')),0);
+//		IPS_SetEventCyclicTimeBounds($TimerId,mktime(0, 0, date('s')),0);
 		IPS_SetEventActive($TimerId, $Active);
 		return $TimerId;
 	}

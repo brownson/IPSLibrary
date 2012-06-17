@@ -47,8 +47,12 @@
 			   CircleSelect($ControlId, $instanceId, $_IPS['VALUE']);
 				break;
 
-			case c_Control_IOInterfaces:
+			case c_Control_InterfaceSelect:
 			   InterfacesSelect($ControlId, $instanceId, $_IPS['VALUE']);
+				break;
+
+			case c_Control_HomematicSelect:
+			   HomematicSelect($ControlId, $instanceId, $_IPS['VALUE']);
 				break;
 
 			case c_Property_DBNeuagg:

@@ -41,12 +41,14 @@
 	define ("c_Control_DBWartung",      "DB-Wartung");
 	define ("c_Control_Server",         "Server");
 	define ("c_Control_HightChart",     "HightChart");
-	define ("c_Control_Interfaces",     "Interfaces");
 	define ("c_Control_MeldungID",		"letzte Meldungs ID");
 	define ("c_Control_Meldungen",		"Meldungen");
-	define ("c_Control_IOInterfaces",   "IO-Interfaces");
+	define ("c_Control_Interfaces",     "Interfaces");
+	define ("c_Control_InterfaceSelect","IO-Interfaces");
 	define ("c_Control_Homematic",      "Homematic");
-
+	define ("c_Control_HomematicSelect","Homematic_Select");
+	define ("c_Control_Inventory",      "Inventory");
+	
 	define ("c_Control_Uebersicht",		"Uebersicht");
 	define ("c_Control_UebersichtCircle",		"Uebersicht_Circle");
 	define ("c_Control_HCQueue",        "HighChart Queue");
@@ -81,7 +83,8 @@
 	define ("c_Property_ServerZeit",    'Zeit');
 	define ("c_Property_ServerHDD",  	'freie HDD Kapazität');
 	define ("c_Property_ServerCPU",  	'CPU Auslastung');
-	
+	define ("c_Property_ServerMEM",  	'Arbeitsspeicher');
+
 
 	define ("c_Property_DBHistory",  	'History');
 	define ("c_Property_DBNeuagg",  		'DB Neuaggregation');
