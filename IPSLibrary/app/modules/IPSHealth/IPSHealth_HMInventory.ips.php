@@ -373,11 +373,7 @@ switch ($HM_list_sort_option)
 $HTML_intro = "<table width='100%' border='0' align='center' bgcolor=".$Bgcolor_Global.">";
 
 $HTML_ifcs  = "<tr valign='top' width='100%'>";
-<<<<<<< HEAD
 $HTML_ifcs .= "<td><table align='left'><tr><td><font size='3' color='#99AABB'><b>HM Inventory ($Version) for IPSHealth</font></b>";
-=======
-$HTML_ifcs .= "<td><table align='left'><tr><td><font size='3' color='#99AABB'><b>HM Inventory ($Version) </font></b>";
->>>>>>> origin/Development
 $HTML_ifcs .= "<font size='3' color='#CCCCCC'><b>&nbsp found at ".strftime("%d.%m.%Y %X",$StartTime)."</font></b></td></tr>";
 $HTML_ifcs .= "<tr><td><font size='2' color='#CCCCCC'>".$HM_interface_num." HomeMatic interfaces (".$HM_interface_connected_num." connected)</td>";
 $HTML_ifcs .= "<tr><td><font size='2' color='#CCCCCC'>".$IPS_device_num." IPS instances (connected to ".$IPS_HM_channel_num." HM channels)</td>";

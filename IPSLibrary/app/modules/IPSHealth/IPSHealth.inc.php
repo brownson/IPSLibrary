@@ -325,7 +325,7 @@
 
 					} else {
 
-							IPSLogger_Err(__file__, "HealthCheck CallBack Funktion $CircleName in IPSHealth_Custom existiert nicht. Health: ".$Name);
+							IPSLogger_Err(__file__, "HealthCheck CallBack Funktion $CircleName in IPSHealth_Custom existiert nicht. Health: ".$ObjectName);
 
 					}
 			}

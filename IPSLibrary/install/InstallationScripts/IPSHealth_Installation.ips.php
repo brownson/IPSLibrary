@@ -388,12 +388,8 @@
 		CreateLink     (c_Control_Meldungen,				$ControlIdLog,				$WebFrontOverviewMLD, 30);
 
 		// Homematic
-<<<<<<< HEAD
 		CreateLink     ("aktualisieren",                $ScriptIdhm,            $WebFrontOverviewHM, 10);
 		CreateLink     (c_Control_Homematic,				$InventoryHMId,			$WebFrontOverviewHM, 20);
-=======
-		CreateLink     (c_Control_Homematic,				$InventoryHMId,			$WebFrontOverviewHM, 10);
->>>>>>> origin/Development
 
 		// Unten
 		CreateLink     (c_Control_HCQueue,					$SysHCQueue,				$WebFrontOverview4, 10);
