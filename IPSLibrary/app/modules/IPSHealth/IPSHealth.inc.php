@@ -38,11 +38,96 @@
 	IPSUtils_Include ("IPSHealth_Custom.inc.php",         	"IPSLibrary::config::modules::IPSHealth");
 	IPSUtils_Include ("IPSHealth_Logging.inc.php",        	"IPSLibrary::app::modules::IPSHealth");
 
+	// ----------------------------------------------------------------------------------------------------------------------------
+	function set_Update() {
+				$ControlId    		= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth');
+				$VisualisationIds	= IPSUtil_ObjectIDByPath('Visualization.WebFront.IPSHealth.Overview_3');
+
+				$sourceFile = 'https://raw.github.com/MCS-51/IPSLibrary/Development/IPSLibrary/install/DownloadListFiles/IPSHealth_FileList.ini';
+
+				$curl_handle=curl_init();
+				curl_setopt($curl_handle, CURLOPT_URL,$sourceFile);
+				curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT,10);
+				curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER,true);
+				curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
+				curl_setopt($curl_handle, CURLOPT_FAILONERROR, true);
+				$f = curl_exec($curl_handle);
+
+				$arr = explode(chr(10), $f);
+				$oversion = str_replace("Version=","",$arr[0]);
+            set_ControlValue(c_Control_OnlineVersion, $ControlId, $oversion);
+
+				$VisuId 		= IPS_GetLinkIDByName(c_Control_OnlineVersion, $VisualisationIds);
+				IPS_SetHidden($VisuId, true);
+
+				$html1 = "";
+				$html1 = $html1 . "<table border='0' bgcolor=#ff6611 width='100%' height='300' cellspacing='0'  >";
+
+				$html1 = $html1 . "<tr>";
+				$html1 = $html1 . "<td style='text-align:left;'>";
+				$html1 = $html1 . "<span style='font-family:arial;color:white;font-size:15px;'><br></span>";
+				$html1 = $html1 . "<span style='font-family:arial;color:white;font-size:15px;'></span></td>";
+				$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:white;font-size:50px;'>Update</span></td>";
+				$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:20px;'></span></td>";
+				$html1 = $html1 . "</tr>";
+
+				$html1 = $html1 . "<tr>";
+				$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:15px'></span></td>";
+				$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:yellow;font-size:50px'>IPSHealth</span></td>";
+				$html1 = $html1 . "</tr>";
+
+				$html1 = $html1 . "<tr>";
+				$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:15px;'></span></td>";
+				$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:yellow;font-size:50px;'>wurde gestartet</span></td>";
+				$html1 = $html1 . "</tr>";
+
+				$html1 = $html1 . "</table>";
+
+				$ips_uebersicht_id	= get_ControlId(c_Control_Uebersicht, $ControlId);
+				SetValueString($ips_uebersicht_id,$html1);
+		}
+		
+	// ----------------------------------------------------------------------------------------------------------------------------
+	function CheckOnlineVersion() {
+				$ControlId    		= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth');
+				$VisualisationIds	= IPSUtil_ObjectIDByPath('Visualization.WebFront.IPSHealth.Overview_3');
+
+			   IPSUtils_Include ('IPSModuleManager.class.php', 'IPSLibrary::install::IPSModuleManager');
+				$moduleManager = new IPSModuleManager('IPSHealth');
+				$version = $moduleManager->VersionHandler()->GetModuleVersion();
+
+				$sourceFile = 'https://raw.github.com/MCS-51/IPSLibrary/Development/IPSLibrary/install/DownloadListFiles/IPSHealth_FileList.ini';
+
+				$curl_handle=curl_init();
+				curl_setopt($curl_handle, CURLOPT_URL,$sourceFile);
+				curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT,10);
+				curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER,true);
+				curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
+				curl_setopt($curl_handle, CURLOPT_FAILONERROR, true);
+				$f = curl_exec($curl_handle);
+
+				$arr = explode(chr(10), $f);
+				$oversion = str_replace("Version=","",$arr[0]);
+            set_ControlValue(c_Control_OnlineVersion, $ControlId, $oversion);
+
+				$VisuId 		= IPS_GetLinkIDByName(c_Control_OnlineVersion, $VisualisationIds);
+
+				
+				if ($version <> $oversion){
+						IPS_SetHidden($VisuId, false);
+						$ret=1;
+				} else {
+						IPS_SetHidden($VisuId, true);
+						$ret=0;
+				}
+			return $ret;
+	}
+
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function CheckIOInterfaces($instanceId, $name, $status) {
-				$Control0Id     		= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth');
-				$ControlId     		= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_Control_Interfaces);
+				$Control0Id    = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth');
+				$ControlId     = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth.'.c_Control_Interfaces);
 				$CallBack      = c_Control_Interfaces;
 
 			// Prüfen ob Callback existiert
@@ -104,8 +189,8 @@
 					IPSLogger_Err(__file__, "HealthCheck CallBack Funktion $CallBack in IPSHealth_Custom existiert nicht. Health: Interfaces");
 			}
 	}
-	
-	
+
+
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function get_ModulVersion($ControlId, $instanceId, $Value) {
 
@@ -144,18 +229,20 @@
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function DB_Reaggregieren($ControlId, $instanceId, $Value) {
-		
+
 		$timestamp           = date("d.m.Y,", time())." ".date("H:i", time())." Uhr";
 		$Fortschritt 			= get_ControlValue(c_Property_DBSteps, $ControlId);
 		$archiveHandlerID    = IPS_GetInstanceIDByName("Archive Handler", 0);
 
-		if (($Value == true) && ($Fortschritt >= 100)) {
+		if (($Value == true) && (get_ControlValue(c_Property_DBNeuagg,$ControlId) == false)) {
 			 set_ControlValue(c_Property_DBStart, $ControlId,$timestamp);
 			 SetValueBoolean($instanceId, $Value);
           // Anzahl geloggte Variablen ermitteln
           $AggeratedVars = AC_GetAggregationVariables($archiveHandlerID, false);
           $AggeratedVars = count($AggeratedVars);
           set_ControlValue(c_Property_DBVarGes, $ControlId, $AggeratedVars);
+          set_ControlValue(c_Property_DBVarReady, $ControlId, 0);
+          set_ControlValue(c_Property_DBReady, $ControlId, "");
           set_ControlValue(c_Property_DBHistory, $ControlId, "");
           set_ControlValue(c_Property_DBSteps, $ControlId, 0);
 		}
@@ -297,7 +384,7 @@
 
 							$i++;
 						}
-						
+
 						$html1 = $html1 . "</table>";
 //IPS_LogMessage('DEBUG',"$ObjectName $r=$i $CirclyId");
 
@@ -402,6 +489,11 @@
 				// Sonstiger Fehler?
 			   if (get_ControlValue(c_Control_Error,$Circle0Id) == true) $err++;
 
+			   IPSUtils_Include ('IPSModuleManager.class.php', 'IPSLibrary::install::IPSModuleManager');
+				$moduleManager = new IPSModuleManager('IPSHealth');
+				$version = $moduleManager->VersionHandler()->GetModuleVersion();
+
+            $oversion 	= get_ControlValue(c_Control_OnlineVersion, $Circle0Id);
 
 				// Generiere HTML Übersicht
 				if ($err > 0){
@@ -452,6 +544,15 @@
 		$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:15px;'>System Status</span></td>";
 		$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:$systemcolor;font-size:40px;'>$systemstatus</span></td>";
 		$html1 = $html1 . "</tr>";
+
+
+		if (( $version <> $oversion) and (strlen($oversion) > 1)){
+				$html1 = $html1 . "<tr bgcolor=#ff0000>";
+				$html1 = $html1 . "<td style='text-align:left;font-family:arial;color:white;font-size:15px;'>Version Info</span></td>";
+				$html1 = $html1 . "<td style='text-align:center;font-family:arial;color:yellow;font-size:20px;'>Neue Version IPSHealth verfügbar!</span></td>";
+				$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:16px;'>V$oversion</span></td>";
+				$html1 = $html1 . "</tr>";
+		}
 
 		$html1 = $html1 . "</table>";
 
@@ -604,7 +705,7 @@
 			$VisuId 		= IPS_GetLinkIDByName(c_Control_Homematic, $VisualisationIds);
 		   IPS_SetHidden($VisuId, false);
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function InterfacesSelect($ControlId, $instanceId, $Value) {
 			$CategoryIds     	= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth');
@@ -677,7 +778,7 @@
 		   IPS_SetHidden($VisuId, true);
 
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function  SystemSelect($ControlId, $instanceId, $Value){
 			$CategoryIds     	= IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSHealth');
@@ -810,7 +911,7 @@
 		}
 		return $CirclyId;
 	}
-	
+
    // ------------------------------------------------------------------------------------------------
 	function get_CirclyId($DeviceName, $ParentId) {
 		$CategoryId = IPS_GetObjectIDByIdent($DeviceName, $ParentId);

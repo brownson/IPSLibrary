@@ -48,6 +48,7 @@
 			if ($EventMode == "Day") {
 					set_SysInfo_Statistik();
 					IPS_RunScript(IPS_GetScriptIDByName("IPSHealth_HMInventory",$AppId));
+					CheckOnlineVersion();
 			}
 
 //			if ($EventMode == "Timeout")	Check_VarTimeout($EventName);

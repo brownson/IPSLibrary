@@ -227,10 +227,11 @@
 	$UebersichtId	 = CreateVariable(c_Control_Uebersicht			, 3 /*String*/,  $CategoryIdData, 10, '~HTMLBox'		, null, '');
 	$CricleErrId	 = CreateVariable(c_Control_Error				, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Err'	, null, 0);
 	$ModulSYSId		 = CreateVariable(c_Control_System				, 0 /*Boolean*/, $CategoryIdData, 10, 'IPSHealth_Select'	, $ScriptIdCS, 0);
-	$ModulIFSId		 = CreateVariable(c_Control_InterfaceSelect		, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);
+	$ModulIFSId		 = CreateVariable(c_Control_InterfaceSelect	, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);
 	$ModulHMId		 = CreateVariable(c_Control_HomematicSelect	, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);
 	$ModulUpdateId	 = CreateVariable(c_Control_Modul				, 0 /*Boolean*/, $CategoryIdData, 10, 'IPSHealth_Select'	, $ScriptIdCS, 0);
 	$ModulVersionId = CreateVariable(c_Control_Version				, 0 /*Boolean*/, $CategoryIdData, 20, 'IPSHealth_Select'	, $ScriptIdCS, 0);
+	$VersionId		 = CreateVariable(c_Control_OnlineVersion		, 3 /*String*/,  $CategoryIdData, 30, ''						, null		 , '');
 //	$Uebersicht3Id	 = CreateVariable(c_Control_UebersichtCircle	, 3 /*String*/,  $CategoryIdData, 30, '~HTMLBox', null, '');
 
 	IPS_Sleep(2000); // Warten bis Catergorien angelegt wurden
@@ -395,9 +396,9 @@
 		CreateLink     (c_Control_HCQueue,					$SysHCQueue,				$WebFrontOverview4, 10);
 
 		// Oben Links
-		CreateLink		(c_Control_System,					$ModulSYSId,  				$WebFrontOverview1, 1);
-		CreateLink		(c_Control_Interfaces,				$ModulIFSId,  				$WebFrontOverview1, 2);
-		CreateLink		(c_Control_Homematic,				$ModulHMId,  				$WebFrontOverview1, 3);
+		CreateLink		(c_Control_System,					$ModulSYSId,  				$WebFrontOverview1, 2);
+		CreateLink		(c_Control_Interfaces,				$ModulIFSId,  				$WebFrontOverview1, 3);
+		CreateLink		(c_Control_Homematic,				$ModulHMId,  				$WebFrontOverview1, 4);
 //		CreateLink		(c_Property_UptimeHuman,			$SysUptimeHumanID,  		$WebFrontOverview1, 100);
 //		CreateLink     (c_Control_BetriebStd,				$SysBetriebStdSID,		$WebFrontOverview1, 110);
 
@@ -405,10 +406,11 @@
 		CreateLink		(c_Control_Info,						$UebersichtId,  			$WebFrontOverview2, 100);
 
 		// Oben Rechts
-		IPS_SetHidden(CreateLink		(c_Control_Version,					$ModulVersionId,  		$WebFrontOverview3, 1), true);
-		IPS_SetHidden(CreateLink		(c_Control_Modul,						$ModulUpdateId,  			$WebFrontOverview3, 2), true) ;
-		IPS_SetHidden(CreateLink		(c_Control_Interfaces,				$UebersichtIFSId, 		$WebFrontOverview3, 3), true);
-		IPS_SetHidden(CreateLink		(c_Control_Homematic,				$UebersichtHMId, 			$WebFrontOverview3, 3), true);
+		IPS_SetHidden(CreateLink		(c_Control_OnlineVersion,			$VersionId,  				$WebFrontOverview3, 1), true);
+		IPS_SetHidden(CreateLink		(c_Control_Version,					$ModulVersionId,  		$WebFrontOverview3, 2), true);
+		IPS_SetHidden(CreateLink		(c_Control_Modul,						$ModulUpdateId,  			$WebFrontOverview3, 3), true) ;
+		IPS_SetHidden(CreateLink		(c_Control_Interfaces,				$UebersichtIFSId, 		$WebFrontOverview3, 4), true);
+		IPS_SetHidden(CreateLink		(c_Control_Homematic,				$UebersichtHMId, 			$WebFrontOverview3, 5), true);
 
 		$Idx = 10;
 		foreach ($configData as $Name=>$Data) {

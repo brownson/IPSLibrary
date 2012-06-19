@@ -60,32 +60,7 @@
 			   break;
 
 			case c_Control_Modul:
-				$html1 = "";
-				$html1 = $html1 . "<table border='0' bgcolor=#ff6611 width='100%' height='300' cellspacing='0'  >";
-
-				$html1 = $html1 . "<tr>";
-				$html1 = $html1 . "<td style='text-align:left;'>";
-				$html1 = $html1 . "<span style='font-family:arial;color:white;font-size:15px;'><br></span>";
-				$html1 = $html1 . "<span style='font-family:arial;color:white;font-size:15px;'></span></td>";
-				$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:white;font-size:50px;'>Update</span></td>";
-				$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:20px;'></span></td>";
-				$html1 = $html1 . "</tr>";
-
-				$html1 = $html1 . "<tr>";
-				$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:15px'></span></td>";
-				$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:yellow;font-size:50px'>IPSHealth</span></td>";
-				$html1 = $html1 . "</tr>";
-
-				$html1 = $html1 . "<tr>";
-				$html1 = $html1 . "<td align=left><span style='font-family:arial;color:white;font-size:15px;'></span></td>";
-				$html1 = $html1 . "<td align=center><span style='font-family:arial;font-weight:bold;color:yellow;font-size:50px;'>wurde gestartet</span></td>";
-				$html1 = $html1 . "</tr>";
-
-				$html1 = $html1 . "</table>";
-
-				$ips_uebersicht_id	= get_ControlId(c_Control_Uebersicht, $ControlId);
-				SetValueString($ips_uebersicht_id,$html1);
-
+				set_Update();
 				IPS_RunScript(IPS_GetScriptIDByName("IPSHealth_ModulUpdate",$IdApp));
 				break;
 
