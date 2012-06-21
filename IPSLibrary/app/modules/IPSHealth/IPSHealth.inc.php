@@ -310,11 +310,11 @@
 
 		if (($finished) && ($Neuaggegation_val == true))
 		{
-				Send_EMail($mailsubject, $mailcontend);
-				set_ControlValue(c_Property_DBReady, $CircleId,$timestamp);
+				set_ControlValue(c_Property_DBReady, 	$CircleId,	$timestamp);
+				set_ControlValue(c_Property_DBNeuagg, 	$CircleId, 	false);
+            set_ControlValue(c_Property_DBaktVar, 	$CircleId, 	"");
 				IPS_LogMessage('Reaggregation', 'Reaggregation completed!');
-				get_ControlValue(c_Property_DBNeuagg, $CircleId, false);
-            set_ControlValue(c_Property_DBaktVar, $CircleId, "");
+				Send_EMail($mailsubject, $mailcontend);
 		}
 		elseif (($finished == true) && ($Neuaggegation_val == false) && ($history_count < $geloggte_variablen))
 		{
