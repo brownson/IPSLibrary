@@ -151,7 +151,7 @@
 	 * @param $Priority - Priority of Notificaton Message (0 means high priority, higher values indicates a lower priority)
 	 */
    function IPSLogger_Not($LogContext, $LogMessage, $Priority=0) {
-      IPSLogger_Out(c_LogLevel_Information, c_LogType_Information, $LogContext, $LogMessage, $Priority);
+      IPSLogger_Out(c_LogLevel_Notification, c_LogType_Notification, $LogContext, $LogMessage, $Priority);
    }
 
 	// ---------------------------------------------------------------------------------------------------------------------------
