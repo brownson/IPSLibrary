@@ -80,6 +80,7 @@
 	define ("c_Control_Automatic",				"Automatic");
 	define ("c_Control_ManualChange",			"ManualChange");
 	define ("c_Control_TempChange",				"TemperatureChange");
+	define ("c_Control_TempLastPos",			"TemperatureLastPos");
 	define ("c_Control_ProfileTemp",			"ProfileTemp");
 	define ("c_Control_ProfileSun",				"ProfileSun");
 	define ("c_Control_ProfileWeather",			"ProfileWeather");
@@ -88,9 +89,12 @@
 	define ("c_Control_ProfileInfo",			"ProfileInfo");
 
 	define ("c_Control_ProfileName",			"ProfileName");
-	define ("c_Control_TempDiffShadowing",		"TempDiffShadowing");
-	define ("c_Control_TempDiffClosing",		"TempDiffClosing");
-	define ("c_Control_TempDiffOpening",		"TempDiffOpening");
+	define ("c_Control_TempLevelOutShadow",		"TempLevelOutShadow");
+	define ("c_Control_TempLevelOutClose",		"TempLevelOutClose");
+	define ("c_Control_TempLevelOutOpen",		"TempLevelOutOpen");
+	define ("c_Control_TempLevelInShadow",		"TempLevelInShadow");
+	define ("c_Control_TempLevelInClose",		"TempLevelInClose");
+	define ("c_Control_TempLevelInOpen",		"TempLevelInOpen");
 	define ("c_Control_Brightness",				"Brightness");
 	define ("c_Control_AzimuthBgn",				"AzimuthBgn");
 	define ("c_Control_AzimuthEnd",				"AzimuthEnd");
@@ -127,7 +131,7 @@
 	define ("c_Control_MsgPrioTemp",			"MsgPrioTemp");
 	define ("c_Control_MsgPrioProg",			"MsgPrioProg");
 
-	define ("c_TempDiff_NoAction",				4);
+	define ("c_TempLevel_Ignore",				100);
 
 	define ("c_Color_ProfileActive",			0x880000);
 
@@ -141,13 +145,16 @@
 	define ("c_Program_OpenedDay",				"Geöffnet Tag");
 	define ("c_Program_OpenedNight",			"Geöffnet Nacht");
 	define ("c_Program_Closed",					"Geschlossen");
-	define ("c_Program_75",						"75");
-	define ("c_Program_90",						"90");
+	define ("c_Program_25",						"25%");
+	define ("c_Program_50",						"50%");
+	define ("c_Program_75",						"75%");
+	define ("c_Program_90",						"90%");
 	define ("c_Program_Dimout",					"Geschlossen");
 	define ("c_Program_MovedOut",				"Ausgefahren");
 	define ("c_Program_MovedOutTemp",			"Ausgefahren Temperatur");
 	define ("c_Program_DimoutOrShadowing",		"Schatten oder Geschl");
 	define ("c_Program_DimoutAndShadowing",		"Schatten und Geschl.");
+	define ("c_Program_LastPosition",			"LastPosition");
 
 	define ("c_ProgramId_Opened",				1);
 	define ("c_ProgramId_MovedIn",				2);
@@ -155,15 +162,18 @@
 	define ("c_ProgramId_OpenedAndShadowing",	4);
 	define ("c_ProgramId_OpenedDay",			5);
 	define ("c_ProgramId_OpenedNight",			6);
-	define ("c_ProgramId_75",					7);
-	define ("c_ProgramId_90",					8);
-	define ("c_ProgramId_Closed",				9);
-	define ("c_ProgramId_Dimout",				10);
-	define ("c_ProgramId_DimoutOrShadowing",	11);
-	define ("c_ProgramId_DimoutAndShadowing",	12);
-	define ("c_ProgramId_MovedOut",				13);
-	define ("c_ProgramId_MovedOutTemp",			14);
-	define ("c_ProgramId_Manual",				15);
+	define ("c_ProgramId_25",					7);
+	define ("c_ProgramId_50",					8);
+	define ("c_ProgramId_75",					9);
+	define ("c_ProgramId_90",					10);
+	define ("c_ProgramId_Closed",				11);
+	define ("c_ProgramId_Dimout",				12);
+	define ("c_ProgramId_DimoutOrShadowing",	13);
+	define ("c_ProgramId_DimoutAndShadowing",	14);
+	define ("c_ProgramId_MovedOut",				15);
+	define ("c_ProgramId_MovedOutTemp",			16);
+	define ("c_ProgramId_Manual",				17);
+	define ("c_ProgramId_LastPosition",			18);
 
 	define ("c_ShadowingType_Shutter",			"Shutter");
 	define ("c_ShadowingType_Jalousie",			"Jolousie");

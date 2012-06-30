@@ -151,17 +151,23 @@
 	$IPSShadowing_ProgNigSht = array(
 		c_ProgramId_Manual      	=> c_Program_Manual,
 		c_ProgramId_Opened      	=> c_Program_Opened,
+		c_ProgramId_25				=> c_Program_25,
+		c_ProgramId_50				=> c_Program_50,
 		c_ProgramId_75				=> c_Program_75,
 		c_ProgramId_90				=> c_Program_90,
 		c_ProgramId_Closed			=> c_Program_Closed);
 	$IPSShadowing_ProgDaySht = array(
 		c_ProgramId_Manual      	=> c_Program_Manual,
 		c_ProgramId_Opened      	=> c_Program_Opened,
+		c_ProgramId_25				=> c_Program_25,
+		c_ProgramId_50				=> c_Program_50,
 		c_ProgramId_75				=> c_Program_75,
 		c_ProgramId_90				=> c_Program_90,
 		c_ProgramId_Closed      	=> c_Program_Closed);
 	$IPSShadowing_ProgTmpSht = array(
 		c_ProgramId_Manual      	=> c_Program_Manual,
+		c_ProgramId_25				=> c_Program_25,
+		c_ProgramId_50				=> c_Program_50,
 		c_ProgramId_75				=> c_Program_75,
 		c_ProgramId_90				=> c_Program_90,
 		c_ProgramId_Closed      	=> c_Program_Closed);
@@ -178,12 +184,19 @@
 	$IPSShadowing_ProgDayMar = array(
 		c_ProgramId_Manual      	=> c_Program_Manual,
 		c_ProgramId_MovedIn      	=> c_Program_MovedIn,
+		c_ProgramId_50				=> c_Program_50,
+		c_ProgramId_75				=> c_Program_75,
 		c_ProgramId_MovedOut      	=> c_Program_MovedOut);
 	$IPSShadowing_ProgTmpMar = array(
 		c_ProgramId_Manual      	=> c_Program_Manual,
+		c_ProgramId_50				=> c_Program_50,
+		c_ProgramId_75				=> c_Program_75,
 		c_ProgramId_MovedOut      	=> c_Program_MovedOut);
 	$IPSShadowing_ProgPreMar = array(
 		c_ProgramId_Manual      	=> c_Program_Manual,
+		c_ProgramId_50				=> c_Program_50,
+		c_ProgramId_75				=> c_Program_75,
+		c_ProgramId_MovedOut      	=> c_Program_MovedOut,
 		c_ProgramId_MovedOutTemp   => c_Program_MovedOutTemp);
 	$IPSShadowing_ProgWeaMar = array(
 		c_ProgramId_Manual      	=> c_Program_Manual,
@@ -261,10 +274,13 @@
 	CreateProfile_Count        ('IPSShadowing_TempDelta',  1, 1,   5,     null, " °C", null);
 	CreateProfile_Count        ('IPSShadowing_Position',   0, 1,   100,   null, "%",   null);
 
-	CreateProfile_Associations ('IPSShadowing_TempDiffShadowing', array('Aussen >= Innen', '> 1°C', '> 2°C', '> 3°C', 'keine Aktion'));
-	CreateProfile_Associations ('IPSShadowing_TempDiffClosing',   array('Aussen >= Innen', '> 1°C', '> 2°C', '> 3°C', 'keine Aktion'));
-	CreateProfile_Associations ('IPSShadowing_TempDiffOpening',   array('Innen >= Aussen', '> 1°C', '> 2°C', '> 3°C', 'keine Aktion'));
-	CreateProfile_Count        ('IPSShadowing_Brightness', 0, 100, 10000, null, " Lux",    null);
+	CreateProfile_Associations ('IPSShadowing_TempLevelOutShadow', array(22=>'Aussen >= 22°C', 23=>'>= 23°C', 24=>'>= 24°C', 25=>'>= 25°C', 26=>'>= 26°C', c_TempLevel_Ignore=>'Ignorieren'));
+	CreateProfile_Associations ('IPSShadowing_TempLevelInShadow',  array(22=>'Innen >= 22°C',  23=>'>= 23°C', 24=>'>= 24°C', 25=>'>= 25°C', 26=>'>= 26°C', c_TempLevel_Ignore=>'Ignorieren'));
+	CreateProfile_Associations ('IPSShadowing_TempLevelOutClose',  array(22=>'Aussen >= 22°C', 23=>'>= 23°C', 24=>'>= 24°C', 25=>'>= 25°C', 26=>'>= 26°C', c_TempLevel_Ignore=>'Ignorieren'));
+	CreateProfile_Associations ('IPSShadowing_TempLevelInClose',   array(22=>'Innen >= 22°C',  23=>'>= 23°C', 24=>'>= 24°C', 25=>'>= 25°C', 26=>'>= 26°C', c_TempLevel_Ignore=>'Ignorieren'));
+	CreateProfile_Associations ('IPSShadowing_TempLevelOutOpen',   array(22=>'Aussen <= 22°C', 23=>'<= 23°C', 24=>'<= 24°C', 25=>'<= 25°C', 26=>'<= 26°C', c_TempLevel_Ignore=>'Ignorieren'));
+	CreateProfile_Associations ('IPSShadowing_TempLevelInOpen',    array(22=>'Innen <= 22°C',  23=>'<= 23°C', 24=>'<= 24°C', 25=>'<= 25°C', 26=>'<= 26°C', c_TempLevel_Ignore=>'Ignorieren'));
+	CreateProfile_Count        ('IPSShadowing_Brightness', 0, 500, 50000, null, " Lux",    null);
 
 	CreateProfile_Count        ('IPSShadowing_AzimuthBgn', 0, 5,   360,   null, " °",  null);
 	CreateProfile_Count        ('IPSShadowing_AzimuthEnd', 0, 5,   360,   null, " °",  null);
@@ -307,6 +323,8 @@
 													c_MovementId_Stop				=> c_Movement_Stop),"", $IPSShadowing_MovementCol, true);
 
 	$CategoryIdDevices	= CreateCategory('Devices', $CategoryIdData, 20);
+
+
 
 	// Profile Manager
 	// ====================================================================================================================================
@@ -354,6 +372,30 @@
 	if (count($Profiles)==0) {
 		$profileManager->CreateEndOfDay('Dämmerung');
 	}
+	//++Migration v2.50.2 --> 2.50.3
+	$categoryIdTempProfiles      = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSShadowing.Profiles.Temp');
+	$categoryIdListTempProfiles  = IPS_GetChildrenIDs($categoryIdTempProfiles);
+	foreach ($categoryIdListTempProfiles as $categoryIdTempProfile) {
+		CreateVariable(c_Control_TempLevelOutShadow, 1 /*Integer*/,  $categoryIdTempProfile, 10, 'IPSShadowing_TempLevelOutShadow', $ScriptIdChangeSettings, c_TempLevel_Ignore, 'Temperature');
+		CreateVariable(c_Control_TempLevelInShadow,  1 /*Integer*/,  $categoryIdTempProfile, 20, 'IPSShadowing_TempLevelInShadow',  $ScriptIdChangeSettings, c_TempLevel_Ignore, 'Temperature');
+		CreateVariable(c_Control_TempLevelOutClose,  1 /*Integer*/,  $categoryIdTempProfile, 30, 'IPSShadowing_TempLevelOutClose',  $ScriptIdChangeSettings, c_TempLevel_Ignore, 'Temperature');
+		CreateVariable(c_Control_TempLevelInClose,   1 /*Integer*/,  $categoryIdTempProfile, 40, 'IPSShadowing_TempLevelInClose',   $ScriptIdChangeSettings, c_TempLevel_Ignore, 'Temperature');
+		CreateVariable(c_Control_TempLevelOutOpen,   1 /*Integer*/,  $categoryIdTempProfile, 50, 'IPSShadowing_TempLevelOutOpen',   $ScriptIdChangeSettings, c_TempLevel_Ignore, 'Temperature');
+		CreateVariable(c_Control_TempLevelInOpen,    1 /*Integer*/,  $categoryIdTempProfile, 60, 'IPSShadowing_TempLevelInOpen',    $ScriptIdChangeSettings, c_TempLevel_Ignore, 'Temperature');
+		$variableId = @IPS_GetObjectIDByName('TempDiffClosing',   $categoryIdTempProfile);  if ($variableId!==false) { IPS_DeleteVariable($variableId); }
+		$variableId = @IPS_GetObjectIDByName('TempDiffShadowing', $categoryIdTempProfile);  if ($variableId!==false) { IPS_DeleteVariable($variableId); }
+		$variableId = @IPS_GetObjectIDByName('TempDiffOpening',   $categoryIdTempProfile);  if ($variableId!==false) { IPS_DeleteVariable($variableId); }
+	}
+	$profileId = GetValue($ControlIdProfileTempSelect);
+	$profile   = new IPSShadowing_ProfileTemp($profileId);
+	$profile->Display($CategoryIdProfileTempDisplay);
+	$linkId = @IPS_GetObjectIDByName('Differenz Beschattung', $CategoryIdProfileTempDisplay); if ($linkId!==false) { IPS_DeleteLink($linkId); }
+	$linkId = @IPS_GetObjectIDByName('Differenz Abdunkelung', $CategoryIdProfileTempDisplay); if ($linkId!==false) { IPS_DeleteLink($linkId); }
+	$linkId = @IPS_GetObjectIDByName('Differenz Öffnen',      $CategoryIdProfileTempDisplay); if ($linkId!==false) { IPS_DeleteLink($linkId); }
+	@IPS_DeleteVariableProfile('IPSShadowing_TempDiffShadowing');
+	@IPS_DeleteVariableProfile('IPSShadowing_TempDiffClosing');
+	@IPS_DeleteVariableProfile('IPSShadowing_TempDiffOpening');
+	//--Migration v2.50.2 --> 2.50.3
 
 	// Scenario Manager
 	// ====================================================================================================================================
@@ -407,6 +449,7 @@
 		$ControlIdPosition         = CreateVariable(c_Control_Position,       1 /*Integer*/, $DeviceId,  90, 'IPSShadowing_Position',        null,                    0,       'Intensity');
 		$ControlIdManualChange     = CreateVariable(c_Control_ManualChange,   0 /*Boolean*/, $DeviceId, 110, '~Switch',                      $ScriptIdChangeSettings, false,   'Warning');
 		$ControlIdTempChange       = CreateVariable(c_Control_TempChange,     0 /*Boolean*/, $DeviceId, 120, '~Switch',                      null                   , false,   'Warning');
+		$ControlIdTempLastPos      = CreateVariable(c_Control_TempLastPos,    1 /*Integer*/, $DeviceId, 125, '',                             null                   , false,   'Information');
 		$ControlIdAutomatic        = CreateVariable(c_Control_Automatic ,     0 /*Boolean*/, $DeviceId, 130, '~Switch',                      $ScriptIdChangeSettings, false,   'Power');
 
 		$ControlIdTempProfile      = CreateVariable(c_Control_ProfileTemp,    1 /*Integer*/, $DeviceId, 330, 'IPSShadowing_ProfileTemp',     $ScriptIdChangeSettings, 0,       'Temperature');
@@ -555,7 +598,7 @@
 		$WebFrontScenariosIdTopL  = CreateCategory(  'TopLeft',  $WebFrontScenariosId, 10);
 		$WebFrontScenariosIdTopR  = CreateCategory(  'TopRight', $WebFrontScenariosId, 20);
 		$WebFrontScenariosIdBot   = CreateCategory(  'Bottom',   $WebFrontScenariosId, 30);
-		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Scenarios",    $WFC10_TabPaneItem, 30, 'Szenarien', 'Script', 0 /*Horizontal*/, 120 /*Hight*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
+		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Scenarios",    $WFC10_TabPaneItem, 30, 'Szenarien', 'Script', 0 /*Horizontal*/, 106 /*Hight*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_ScenariosTop", $WFC10_TabPaneItem."_Scenarios",    10, '', '', 1 /*Vertical*/, 300/*Width*/, 1 /*Target=Pane2*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_ScenariosBot", $WFC10_TabPaneItem."_Scenarios",    20, '', '', $CategoryIdScenarioDisplay /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_ScenariosTopL",$WFC10_TabPaneItem."_ScenariosTop", 10, '', '', $WebFrontScenariosIdTopL /*BaseId*/, 'false' /*BarBottomVisible*/);
@@ -588,29 +631,29 @@
 		$WebFrontProfilesId5BotR  = CreateCategory(    'BottomRight',   $WebFrontProfilesId5, 30);
 		CreateWFCItemTabPane   ($WFC10_ConfigId, $WFC10_TabPaneItem.'_Profiles', $WFC10_TabPaneItem, 40, 'Profile', 'Clock');
 
-		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles1",    $WFC10_TabPaneItem.'_Profiles',     10, 'Temperatur', 'Temperature', 0 /*Horizontal*/, 120 /*Hight*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
+		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles1",    $WFC10_TabPaneItem.'_Profiles',     10, 'Temperatur', 'Temperature', 0 /*Horizontal*/, 106 /*Hight*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles1Top", $WFC10_TabPaneItem."_Profiles1",    10, '', '', 1 /*Vertical*/, 300/*Width*/, 1 /*Target=Pane2*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles1Bot", $WFC10_TabPaneItem."_Profiles1",    20, '', '', $CategoryIdProfileTempDisplay /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles1TopL",$WFC10_TabPaneItem."_Profiles1Top", 10, '', '', $WebFrontProfilesId1TopL /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles1TopR",$WFC10_TabPaneItem."_Profiles1Top", 20, '', '', $WebFrontProfilesId1TopR /*BaseId*/, 'false' /*BarBottomVisible*/);
-		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles2",    $WFC10_TabPaneItem.'_Profiles',     20, 'Sonnenstand', 'Sun', 0 /*Horizontal*/, 120 /*Hight*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
+		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles2",    $WFC10_TabPaneItem.'_Profiles',     20, 'Sonnenstand', 'Sun', 0 /*Horizontal*/, 106 /*Hight*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles2Top", $WFC10_TabPaneItem."_Profiles2",    10, '', '', 1 /*Vertical*/, 300/*Width*/, 1 /*Target=Pane2*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles2Bot", $WFC10_TabPaneItem."_Profiles2",    20, '', '', 1 /*Vertical*/, 420/*Width*/, 1 /*Target=Pane2*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles2BotL",$WFC10_TabPaneItem."_Profiles2Bot", 10, '', '', $CategoryIdProfileSunDisplay /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles2BotR",$WFC10_TabPaneItem."_Profiles2Bot", 20, '', '', $CategoryIdProfileSunGraphs /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles2TopL",$WFC10_TabPaneItem."_Profiles2Top", 10, '', '', $WebFrontProfilesId2TopL /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles2TopR",$WFC10_TabPaneItem."_Profiles2Top", 20, '', '', $WebFrontProfilesId2TopR /*BaseId*/, 'false' /*BarBottomVisible*/);
-		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles3",    $WFC10_TabPaneItem.'_Profiles',     20, 'Wetter', 'Drops', 0 /*Horizontal*/, 120 /*Hight*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
+		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles3",    $WFC10_TabPaneItem.'_Profiles',     20, 'Wetter', 'Drops', 0 /*Horizontal*/, 106 /*Hight*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles3Top", $WFC10_TabPaneItem."_Profiles3",    10, '', '', 1 /*Vertical*/, 300/*Width*/, 1 /*Target=Pane2*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles3Bot", $WFC10_TabPaneItem."_Profiles3",    20, '', '', $CategoryIdProfileWeatherDisplay /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles3TopL",$WFC10_TabPaneItem."_Profiles3Top", 10, '', '', $WebFrontProfilesId3TopL /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles3TopR",$WFC10_TabPaneItem."_Profiles3Top", 20, '', '', $WebFrontProfilesId3TopR /*BaseId*/, 'false' /*BarBottomVisible*/);
-		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles4",    $WFC10_TabPaneItem.'_Profiles',     20, 'Tagesbeginn', 'Clock', 0 /*Horizontal*/, 120 /*Hight*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
+		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles4",    $WFC10_TabPaneItem.'_Profiles',     20, 'Tagesbeginn', 'Clock', 0 /*Horizontal*/, 106 /*Hight*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles4Top", $WFC10_TabPaneItem."_Profiles4",    10, '', '', 1 /*Vertical*/, 300/*Width*/, 1 /*Target=Pane2*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles4Bot", $WFC10_TabPaneItem."_Profiles4",    20, '', '', $CategoryIdProfileBgnOfDayDisplay /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles4TopL",$WFC10_TabPaneItem."_Profiles4Top", 10, '', '', $WebFrontProfilesId4TopL /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles4TopR",$WFC10_TabPaneItem."_Profiles4Top", 20, '', '', $WebFrontProfilesId4TopR /*BaseId*/, 'false' /*BarBottomVisible*/);
-		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles5",    $WFC10_TabPaneItem.'_Profiles',     30, 'Tagesende', 'Clock', 0 /*Horizontal*/, 120 /*Hight*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
+		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles5",    $WFC10_TabPaneItem.'_Profiles',     30, 'Tagesende', 'Clock', 0 /*Horizontal*/, 106 /*Hight*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles5Top", $WFC10_TabPaneItem."_Profiles5",    10, '', '', 1 /*Vertical*/, 300/*Width*/, 1 /*Target=Pane2*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles5Bot", $WFC10_TabPaneItem."_Profiles5",    20, '', '', $CategoryIdProfileEndOfDayDisplay /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles5TopL",$WFC10_TabPaneItem."_Profiles5Top", 10, '', '', $WebFrontProfilesId5TopL /*BaseId*/, 'false' /*BarBottomVisible*/);
