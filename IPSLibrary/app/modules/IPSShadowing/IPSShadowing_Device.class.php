@@ -204,6 +204,12 @@
 				case c_ProgramId_75:
 					$DoBeMoved = c_MovementId_75;
 					break;
+				case c_ProgramId_50:
+					$DoBeMoved = c_MovementId_50;
+					break;
+				case c_ProgramId_25:
+					$DoBeMoved = c_MovementId_25;
+					break;
 				case c_ProgramId_Dimout:
 					$DoBeMoved = c_MovementId_Dimout;
 					break;
@@ -219,8 +225,9 @@
 					break;
 				case c_ProgramId_LastPosition:
 					$DoBeMoved = $this->GetVariableValue(c_Control_TempLastPos);
+					break;
 				default:
-					IPSLogger_Err(__file__, "Unknown Program $Program, DeviceId=".$this->DeviceId);
+					IPSLogger_Err(__file__, "Unknown ProgramId $ProgramId, DeviceId=".$this->DeviceId);
 					exit;
 			}
 			if ($DoBeMoved<>$MovementStatus) {
