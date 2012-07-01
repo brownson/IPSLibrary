@@ -238,7 +238,7 @@
 		private function GetMovementIdByPosition() {
 			$shadowingType     = $this->GetPropertyValue(c_Property_ShadowingType);
 			$currentMovementId = $this->GetVariableValue(c_Control_Movement);
-			$currentPosition   = $this->GetVariableValue(c_Control_TempChange, c_Control_Position);
+			$currentPosition   = $this->GetVariableValue(c_Control_Position);
 
 			if ($currentMovementId<>c_MovementId_Stop) {
 				$lastPosition = $currentMovementId;
