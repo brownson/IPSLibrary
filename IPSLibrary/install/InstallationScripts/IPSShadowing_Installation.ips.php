@@ -122,10 +122,6 @@
 	$ScriptIdProfileEndOfDayCreate  = IPS_GetScriptIDByName('IPSShadowing_ProfileEndOfDayCreate',  $CategoryIdApp);
 	$ScriptIdProfileEndOfDayDelete  = IPS_GetScriptIDByName('IPSShadowing_ProfileEndOfDayDelete',  $CategoryIdApp);
 
-	CreateTimer_OnceADay ('Reset', $ScriptIdResetTimer, 0, 5);
-	CreateTimer_CyclicBySeconds ('Refresh', $ScriptIdRefreshTimer, 1, false);
-	CreateTimer_CyclicByMinutes ('Program', $ScriptIdProgramTimer, 5);
-
 	// Create Circles and Controls
 	// ----------------------------------------------------------------------------------------------------------------------------
 	$IPSShadowing_ProgNigJal = array(
@@ -349,6 +345,33 @@
 	$CategoryIdProfileSunGraphs       = CreateCategory('GraphsSun', $CategoryIdProfileManager, 200);
 	$MediaIdAzimuth                   = CreateMedia ('Sonnenstand', $CategoryIdProfileSunGraphs, IPS_GetKernelDir().'media\\IPSShadowing_Azimuth.gif', false, 1, 'Sun');
 
+	//++Migration v2.50.2 --> 2.50.3
+	$categoryIdTempProfiles      = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSShadowing.Profiles.Temp');
+	$categoryIdListTempProfiles  = IPS_GetChildrenIDs($categoryIdTempProfiles);
+	foreach ($categoryIdListTempProfiles as $categoryIdTempProfile) {
+		CreateVariable(c_Control_TempLevelOutShadow, 1 /*Integer*/,  $categoryIdTempProfile, 10, 'IPSShadowing_TempLevelOutShadow', $ScriptIdChangeSettings, c_TempLevel_Ignore, 'Temperature');
+		CreateVariable(c_Control_TempLevelInShadow,  1 /*Integer*/,  $categoryIdTempProfile, 20, 'IPSShadowing_TempLevelInShadow',  $ScriptIdChangeSettings, c_TempLevel_Ignore, 'Temperature');
+		CreateVariable(c_Control_TempLevelOutClose,  1 /*Integer*/,  $categoryIdTempProfile, 30, 'IPSShadowing_TempLevelOutClose',  $ScriptIdChangeSettings, c_TempLevel_Ignore, 'Temperature');
+		CreateVariable(c_Control_TempLevelInClose,   1 /*Integer*/,  $categoryIdTempProfile, 40, 'IPSShadowing_TempLevelInClose',   $ScriptIdChangeSettings, c_TempLevel_Ignore, 'Temperature');
+		CreateVariable(c_Control_TempLevelOutOpen,   1 /*Integer*/,  $categoryIdTempProfile, 50, 'IPSShadowing_TempLevelOutOpen',   $ScriptIdChangeSettings, c_TempLevel_Ignore, 'Temperature');
+		CreateVariable(c_Control_TempLevelInOpen,    1 /*Integer*/,  $categoryIdTempProfile, 60, 'IPSShadowing_TempLevelInOpen',    $ScriptIdChangeSettings, c_TempLevel_Ignore, 'Temperature');
+		$variableId = @IPS_GetObjectIDByName('TempDiffClosing',   $categoryIdTempProfile);  if ($variableId!==false) { IPS_DeleteVariable($variableId); }
+		$variableId = @IPS_GetObjectIDByName('TempDiffShadowing', $categoryIdTempProfile);  if ($variableId!==false) { IPS_DeleteVariable($variableId); }
+		$variableId = @IPS_GetObjectIDByName('TempDiffOpening',   $categoryIdTempProfile);  if ($variableId!==false) { IPS_DeleteVariable($variableId); }
+	}
+	$linkId = @IPS_GetObjectIDByName('Differenz Beschattung', $CategoryIdProfileTempDisplay); if ($linkId!==false) { IPS_DeleteLink($linkId); }
+	$linkId = @IPS_GetObjectIDByName('Differenz Abdunkelung', $CategoryIdProfileTempDisplay); if ($linkId!==false) { IPS_DeleteLink($linkId); }
+	$linkId = @IPS_GetObjectIDByName('Differenz Öffnen',      $CategoryIdProfileTempDisplay); if ($linkId!==false) { IPS_DeleteLink($linkId); }
+	@IPS_DeleteVariableProfile('IPSShadowing_TempDiffShadowing');
+	@IPS_DeleteVariableProfile('IPSShadowing_TempDiffClosing');
+	@IPS_DeleteVariableProfile('IPSShadowing_TempDiffOpening');
+	$profileId = GetValue($ControlIdProfileTempSelect);
+	if ($profileId<>0) {
+		$profile   = new IPSShadowing_ProfileTemp($profileId);
+		$profile->Display($CategoryIdProfileTempDisplay);
+	}
+	//--Migration v2.50.2 --> 2.50.3
+
 	$profileManager = new IPSShadowing_ProfileManager();
 	$profileManager->AssignAllProfileAssociations();
 
@@ -372,31 +395,6 @@
 	if (count($Profiles)==0) {
 		$profileManager->CreateEndOfDay('Dämmerung');
 	}
-	//++Migration v2.50.2 --> 2.50.3
-	$categoryIdTempProfiles      = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSShadowing.Profiles.Temp');
-	$categoryIdListTempProfiles  = IPS_GetChildrenIDs($categoryIdTempProfiles);
-	foreach ($categoryIdListTempProfiles as $categoryIdTempProfile) {
-		CreateVariable(c_Control_TempLevelOutShadow, 1 /*Integer*/,  $categoryIdTempProfile, 10, 'IPSShadowing_TempLevelOutShadow', $ScriptIdChangeSettings, c_TempLevel_Ignore, 'Temperature');
-		CreateVariable(c_Control_TempLevelInShadow,  1 /*Integer*/,  $categoryIdTempProfile, 20, 'IPSShadowing_TempLevelInShadow',  $ScriptIdChangeSettings, c_TempLevel_Ignore, 'Temperature');
-		CreateVariable(c_Control_TempLevelOutClose,  1 /*Integer*/,  $categoryIdTempProfile, 30, 'IPSShadowing_TempLevelOutClose',  $ScriptIdChangeSettings, c_TempLevel_Ignore, 'Temperature');
-		CreateVariable(c_Control_TempLevelInClose,   1 /*Integer*/,  $categoryIdTempProfile, 40, 'IPSShadowing_TempLevelInClose',   $ScriptIdChangeSettings, c_TempLevel_Ignore, 'Temperature');
-		CreateVariable(c_Control_TempLevelOutOpen,   1 /*Integer*/,  $categoryIdTempProfile, 50, 'IPSShadowing_TempLevelOutOpen',   $ScriptIdChangeSettings, c_TempLevel_Ignore, 'Temperature');
-		CreateVariable(c_Control_TempLevelInOpen,    1 /*Integer*/,  $categoryIdTempProfile, 60, 'IPSShadowing_TempLevelInOpen',    $ScriptIdChangeSettings, c_TempLevel_Ignore, 'Temperature');
-		$variableId = @IPS_GetObjectIDByName('TempDiffClosing',   $categoryIdTempProfile);  if ($variableId!==false) { IPS_DeleteVariable($variableId); }
-		$variableId = @IPS_GetObjectIDByName('TempDiffShadowing', $categoryIdTempProfile);  if ($variableId!==false) { IPS_DeleteVariable($variableId); }
-		$variableId = @IPS_GetObjectIDByName('TempDiffOpening',   $categoryIdTempProfile);  if ($variableId!==false) { IPS_DeleteVariable($variableId); }
-	}
-	$profileId = GetValue($ControlIdProfileTempSelect);
-	$profile   = new IPSShadowing_ProfileTemp($profileId);
-	$profile->Display($CategoryIdProfileTempDisplay);
-	$linkId = @IPS_GetObjectIDByName('Differenz Beschattung', $CategoryIdProfileTempDisplay); if ($linkId!==false) { IPS_DeleteLink($linkId); }
-	$linkId = @IPS_GetObjectIDByName('Differenz Abdunkelung', $CategoryIdProfileTempDisplay); if ($linkId!==false) { IPS_DeleteLink($linkId); }
-	$linkId = @IPS_GetObjectIDByName('Differenz Öffnen',      $CategoryIdProfileTempDisplay); if ($linkId!==false) { IPS_DeleteLink($linkId); }
-	@IPS_DeleteVariableProfile('IPSShadowing_TempDiffShadowing');
-	@IPS_DeleteVariableProfile('IPSShadowing_TempDiffClosing');
-	@IPS_DeleteVariableProfile('IPSShadowing_TempDiffOpening');
-	//--Migration v2.50.2 --> 2.50.3
-
 	// Scenario Manager
 	// ====================================================================================================================================
 	$CategoryIdScenarios = CreateCategory('Scenarios', $CategoryIdData, 40);
@@ -483,6 +481,8 @@
 		}
 		$Idx = $Idx  + 10;
 	}
+	$profileManager = new IPSShadowing_ProfileManager();
+	$profileManager->AssignAllProfileAssociations();
 	$profileManager->CorrectDeletedDeviceProfiles();
 
 	// Register Events for Device Synchronization
@@ -509,6 +509,9 @@
 		}
 	}
 
+	CreateTimer_OnceADay ('Reset', $ScriptIdResetTimer, 0, 5);
+	CreateTimer_CyclicBySeconds ('Refresh', $ScriptIdRefreshTimer, 1, false);
+	CreateTimer_CyclicByMinutes ('Program', $ScriptIdProgramTimer, 5);
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 	// Webfront Definition
