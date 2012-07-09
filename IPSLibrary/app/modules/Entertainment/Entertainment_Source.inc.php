@@ -108,12 +108,14 @@
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function Entertainment_SetSource($SourceId, $Value, $MessageType=c_MessageType_Action) {
-	   if (GetValue($SourceId) <> $Value) {
+        $RoomId = IPS_GetParent($SourceId);
+		$IsRoomPoweredOn = IsRoomPoweredOn($RoomId);
+	    if (GetValue($SourceId) <> $Value || !$IsRoomPoweredOn) {
 		   $RoomId = IPS_GetParent($SourceId);
 		   $SourceName = get_SourceName($RoomId, $Value);
 		   IPSLogger_Inf(__file__, 'Set Source "'.$SourceName.'" of Room '.IPS_GetName($RoomId));
 			SetValue($SourceId, $Value);
-			if (!IsRoomPoweredOn($RoomId)) {
+			if (!$IsRoomPoweredOn) {
 				Entertainment_SetRoomPowerByRoomId($RoomId, true, false);
 			}
 			Entertainment_SetDeviceControlByRoomId($RoomId, c_Control_Muting, false);
