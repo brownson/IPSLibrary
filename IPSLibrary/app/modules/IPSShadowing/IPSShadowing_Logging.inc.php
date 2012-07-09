@@ -37,6 +37,10 @@
 			$Message = "Abdunkelung";
 		} elseif ($ToBeMoved==c_MovementId_Closed) {
 			$Message = "Geschlossen";
+		} elseif ($ToBeMoved==c_MovementId_25) {
+			$Message = "25%";
+		} elseif ($ToBeMoved==c_MovementId_50) {
+			$Message = "50%";
 		} elseif ($ToBeMoved==c_MovementId_75) {
 			$Message = "75%";
 		} elseif ($ToBeMoved==c_MovementId_90) {
@@ -74,11 +78,14 @@
 			c_ProgramId_Closed					=> c_Program_Closed,
 			c_ProgramId_90						=> c_Program_90,
 			c_ProgramId_75						=> c_Program_75,
+			c_ProgramId_50						=> c_Program_50,
+			c_ProgramId_25						=> c_Program_25,
 			c_ProgramId_MovedOut				=> c_Program_MovedOut,
 			c_ProgramId_MovedOutTemp			=> c_Program_MovedOutTemp,
 			c_ProgramId_Dimout					=> c_Program_Dimout,
 			c_ProgramId_DimoutOrShadowing		=> c_Program_DimoutOrShadowing,
-			c_ProgramId_DimoutAndShadowing		=> c_Program_DimoutAndShadowing
+			c_ProgramId_DimoutAndShadowing		=> c_Program_DimoutAndShadowing,
+			c_ProgramId_LastPosition			=> c_Program_LastPosition
 		);
 
 		return $ProgramList[$ProgramId];
