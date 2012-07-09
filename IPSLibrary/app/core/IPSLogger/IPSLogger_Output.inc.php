@@ -270,11 +270,11 @@
 	}
 	
 	// ----------------------------------------------------------------------------------------------------------------------------
-	function IPSLogger_OutProgram($Msg, $HtmlId, $LogId, $MsgCount) {
+	function IPSLogger_OutProgram($Msg, $HtmlId, $LogId, $MsgCount, $FontSize=10) {
 			$Msg          = htmlentities($Msg, ENT_COMPAT, 'ISO-8859-1');
 			$Msg          = str_replace("\n", "<BR>", $Msg);
 			$MsgList      = GetValue($HtmlId);
-			$TablePrefix  = '<table width="100%" style="font-family:courier; font-size:10px;">';
+			$TablePrefix  = '<table width="100%" style="font-family:courier; font-size:'.$FontSize.'px;">';
 			$CurrentMsgId = GetValue($LogId)+1;
 			SetValue($LogId, $CurrentMsgId);
 
@@ -288,7 +288,7 @@
 			if (strpos($MsgList, '</table>') === false) {
 				$MsgList = "";
 			} else {
-				$StrTmp      = '<tr id="'.($CurrentMsgId-c_LogMessage_Count+1).'"';
+				$StrTmp      = '<tr id="'.($CurrentMsgId-$MsgCount+1).'"';
 				if (strpos($MsgList, $StrTmp)===false) {
 					$StrPos = strlen($TablePrefix);
 				} else {
