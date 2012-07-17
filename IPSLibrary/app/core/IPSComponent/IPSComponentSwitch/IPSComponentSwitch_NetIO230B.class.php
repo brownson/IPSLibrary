@@ -32,7 +32,7 @@
          *
          * Initialisierung eines IPSComponentSwitch_NetIO230B Objektes
          *
-         * @param integer $instanceId InstanceId des NetIO230B Devices
+         * @param integer $instanceId InstanceId des NetIO230B Ports
          */
         public function __construct($instanceId) {
             $this->instanceId = IPSUtil_ObjectIDByPath($instanceId);
@@ -59,7 +59,7 @@
          * @param boolean $value Wert für Schalter
          */
         public function SetState($value) {
-            NetIO_setPortStatus($this->instanceId, $value);
+            NetIO230B::getInstanceFromPortIdAndSetStatus($this->instanceId, $value);
         }
 
         /**
@@ -72,7 +72,6 @@
         public function GetState() {
             return GetValue($this->instanceId);
         }
-
     }
 
     /** @}*/
