@@ -1,5 +1,15 @@
 <?
-
+    /**@addtogroup hardware
+     * @{
+     *
+     * @file          FritzBox_Status.inc.php
+     * @author        Dominik Zeiger
+     * @version
+     * Version 2.50.1, 30.05.2012<br/>
+     *
+     * Parse status responses from FritzBox devices and store them in IPS
+     */
+    
     IPSUtils_Include ('IPSLogger.inc.php',      'IPSLibrary::app::core::IPSLogger');
     IPSUtils_Include ('IPSInstaller.inc.php',      'IPSLibrary::install::IPSInstaller');
     IPSUtils_Include ('FritzBox.inc.php',      'IPSLibrary::app::hardware::FritzBox');
@@ -146,7 +156,7 @@
                 } else if($nodeName == "Slot") {
                     $var = copyVar($childNode, $nodeName, $instanceId, 1, $position);
                 } else if($nodeName == "Encryption" || $nodeName == "NoEmission" || $nodeName == "Subscribed") {
-                    $var = copyVar($childNode, $nodeName, $instanceId, 0, $position);
+                    $var = copyVar($childNode, $nodeName, $instanceId, 0, $position, "~Switch");
                 } else {
                     $var = copyVar($childNode, $nodeName, $instanceId, 3, $position);
                 }

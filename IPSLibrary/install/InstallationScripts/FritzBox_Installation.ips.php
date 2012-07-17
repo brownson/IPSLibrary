@@ -136,18 +136,20 @@
     // ----------------------------------------------------------------------------------------------------------------------------
     if ($WFC10_Enabled) {
         $ID_CategoryWebFront        = CreateCategoryPath($WFC10_Path);
-        $ID_CategoryOutput          = CreateCategory('FritzBox',    $ID_CategoryWebFront, 10);
-        $ID_CategoryLeft            = CreateCategory('Left',      $ID_CategoryOutput,         100);
-        $ID_CategoryRight           = CreateCategory('Right',        $ID_CategoryOutput,  10);
+        EmptyCategory($ID_CategoryWebFront);
+        $ID_CategoryOutput          = CreateCategory('FritzBox', $ID_CategoryWebFront, 10);
+        $ID_CategoryLeft            = CreateCategory('Left',     $ID_CategoryOutput, 10);
+        $ID_CategoryRight           = CreateCategory('Right',    $ID_CategoryOutput, 20);
 
         $UniqueId = date('Hi');
-        DeleteWFCItems($WFC10_ConfigId, 'SystemTP_FritzBox');
-        DeleteWFCItems($WFC10_ConfigId, $WFC10_TabPaneItem.'_OvSP');
+        $baseName = $WFC10_TabPaneItem.'_'.$WFC10_TabPaneName;
+        DeleteWFCItems($WFC10_ConfigId, $baseName);
+        DeleteWFCItems($WFC10_ConfigId, $baseName.'_OvSP');
         
-        CreateWFCItemTabPane   ($WFC10_ConfigId, $WFC10_TabPaneItem,                          $WFC10_TabPaneParent,         $WFC10_TabPaneOrder, $WFC10_TabPaneName, $WFC10_TabPaneIcon);
-        CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OvSP',              $WFC10_TabPaneItem,              0, $WFC10_TabName1, $WFC10_TabIcon1, 1 /*Vertical*/, 50 /*Width*/, 0 /*Target=Pane1*/, 0 /*Percent*/, 'true');
-        CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OvCatLeft'.$UniqueId,   $WFC10_TabPaneItem.'_OvSP',  $WFC10_TabOrder1, $WFC10_TabName1, $WFC10_TabIcon1, $ID_CategoryLeft /*BaseId*/, 'false' /*BarBottomVisible*/);
-        CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OvCatRight.'.$UniqueId,   $WFC10_TabPaneItem.'_OvSP', $WFC10_TabOrder1, $WFC10_TabName1, $WFC10_TabIcon1, $ID_CategoryRight /*BaseId*/, 'false' /*BarBottomVisible*/);
+        CreateWFCItemTabPane   ($WFC10_ConfigId, $baseName,                          $WFC10_TabPaneItem,         $WFC10_TabPaneOrder, $WFC10_TabPaneName, $WFC10_TabPaneIcon);
+        CreateWFCItemSplitPane ($WFC10_ConfigId, $baseName.'_OvSP',                  $baseName, 0, $WFC10_TabName1, $WFC10_TabIcon1, 1 /*Vertical*/, 50 /*Width*/, 0 /*Target=Pane1*/, 0 /*Percent*/, 'true');
+        CreateWFCItemCategory  ($WFC10_ConfigId, $baseName.'_OvCatLeft'.$UniqueId,   $baseName.'_OvSP', $WFC10_TabOrder1, $WFC10_TabName1, $WFC10_TabIcon1, $ID_CategoryLeft /*BaseId*/, 'false' /*BarBottomVisible*/);
+        CreateWFCItemCategory  ($WFC10_ConfigId, $baseName.'_OvCatRight'.$UniqueId, $baseName.'_OvSP', $WFC10_TabOrder1, $WFC10_TabName1, $WFC10_TabIcon1, $ID_CategoryRight /*BaseId*/, 'false' /*BarBottomVisible*/);
         
         $count = count($devices);
         if($count == 1) {
@@ -155,14 +157,20 @@
                 CreateLink($device[DEVICE_IP]." - Receive", $device["RECEIVE_ID"], $ID_CategoryLeft, 10);
                 CreateLink($device[DEVICE_IP]." - Send", $device["SEND_ID"], $ID_CategoryLeft, 10);
             }
-            CreateLink($device[DEVICE_IP]." - DECT Status", $device["DECT_ID"], $ID_CategoryRight, 50);
+            // Dect Status
+            $dectChildren = IPS_GetChildrenIDs($device["DECT_ID"]);
+            $i = 0;
+            foreach($dectChildren as $dectChild) {
+                $dectName = GetValueString(IPS_GetObjectIDByName("Name", $dectChild));
+                CreateLink($device[DEVICE_IP]." - ".$dectName, $dectChild, $ID_CategoryRight, $i++);
+            }
         } else {
             // TODO: create categories?
             foreach($devices as $device) {
                 CreateLink($device[DEVICE_IP]." - Receive", $device["RECEIVE_ID"], $ID_CategoryLeft, 10);
                 CreateLink($device[DEVICE_IP]." - Send", $device["SEND_ID"], $ID_CategoryLeft, 10);
             }
-            CreateLink($device[DEVICE_IP]." - DECT Status", $device["DECT_ID"], $ID_CategoryRight, 50);
+            //CreateLink($device[DEVICE_IP]." - DECT Status", $device["DECT_ID"], $ID_CategoryRight, 50);
         }
 
         ReloadAllWebFronts();

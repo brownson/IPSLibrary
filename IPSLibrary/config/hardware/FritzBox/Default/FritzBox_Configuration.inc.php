@@ -14,7 +14,7 @@
         return array(
             c_FritzBox_1 => array(
                 DEVICE_IP       => "192.168.178.1",
-                DEVICE_PASSWORD => "ama1Vane",
+                DEVICE_PASSWORD => "testpass",
             )
         );
     }
