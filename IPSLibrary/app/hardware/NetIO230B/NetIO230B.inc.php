@@ -3,7 +3,7 @@
     /**@addtogroup hardware
      * @{
      *
-     * @file          26576.inc.php
+     * @file          NetIO230B.inc.php
      * @author        Dominik Zeiger
      * @version
      * Version 2.50.1, 13.07.2012<br/>
