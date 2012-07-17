@@ -58,25 +58,25 @@
         $ipClean = str_replace(".", "", $ip);
         $deviceName = "NetIO230B".$ipClean;
         
-        // client socket instanz erstellen
-        $socketId = IPS_CreateInstance("{3CFF0FD9-E306-41DB-9B5A-9D06D38576C3}");
-        IPS_SetName($socketId, $deviceName);
-        CSCK_SetHost($socketId, $ip);
-        CSCK_SetPort($socketId, 1234);
-        IPS_ApplyChanges($socketId);
-        
-        $regVarId = CreateRegisterVariable($deviceName, $CategoryIdData, $ID_ScriptNetIO230BInterface);
-        IPS_ApplyChanges($regVarId);
-        if($socketId) {
-            IPS_ConnectInstance($regVarId, $socketId);
+        $socketId = @IPS_GetObjectIDByName($deviceName, 0);
+        if($socketId == false) {
+            // client socket instanz erstellen
+            $socketId = IPS_CreateInstance("{3CFF0FD9-E306-41DB-9B5A-9D06D38576C3}");
+            IPS_SetName($socketId, $deviceName);
+            CSCK_SetHost($socketId, $ip);
+            CSCK_SetPort($socketId, 1234);
+            CSCK_SetOpen($socketId, true);
+            IPS_ApplyChanges($socketId);
         }
+        
+        $regVarId = CreateRegisterVariable($deviceName, $CategoryIdData, $ID_ScriptNetIO230BInterface, $socketId);
         
         // create settings
         $settingsID = CreateDummyInstance(v_NETIO_SETTINGS, $regVarId, 1);
         $Order = 10;
-        CreateVariable(v_USERNAME, 3 /*String*/, $settingsID, $Order++, "");
-        CreateVariable(v_PASSWORD, 3 /*String*/, $settingsID, $Order++, "");
-        CreateVariable(v_IP, 3 /*String*/, $settingsID, $Order++, "");
+        CreateVariable(v_USERNAME, 3 /*String*/, $settingsID, $Order++, "", null, $username);
+        CreateVariable(v_PASSWORD, 3 /*String*/, $settingsID, $Order++, "", null, $password);
+        CreateVariable(v_IP, 3 /*String*/, $settingsID, $Order++, "", null, $ip);
         
         // Setup regular status updates
         //CreateTimer_CyclicBySeconds ('NetIO230B_GetStatus', $ID_ScriptNetIO230BInterface, 45);
@@ -87,7 +87,7 @@
         IPS_SetPosition($TimerID, $Order++);
         
         $Order = 10;
-        CreateVariable(v_NETIO_LAST_ACTION, 1 /*Integer*/, $regVarId, $Order, "");
+        CreateVariable(v_NETIO_LAST_ACTION, 1 /*Integer*/, $regVarId, $Order, "", null, 0);
         
         // create the port variables
         $Order = 20;
