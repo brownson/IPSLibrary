@@ -94,7 +94,7 @@
 		// Wetter für Niederösterreich von ORF auslesen
 		$lHTML=file_get_contents(IPSWEATHERFAT_ORF_URL);
 
-		$forcast = ExtractData($lHTML, '<div class="fulltextWrapper" role="article">', '<div class="webcamLinks">', true, false);
+		$forcast = ExtractData($lHTML, '<div class="fulltextWrapper" role="article">', '<div class="webcamLinks', true, false);
 		$forcastToday = '<h2>'.ExtractData($forcast, '<h2>', '</h2>').'</h2>'.ExtractData($forcast, '<p>', '</p>', false, false);
 
 		$forcast = ExtractData($forcast, '</p>', '<div class="webcamLinks">', true, false);
