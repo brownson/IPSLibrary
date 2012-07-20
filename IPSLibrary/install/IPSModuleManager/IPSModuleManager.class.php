@@ -558,9 +558,11 @@
 						default:
 						   die('Unknown fileTypeSection '.$fileTypeSection);
 					}
+					$pathPrefix       = substr($fullScriptName, 0, 2);
+					$fullScriptName   = substr($fullScriptName, 2);
 				   $fullScriptName   = str_replace('::', '\\', $fullScriptName);
 				   $fullScriptName   = str_replace('\\\\', '\\', $fullScriptName);
-
+               $fullScriptName   = $pathPrefix.$fullScriptName;
 				   $resultList[] = $fullScriptName;
 				}
 			}
