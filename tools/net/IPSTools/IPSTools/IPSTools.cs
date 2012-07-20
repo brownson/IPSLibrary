@@ -37,7 +37,7 @@ namespace BrownsonTool
         public IPSTools()
         {
             InitializeComponent();
-            tcpServer = new TcpServer((int)tcpPort.Value, this.Handle, this.notifyIcon);
+            tcpServer = new TcpServer((int)tcpPort.Value, this.Handle);
             tcpServer.AutoSendInterval = (int)autoSendInterval.Value;
             tcpServer.AutoSendIdle = autoSendIdle.Checked;
             if (checkBox_AutoStart.Checked)

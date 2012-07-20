@@ -18,3 +18,8 @@ C:\ab\IPS\Projects.Net\_Development\IP-SymconTools\IPSToolsLibrary\bin\Debug\IPS
 C:\ab\IPS\Projects.Net\_Development\IP-SymconTools\IPSToolsLibrary\obj\Debug\ResolveAssemblyReference.cache
 C:\ab\IPS\Projects.Net\_Development\IP-SymconTools\IPSToolsLibrary\obj\Debug\IPSToolLibrary.dll
 C:\ab\IPS\Projects.Net\_Development\IP-SymconTools\IPSToolsLibrary\obj\Debug\IPSToolLibrary.pdb
+C:\ab\IPS\GIT\IPSLibrary\tools\net\IPSTools\IPSToolsLibrary\bin\Debug\IPSToolLibrary.dll
+C:\ab\IPS\GIT\IPSLibrary\tools\net\IPSTools\IPSToolsLibrary\bin\Debug\IPSToolLibrary.pdb
+C:\ab\IPS\GIT\IPSLibrary\tools\net\IPSTools\IPSToolsLibrary\obj\Debug\ResolveAssemblyReference.cache
+C:\ab\IPS\GIT\IPSLibrary\tools\net\IPSTools\IPSToolsLibrary\obj\Debug\IPSToolLibrary.dll
+C:\ab\IPS\GIT\IPSLibrary\tools\net\IPSTools\IPSToolsLibrary\obj\Debug\IPSToolLibrary.pdb

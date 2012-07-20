@@ -1,21 +1,4 @@
-﻿/**
- * This file is part of the IPSLibrary.
- *
- * The IPSLibrary is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published
- * by the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * The IPSLibrary is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with the IPSLibrary. If not, see http://www.gnu.org/licenses/gpl.txt.
- */
- 
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -39,6 +22,31 @@ namespace IPSToolLibrary
         [DllImport("user32.dll")]
         private static extern int ShowWindow(int hwnd, int command);
 
+
+
+        [DllImport("user32.dll")]
+        private static extern bool SystemParametersInfo(int uAction, int uParam, ref bool lpvParam, int flags);
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr OpenDesktop(string hDesktop, int Flags, bool Inherit, uint DesiredAccess);
+
+        [DllImport("user32.dll")]
+        private static extern bool CloseDesktop(IntPtr hDesktop);
+
+        [DllImport("user32.dll")]
+        private static extern bool EnumDesktopWindows(IntPtr hDesktop, EnumDesktopWindowsProc callback, IntPtr lParam);
+
+        [DllImport("user32.dll")]
+        private static extern bool IsWindowVisible(IntPtr hWnd);
+        
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        private static extern int PostMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
+
+        private delegate bool EnumDesktopWindowsProc(IntPtr hDesktop, IntPtr lParam);
+
         private const int WM_SYSCOMMAND = 0x0112;
 
         private const int SC_SCREENSAVER = 0xF140;
@@ -50,6 +58,12 @@ namespace IPSToolLibrary
 
         private const int TASKBAR_HIDE = 0;
         private const int TASKBAR_SHOW = 1;
+
+        private const int SPI_GETSCREENSAVERRUNNING = 114;
+        private const uint DESKTOP_WRITEOBJECTS = 0x0080;
+        private const uint DESKTOP_READOBJECTS = 0x0001;
+        private const int WM_CLOSE = 16;
+
 
         private IntPtr handle;
 
@@ -63,6 +77,34 @@ namespace IPSToolLibrary
             SendMessage(GetDesktopWindow(), WM_SYSCOMMAND, SC_SCREENSAVER, 0);
         }
 
+        public void StopScreenSaver()
+        {
+            bool isActive = false;
+            SystemParametersInfo(SPI_GETSCREENSAVERRUNNING, 0, ref isActive, 0);
+            if (isActive)
+            {
+                IntPtr hDesktop = OpenDesktop("Screen-saver", 0, false, DESKTOP_READOBJECTS | DESKTOP_WRITEOBJECTS);
+                if (hDesktop != IntPtr.Zero)
+                {
+                    EnumDesktopWindows(hDesktop, new EnumDesktopWindowsProc(KillScreenSaverFunc), IntPtr.Zero);
+                    CloseDesktop(hDesktop);
+
+                }
+                else
+                {
+                    PostMessage(GetForegroundWindow(), WM_CLOSE, 0, 0);
+
+                }
+            }
+        }
+
+        private static bool KillScreenSaverFunc(IntPtr hWnd, IntPtr lParam)
+        {
+            if (IsWindowVisible(hWnd)) PostMessage(hWnd, WM_CLOSE, 0, 0);
+            return true;
+        }
+
+        
         public void ScreenPowerOff()
         {
             SendMessage(handle, WM_SYSCOMMAND, SC_MONITORPOWER, MONITOR_OFF);
@@ -72,24 +114,5 @@ namespace IPSToolLibrary
         {
             SendMessage(handle, WM_SYSCOMMAND, SC_MONITORPOWER, MONITOR_ON);
         }
-
-        public void WindowsTaskBarVisible(bool isVisible)
-        {
-            //try
-            //{
-                int hWnd = FindWindow("Shell_traywnd", "");
-                if (isVisible)
-                {
-                    ShowWindow(hWnd, TASKBAR_SHOW);
-                }
-                else
-                {
-                    ShowWindow(hWnd, TASKBAR_HIDE);
-                }
-            //}
-            //catch (Win32Exception ex)  {  }
-
-        }
-
     }
 }

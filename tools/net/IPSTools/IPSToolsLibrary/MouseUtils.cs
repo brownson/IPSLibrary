@@ -65,6 +65,11 @@ namespace IPSToolLibrary
             return Cursor.Position;
         }
 
+        public static void SetMousePosition(int x, int y)
+        {
+            Cursor.Position = new Point(x, y);
+        }
+
         public int GetMouseIdleSince()
         {
             return mouseIdleSince;

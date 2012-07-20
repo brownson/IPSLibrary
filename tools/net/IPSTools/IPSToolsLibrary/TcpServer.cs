@@ -1,21 +1,4 @@
-﻿/**
- * This file is part of the IPSLibrary.
- *
- * The IPSLibrary is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published
- * by the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * The IPSLibrary is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with the IPSLibrary. If not, see http://www.gnu.org/licenses/gpl.txt.
- */    
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,6 +8,7 @@ using System.Net;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Diagnostics;
+
 
 namespace IPSToolLibrary
 {
@@ -41,7 +25,6 @@ namespace IPSToolLibrary
 
         private int tcpPort;
         private IntPtr guiHandle;
-        private NotifyIcon notifyIcon;
         private System.Windows.Forms.Timer autoSendTimer;
         private int autoSendInterval;
 
@@ -52,11 +35,10 @@ namespace IPSToolLibrary
             set { this.autoSendInterval = value; if (autoSendTimer != null) autoSendTimer.Interval = AutoSendInterval; }
         }
 
-        public TcpServer(int port, IntPtr guiHandle, NotifyIcon notifyIcon)
+        public TcpServer(int port, IntPtr guiHandle)
         {
             this.tcpPort = port;
             this.guiHandle = guiHandle;
-            this.notifyIcon = notifyIcon;
             this.clients = new List<TcpClient>();
             this.mouseUtils = new MouseUtils();
             this.monitorUtils = new MonitorUtils(guiHandle);
@@ -68,6 +50,9 @@ namespace IPSToolLibrary
             this.autoSendTimer.Tick += new EventHandler(SendTimedMessages);
             autoSendTimer.Enabled = true;
         }
+
+        public TcpServer(IntPtr guiHandle) : this(0, guiHandle) { }
+
 
         public int GetPort()
         {
@@ -198,17 +183,17 @@ namespace IPSToolLibrary
                     case "GetMousePosition":
                         outputString = string.Format("MousePosition;{0};{1}", MouseUtils.GetMousePosition().X.ToString(), MouseUtils.GetMousePosition().Y.ToString());
                         break;
+                    case "SetMousePosition":
+                        MouseUtils.SetMousePosition(int.Parse(inputParams[1]), int.Parse(inputParams[2]));
+                        break;
                     case "GetMouseIdleSince":
                         outputString = string.Format("MouseIdleSince;{0}", mouseUtils.GetMouseIdleSince());
                         break;
-                    case "CursorShow":
-                        MouseUtils.SetCursorVisible(true);
-                        break;
-                    case "CursorHide":
-                        MouseUtils.SetCursorVisible(false);
-                        break;
                     case "StartScreenSaver":
                         monitorUtils.StartScreenSaver();
+                        break;
+                    case "StopScreenSaver":
+                        monitorUtils.StopScreenSaver();
                         break;
                     case "ScreenPowerOff":
                         monitorUtils.ScreenPowerOff();
@@ -247,15 +232,10 @@ namespace IPSToolLibrary
                         Process.Start(inputParams[1], inputParams[2]);
                         outputString = string.Format("{0};{1};{2}", inputParams[0], inputParams[1], inputParams[2]);
                         break;
-                    case "NotifyInfo":
-                        notifyIcon.ShowBalloonTip(int.Parse(inputParams[1]), inputParams[2], inputParams[3],ToolTipIcon.Info);
-                        break;
                     case "TaskBarHide":
-                        //monitorUtils.WindowsTaskBarVisible(false);
                         Taskbar.Hide();
                         break;
                     case "TaskBarShow":
-                        //monitorUtils.WindowsTaskBarVisible(true);
                         Taskbar.Show();
                         break;
                     default:
