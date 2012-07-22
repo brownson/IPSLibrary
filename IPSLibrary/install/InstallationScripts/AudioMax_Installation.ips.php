@@ -153,7 +153,7 @@
 	$id_ScriptSettings        = IPS_GetScriptIDByName('AudioMax_ChangeSettings', $CategoryIdApp);
 	$id_ScriptKeepAlive       = IPS_GetScriptIDByName('AudioMax_KeepAlive',      $CategoryIdApp);
 
-	if (AM_CONFIG_COM_PORT) {
+	if (AM_CONFIG_COM_PORT<>'') {
 		$id_IOComPort   = CreateSerialPort('AudioMax_ComPort', AM_CONFIG_COM_PORT, 19200, 1, 8, 'None',0,$IgnoreIOPortInstanceError);
 		$id_Cutter      = CreateVariableCutter('AudioMax_Cutter', $id_IOComPort, '', chr(13));
 		$id_Register    = CreateRegisterVariable('AudioMax_Register', $CategoryIdHardware, $id_ScriptReceive, $id_Cutter);
@@ -185,7 +185,8 @@
 	$id_KeepAliveStatus  = CreateVariable(AM_VAR_KEEPALIVESTATUS, 0 /*Boolean*/, $id_AudioMaxServerId,  80, 'AudioMax_KeepAliveStatus', null,           true,  'Repeat');
 	$id_ModePowerRequest = CreateVariable(AM_VAR_MODEPOWERREQUEST,0 /*Boolean*/, $id_AudioMaxServerId,  90, '~Switch',               $id_ScriptSettings,true,  'Gear');
 	$id_ModeServerDebug  = CreateVariable(AM_VAR_MODESERVERDEBUG, 0 /*Boolean*/, $id_AudioMaxServerId, 100, '~Switch',               $id_ScriptSettings,true,  'Gear');
-	$id_ModeEmulateState = CreateVariable(AM_VAR_MODEEMULATESTATE,0 /*Boolean*/, $id_AudioMaxServerId, 100, '~Switch',               $id_ScriptSettings,true,  'Gear');
+	$id_ModeEmulateState = CreateVariable(AM_VAR_MODEEMULATESTATE,0 /*Boolean*/, $id_AudioMaxServerId, 110, '~Switch',               $id_ScriptSettings,true,  'Gear');
+	$id_ModeEmulateState = CreateVariable(AM_VAR_MODEACKNOWLEDGE, 0 /*Boolean*/, $id_AudioMaxServerId, 120, '~Switch',               $id_ScriptSettings,true,  'Gear');
 	$id_Port             = CreateVariable(AM_VAR_PORTID,          1 /*Integer*/, $id_AudioMaxServerId, 300, '',                      null,              0,     '');
 	$id_RoomIds          = CreateVariable(AM_VAR_ROOMIDS,         3 /*String*/,  $id_AudioMaxServerId, 310, '',                      null,              '',    '');
 	$id_RoomCount        = CreateVariable(AM_VAR_ROOMCOUNT,       1 /*Integer*/, $id_AudioMaxServerId, 320, '',                      null,              0,     '');

@@ -61,7 +61,7 @@
 	 * Ein- und Ausschalten eines einzelnen Raumes
 	 *
 	 * @param int $instanceId ID des AudioMax Servers
-    * @param int $roomId Raum der geändert werden soll (0-15)
+	 * @param int $roomId Raum der geändert werden soll (0-3)
 	 * @param string $value TRUE oder '1' für An, FALSE oder '0' für Aus
 	 * @return boolean Funktions Ergebnis, TRUE für OK, FALSE für Fehler
 	 */
@@ -74,7 +74,7 @@
 	 * Status Raumverstärker lesen
 	 *
 	 * @param int $instanceId ID des AudioMax Servers
-    * @param int $roomId Raum der geändert werden soll (0-15)
+	 * @param int $roomId Raum der ausgelesen werden soll (0-3)
 	 * @return boolean Status Raumverstärker
 	 */
 	function AudioMax_GetRoomPower($instanceId, $roomId) {
@@ -86,7 +86,7 @@
 	 * Auswahl des Eingangs, der für einen bestimmten Raum verwendet werden soll
 	 *
 	 * @param int $instanceId  ID des AudioMax Servers
-    * @param int $roomId Raum der geändert werden soll (0-15)
+	 * @param int $roomId Raum der geändert werden soll (0-3)
 	 * @param int $value Eingang (1-4)
 	 * @return boolean Funktions Ergebnis, TRUE für OK, FALSE für Fehler
 	 */
@@ -99,7 +99,7 @@
 	 * Eingangswahlschalter lesen
 	 *
 	 * @param int $instanceId  ID des AudioMax Servers
-    * @param int $roomId Raum der geändert werden soll (0-15)
+	 * @param int $roomId Raum der ausgelesen werden soll (0-3)
 	 * @return int Eingangswahl (1-4)
 	 */
 	function AudioMax_GetInputSelect($instanceId, $roomId) {
@@ -111,7 +111,7 @@
 	 * Eingangsverstärkung setzen
 	 *
 	 * @param int $instanceId  ID des AudioMax Servers
-    * @param int $roomId Raum der geändert werden soll (1-4)
+	 * @param int $roomId Raum der geändert werden soll (0-3)
 	 * @param int $value Verstärkung (0-15)
 	 * @return boolean Funktions Ergebnis, TRUE für OK, FALSE für Fehler
 	 */
@@ -124,7 +124,7 @@
 	 * Eingangsverstärkung lesen
 	 *
 	 * @param int $instanceId  ID des AudioMax Servers
-    * @param int $roomId Raum der geändert werden soll (1-4)
+	 * @param int $roomId Raum der ausgelesen werden soll (0-3)
 	 * @return int Verstärkung (0-15)
 	 */
 	function AudioMax_GetInputGain($instanceId, $roomId) {
@@ -136,20 +136,20 @@
 	 * Laustärke setzen
 	 *
 	 * @param int $instanceId  ID des AudioMax Servers
-    * @param int $roomId Raum der geändert werden soll (1-4)
+	 * @param int $roomId Raum der geändert werden soll (0-3)
 	 * @param int $value Lautstärke (0-40)
 	 * @return boolean Funktions Ergebnis, TRUE für OK, FALSE für Fehler
 	 */
 	function AudioMax_SetVolume($instanceId, $roomId, $value) {
 		$server = AudioMax_GetServer($instanceId);
-		return $server->SendData(AM_TYP_SET, AM_CMD_AUDIO, $roomId, AM_FNC_VOLUME, AM_VAL_VOLUME_MAX-$value);
+		return $server->SendData(AM_TYP_SET, AM_CMD_AUDIO, $roomId, AM_FNC_VOLUME, round(AM_VAL_VOLUME_MAX-$value));
 	}
 
 	/**
 	 * Laustärke lesen
 	 *
 	 * @param int $instanceId  ID des AudioMax Servers
-    * @param int $roomId Raum der geändert werden soll (1-4)
+	 * @param int $roomId Raum der ausgelesen werden soll (0-3)
 	 * @return int Lautstärke (0-40)
 	 */
 	function AudioMax_GetVolume($instanceId, $roomId) {
@@ -161,7 +161,7 @@
 	 * Muting setzen
 	 *
 	 * @param int $instanceId ID des AudioMax Servers
-    * @param int $roomId Raum der geändert werden soll (0-15)
+	 * @param int $roomId Raum der geändert werden soll (0-3)
 	 * @param string $value TRUE oder '1' für An, FALSE oder '0' für Aus
 	 * @return boolean Funktions Ergebnis, TRUE für OK, FALSE für Fehler
 	 */
@@ -174,7 +174,7 @@
 	 * Status Muting lesen
 	 *
 	 * @param int $instanceId ID des AudioMax Servers
-    * @param int $roomId Raum der geändert werden soll (0-15)
+	 * @param int $roomId Raum der ausgelesen werden soll (0-3)
 	 * @return boolean Status Muting
 	 */
 	function AudioMax_GetMute($instanceId, $roomId) {
@@ -186,7 +186,7 @@
 	 * Balance setzen
 	 *
 	 * @param int $instanceId ID des AudioMax Servers
-    * @param int $roomId Raum der geändert werden soll (0-15)
+	 * @param int $roomId Raum der geändert werden soll (0-3)
 	 * @param int $value Wert Balance (0-15)
 	 * @return boolean Funktions Ergebnis, TRUE für OK, FALSE für Fehler
 	 */
@@ -199,7 +199,7 @@
 	 * Balance lesen
 	 *
 	 * @param int $instanceId ID des AudioMax Servers
-    * @param int $roomId Raum der geändert werden soll (0-15)
+	 * @param int $roomId Raum der ausgelesen werden soll (0-3)
 	 * @return int Wert Balance (0-15)
 	 */
 	function AudioMax_GetBalance($instanceId, $roomId) {
@@ -211,7 +211,7 @@
 	 * Einstellung Höhen
 	 *
 	 * @param int $instanceId  ID des AudioMax Servers
-    * @param int $roomId Raum der geändert werden soll (0-15)
+	 * @param int $roomId Raum der geändert werden soll (0-3)
 	 * @param int $value Wert Höhen (0-15)
 	 * @return boolean Funktions Ergebnis, TRUE für OK, FALSE für Fehler
 	 */
@@ -224,7 +224,7 @@
 	 * Einstellung Höhen lesen
 	 *
 	 * @param int $instanceId  ID des AudioMax Servers
-    * @param int $roomId Raum der geändert werden soll (0-15)
+	 * @param int $roomId Raum der ausgelesen werden soll (0-3)
 	 * @return int Wert Höhen (0-15)
 	 */
 	function AudioMax_GetTreble($instanceId, $roomId) {
@@ -236,7 +236,7 @@
 	 * Einstellung Mitten
 	 *
 	 * @param int $instanceId  ID des AudioMax Servers
-    * @param int $roomId Raum der geändert werden soll (0-15)
+	 * @param int $roomId Raum der geändert werden soll (0-3)
 	 * @param int $value Wert Mitten (0-15)
 	 * @return boolean Funktions Ergebnis, TRUE für OK, FALSE für Fehler
 	 */
@@ -249,7 +249,7 @@
 	 * Einstellung Mitten lesen
 	 *
 	 * @param int $instanceId  ID des AudioMax Servers
-    * @param int $roomId Raum der geändert werden soll (0-15)
+	 * @param int $roomId Raum der ausgelesen werden soll (0-3)
 	 * @return int Wert Mitten (0-15)
 	 */
 	function AudioMax_GetMiddle($instanceId, $roomId) {
@@ -261,7 +261,7 @@
 	 * Einstellung Bass setzen
 	 *
 	 * @param int $instanceId  ID des AudioMax Servers
-    * @param int $roomId Raum der geändert werden soll (0-15)
+	 * @param int $roomId Raum der geändert werden soll (0-3)
 	 * @param int $value Wert Bass (0-15)
 	 * @return boolean Funktions Ergebnis, TRUE für OK, FALSE für Fehler
 	 */
@@ -274,7 +274,7 @@
 	 * Einstellung Bass lesen
 	 *
 	 * @param int $instanceId  ID des AudioMax Servers
-    * @param int $roomId Raum der geändert werden soll (0-15)
+	 * @param int $roomId Raum der ausgelesen werden soll (0-3)
 	 * @return int Wert Bass (0-15)
 	 */
 	function AudioMax_GetBass($instanceId, $roomId) {
