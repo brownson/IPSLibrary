@@ -17,7 +17,7 @@
 	IPSUtils_Include ('IPSMessageHandler.class.php', 'IPSLibrary::app::core::IPSMessageHandler');
 
 	$messageHandler = new IPSMessageHandler();
-	$messageHandler->HandleEvent($variable, $value);
+	$messageHandler->HandleIREvent($variable, $value);
 
 	/** @}*/
 ?>
