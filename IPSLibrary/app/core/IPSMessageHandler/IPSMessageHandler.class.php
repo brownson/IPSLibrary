@@ -100,6 +100,11 @@
 			foreach ($configuration as $variableId=>$params) {
 				self::CreateEvent($variableId, $params[0]);
 			}
+			$configuration = self::Get_EventConfigurationCust();
+
+			foreach ($configuration as $variableId=>$params) {
+				self::CreateEvent($variableId, $params[0]);
+			}
 		}
 
 		/**
