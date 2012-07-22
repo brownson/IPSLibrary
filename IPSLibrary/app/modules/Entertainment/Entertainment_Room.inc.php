@@ -79,8 +79,8 @@
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function Entertainment_SetRoomPowerByDeviceName($DeviceName, $Value) {
-	   if ($Value) {
-	      $SourceList = get_SourceListByDeviceName($DeviceName, $Value);
+		if ($Value) {
+			$SourceList = get_SourceListByDeviceName($DeviceName, $Value);
 			if (count($SourceList)==1) {
 				$RoomKeys  = array_keys($SourceList);
 				$RoomId    = $RoomKeys[0];
