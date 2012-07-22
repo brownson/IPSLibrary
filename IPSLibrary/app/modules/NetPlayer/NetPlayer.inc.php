@@ -92,6 +92,14 @@
 	   return $player ;
 	}
 
+	function NetPlayer_Switch() {
+		if (GetValue(NP_ID_CONTROLTYPE)==2) {
+			NetPlayer_SwitchToMP3Player();
+		} else {
+			NetPlayer_SwitchToRadio();
+		}
+	}
+
 	function NetPlayer_SwitchToMP3Player($loadDirectory=true,$forceLoad=false) {
 		if (GetValue(NP_ID_CONTROLTYPE)==0 and !$forceLoad) return;
 		if ($loadDirectory) {
@@ -116,8 +124,8 @@
 		SetValue(NP_ID_MOBILECONTROL,     '<iframe frameborder="0" width="100%" '.NP_RC_MOBILE.'</iframe>');
 	}
 
-	function NetPlayer_SwitchToRadio() {
-		if (GetValue(NP_ID_CONTROLTYPE)==2) return;
+	function NetPlayer_SwitchToRadio($forceLoad=false) {
+		if (GetValue(NP_ID_CONTROLTYPE)==2 and !$forceLoad) return;
 		$radiourl   = GetValue(NP_ID_RADIOURL);
 		$radiotitel = GetValue(NP_ID_RADIONAME);
 		IPSLogger_Inf(__file__, "Play RadioStation '$radiotitel', Url='$radiourl'");
@@ -193,20 +201,6 @@
 		NetPlayer_RefreshCDListValue();
 	}
 
-	function NetPlayer_PlayRadio($radiourl, $radiotitel) {
-		IPSLogger_Inf(__file__, "Play RadioStation '$radiotitel', Url='$radiourl'");
-		SetValue(NP_ID_RADIOURL,    $radiourl);
-		SetValue(NP_ID_RADIONAME,   $radiotitel);
-		SetValue(NP_ID_CDINTERPRET, '');
-		SetValue(NP_ID_CDALBUM,     $radiotitel);
-		NetPlayer_Power(true);
-		NetPlayer_SwitchToRadio();
-		NetPlayer_RefreshRadioListValue();
-		$player = NetPlayer_GetIPSComponentPlayer();
-		$player->ClearPlaylist();
-		$player->AddPlaylist($radiourl);
-		$player->Play();
-	}
 
 	function NetPlayer_NavigateRadioForward($count=NP_COUNT_RADIODEFAULT) {
 		IPSLogger_Trc(__file__, "Navigate Forward Radio, Count=$count");
@@ -232,20 +226,64 @@
 		NetPlayer_GetIPSComponentPlayer()->Pause();
 	}
 
-	function NetPlayer_Prev() {
+	function NetPlayer_PlayRadio($radiourl, $radiotitel) {
+		IPSLogger_Inf(__file__, "Play RadioStation '$radiotitel', Url='$radiourl'");
+		SetValue(NP_ID_RADIOURL,    $radiourl);
+		SetValue(NP_ID_RADIONAME,   $radiotitel);
+		SetValue(NP_ID_CDINTERPRET, '');
+		SetValue(NP_ID_CDALBUM,     $radiotitel);
 		NetPlayer_Power(true);
-		$plaverState = GetValue(NP_ID_CONTROL);
-		SetValue(NP_ID_CONTROL, NP_IDX_CONTROLPREV);
-		NetPlayer_GetIPSComponentPlayer()->Prev();
-		IPS_SLEEP(200);
-		SetValue(NP_ID_CONTROL, $plaverState);
+		NetPlayer_SwitchToRadio();
+		NetPlayer_RefreshRadioListValue();
+		$player = NetPlayer_GetIPSComponentPlayer();
+		$player->ClearPlaylist();
+		$player->AddPlaylist($radiourl);
+		$player->Play();
+	}
+
+	function NetPlayer_NextRadio($next=1) {
+		$radioName = GetValue(NP_ID_RADIONAME);
+		$radioList = NetPlayer_GetRadioList();
+		$radioKeys = array_keys($radioList); // 0=>'OE3',...
+		$radioFlip = array_flip($radioKeys); // 'OE3'=>0
+		print_r($radioFlip);
+		$radioIdx  = $radioFlip[$radioName]+$next;
+		echo $radioIdx;
+		if (!array_key_exists($radioIdx, $radioKeys)) {
+			if ($next>0) {
+				$radioIdx = 0;
+	  		} else {
+				$radioIdx = count($radioKeys)-1;
+	  		}
+		}
+		$radioName  = $radioKeys[$radioIdx];
+		$radioUrl   = $radioList[$radioName];
+		NetPlayer_PlayRadio($radioUrl, $radioName);
+		NetPlayer_RefreshRemoteControl();
 	}
 
 	function NetPlayer_Next() {
 		NetPlayer_Power(true);
 		$plaverState = GetValue(NP_ID_CONTROL);
 		SetValue(NP_ID_CONTROL, NP_IDX_CONTROLNEXT);
-		NetPlayer_GetIPSComponentPlayer()->Next();
+		if (GetValue(NP_ID_CONTROLTYPE)==2) { // Radio
+			NetPlayer_NextRadio(1);
+		} else {
+			NetPlayer_GetIPSComponentPlayer()->Next();
+		}
+		IPS_SLEEP(200);
+		SetValue(NP_ID_CONTROL, $plaverState);
+	}
+
+	function NetPlayer_Prev() {
+		NetPlayer_Power(true);
+		$plaverState = GetValue(NP_ID_CONTROL);
+		SetValue(NP_ID_CONTROL, NP_IDX_CONTROLPREV);
+		if (GetValue(NP_ID_CONTROLTYPE)==2) { // Radio
+			NetPlayer_NextRadio(-1);
+		} else {
+			NetPlayer_GetIPSComponentPlayer()->Prev();
+		}
 		IPS_SLEEP(200);
 		SetValue(NP_ID_CONTROL, $plaverState);
 	}
@@ -257,38 +295,45 @@
 	}
 
 	function NetPlayer_SetSource($value) {
-	   if (GetValue(NP_ID_SOURCE)<>$value) {
+		if (GetValue(NP_ID_SOURCE)<>$value) {
 			switch ($value) {
-			   case NP_IDX_SOURCECD:
-               NetPlayer_SwitchToMP3Player(true, true);
-			      break;
-			   case NP_IDX_SOURCERADIO:
-			   	NetPlayer_SwitchToRadio();
-			      break;
+				case NP_IDX_SOURCECD:
+					NetPlayer_SwitchToMP3Player(true, true);
+					break;
+				case NP_IDX_SOURCERADIO:
+					NetPlayer_SwitchToRadio();
+					break;
 				default:
-				   IPSLogger_Err(__file__, "Unknown SourceValue '$value'");
-				   exit;
+					IPSLogger_Err(__file__, "Unknown SourceValue '$value'");
+					exit;
 			}
 	   }
 	}
 
 	function NetPlayer_Power($value) {
-	   // Set Power State
+		// Set Power State
 		if ($value != GetValue(NP_ID_POWER)) {
-         SetValue(NP_ID_POWER, $value);
+			SetValue(NP_ID_POWER, $value);
 			NetPlayer_RefreshRemoteControl();
 		}
 		$plaverState = GetValue(NP_ID_CONTROL);
 		
 		// Set Player Control
 		if ($value and $plaverState<>NP_IDX_CONTROLPLAY) {
-		   IPSLogger_Trc(__file__, 'Start Netplayer');
-		   SetValue(NP_ID_CONTROL, NP_IDX_CONTROLPLAY);
-			NetPlayer_GetIPSComponentPlayer()->Play();
+			IPSLogger_Trc(__file__, 'Start Netplayer');
+			SetValue(NP_ID_CONTROL, NP_IDX_CONTROLPLAY);
+			$player = NetPlayer_GetIPSComponentPlayer(); 
+			if (!$player->Play()) {
+				if (GetValue(NP_ID_CONTROLTYPE)==2) {
+					NetPlayer_SwitchToRadio(true); 
+				} else {
+					NetPlayer_SwitchToMP3Player(true, true);
+				}
+			}
 		}
 		if (!$value and $plaverState<>NP_IDX_CONTROLSTOP) {
-		   IPSLogger_Trc(__file__, 'Stop Netplayer');
-		   SetValue(NP_ID_CONTROL, NP_IDX_CONTROLSTOP);
+			IPSLogger_Trc(__file__, 'Stop Netplayer');
+			SetValue(NP_ID_CONTROL, NP_IDX_CONTROLSTOP);
 			NetPlayer_GetIPSComponentPlayer()->Stop();
 		}
 	}
