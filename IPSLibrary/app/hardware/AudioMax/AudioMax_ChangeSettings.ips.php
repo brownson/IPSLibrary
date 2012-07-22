@@ -40,19 +40,22 @@
 	$serverId = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.hardware.AudioMax.AudioMax_Server');
 	$instanceId = IPS_GetParent($variableId);
 	if ($serverId<>$instanceId) {
-	   $roomIds = GetValue(IPS_GetObjectIDByIdent(AM_VAR_ROOMIDS, $serverId));
-	   $roomList = array_flip(explode(',',$roomIds));
-	   $roomId = $roomList[$instanceId];
+		$roomIds = GetValue(IPS_GetObjectIDByIdent(AM_VAR_ROOMIDS, $serverId));
+		$roomList = array_flip(explode(',',$roomIds));
+		$roomId = $roomList[$instanceId];
 	}
 
 	switch($variableIdent) {
 		case AM_VAR_CONNECTION:
 			$server = new AudioMax_Server($serverId);
 			$server->SetConnection($variableValue);
-		   break;
+			break;
 
 		case AM_VAR_MODESERVERDEBUG:
 			AudioMax_SetMode($serverId, AM_MOD_SERVERDEBUG, $variableValue);
+			break;
+		case AM_VAR_MODEACKNOWLEDGE:
+			AudioMax_SetMode($serverId, AM_MOD_ACKNOWLEDGE, $variableValue);
 			break;
 		case AM_VAR_MODEPOWERREQUEST:
 			AudioMax_SetMode($serverId, AM_MOD_POWERREQUEST, $variableValue);
@@ -66,34 +69,34 @@
 			break;
 
 		case AM_VAR_ROOMPOWER:
-		    AudioMax_SetRoomPower($serverId , $roomId, $variableValue);
-		    break;
+			AudioMax_SetRoomPower($serverId , $roomId, $variableValue);
+			break;
 		case AM_VAR_BALANCE:
-		    AudioMax_SetBalance($serverId , $roomId, $variableValue);
-		    break;
+			AudioMax_SetBalance($serverId , $roomId, $variableValue);
+			break;
 		case AM_VAR_VOLUME:
-		    AudioMax_SetVolume($serverId , $roomId, $variableValue);
-		    break;
+			AudioMax_SetVolume($serverId , $roomId, $variableValue);
+			break;
 		case AM_VAR_MUTE:
-		    AudioMax_SetMute($serverId , $roomId, $variableValue);
-		    break;
+			AudioMax_SetMute($serverId , $roomId, $variableValue);
+			break;
 		case AM_VAR_TREBLE:
-		    AudioMax_SetTreble($serverId , $roomId, $variableValue);
-		    break;
+			AudioMax_SetTreble($serverId , $roomId, $variableValue);
+			break;
 		case AM_VAR_MIDDLE:
-		    AudioMax_SetMiddle($serverId , $roomId, $variableValue);
-		    break;
+			AudioMax_SetMiddle($serverId , $roomId, $variableValue);
+			break;
 		case AM_VAR_BASS:
-		    AudioMax_SetBass($serverId , $roomId, $variableValue);
-		    break;
+			AudioMax_SetBass($serverId , $roomId, $variableValue);
+			break;
 		case AM_VAR_INPUTSELECT:
-		    AudioMax_SetInputSelect($serverId , $roomId, $variableValue);
-		    break;
+			AudioMax_SetInputSelect($serverId , $roomId, $variableValue);
+			break;
 		case AM_VAR_INPUTGAIN:
-		    AudioMax_SetInputGain($serverId , $roomId, $variableValue);
-		    break;
+			AudioMax_SetInputGain($serverId , $roomId, $variableValue);
+			break;
 		default:
-		    break;
+			break;
 	}
 	;
 	/** @}*/

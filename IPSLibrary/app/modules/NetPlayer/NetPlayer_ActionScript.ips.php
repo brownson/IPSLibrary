@@ -75,23 +75,23 @@
 				if ($categoryPath<>"") $basePath = $basePath."\\".$categoryPath;
 				$directory = $basePath . "\\" . $directory;
 				NetPlayer_PlayDirectory($directory);
-		      break;
+				break;
 		   case NP_ID_RADIONAV:
 				SetValue($variable, $value);
-		      if ($value==NP_IDX_RADIOPREV) {
+				if ($value==NP_IDX_RADIOPREV) {
 					NetPlayer_NavigateRadioBack(NP_COUNT_RADIOVARIABLE);
-		      } else {
+				} else {
 					NetPlayer_NavigateRadioForward(NP_COUNT_RADIOVARIABLE);
-		      }
+				}
 				IPS_SLEEP(200);
 				SetValue($variable, -1);
-		      break;
+				break;
 		   case NP_ID_RADIOLIST:
 				$radioName = NetPlayer_GetNameFromProfile($value,'NetPlayer_RadioList');
 				$radioList = NetPlayer_GetRadioList();
 				$radioUrl  = $radioList[$radioName];
 				NetPlayer_PlayRadio($radioUrl, $radioName);
-		      break;
+				break;
 			default:
 			   IPSLogger_Err(__file__, 'Unknown ControlID '.$variable);
 		}
