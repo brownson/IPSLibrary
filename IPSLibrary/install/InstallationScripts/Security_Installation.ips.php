@@ -72,20 +72,24 @@
     // Get Scripts Ids
     $ID_ScriptSecurity = IPS_GetScriptIDByName('Security', $CategoryIdApp);
     $ID_ScriptSecurityMotionHandler = IPS_GetScriptIDByName('Security_MotionHandler', $CategoryIdApp);
-    $devices = get_MotionDevices();
+    $ID_ScriptSecurityEnableDisableAlarm = IPS_GetScriptIDByName('Security_EnableDisableAlarm', $CategoryIdApp);
     
-    foreach($devices as $deviceName => &$deviceConfig) {
-        echo "Creating device ".$device[c_Motion_Name]." (Location: ".$device[c_Motion_Location]." in $CategoryIdData \n";
-        $CategoryIdLocation = CreateCategory($device[c_Motion_Location], $CategoryIdData, 20);
-        $CategoryIdDevice = CreateCategory($deviceName, $CategoryIdLocation, 50);
-        CreateVariable("LastMotion", 3 /*String*/, $CategoryIdDevice, 10);
-        
-        // TODO
-        $motionId = IPS_GetObjectIDByName(v_MOTION, $deviceConfig[c_Motion_Instance_ID]);
-        if($motionId == false || !IPS_ObjectExists($motionId)) {
+    CreateVariable(v_ALARM_ACTIVE, 0 /*Boolean*/, $CategoryIdData, 0, "~Switch", $ID_ScriptSecurityEnableDisableAlarm, false);
+    
+    $devices = getMotionDevices();
+    
+    foreach($devices as $deviceNumber => &$deviceConfig) {
+        if(!isset($deviceConfig[c_Motion_Instance_ID]) || !IPS_ObjectExists($deviceConfig[c_Motion_Instance_ID])) {
             IPSLogger_Err(__file__, "Variable with name ".v_MOTION." does not exist in instance ".$deviceConfig[c_Motion_Instance_ID].".");
             throw new Exception("Unable to find MOTION variable on device instance ".$deviceConfig[c_Motion_Instance_ID]);
         }
+        $motionId = $deviceConfig[c_Motion_Instance_ID];
+    
+        echo "Creating device ".$deviceConfig[c_Motion_Name]." (Location: ".$deviceConfig[c_Motion_Location].") in $CategoryIdData for $motionId \n";
+        $CategoryIdDevice = CreateCategory($motionId, $CategoryIdData, 50);
+        CreateVariable(v_LAST_MOTION, 3 /*String*/, $CategoryIdDevice, 10, "~HTMLBox");
+        
+        // TODO
         
         $motionEventId = CreateEvent("On Motion", $motionId, $ID_ScriptSecurityMotionHandler);
     }
