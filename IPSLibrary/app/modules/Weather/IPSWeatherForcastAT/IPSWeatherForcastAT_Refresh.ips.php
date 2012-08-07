@@ -45,7 +45,7 @@
 		$DayDisplayArray = array('Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag');
 
 		$api = simplexml_load_string(utf8_encode(@Sys_GetURLContent($urlGoogle)));
-		echo $urlGoogle;
+		echo $urlGoogle.PHP_EOL;
 
 		IPSWeatherFAT_SetValue('LastRefreshDateTime', date("Y-m-j H:i:s"));
 		IPSWeatherFAT_SetValue('LastRefreshTime', date("H:i"));
@@ -95,17 +95,29 @@
 		$lHTML=file_get_contents(IPSWEATHERFAT_ORF_URL);
 
 		$forcast = ExtractData($lHTML, '<div class="fulltextWrapper" role="article">', '<div class="webcamLinks', true, false);
-		$forcastToday = '<h2>'.ExtractData($forcast, '<h2>', '</h2>').'</h2>'.ExtractData($forcast, '<p>', '</p>', false, false);
+		$forcastToday = '<h2>'.ExtractData($forcast, '<h2>', '</h2>').'</h2>';
+		$forcast = ExtractData($forcast, '</h2>', '<div class="webcamLinks', true, false);
+		$forcastToday .= ExtractData($forcast, '<p>', '<h2>', false, true);
 
-		$forcast = ExtractData($forcast, '</p>', '<div class="webcamLinks">', true, false);
-		$forcastTomorrow  = '<h2>'.ExtractData($forcast, '<h2>', '</h2>').'</h2>'.ExtractData($forcast, '<p>', '</p>', false, false);
+		$forcast = ExtractData($forcast, '<h2>', '<div class="webcamLinks', false, false);
+		$forcastTomorrow  = '<h2>'.ExtractData($forcast, '<h2>', '</h2>').'</h2>';
+		$forcast = ExtractData($forcast, '</h2>', '<div class="webcamLinks', true, false);
+		$forcastTomorrow  .= ExtractData($forcast, '<p>', '<h2>', false, true);
 
-		$forcast = ExtractData($forcast, '</p>', '<div class="webcamLinks">', true, false);
-		$forcastTomorrow1 = '<h2>'.ExtractData($forcast, '<h2>', '</h2>').'</h2>'.ExtractData($forcast, '<p>', '</p>', false, false);
+		$forcast = ExtractData($forcast, '<h2>', '<div class="webcamLinks', false, false);
+		$forcastTomorrow1 = '<h2>'.ExtractData($forcast, '<h2>', '</h2>').'</h2>';
+		$forcast = ExtractData($forcast, '</h2>', '<div class="webcamLinks', true, false);
+		$forcastTomorrow1 .= ExtractData($forcast, '<p>', '<h2>', false, true);
 
-		$forcast = ExtractData($forcast, '</p>', '<div class="webcamLinks">', true, false);
-		$forcastTomorrow2 = '<h2>'.ExtractData($forcast, '<h2>', '</h2>').'</h2>'.ExtractData($forcast, '<p>', '</p>', false, false);
+		$forcast = ExtractData($forcast, '<h2>', '<div class="webcamLinks', false, false);
+		$forcastTomorrow2 = '<h2>'.ExtractData($forcast, '<h2>', '</h2>').'</h2>';
+		$forcast = ExtractData($forcast, '<h2>', '<div class="webcamLinks', true, false);
+		$forcastTomorrow2 .= ExtractData($forcast, '<p>',  '<div class="webcamLinks', false, true);
 
+		//echo 'Heute    = '.$forcastToday.PHP_EOL;
+		//echo 'Morgen   = '.$forcastTomorrow.PHP_EOL;
+		//echo 'Morgen+1 = '.$forcastTomorrow1.PHP_EOL;
+		//echo 'Morgen+2 = '.$forcastTomorrow2.PHP_EOL;
 		IPSWeatherFAT_SetValue('TodayForecastLong',     $forcastToday);
 		IPSWeatherFAT_SetValue('TomorrowForecastLong',  $forcastTomorrow);
 		IPSWeatherFAT_SetValue('Tomorrow1ForecastLong', $forcastTomorrow1);
@@ -120,7 +132,13 @@
 	function ExtractData($data, $key1, $key2, $removeKey1=true, $removeKey2=true) {
 	   $strPos1 = strpos($data, $key1);
 	   $strPos2 = strpos($data, $key2);
-	   if ($removeKey1 and $removeKey2) {
+	   if ($strPos1===false) {
+	      $result = 0;
+	      echo 'Key1 "'.$key1.'" NOT found !'.PHP_EOL;
+	   } elseif ($strPos2===false) {
+	      $result = strlen($data);
+	      echo 'Key2 "'.$key2.'" NOT found !'.PHP_EOL;
+		} elseif ($removeKey1 and $removeKey2) {
 	   	$result  =substr($data, $strPos1+strlen($key1), $strPos2-$strPos1-strlen($key1));
 	   } elseif ($removeKey1) {
 	   	$result  =substr($data, $strPos1+strlen($key1), $strPos2-$strPos1-strlen($key1)+strlen($key2));
