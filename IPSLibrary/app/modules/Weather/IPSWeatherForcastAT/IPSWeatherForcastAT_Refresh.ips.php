@@ -48,7 +48,7 @@
 		$urlContent = @Sys_GetURLContent($urlGoogle);
 		if ($urlContent===false) {
 			echo 'Google Weather API is empty ...'.PHP_EOL;
-		   return;
+			return;
 		}
 		$api = simplexml_load_string(utf8_encode($urlContent));
 
@@ -85,7 +85,7 @@
 		$names = array('TodayIcon', 'TomorrowIcon', 'Tomorrow1Icon', 'Tomorrow2Icon');
 		foreach($api->xpath('//weather/forecast_conditions/icon/@data') as $idx=>$weather) {
 			//print_r($weather);
-			IPSWeatherFAT_SetValueXML($names[$idx],$weather, array(".gif", ".png", IPSWEATHERFAT_ICONS_GOOGLE1, IPSWEATHERFAT_ICONS_LARGE));
+			IPSWeatherFAT_SetValueXML($names[$idx],$weather, array(".gif", ".png", IPSWEATHERFAT_ICONS_GOOGLE1, IPSWEATHERFAT_ICONS_SMALL));
 		}
 
 		// Wetter für Niederösterreich von ORF auslesen
