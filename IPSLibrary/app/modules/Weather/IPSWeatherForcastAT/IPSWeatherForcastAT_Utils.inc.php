@@ -43,7 +43,7 @@
 		return $value;
 	}
 	 
-	/** 
+	/**
 	 * Schreiben von Wetterdaten anhand des Namens
 	 *
 	 * @param string $name Name der Variablen
@@ -54,7 +54,30 @@
 		$variableId         = IPS_GetObjectIDByIdent($name, $categoryId_Weather);
 		SetValue($variableId, $value);
 	}
-	 
-	 
+
+	/**
+	 * Schreiben von Wetterdaten anhand des Namens
+	 *
+	 * @param string $name Name der Variablen
+	 * @param string $valueArrayXML Wert der geschrieben werden soll
+	 */
+	function IPSWeatherFAT_SetValueXML($name, $valueArrayXML, $replacementArray=null) {
+	   if (count($valueArrayXML)==0) {
+	      echo 'Value for '.$name.' NOT found Google Weather API'.PHP_EOL;
+		} else {
+			$categoryId_Weather = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.Weather.IPSWeatherForcastAT');
+			$variableId         = IPS_GetObjectIDByIdent($name, $categoryId_Weather);
+			$value = (string)$valueArrayXML[0];
+			if ($replacementArray <> null) {
+				for ($i=0; $i<count($replacementArray); $i=$i+2) {
+				   $value = str_replace($replacementArray[$i], $replacementArray[$i+1], $value);
+				}
+			}
+	      //echo 'Write '.$name.' = '.$value.PHP_EOL;
+			SetValue($variableId, $value);
+		}
+	}
+
+
 	/** @}*/
 ?>

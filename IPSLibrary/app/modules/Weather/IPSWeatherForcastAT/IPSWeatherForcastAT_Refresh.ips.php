@@ -44,51 +44,48 @@
 		$DaySourceArray  = array('Mo.','Di.','Mi.','Do.','Fr.','Sa.','So.');
 		$DayDisplayArray = array('Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag');
 
-		$api = simplexml_load_string(utf8_encode(@Sys_GetURLContent($urlGoogle)));
 		echo $urlGoogle.PHP_EOL;
+		$urlContent = @Sys_GetURLContent($urlGoogle);
+		if ($urlContent===false) {
+			echo 'Google Weather API is empty ...'.PHP_EOL;
+		   return;
+		}
+		$api = simplexml_load_string(utf8_encode($urlContent));
 
 		IPSWeatherFAT_SetValue('LastRefreshDateTime', date("Y-m-j H:i:s"));
 		IPSWeatherFAT_SetValue('LastRefreshTime', date("H:i"));
 
-		// Aktuelles Wetter
-		IPSWeatherFAT_SetValue('TodayForecastShort', (string)$api->weather->current_conditions->condition->attributes()->data);
-		IPSWeatherFAT_SetValue('TodayTempCurrent',   (string)$api->weather->current_conditions->temp_c->attributes()->data);
-		IPSWeatherFAT_SetValue('AirHumidity',        str_replace("Feuchtigkeit", "rel.Luftfeuchte", $api->weather->current_conditions->humidity->attributes()->data));
-		IPSWeatherFAT_SetValue('Wind',               (string)$api->weather->current_conditions->wind_condition->attributes()->data);
-		IPSWeatherFAT_SetValue('TodayIcon',          str_replace(".gif", ".png", str_replace(IPSWEATHERFAT_ICONS_GOOGLE1, IPSWEATHERFAT_ICONS_LARGE, $api->weather->current_conditions->icon->attributes()->data)));
+		IPSWeatherFAT_SetValueXML('TodayForecastShort', $api->xpath('//weather/current_conditions/condition/@data'));
+		IPSWeatherFAT_SetValueXML('TodayTempCurrent',   $api->xpath('//weather/current_conditions/temp_c/@data'));
+		IPSWeatherFAT_SetValueXML('AirHumidity',        $api->xpath('//weather/current_conditions/humidity/@data'), array("Feuchtigkeit", "rel.Luftfeuchte"));
+		IPSWeatherFAT_SetValueXML('Wind',               $api->xpath('//weather/current_conditions/wind_condition/@data'));
+		IPSWeatherFAT_SetValueXML('TodayIcon',          $api->xpath('//weather/current_conditions/icon/@data'), array(".gif", ".png", IPSWEATHERFAT_ICONS_GOOGLE1, IPSWEATHERFAT_ICONS_LARGE));
 
 		// Wettervorhersage heute, morgen, in zwei und in drei Tagen ($wetter[1] bis $wetter[4])
-		$i = 1;
-		foreach($api->weather->forecast_conditions as $weather)
-		{
-			if ($i==1) {
-				IPSWeatherFAT_SetValue('TodayDay',               str_replace($DaySourceArray, $DayDisplayArray, $weather->day_of_week->attributes()->data));
-				IPSWeatherFAT_SetValue('TodayForecastShort',     (string)$weather->condition->attributes()->data);
-				IPSWeatherFAT_SetValue('TodayTempMin',           (string)$weather->low->attributes()->data);
-				IPSWeatherFAT_SetValue('TodayTempMax',           (string)$weather->high->attributes()->data);
-				IPSWeatherFAT_SetValue('TodayIcon',              str_replace(".gif", ".png", str_replace(IPSWEATHERFAT_ICONS_GOOGLE1, IPSWEATHERFAT_ICONS_LARGE, $weather->icon->attributes()->data)));
-			} else if ($i==2) {
-				IPSWeatherFAT_SetValue('TomorrowDay',            str_replace($DaySourceArray, $DayDisplayArray, $weather->day_of_week->attributes()->data));
-				IPSWeatherFAT_SetValue('TomorrowForecastShort',  (string)$weather->condition->attributes()->data);
-				IPSWeatherFAT_SetValue('TomorrowTempMin',        (string)$weather->low->attributes()->data);
-				IPSWeatherFAT_SetValue('TomorrowTempMax',        (string)$weather->high->attributes()->data);
-				IPSWeatherFAT_SetValue('TomorrowIcon',           str_replace(".gif", ".png", str_replace(IPSWEATHERFAT_ICONS_GOOGLE1, IPSWEATHERFAT_ICONS_SMALL, $weather->icon->attributes()->data)));
-			} else if ($i==3) {
-				IPSWeatherFAT_SetValue('Tomorrow1Day',           str_replace($DaySourceArray, $DayDisplayArray, $weather->day_of_week->attributes()->data));
-				IPSWeatherFAT_SetValue('Tomorrow1ForecastShort', (string)$weather->condition->attributes()->data);
-				IPSWeatherFAT_SetValue('Tomorrow1TempMin',       (string)$weather->low->attributes()->data);
-				IPSWeatherFAT_SetValue('Tomorrow1TempMax',       (string)$weather->high->attributes()->data);
-				IPSWeatherFAT_SetValue('Tomorrow1Icon',          str_replace(".gif", ".png", str_replace(IPSWEATHERFAT_ICONS_GOOGLE1, IPSWEATHERFAT_ICONS_SMALL, $weather->icon->attributes()->data)));
-			} else if ($i==4) {
-				IPSWeatherFAT_SetValue('Tomorrow2Day',           str_replace($DaySourceArray, $DayDisplayArray, $weather->day_of_week->attributes()->data));
-				IPSWeatherFAT_SetValue('Tomorrow2ForecastShort', (string)$weather->condition->attributes()->data);
-				IPSWeatherFAT_SetValue('Tomorrow2TempMin',       (string)$weather->low->attributes()->data);
-				IPSWeatherFAT_SetValue('Tomorrow2TempMax',       (string)$weather->high->attributes()->data);
-				IPSWeatherFAT_SetValue('Tomorrow2Icon',          str_replace(".gif", ".png", str_replace(IPSWEATHERFAT_ICONS_GOOGLE1, IPSWEATHERFAT_ICONS_SMALL, $weather->icon->attributes()->data)));
-			} else  {
-				IPSLogger_Err(__file__, "Receive unknown Weather Forecast Condition");
-			}
-			$i++;
+		$names = array('TodayDay', 'TomorrowDay', 'Tomorrow1Day', 'Tomorrow2Day');
+		foreach($api->xpath('//weather/forecast_conditions/day_of_week/@data') as $idx=>$weather) {
+			//print_r($weather);
+			IPSWeatherFAT_SetValueXML($names[$idx],$weather, array($DaySourceArray, $DayDisplayArray));
+		}
+		$names = array('TodayForecastShort', 'TomorrowForecastShort', 'Tomorrow1ForecastShort', 'Tomorrow2ForecastShort');
+		foreach($api->xpath('//weather/forecast_conditions/condition/@data') as $idx=>$weather) {
+			//print_r($weather);
+			IPSWeatherFAT_SetValueXML($names[$idx],$weather);
+		}
+		$names = array('TodayTempMin', 'TomorrowTempMin', 'Tomorrow1TempMin', 'Tomorrow2TempMin');
+		foreach($api->xpath('//weather/forecast_conditions/low/@data') as $idx=>$weather) {
+			//print_r($weather);
+			IPSWeatherFAT_SetValueXML($names[$idx],$weather);
+		}
+		$names = array('TodayTempMax', 'TomorrowTempMax', 'Tomorrow1TempMax', 'Tomorrow2TempMax');
+		foreach($api->xpath('//weather/forecast_conditions/high/@data') as $idx=>$weather) {
+			//print_r($weather);
+			IPSWeatherFAT_SetValueXML($names[$idx],$weather);
+		}
+		$names = array('TodayIcon', 'TomorrowIcon', 'Tomorrow1Icon', 'Tomorrow2Icon');
+		foreach($api->xpath('//weather/forecast_conditions/icon/@data') as $idx=>$weather) {
+			//print_r($weather);
+			IPSWeatherFAT_SetValueXML($names[$idx],$weather, array(".gif", ".png", IPSWEATHERFAT_ICONS_GOOGLE1, IPSWEATHERFAT_ICONS_LARGE));
 		}
 
 		// Wetter für Niederösterreich von ORF auslesen
