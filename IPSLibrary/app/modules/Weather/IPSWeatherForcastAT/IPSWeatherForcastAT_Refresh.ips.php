@@ -85,7 +85,11 @@
 		$names = array('TodayIcon', 'TomorrowIcon', 'Tomorrow1Icon', 'Tomorrow2Icon');
 		foreach($api->xpath('//weather/forecast_conditions/icon/@data') as $idx=>$weather) {
 			//print_r($weather);
-			IPSWeatherFAT_SetValueXML($names[$idx],$weather, array(".gif", ".png", IPSWEATHERFAT_ICONS_GOOGLE1, IPSWEATHERFAT_ICONS_SMALL));
+			if ($idx==0) {
+				IPSWeatherFAT_SetValueXML($names[$idx],$weather, array(".gif", ".png", IPSWEATHERFAT_ICONS_GOOGLE1, IPSWEATHERFAT_ICONS_LARGE));
+			} else {
+				IPSWeatherFAT_SetValueXML($names[$idx],$weather, array(".gif", ".png", IPSWEATHERFAT_ICONS_GOOGLE1, IPSWEATHERFAT_ICONS_SMALL));
+			}
 		}
 
 		// Wetter für Niederösterreich von ORF auslesen
