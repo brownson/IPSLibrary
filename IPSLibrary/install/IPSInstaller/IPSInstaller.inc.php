@@ -801,7 +801,7 @@
 	 *
 	 */
 	function CreateProfile_Switch ($Name, $DisplayFalse, $DisplayTrue, $Icon="", $ColorOff=-1, $ColorOn=0x00ff00, $IconOff="", $IconOn="") {
-		@IPS_CreateVariableProfile($Name, 1);
+		@IPS_CreateVariableProfile($Name, 0);
 		IPS_SetVariableProfileText($Name, "", "");
 		IPS_SetVariableProfileValues($Name, 0, 1, 1);
 		IPS_SetVariableProfileDigits($Name, 0);
