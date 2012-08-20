@@ -45,9 +45,9 @@
 			$agent  = $_SERVER['HTTP_USER_AGENT'];
 			$iPhone = preg_match("@ipod@i", $agent) || preg_match("@ipad@i", $agent) || preg_match("@iphone@i",$agent);
 			if ($iPhone) {
-				echo '<link rel="stylesheet" type="text/css" href="\user\IPSWeatherForcastAT\iWeather.css" />';
+				echo '<link rel="stylesheet" type="text/css" href="/user/IPSWeatherForcastAT/iWeather.css" />';
 			} else {
-				echo '<link rel="stylesheet" type="text/css" href="\user\IPSWeatherForcastAT\Weather.css" />';
+				echo '<link rel="stylesheet" type="text/css" href="/user/IPSWeatherForcastAT/Weather.css" />';
 			}
 		?>
 

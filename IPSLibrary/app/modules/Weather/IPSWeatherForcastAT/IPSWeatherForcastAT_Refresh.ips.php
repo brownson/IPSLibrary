@@ -50,7 +50,11 @@
 			echo 'Google Weather API is empty ...'.PHP_EOL;
 			return;
 		}
-		$api = simplexml_load_string(utf8_encode($urlContent));
+		$api = @simplexml_load_string(utf8_encode($urlContent));
+		if ($api===false) {
+			echo 'Error processing Google Weather API ...'.PHP_EOL;
+			return;
+		}
 
 		IPSWeatherFAT_SetValue('LastRefreshDateTime', date("Y-m-j H:i:s"));
 		IPSWeatherFAT_SetValue('LastRefreshTime', date("H:i"));
