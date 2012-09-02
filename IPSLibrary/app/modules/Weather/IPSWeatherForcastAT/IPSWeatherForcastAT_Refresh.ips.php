@@ -40,12 +40,13 @@
 	if (Sys_Ping(IPSWEATHERFAT_EXTERNAL_IP, 100)) {
 		IPSLogger_Trc(__file__, "Refresh Weather Data");
 
-		if (IPSWEATHERFAT_WONDERGROUND_KEY<>'') {
-			IPSUtils_Include ("IPSWeatherForcastAT_RefreshWonderground.inc.php",  "IPSLibrary::app::modules::Weather::IPSWeatherForcastAT");
-			$refreshWonderground = IPSWeatherFAT_RefreshWonderground();
+      $refreshWunderground = false;
+		if (IPSWEATHERFAT_WUNDERGROUND_KEY<>'') {
+			IPSUtils_Include ("IPSWeatherForcastAT_RefreshWunderground.inc.php",  "IPSLibrary::app::modules::Weather::IPSWeatherForcastAT");
+			$refreshWunderground = IPSWeatherFAT_RefreshWunderground();
 		}
 
-		if (IPSWEATHERFAT_YAHOO_WOEID<>'' and !$refreshWonderground) {
+		if (IPSWEATHERFAT_YAHOO_WOEID<>'' and !$refreshWunderground) {
 			IPSUtils_Include ("IPSWeatherForcastAT_RefreshYahoo.inc.php",  "IPSLibrary::app::modules::Weather::IPSWeatherForcastAT");
 			IPSWeatherFAT_RefreshYahoo();
 		}

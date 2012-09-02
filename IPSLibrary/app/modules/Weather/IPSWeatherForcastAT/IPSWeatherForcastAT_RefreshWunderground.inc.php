@@ -20,9 +20,9 @@
 	 * @ingroup modules_weather
 	 * @{
 	 *
-	 * Dieses Script aktualisiert die Wetterdaten in IPS mit Wonderground
+	 * Dieses Script aktualisiert die Wetterdaten in IPS mit Wunderground
 	 *
-	 * @file          IPSWeatherForcastAT_RefreshWonderground.inc.php
+	 * @file          IPSWeatherForcastAT_RefreshWunderground.inc.php
 	 * @author        Andreas Brauneis
 	 * @version
 	 *  Version 2.50.1, 15.02.2012<br/>
@@ -30,18 +30,18 @@
 	 */
 
 
-	function IPSWeatherFAT_RefreshWonderground() {
+	function IPSWeatherFAT_RefreshWunderground() {
 
-		$urlWonderground      = 'http://api.wunderground.com/api/'.IPSWEATHERFAT_WONDERGROUND_KEY.'/forecast/lang:DL/q/'.IPSWEATHERFAT_WONDERGROUND_COUNTRY.'/'.IPSWEATHERFAT_WONDERGROUND_TOWN.'.xml';
-		echo 'URL Wonderground = '.$urlWonderground.PHP_EOL;
-		$urlContent = @Sys_GetURLContent($urlWonderground);
+		$urlWunderground      = 'http://api.wunderground.com/api/'.IPSWEATHERFAT_WUNDERGROUND_KEY.'/forecast/lang:DL/q/'.IPSWEATHERFAT_WUNDERGROUND_COUNTRY.'/'.IPSWEATHERFAT_WUNDERGROUND_TOWN.'.xml';
+		echo 'URL Wunderground = '.$urlWunderground.PHP_EOL;
+		$urlContent = @Sys_GetURLContent($urlWunderground);
 		if ($urlContent===false) {
-			echo 'Wonderground Weather API is empty ...'.PHP_EOL;
+			echo 'Wunderground Weather API is empty ...'.PHP_EOL;
 			return false;
 		}
 		$api = @simplexml_load_string($urlContent);
 		if ($api===false) {
-			echo 'Error processing Wonderground Weather API ...'.PHP_EOL;
+			echo 'Error processing Wunderground Weather API ...'.PHP_EOL;
 			return false;
 		}
 		$icon_array = array(
@@ -97,16 +97,16 @@
 		IPSWeatherFAT_SetValueXML('Tomorrow2Icon', $api->forecast->simpleforecast->forecastdays->forecastday[3]->icon, IPSWEATHERFAT_ICONS_SMALL, '.png', $icon_array);
 
 
-		$urlWonderground      = 'http://api.wunderground.com/api/'.IPSWEATHERFAT_WONDERGROUND_KEY.'/conditions/lang:DL/q/'.IPSWEATHERFAT_WONDERGROUND_COUNTRY.'/'.IPSWEATHERFAT_WONDERGROUND_TOWN.'.xml';
-		echo 'URL Wonderground = '.$urlWonderground.PHP_EOL;
-		$urlContent = @Sys_GetURLContent($urlWonderground);
+		$urlWunderground      = 'http://api.wunderground.com/api/'.IPSWEATHERFAT_WUNDERGROUND_KEY.'/conditions/lang:DL/q/'.IPSWEATHERFAT_WUNDERGROUND_COUNTRY.'/'.IPSWEATHERFAT_WUNDERGROUND_TOWN.'.xml';
+		echo 'URL Wunderground = '.$urlWunderground.PHP_EOL;
+		$urlContent = @Sys_GetURLContent($urlWunderground);
 		if ($urlContent===false) {
-			echo 'Wonderground Weather API is empty ...'.PHP_EOL;
+			echo 'Wunderground Weather API is empty ...'.PHP_EOL;
 			return false;
 		}
 		$api = @simplexml_load_string(utf8_encode($urlContent));
 		if ($api===false) {
-			echo 'Error processing Wonderground Weather API ...'.PHP_EOL;
+			echo 'Error processing Wunderground Weather API ...'.PHP_EOL;
 			return false;
 		}
 
