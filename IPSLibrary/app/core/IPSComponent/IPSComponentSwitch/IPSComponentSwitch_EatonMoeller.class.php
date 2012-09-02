@@ -57,7 +57,7 @@
 		 * @param boolean $value Wert für Schalter
 		 */
 		public function SetState($value) {
-			MXC_SendBoolean($this->instanceId, $value);
+			MXC_SwitchMode($this->instanceId, $value);
 		}
 
 		/**
