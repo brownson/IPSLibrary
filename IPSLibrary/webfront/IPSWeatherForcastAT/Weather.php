@@ -76,32 +76,35 @@
 
 
 			$TodayData = "<b>Aktuell:</b><br/>\n";
-			$TodayData .= IPSWeatherFAT_GetValue('TodayForecastShort')."<br/>\n";
+			$TodayData .= htmlentities(IPSWeatherFAT_GetValue('TodayForecastShort'), ENT_COMPAT, 'ISO-8859-1')."<br/>\n";
 			$TodayData .= "Temperatur: ".IPSWeatherFAT_GetValue('TodayTempCurrent')." &deg;C<br/>\n";
 			$TodayData .= "Minimal: ".IPSWeatherFAT_GetValue('TodayTempMin')." &deg;C <br/> Maximal: ".IPSWeatherFAT_GetValue('TodayTempMax')." &deg;C<br/>";
 			$TodayData .= IPSWeatherFAT_GetValue('AirHumidity')."<br/>";
-			$TodayData .= IPSWeatherFAT_GetValue('Wind')."<br/>";
+			$TodayData .= htmlentities(IPSWeatherFAT_GetValue('Wind'), ENT_COMPAT, 'ISO-8859-1')."<br/>";
 			$TodayData .= "Höhe: ".IPSWeatherFAT_GetValue('SeaLevel')."<br/>\n";
 			$TodayData .= "LastRefresh: ".IPSWeatherFAT_GetValue('LastRefreshTime')."<br/>\n";
 
 			$ForecastData1  = "<b>".IPSWeatherFAT_GetValue('TomorrowDay')."</b><br/>\n";
-			$ForecastData1 .= IPSWeatherFAT_GetValue('TomorrowForecastShort')."<br/>\n";
+			$ForecastData1 .= htmlentities(IPSWeatherFAT_GetValue('TomorrowForecastShort'), ENT_COMPAT, 'ISO-8859-1')."<br/>\n";
 			$ForecastData1 .= "min. ".IPSWeatherFAT_GetValue('TomorrowTempMin')." &deg;C <br/> max. ".IPSWeatherFAT_GetValue('TomorrowTempMax')." &deg;C<br/><br/>";
 
 			$ForecastData2  = "<b>".IPSWeatherFAT_GetValue('Tomorrow1Day')."</b><br/>\n";
-			$ForecastData2 .= IPSWeatherFAT_GetValue('Tomorrow1ForecastShort')."<br/>\n";
-			$ForecastData2 .= "min. ".IPSWeatherFAT_GetValue('Tomorrow1TempMin')." &deg;C <br/> max. ".IPSWeatherFAT_GetValue('Tomorrow1TempMax')." &deg;C<br/><br/>";
-
+			if (IPSWeatherFAT_GetValue('Tomorrow1Day')<>'') {
+				$ForecastData2 .= htmlentities(IPSWeatherFAT_GetValue('Tomorrow1ForecastShort'), ENT_COMPAT, 'ISO-8859-1')."<br/>\n";
+				$ForecastData2 .= "min. ".IPSWeatherFAT_GetValue('Tomorrow1TempMin')." &deg;C <br/> max. ".IPSWeatherFAT_GetValue('Tomorrow1TempMax')." &deg;C<br/><br/>";
+			}
 			$ForecastData3  = "<b>".IPSWeatherFAT_GetValue('Tomorrow2Day')."</b><br/>\n";
-			$ForecastData3 .= IPSWeatherFAT_GetValue('Tomorrow2ForecastShort')."<br/>\n";
-			$ForecastData3 .= "min. ".IPSWeatherFAT_GetValue('Tomorrow2TempMin')." &deg;C <br/> max. ".IPSWeatherFAT_GetValue('Tomorrow2TempMax')." &deg;C<br/><br/>";
+			if (IPSWeatherFAT_GetValue('Tomorrow1Day')<>'') {
+				$ForecastData3 .= htmlentities(IPSWeatherFAT_GetValue('Tomorrow2ForecastShort'), ENT_COMPAT, 'ISO-8859-1')."<br/>\n";
+				$ForecastData3 .= "min. ".IPSWeatherFAT_GetValue('Tomorrow2TempMin')." &deg;C <br/> max. ".IPSWeatherFAT_GetValue('Tomorrow2TempMax')." &deg;C<br/><br/>";
+			}
 		?>
 
 		<div id="containerToday">
 			<div class="heading"><?php echo IPSWEATHERFAT_DISPLAY;?></div>
 			<div class="containerTodayBorder">
 				<div class="containerTodayData"><?php echo $TodayData;?></div>
-				<div class="containerTodayIcon"><?php echo '<div class="pictureToday"><span></span><img src="'.IPSWeatherFAT_GetValue('TodayIcon').'" alt="'.IPSWeatherFAT_GetValue('TodayForecastShort').'"/></div>';?></div>
+				<div class="containerTodayIcon"><?php echo '<div class="pictureToday"><span></span><img src="'.IPSWeatherFAT_GetValue('TodayIcon').'" alt="'.htmlentities(IPSWeatherFAT_GetValue('TodayForecastShort')).'"/></div>';?></div>
 				<div class="containerTodayText"><?php echo IPSWeatherFAT_GetValue('TodayForecastLong');?></div>
 			</div>
 		</div>
@@ -111,9 +114,9 @@
 				<div class="containerForecastData1"><?php echo $ForecastData1;?></div>
 				<div class="containerForecastData2"><?php echo $ForecastData2;?></div>
 				<div class="containerForecastData3"><?php echo $ForecastData3;?></div>
-				<div class="containerForecastIcon1"><?php echo '<div class="pictureForecast"><img src="'.IPSWeatherFAT_GetValue('TomorrowIcon').'" alt="'.IPSWeatherFAT_GetValue('TomorrowForecastShort').'"/></div>';?></div>
-				<div class="containerForecastIcon2"><?php echo '<div class="pictureForecast"><img src="'.IPSWeatherFAT_GetValue('Tomorrow1Icon').'" alt="'.IPSWeatherFAT_GetValue('Tomorrow1ForecastShort').'"/></div>';?></div>
-				<div class="containerForecastIcon3"><?php echo '<div class="pictureForecast"><img src="'.IPSWeatherFAT_GetValue('Tomorrow2Icon').'" alt="'.IPSWeatherFAT_GetValue('Tomorrow2ForecastShort').'"/></div>';?></div>
+				<div class="containerForecastIcon1"><?php echo '<div class="pictureForecast"><img src="'.IPSWeatherFAT_GetValue('TomorrowIcon').'" alt="'.htmlentities(IPSWeatherFAT_GetValue('TomorrowForecastShort')).'"/></div>';?></div>
+				<div class="containerForecastIcon2"><?php echo '<div class="pictureForecast"><img src="'.IPSWeatherFAT_GetValue('Tomorrow1Icon').'" alt="'.htmlentities(IPSWeatherFAT_GetValue('Tomorrow1ForecastShort')).'"/></div>';?></div>
+				<div class="containerForecastIcon3"><?php echo '<div class="pictureForecast"><img src="'.IPSWeatherFAT_GetValue('Tomorrow2Icon').'" alt="'.htmlentities(IPSWeatherFAT_GetValue('Tomorrow2ForecastShort')).'"/></div>';?></div>
 				<div class="containerForecastText1"><?php echo IPSWeatherFAT_GetValue('TomorrowForecastLong');?></div>
 				<div class="containerForecastText2"><?php echo IPSWeatherFAT_GetValue('Tomorrow1ForecastLong');?></div>
 				<?php

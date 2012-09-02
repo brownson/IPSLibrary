@@ -61,21 +61,27 @@
 	 * @param string $name Name der Variablen
 	 * @param string $valueArrayXML Wert der geschrieben werden soll
 	 */
-	function IPSWeatherFAT_SetValueXML($name, $valueArrayXML, $replacementArray=null) {
-	   if (count($valueArrayXML)==0) {
+	function IPSWeatherFAT_SetValueXML($name, $valueArrayXML, $prefix='', $suffix='', $replacementArray=null) {
+		if (!is_array($valueArrayXML)) {
+			$value = $valueArrayXML;
+	   } elseif (count($valueArrayXML)==0) {
 	      echo 'Value for '.$name.' NOT found Google Weather API'.PHP_EOL;
+	      return;
 		} else {
-			$categoryId_Weather = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.Weather.IPSWeatherForcastAT');
-			$variableId         = IPS_GetObjectIDByIdent($name, $categoryId_Weather);
 			$value = (string)$valueArrayXML[0];
-			if ($replacementArray <> null) {
-				for ($i=0; $i<count($replacementArray); $i=$i+2) {
-				   $value = str_replace($replacementArray[$i], $replacementArray[$i+1], $value);
-				}
-			}
-	      //echo 'Write '.$name.' = '.$value.PHP_EOL;
-			SetValue($variableId, $value);
 		}
+		
+		$categoryId_Weather = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.Weather.IPSWeatherForcastAT');
+		$variableId         = IPS_GetObjectIDByIdent($name, $categoryId_Weather);
+		$value = html_entity_decode($value, ENT_COMPAT, 'ISO-8859-1');
+		$value = $prefix.$value.$suffix;
+		if ($replacementArray <> null) {
+			for ($i=0; $i<count($replacementArray); $i=$i+2) {
+			   $value = str_replace($replacementArray[$i], $replacementArray[$i+1], $value);
+			}
+		}
+      echo 'Write '.$name.' = '.$value.PHP_EOL;
+		SetValue($variableId, $value);
 	}
 
 
