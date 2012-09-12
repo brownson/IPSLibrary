@@ -25,6 +25,7 @@ class Prowl
 		'application' 	=> 		254,	// Name of the app.
 		'event' 		=> 		1024,	// Name of the event.
 		'description' 	=> 		10000,	// Description of the event.
+		'url'           => 		512,  
 	);
 	
 	public function __construct($apikey=null, $verify=false, $provkey=null, $proxy=null, $userpwd=null)
