@@ -33,15 +33,15 @@
 	function IPSWeatherFAT_RefreshWunderground() {
 
 		$urlWunderground      = 'http://api.wunderground.com/api/'.IPSWEATHERFAT_WUNDERGROUND_KEY.'/forecast/lang:DL/q/'.IPSWEATHERFAT_WUNDERGROUND_COUNTRY.'/'.IPSWEATHERFAT_WUNDERGROUND_TOWN.'.xml';
-		echo 'URL Wunderground = '.$urlWunderground.PHP_EOL;
+		IPSLogger_Trc(__file__, 'Load Weather Data from Wunderground, URL='.$urlWunderground);
 		$urlContent = @Sys_GetURLContent($urlWunderground);
 		if ($urlContent===false) {
-			echo 'Wunderground Weather API is empty ...'.PHP_EOL;
+			IPSLogger_Dbg(__file__, 'Wunderground Weather API is empty ...');
 			return false;
 		}
 		$api = @simplexml_load_string($urlContent);
 		if ($api===false) {
-			echo 'Error processing Wunderground Weather API ...'.PHP_EOL;
+			IPSLogger_Dbg(__file__, 'Error processing Wunderground Weather API ...');
 			return false;
 		}
 		$icon_array = array(
@@ -98,15 +98,15 @@
 
 
 		$urlWunderground      = 'http://api.wunderground.com/api/'.IPSWEATHERFAT_WUNDERGROUND_KEY.'/conditions/lang:DL/q/'.IPSWEATHERFAT_WUNDERGROUND_COUNTRY.'/'.IPSWEATHERFAT_WUNDERGROUND_TOWN.'.xml';
-		echo 'URL Wunderground = '.$urlWunderground.PHP_EOL;
+		IPSLogger_Trc(__file__, 'Load Weather Data from Wunderground, URL='.$urlWunderground);
 		$urlContent = @Sys_GetURLContent($urlWunderground);
 		if ($urlContent===false) {
-			echo 'Wunderground Weather API is empty ...'.PHP_EOL;
+			IPSLogger_Dbg(__file__, 'Wunderground Weather API is empty ...');
 			return false;
 		}
 		$api = @simplexml_load_string(utf8_encode($urlContent));
 		if ($api===false) {
-			echo 'Error processing Wunderground Weather API ...'.PHP_EOL;
+			IPSLogger_Dbg(__file__, 'Error processing Wunderground Weather API ...');
 			return false;
 		}
 
