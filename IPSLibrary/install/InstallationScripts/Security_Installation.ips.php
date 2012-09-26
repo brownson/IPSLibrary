@@ -67,31 +67,88 @@
     // ----------------------------------------------------------------------------------------------------------------------------
     $CategoryIdApp      = $moduleManager->GetModuleCategoryID('app');
     $CategoryIdData     = $moduleManager->GetModuleCategoryID('data');
-    $CategoryIdConfig   = $moduleManager->GetModuleCategoryID('config');
+	$CategoryIdConfig   = $moduleManager->GetModuleCategoryID('config');
     
     // Get Scripts Ids
     $ID_ScriptSecurity = IPS_GetScriptIDByName('Security', $CategoryIdApp);
     $ID_ScriptSecurityMotionHandler = IPS_GetScriptIDByName('Security_MotionHandler', $CategoryIdApp);
+	$ID_ScriptSecuritySmokeHandler = IPS_GetScriptIDByName('Security_SmokeHandler', $CategoryIdApp);
+	$ID_ScriptSecurityClosureHandler = IPS_GetScriptIDByName('Security_ClosureHandler', $CategoryIdApp);
     $ID_ScriptSecurityEnableDisableAlarm = IPS_GetScriptIDByName('Security_EnableDisableAlarm', $CategoryIdApp);
     
-    CreateVariable(v_ALARM_ACTIVE, 0 /*Boolean*/, $CategoryIdData, 0, "~Switch", $ID_ScriptSecurityEnableDisableAlarm, false);
-    
-    $devices = getMotionDevices();
-    
+    // TODO: enable logging
+	CreateVariable(v_ALARM_ACTIVE, 0 /*Boolean*/, $CategoryIdData, 0, "~Switch", $ID_ScriptSecurityEnableDisableAlarm, false);
+	CreateVariable(cat_MOTION."Log", 3 /* String */, $CategoryIdData, 0, "~HTMLBox", false, false);
+	CreateVariable(cat_SMOKE."Log", 3 /* String */, $CategoryIdData, 0, "~HTMLBox", false, false);
+	CreateVariable(cat_CLOSURE."Log", 3 /* String */, $CategoryIdData, 0, "~HTMLBox", false, false);
+	
+    /*$devices = getMotionDevices();
+    $CategoryIdDataMotion = CreateCategory(cat_MOTION, $CategoryIdData, 50);
     foreach($devices as $deviceNumber => &$deviceConfig) {
-        if(!isset($deviceConfig[c_Motion_Instance_ID]) || !IPS_ObjectExists($deviceConfig[c_Motion_Instance_ID])) {
-            IPSLogger_Err(__file__, "Variable with name ".v_MOTION." does not exist in instance ".$deviceConfig[c_Motion_Instance_ID].".");
-            throw new Exception("Unable to find MOTION variable on device instance ".$deviceConfig[c_Motion_Instance_ID]);
+        if(!isset($deviceConfig[c_Variable_ID]) || !IPS_ObjectExists($deviceConfig[c_Variable_ID])) {
+            IPSLogger_Err(__file__, "No device variable defined.");
+            throw new Exception("No device variable defined.");
         }
-        $motionId = $deviceConfig[c_Motion_Instance_ID];
+        $deviceId = $deviceConfig[c_Variable_ID];
     
-        echo "Creating device ".$deviceConfig[c_Motion_Name]." (Location: ".$deviceConfig[c_Motion_Location].") in $CategoryIdData for $motionId \n";
-        $CategoryIdDevice = CreateCategory($motionId, $CategoryIdData, 50);
-        CreateVariable(v_LAST_MOTION, 3 /*String*/, $CategoryIdDevice, 10, "~HTMLBox");
+        echo "Creating device ".$deviceConfig[c_Name]." (Location: ".$deviceConfig[c_Location].") in $CategoryIdDataMotion for $deviceId \n";
+        $CategoryIdDevice = CreateCategory($deviceId, $CategoryIdDataMotion, 50);
+        CreateVariable("Last".cat_MOTION, 3, $CategoryIdDevice, 10, "~HTMLBox");
         
         // TODO
+        $motionEventId = CreateEvent($deviceId." - On Motion", $deviceId, $ID_ScriptSecurityMotionHandler);
+    }
+	
+	$devices = getSmokeDevices();
+    $CategoryIdDataSmoke = CreateCategory(cat_SMOKE, $CategoryIdData, 50);
+    foreach($devices as $deviceNumber => &$deviceConfig) {
+        $deviceId = $deviceConfig[c_Variable_ID];
+    
+        echo "Creating device ".$deviceConfig[c_Name]." (Location: ".$deviceConfig[c_Location].") in $CategoryIdDataSmoke for $deviceId \n";
+        $CategoryIdDevice = CreateCategory($deviceId, $CategoryIdDataSmoke, 50);
+        CreateVariable("Last".cat_SMOKE, 3, $CategoryIdDevice, 10, "~HTMLBox");
         
-        $motionEventId = CreateEvent("On Motion", $motionId, $ID_ScriptSecurityMotionHandler);
+        // TODO
+        $smokeEventId = CreateEvent($deviceId." - On Smoke", $deviceId, $ID_ScriptSecuritySmokeHandler);
+    }*/
+	
+	createCategoryAndDevices($CategoryIdData, cat_MOTION, getMotionDevices(), $ID_ScriptSecurityMotionHandler);
+	createCategoryAndDevices($CategoryIdData, cat_SMOKE, getSmokeDevices(), $ID_ScriptSecuritySmokeHandler);
+	createCategoryAndDevices($CategoryIdData, cat_CLOSURE, getClosureDevices(), $ID_ScriptSecurityClosureHandler);
+	
+	function createCategoryAndDevices($parentCategory, $type, $devices, $handlerScriptId) {
+		$typeCategoryId = CreateCategory($type, $parentCategory, 50);
+		foreach($devices as $deviceNumber => &$deviceConfig) {
+			$deviceId = $deviceConfig[c_Variable_ID];
+		
+			echo "Creating device ".$deviceConfig[c_Name]." (Location: ".$deviceConfig[c_Location].") in $typeCategoryId for $deviceId \n";
+			$CategoryIdDevice = CreateCategory($deviceId, $typeCategoryId, 50);
+			CreateVariable("Last".$type, 3 /*String*/, $CategoryIdDevice, 10, "~HTMLBox");
+			
+			// TODO
+			$eventId = CreateEvent($deviceId." - On ".$type, $deviceId, $handlerScriptId);
+		}
+	}
+	
+	Register_PhpErrorHandler($moduleManager);
+
+    // ------------------------------------------------------------------------------------------------
+    function Register_PhpErrorHandler($moduleManager) {
+        $file = IPS_GetKernelDir().'scripts\\__autoload.php';
+
+        if (!file_exists($file)) {
+            throw new Exception($file.' could NOT be found!', E_USER_ERROR);
+        }
+        $FileContent = file_get_contents($file);
+
+        $pos = strpos($FileContent, 'IPSLogger_PhpErrorHandler.inc.php');
+
+        if ($pos === false) {
+            $includeCommand = '    IPSUtils_Include("IPSLogger_PhpErrorHandler.inc.php", "IPSLibrary::app::core::IPSLogger");';
+            $FileContent = str_replace('?>', $includeCommand.PHP_EOL.'?>', $FileContent);
+            $moduleManager->LogHandler()->Log('Register Php ErrorHandler of IPSLogger in File __autoload.php');
+            file_put_contents($file, $FileContent);
+        }
     }
     
     return;
@@ -170,27 +227,6 @@
     }
     
     CreateProfile_DectStatus();
-
-    Register_PhpErrorHandler($moduleManager);
-
-    // ------------------------------------------------------------------------------------------------
-    function Register_PhpErrorHandler($moduleManager) {
-        $file = IPS_GetKernelDir().'scripts\\__autoload.php';
-
-        if (!file_exists($file)) {
-            throw new Exception($file.' could NOT be found!', E_USER_ERROR);
-        }
-        $FileContent = file_get_contents($file);
-
-        $pos = strpos($FileContent, 'IPSLogger_PhpErrorHandler.inc.php');
-
-        if ($pos === false) {
-            $includeCommand = '    IPSUtils_Include("IPSLogger_PhpErrorHandler.inc.php", "IPSLibrary::app::core::IPSLogger");';
-            $FileContent = str_replace('?>', $includeCommand.PHP_EOL.'?>', $FileContent);
-            $moduleManager->LogHandler()->Log('Register Php ErrorHandler of IPSLogger in File __autoload.php');
-            file_put_contents($file, $FileContent);
-        }
-    }
     
     function CreateProfile_DectStatus() {
         $Name = "Security_DectStatus";
