@@ -21,22 +21,67 @@
 		return $devices;
 	}
 	
-	function Security_getConfigById($configs, $variableId) {
-		foreach($configs as $config) {
-			if($config[c_Variable_ID] == $variableId) {
-				return $config;
+    function Security_getConfigById($type, $variableId) {
+		$devices = array();
+		switch ($type) {
+			case cat_SMOKE:
+				$devices = Security_getSmokeDevices();
+				break;
+			case cat_MOTION:
+				$devices = Security_getMotionDevices();
+				break;
+			case cat_CLOSURE:
+				$devices = Security_getClosureDevices();
+				break;
+			default:
+				throw new Exception("Unsupported event type '".$type."'");
+		}
+		
+		foreach($devices as $device) {
+			if($device[c_Variable_ID] == $variableId) {
+				return $device;
 			}
 		}
+		return null;
 	}
 	
-    function Security_getMotionConfigById($variableId) {
-		$configs = Security_getMotionDevices();
-		return Security_getConfigById($configs, $variableId);
+	function Security_resolveDevice(&$event) {
+		$event["device"] = Security_getConfigById($event["type"], $event["deviceId"]);
+		// IPSLogger_Dbg(__file__, "Found device: ".print_r($event["device"], true));
 	}
 	
-	function Security_getSmokeConfigById($variableId) {
-		$configs = Security_getSmokeDevices();
-		return Security_getConfigById($configs, $variableId);
+	function Security_handleEvent($event) {
+		Security_resolveDevice($event);
+		
+		Security_logEvent($event);
+		
+		$type = $event["type"];
+		$value = $event["value"];
+		$raiseAlarm = false;
+		
+		IPSLogger_Trc(__file__, $type."Event - Source: ".$event["device"][c_Name]."@".$event["device"][c_Location]."(".$event["device"][c_Variable_ID].")");
+		
+		switch ($type) {
+			case cat_SMOKE:
+				$raiseAlarm = true;
+				break;
+			case cat_MOTION:
+				if($value == true && Security_isAlarmEnabled()) {
+					$raiseAlarm = true;
+				}
+				break;
+			case cat_CLOSURE:
+				if($value == true && Security_isAlarmEnabled()) {
+					$raiseAlarm = true;
+				}
+				break;
+			default;
+				throw new Exception("Unsupported event type '".$type."'");
+		}
+		
+		if($raiseAlarm) {
+			Security_raiseAlarm($event);
+		}
 	}
 	
 	function Security_logEvent($event) {

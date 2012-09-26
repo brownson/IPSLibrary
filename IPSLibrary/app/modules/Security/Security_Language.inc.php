@@ -10,6 +10,10 @@
 		$langString["ALARM_SMOKE_DETECTED_BODY"] = "%s: Rauch durch '%s' am Ort '%s' erkannt.";
 		$langString["ALARM_SMOKE_DETECTED_BODY_HISTORY"] = $langString["ALARM_SMOKE_DETECTED_BODY"]."\n\nVerlauf: \n%s";
 		
+		$langString["ALARM_CLOSURE_DETECTED_HEADER"] = "ALARM - Öffnung erkannt";
+		$langString["ALARM_CLOSURE_DETECTED_BODY"] = "%s: Öffnung von '%s' am Ort '%s' erkannt.";
+		$langString["ALARM_CLOSURE_DETECTED_BODY_HISTORY"] = $langString["ALARM_CLOSURE_DETECTED_BODY"]."\n\nVerlauf: \n%s";
+		
 		if(isset($langString[$langId])) {
 			return $langString[$langId];
 		}
