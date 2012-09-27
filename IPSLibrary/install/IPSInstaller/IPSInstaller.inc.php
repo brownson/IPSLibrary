@@ -651,7 +651,7 @@
 	 * @return integer ID des Timers
 	 *
 	 */
-	function CreateTimer_OnceADay ($Name, $ParentId, $Hour, $Minute=0) {
+	function CreateTimer_OnceADay ($Name, $ParentId, $Hour, $Minute=0, $Active=true) {
 		$TimerId = @IPS_GetObjectIDByIdent(Get_IdentByName($Name), $ParentId);
 		if ($TimerId === false) $TimerId = @IPS_GetEventIDByName($Name, $ParentId);
 		if ($TimerId === false) {
@@ -665,7 +665,7 @@
 			if (!IPS_SetEventCyclicTimeBounds($TimerId, mktime($Hour, $Minute, 0), 0)) {
 				Error ("IPS_SetEventCyclicTimeBounds failed !!!");
 			}
-			IPS_SetEventActive($TimerId, true);
+			IPS_SetEventActive($TimerId, $Active);
 			Debug ('Created Timer '.$Name.'='.$TimerId."");
 		}
 		return $TimerId;
