@@ -13,7 +13,7 @@
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function convert($s) {
 	   $source = array("&", "ä", "ö", "ü", "Ä", "Ö", "Ü", "ß", "<", ">", "€", "", "¹", "²", "³");
-	   $dest = array("&", "ä", "ö", "ü", "Ä", "Ö", "Ü", "ß", "<", ">", "¬", "¹", "&#178", "³");
+	   $dest = array("&amp;", "&auml;", "&ouml;", "&uuml;", "&Auml;", "&Ouml;", "&Uuml;", "&szlig;", "&lt;", "&gt;", "&euro;", "¹", "&#178", "³");
 	   $s = str_replace($source, $dest, $s);
 	   return $s;
 	}
@@ -21,7 +21,7 @@
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function decode($s) {
 	   $dest = array("&", "ä", "ö", "ü", "Ä", "Ö", "Ü", "ß", "<", ">", "€", "", "¹", "²", "³");
-	   $source = array("&", "ä", "ö", "ü", "Ä", "Ö", "Ü", "ß", "<", ">", "¬", "¹", "&#178", "³");
+	   $source = array("&amp;", "&auml;", "&ouml;", "&uuml;", "&Auml;", "&Ouml;", "&Uuml;", "&szlig;", "&lt;", "&gt;", "&euro;", "¹", "&#178", "³");
 	   $s = str_replace($source, $dest, $s);
 	   return $s;
 	}
@@ -226,19 +226,22 @@
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function NetPlayer_RefreshTrackListValue() {
 		$currentIdx    = -1;
-		$player = NetPlayer_GetIPSComponentPlayer();
-		$currentName   = $player->GetTrackName();
-		$currentName   = NetPlayer_GetTrackName($currentName);
-		$currentName   = str_replace(GetValue(NP_ID_CDINTERPRET).' - ', '', $currentName);
+		if (GetValue(NP_ID_SOURCE)==NP_IDX_SOURCECD) {
+			$player        = NetPlayer_GetIPSComponentPlayer();
+			$currentName   = $player->GetTrackName();
+			$currentName   = NetPlayer_GetTrackName($currentName);
+			$currentName   = str_replace(GetValue(NP_ID_CDINTERPRET).' - ', '', $currentName);
 
-		$profileData   = IPS_GetVariableProfile('NetPlayer_CDTrackList');
-		$associations  = $profileData['Associations'];
-		foreach ($associations as $idx=>$data) {
-			IPSLogger_Trc(__file__, "Idx=$idx, '$currentName' --> '".$data['Name']."'");
-			if ($currentName == $data['Name']) {
-			   $currentIdx = $data['Value'];
+			$profileData   = IPS_GetVariableProfile('NetPlayer_CDTrackList');
+			$associations  = $profileData['Associations'];
+			foreach ($associations as $idx=>$data) {
+				IPSLogger_Trc(__file__, "Idx=$idx, '$currentName' --> '".$data['Name']."'");
+				if ($currentName == $data['Name']) {
+					$currentIdx = $data['Value'];
+				}
 			}
 		}
+		
 		if (GetValue(NP_ID_CDTRACKLIST)<>$currentIdx ) {
 		   SetValue(NP_ID_CDTRACKLIST, $currentIdx);
 		}

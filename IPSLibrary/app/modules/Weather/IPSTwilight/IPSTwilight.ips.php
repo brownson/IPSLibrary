@@ -112,8 +112,8 @@
 	function GenerateGraphics($variableId_Display) {
 		GenerateTwilightGraphic('IPSTwilight_YearUnlimited', false, 4.4, 1.8);
 		GenerateTwilightGraphic('IPSTwilight_YearLimited',   true,  4.4, 1.8);
-		GenerateClockGraphic('IPSTwilight_DayUnlimited',      false);
-		GenerateClockGraphic('IPSTwilight_DayLimited',        true);
+		GenerateClockGraphic('IPSTwilight_DayUnlimited', false);
+		GenerateClockGraphic('IPSTwilight_DayLimited',   true);
 
 		CopyGraphics($variableId_Display);
 	}
@@ -131,8 +131,8 @@
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function SetLimitedValues($NameLimits, $NameBegin, $NameEnd, $TimeStart, $TimeEnd, $categoryId_Values, $scriptId_Refresh) {
-		CreateTimer($TimeStart, 'IPSTwilight_'.$NameBegin, $scriptId_Refresh);
-		CreateTimer($TimeEnd,   'IPSTwilight_'.$NameEnd,   $scriptId_Refresh);
+		CreateTimer($TimeStart, 'IPSTwilight_'.str_replace('Limited', '', $NameBegin), $scriptId_Refresh);
+		CreateTimer($TimeEnd,   'IPSTwilight_'.str_replace('Limited', '', $NameEnd),   $scriptId_Refresh);
 
 		$Limits = GetValue(IPS_GetVariableIDByName($NameLimits, $categoryId_Values));
 		//                   01234567890123456789012
@@ -149,8 +149,8 @@
 		SetValue(IPS_GetVariableIDByName($NameBegin, $categoryId_Values), date("H:i",$TimeStart));
 		SetValue(IPS_GetVariableIDByName($NameEnd,   $categoryId_Values), date("H:i",$TimeEnd));
 
-		CreateTimer($TimeStart, 'IPSTwilight_'.str_replace('Limited', '', $NameBegin), $scriptId_Refresh);
-		CreateTimer($TimeEnd,   'IPSTwilight_'.str_replace('Limited', '', $NameEnd),   $scriptId_Refresh);
+		CreateTimer($TimeStart, 'IPSTwilight_'.$NameBegin, $scriptId_Refresh);
+		CreateTimer($TimeEnd,   'IPSTwilight_'.$NameEnd,   $scriptId_Refresh);
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------

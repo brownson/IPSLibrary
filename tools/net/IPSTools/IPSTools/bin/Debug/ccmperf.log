@@ -1,0 +1,14 @@
+﻿<![LOG[Failed to create or open mutex for CcmFramework\CcmEndpoint]LOG]!><time="19:17:55.795-120" date="07-12-2012" component="ccmperf" context="" type="3" thread="8476" file="perfobject.cpp:342">
+<![LOG[Failed to initialize object CcmEndpoint.]LOG]!><time="19:17:55.797-120" date="07-12-2012" component="ccmperf" context="" type="3" thread="8476" file="perfentry.cpp:176">
+<![LOG[Failed to create or open mutex for CcmFramework\CcmEndpoint]LOG]!><time="19:18:37.616-120" date="07-12-2012" component="ccmperf" context="" type="3" thread="4600" file="perfobject.cpp:342">
+<![LOG[Failed to initialize object CcmEndpoint.]LOG]!><time="19:18:37.617-120" date="07-12-2012" component="ccmperf" context="" type="3" thread="4600" file="perfentry.cpp:176">
+<![LOG[Failed to create or open mutex for CcmFramework\CcmEndpoint]LOG]!><time="20:12:17.918-120" date="07-12-2012" component="ccmperf" context="" type="3" thread="9508" file="perfobject.cpp:342">
+<![LOG[Failed to initialize object CcmEndpoint.]LOG]!><time="20:12:17.920-120" date="07-12-2012" component="ccmperf" context="" type="3" thread="9508" file="perfentry.cpp:176">
+<![LOG[Failed to create or open mutex for CcmFramework\CcmEndpoint]LOG]!><time="20:42:56.581-120" date="07-12-2012" component="ccmperf" context="" type="3" thread="9768" file="perfobject.cpp:342">
+<![LOG[Failed to initialize object CcmEndpoint.]LOG]!><time="20:42:56.582-120" date="07-12-2012" component="ccmperf" context="" type="3" thread="9768" file="perfentry.cpp:176">
+<![LOG[Failed to create or open mutex for CcmFramework\CcmEndpoint]LOG]!><time="21:34:59.916-120" date="07-12-2012" component="ccmperf" context="" type="3" thread="8504" file="perfobject.cpp:342">
+<![LOG[Failed to initialize object CcmEndpoint.]LOG]!><time="21:34:59.917-120" date="07-12-2012" component="ccmperf" context="" type="3" thread="8504" file="perfentry.cpp:176">
+<![LOG[Failed to create or open mutex for CcmFramework\CcmEndpoint]LOG]!><time="21:37:42.739-120" date="07-12-2012" component="ccmperf" context="" type="3" thread="10908" file="perfobject.cpp:342">
+<![LOG[Failed to initialize object CcmEndpoint.]LOG]!><time="21:37:42.740-120" date="07-12-2012" component="ccmperf" context="" type="3" thread="10908" file="perfentry.cpp:176">
+<![LOG[Failed to create or open mutex for CcmFramework\CcmEndpoint]LOG]!><time="21:38:48.143-120" date="07-12-2012" component="ccmperf" context="" type="3" thread="11248" file="perfobject.cpp:342">
+<![LOG[Failed to initialize object CcmEndpoint.]LOG]!><time="21:38:48.145-120" date="07-12-2012" component="ccmperf" context="" type="3" thread="11248" file="perfentry.cpp:176">

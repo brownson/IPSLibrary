@@ -109,9 +109,12 @@
 				$profileManager->Rename($controlId, $value);
 				break;
 
-			case c_Control_TempDiffShadowing:
-			case c_Control_TempDiffClosing:
-			case c_Control_TempDiffOpening:
+			case c_Control_TempLevelOutShadow:
+			case c_Control_TempLevelOutClose:
+			case c_Control_TempLevelOutOpen:
+			case c_Control_TempLevelInShadow:
+			case c_Control_TempLevelInClose:
+			case c_Control_TempLevelInOpen:
 			case c_Control_Brightness:
 			case c_Control_AzimuthBgn:
 			case c_Control_AzimuthEnd:

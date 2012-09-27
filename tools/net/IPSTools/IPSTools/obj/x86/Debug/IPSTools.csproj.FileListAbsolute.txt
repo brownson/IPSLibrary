@@ -46,3 +46,15 @@ C:\ab\IPS\Projects.Net\_Development\IP-SymconTools\IPSTools\obj\x86\Debug\Browns
 C:\ab\IPS\Projects.Net\_Development\IP-SymconTools\IPSTools\obj\x86\Debug\IPSTool.Properties.Resources.resources
 C:\ab\IPS\Projects.Net\_Development\IP-SymconTools\IPSTools\obj\x86\Debug\GenerateResource.read.1.tlog
 C:\ab\IPS\Projects.Net\_Development\IP-SymconTools\IPSTools\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\ab\IPS\GIT\IPSLibrary\tools\net\IPSTools\IPSTools\bin\Debug\IPSTools.exe.config
+C:\ab\IPS\GIT\IPSLibrary\tools\net\IPSTools\IPSTools\obj\x86\Debug\IPSTools.exe
+C:\ab\IPS\GIT\IPSLibrary\tools\net\IPSTools\IPSTools\obj\x86\Debug\IPSTools.pdb
+C:\ab\IPS\GIT\IPSLibrary\tools\net\IPSTools\IPSTools\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\ab\IPS\GIT\IPSLibrary\tools\net\IPSTools\IPSTools\obj\x86\Debug\BrownsonTool.IPSTools.resources
+C:\ab\IPS\GIT\IPSLibrary\tools\net\IPSTools\IPSTools\obj\x86\Debug\IPSTool.Properties.Resources.resources
+C:\ab\IPS\GIT\IPSLibrary\tools\net\IPSTools\IPSTools\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\ab\IPS\GIT\IPSLibrary\tools\net\IPSTools\IPSTools\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\ab\IPS\GIT\IPSLibrary\tools\net\IPSTools\IPSTools\bin\Debug\IPSTools.exe
+C:\ab\IPS\GIT\IPSLibrary\tools\net\IPSTools\IPSTools\bin\Debug\IPSTools.pdb
+C:\ab\IPS\GIT\IPSLibrary\tools\net\IPSTools\IPSTools\bin\Debug\IPSToolLibrary.dll
+C:\ab\IPS\GIT\IPSLibrary\tools\net\IPSTools\IPSTools\bin\Debug\IPSToolLibrary.pdb
