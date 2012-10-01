@@ -111,7 +111,7 @@
 		}
 
 		IPSWeatherFAT_SetValueXML('TodayForecastShort', $api->xpath('//current_observation/weather'));
-		IPSWeatherFAT_SetValueXML('TodayTempCurrent',   str_replace('.',',',$api->current_observation->temp_c));
+		IPSWeatherFAT_SetValueXML('TodayTempCurrent',   round(floatval(str_replace(',','.',$api->current_observation->temp_c))));
 		IPSWeatherFAT_SetValueXML('AirHumidity',        $api->xpath('//current_observation/relative_humidity'), 'Feuchtigkeit: ', '');
 		//IPSWeatherFAT_SetValueXML('Wind',               utf8_decode($api->current_observation->wind_dir),          'Wind:', '');
 		IPSWeatherFAT_SetValueXML('Wind',               utf8_decode(utf8_decode($api->current_observation->wind_dir)),          'Wind:', '');
