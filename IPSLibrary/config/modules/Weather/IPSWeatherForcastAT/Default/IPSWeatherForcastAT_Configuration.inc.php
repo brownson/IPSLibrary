@@ -55,6 +55,28 @@
 	define ("IPSWEATHERFAT_GOOGLE_LANG",            'de');
 
 	/**
+	 * Zugriffs API Key für die "Wunderground Weather API", dieser kann auf folgender Adresse generiert
+	 * werden: http://www.wunderground.com
+	 */
+	define ("IPSWEATHERFAT_WUNDERGROUND_KEY",       '');
+
+	/**
+	 * Ländereinstellung für die "Wunderground Weather API"
+	 */
+	define ("IPSWEATHERFAT_WUNDERGROUND_COUNTRY",    'AT');
+
+	/**
+	 * Stadt für die "Wunderground Weather API"
+	 */
+	define ("IPSWEATHERFAT_WUNDERGROUND_TOWN",       'Wien');
+
+	/**
+	 * Yahoo Wohnort Angabe, WOEID = "Where On Earth Identifiers", dieser kann auf folgender Adresse
+	 * ermittelt werden: "http://weather.yahoo.com"
+	 */
+	define ("IPSWEATHERFAT_YAHOO_WOEID",            '');
+
+	/**
 	 * URL für ORF Wetter
 	 */
 	define ("IPSWEATHERFAT_ORF_URL",                "http://wetter.orf.at/wien/prognose");

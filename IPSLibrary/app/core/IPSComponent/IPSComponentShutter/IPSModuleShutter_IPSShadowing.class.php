@@ -32,15 +32,16 @@
 		 *
 		 * @param string $position Aktuelle Position der Beschattung (Wertebereich 0-100)
 		 */
-		public function SyncPosition($position, IPSComponentShutter $component) {
-			$deviceConfig      = get_ShadowingConfiguration();
-			$componentParams   = $component->GetComponentParams();
-
+		public function SyncPosition($position, IPSComponentShutter $componentToSync) {
+			$componentParamsToSync = $componentToSync->GetComponentParams();
+			$deviceConfig          = get_ShadowingConfiguration();
 			foreach ($deviceConfig as $deviceIdent=>$deviceData) {
-				if ($componentParams==$deviceData[c_Property_Component]) {
+				$componentConfig       = IPSComponent::CreateObjectByParams($deviceData[c_Property_Component]);
+				$componentParamsConfig = $componentConfig->GetComponentParams();
+				if ($componentParamsConfig==$componentParamsToSync) {
 					$categoryIdDevices = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSShadowing.Devices');
 					$deviceId = IPS_GetObjectIDByIdent($deviceIdent, $categoryIdDevices);
-					
+
 					$device = new IPSShadowing_Device($deviceId);
 					$device->MoveByEvent($position);
 				}

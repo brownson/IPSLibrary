@@ -29,19 +29,25 @@
 
 	include_once "IPSShadowing.inc.php";
 
-	$categoryIdDevices      = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSShadowing.Devices');
-	$deviceIds              = IPS_GetChildrenIds($categoryIdDevices);
-	$oneOrMoreDevicesActive = false;
-	
-	foreach($deviceIds as $deviceId) {
-		$device = new IPSShadowing_Device($deviceId);
-		$deviceActive = $device->Refresh();
-		$oneOrMoreDevicesActive = ($oneOrMoreDevicesActive or $deviceActive);
-	}
-	
-	if (!$oneOrMoreDevicesActive) {
-		$refreshTimerId = IPSUtil_ObjectIDByPath('Program.IPSLibrary.app.modules.IPSShadowing.IPSShadowing_RefreshTimer.Refresh');
-		IPS_SetEventActive($refreshTimerId, false);
+	$result = IPS_SemaphoreEnter('IPSShadowing_Refresh', 500);
+
+	if ($result) {
+		$categoryIdDevices      = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSShadowing.Devices');
+		$deviceIds              = IPS_GetChildrenIds($categoryIdDevices);
+		$oneOrMoreDevicesActive = false;
+		
+		foreach($deviceIds as $deviceId) {
+			$device = new IPSShadowing_Device($deviceId);
+			$deviceActive = $device->Refresh();
+			$oneOrMoreDevicesActive = ($oneOrMoreDevicesActive or $deviceActive);
+		}
+		
+		if (!$oneOrMoreDevicesActive) {
+			$refreshTimerId = IPSUtil_ObjectIDByPath('Program.IPSLibrary.app.modules.IPSShadowing.IPSShadowing_RefreshTimer.Refresh');
+			IPS_SetEventActive($refreshTimerId, false);
+		}
+
+		IPS_SemaphoreLeave('IPSShadowing_Refresh');
 	}
 	
 	/** @}*/
