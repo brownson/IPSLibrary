@@ -37,8 +37,8 @@
 
 	class IPSMessageHandler {
 
-		private static $eventConfigurationAuto = null;
-		private static $eventConfigurationCust = null;
+		private static $eventConfigurationAuto = array();
+		private static $eventConfigurationCust = array();
 
 		/**
 		 * @public
@@ -177,7 +177,7 @@
 			}
 			$fileContentNew = substr($fileContent, 0, $pos1).$configString.substr($fileContent, $pos2);
 			file_put_contents($fileNameFull, $fileContentNew);
-			self::Set_EventConfiguration($configuration);
+			self::Set_EventConfigurationAuto($configuration);
 		}
 
 		/**
@@ -207,7 +207,7 @@
 					$moduleParamsNew = explode(',', $moduleParams);
 					$moduleClassNew  = $moduleParamsNew[0];
 
-					$params = $configuration[$variableId];
+					$params = $configurationAuto[$variableId];
 				   
 					for ($i=0; $i<count($params); $i=$i+3) {
 						$moduleParamsCfg = $params[$i+2];
