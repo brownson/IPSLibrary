@@ -1,0 +1,123 @@
+body  {
+      color:#fff;font-size:12px;
+      font-family:arial,sans-serif;
+      margin:0;
+      padding:0;
+      overflow:hidden
+}
+
+.plants .plant {
+	display: inline-block;
+    position: relative;
+    background: #333;
+	width: 250px;
+	height: auto;
+	margin: 3px;
+	padding-left: 8px;
+	padding-top: 3px;
+	padding-bottom: 6px;
+	padding-right: 8px;
+	
+	border: 1px solid black;
+    border-radius: 5px;
+}
+
+.plant .circle {
+	height: 12px;
+    width: 12px;
+    border-radius: 12px;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 12px;
+	margin: 10px;
+}
+
+.plant .circle.green {
+    background:green;
+}
+
+.plant .circle.red {
+    background:red;
+}
+
+.plant .label {
+	padding-top: 6px;
+	padding-bottom: 4px;
+}
+
+.plant .row {
+	line-height: 32px;
+}
+
+.plant .row > * {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.plant .name {
+	font-size: 20px;
+	line-height: 32px;
+	overflow: hidden;
+	color: #FF1133;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	max-width: 200px;
+}
+
+.plant .name .active {
+	color: #00FF00;
+}
+
+.plant .icon {
+	background-repeat: no-repeat;
+	height: 32px;
+	width: 32px;
+	line-height: 32px;
+	vertical-align: middle;
+}
+
+.plant .data {
+	font-size: 14px;
+	color: #0088FF;
+	padding-left: 10px;
+}
+
+.plant .warning {
+	position: absolute;
+	vertical-align: middle;
+	right: 1px;
+}
+
+.plant .message {
+	padding-left: 10px;
+	font-style: italic;
+	color: #99DD99;
+	opacity: 0;
+	height: 0;
+	overflow: hidden;
+	-moz-transition: padding 1s linear, height 1s linear, opacity 1s ease-out;
+	-webkit-transition: padding 1s linear, height 1s linear, opacity 1s ease-out;
+	transition: padding 1s linear, height 1s linear, opacity 1s ease-out;
+}
+
+.plant .message.active {
+	opacity: 1;
+	height: auto;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+/* Tooltips */
+.tooltip {
+   /*position: absolute;*/
+   padding: 5px 5px;
+   z-index: 2;
+   
+   color: #303030;
+   background-color: #f5f5b5;
+   border: 1px solid #DECA7E;
+   
+   font-family: sans-serif;
+   font-size: 12px;
+   line-height: 18px;
+   text-align: center;
+}
