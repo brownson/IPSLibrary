@@ -94,21 +94,18 @@ body  {
 	opacity: 0;
 	height: 0;
 	overflow: hidden;
-	-moz-transition: padding 1s linear, height 1s linear, opacity 1s ease-out;
-	-webkit-transition: padding 1s linear, height 1s linear, opacity 1s ease-out;
-	transition: padding 1s linear, height 1s linear, opacity 1s ease-out;
+	-moz-transition: height 1s linear, opacity 1s linear;
+	-webkit-transition: height 1s linear, opacity 1s linear;
+	transition: height 1s linear, opacity 1s linear;
 }
 
 .plant .message.active {
 	opacity: 1;
 	height: auto;
-	padding-top: 5px;
 	padding-bottom: 5px;
 }
 
-/* Tooltips */
 .tooltip {
-   /*position: absolute;*/
    padding: 5px 5px;
    z-index: 2;
    

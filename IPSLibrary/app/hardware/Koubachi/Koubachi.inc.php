@@ -299,9 +299,10 @@
 			"light"	=> "Helligkeit",
 			"temperature" => "Temperatur",
 			"mist" => "Besprühtermin",
-			"lastMisted" => "zuletzt",
+			"lastMisted" => "<b>Zuletzt</b>",
 			"lastUpdate" => "Letzte Aktualisierung",
 			"NA" => "Keine Daten",
+			"hint" => "<b>Hinweis</b>",
 		);
 		
 		//IPSLogger_Dbg(__file__, "I18N: ".print_r($i18n, true));
@@ -311,6 +312,15 @@
 		} else {
 			return $id;
 		}
+	}
+	
+	function formatDate($rawValue, $format) {
+		if($rawValue > 0) {
+			$popup = date($format ,$rawValue);
+		} else {
+			$popup = i18n('NA');
+		}
+		return $popup;
 	}
 	
 	function createEntry($plant) {
@@ -334,24 +344,13 @@
 		} else {
 			$waterLevel = (round($waterLevel * 100, 2))." %";
 		}
-		if($plant[API_XML_PLANT_NEXT_WATER] > 0) {
-			$nextWaterPopup = i18n('nextWater').": ".date("d.m.y" ,$plant[API_XML_PLANT_NEXT_WATER]);
-		} else {
-			$nextWaterPopup = i18n('nextWater').": ".i18n('NA');
-		}
 		if($plant[API_XML_PLANT_WATER_PENDING]) {
 			$showWarning = true;
-			$warning = str_replace("{{title}}", "Die Pflanze sollte gegossen werden.<br><br><b>Hinweis</b>: <br>".$plant[API_XML_PLANT_WATER_INSTRUCTION], $warningTpl);
+			$warning = str_replace("{{title}}", "Die Pflanze sollte gegossen werden.<br><br>".i18n('hint').": <br>".$plant[API_XML_PLANT_WATER_INSTRUCTION], $warningTpl);
 		} else {
 			$showWarning = false;
 		}
-		if($plant[API_XML_PLANT_LAST_WATER] > 0) {
-			$lastWateredDate = date("d.m.y H:i" ,$plant[API_XML_PLANT_LAST_WATER]);
-			$lastWateredPopup = i18n('lastWater').": ".$lastWateredDate;
-		} else {
-			$lastWateredPopup = i18n('lastWater').": ".i18n('NA');
-		}
-		$popup = $lastWateredPopup."<br>".$nextWaterPopup;
+		$popup = i18n('lastWater').": ".formatDate($plant[API_XML_PLANT_LAST_WATER], "d.m.y H:i")."<br>".i18n('nextWater').": ".formatDate($plant[API_XML_PLANT_NEXT_WATER], "d.m.y");
 		$str .= "<div class='row water'>";
 		$str .= "<div class='icon ipsIconDrops' title='".i18n('water')."'></div><div class='data kb-tooltip' kb-tooltip='".$popup."'>".$waterLevel."</div>".($showWarning ? $warning : "");
 		$str .= "</div>";
@@ -373,7 +372,7 @@
 				if(strlen($text) > 0) {
 					$text = "<br><br>";
 				}
-				$text .= "<b>Hinweis</b>: <br>".$plant[API_XML_PLANT_LIGHT_HINT];
+				$text .= i18n('hint').":<br>".$plant[API_XML_PLANT_LIGHT_HINT];
 			}
 			$warning = str_replace("{{title}}", $text, $warningTpl);
 		} else {
@@ -382,10 +381,6 @@
 		$str .= "<div class='row light'>";
 		$str .= "<div class='icon ipsIconSun' title='".i18n('light')."'></div><div class='data'>".$lightLevel."</div>".($showWarning ? $warning : "");
 		$str .= "</div>";
-		if($showWarning) {
-			$str .= "<div class='light message'>".$text;
-			$str .= "</div>";
-		}
 		
 		$tempLevel = $plant[API_XML_PLANT_TEMPERATURE_LEVEL];
 		if(!is_numeric($tempLevel)) {
@@ -404,7 +399,7 @@
 				if(strlen($text) > 0) {
 					$text = "<br><br>";
 				}
-				$text .= "<b>Hinweis</b>: <br>".$plant[API_XML_PLANT_TEMPERATURE_HINT];
+				$text .= i18n('hint').":<br>".$plant[API_XML_PLANT_TEMPERATURE_HINT];
 			}
 			$warning = str_replace("{{title}}", $text, $warningTpl);
 		} else {
@@ -420,29 +415,21 @@
 		} else {
 			$mistLevel = (round($mistLevel * 100, 2))." %";
 		}*/
-		if($plant[API_XML_PLANT_NEXT_MIST] > 0) {
-			$nextMistDate = date("d.m.y" ,$plant[API_XML_PLANT_NEXT_MIST]);
-		} else {
-			$nextMistDate = i18n('NA');
-		}
+		$nextMistDate = formatDate($plant[API_XML_PLANT_NEXT_MIST], "d.m.y");
+		print_r($nextMistDate."\n");
 		if($plant[API_XML_PLANT_MIST_PENDING]) {
 			$showWarning = true;
-			$warning = str_replace("{{title}}", "Die Pflanze sollte besprüht werden.<br><br><b>Hinweis:</b> ".$plant[API_XML_PLANT_MIST_INSTRUCTION], $warningTpl);
+			$warning = str_replace("{{title}}", "Die Pflanze sollte besprüht werden.<br><br>".i18n('hint').":<br>".$plant[API_XML_PLANT_MIST_INSTRUCTION], $warningTpl);
 		} else {
 			$showWarning = false;
 		}
-		if($plant[API_XML_PLANT_LAST_MIST] > 0) {
-			$lastMistedDate = date("d.m.y H:i" ,$plant[API_XML_PLANT_LAST_MIST]);
-			$lastMistedPopup = i18n('lastMisted').": ".$lastMistedDate;
-		} else {
-			$lastMistedPopup = i18n('NA');
-		}
-		$str .= "<div class='row light'>";
-		$str .= "<div class='icon ipsIconRainfall' title='".i18n('mist')."'></div><div class='data kb-tooltip' kb-tooltip='".$lastMistedPopup."'>".$nextMistDate."</div>".($showWarning ? $warning : "");
+		$popup = i18n('lastMisted').": ".formatDate($plant[API_XML_PLANT_LAST_MIST], "d.m.y H:i");
+		$str .= "<div class='row mist'>";
+		$str .= "<div class='icon ipsIconRainfall' title='".i18n('mist')."'></div><div class='data kb-tooltip' kb-tooltip='".$popup."'>".$nextMistDate."</div>".($showWarning ? $warning : "");
 		$str .= "</div>";
 		
 		$showWarning = false;
-		$lastUpdate = date("d.m.y H:i" ,$plant[API_XML_PLANT_LAST_UPDATE]);;
+		$lastUpdate = formatDate($plant[API_XML_PLANT_LAST_UPDATE], "d.m.y H:i");
 		$str .= "<div class='row update'>";
 		$str .= "<div class='icon ipsIconClock' title='".i18n('lastUpdate')."'></div><div class='data'>".$lastUpdate."</div>".($showWarning ? $warning : "");
 		$str .= "</div>";
@@ -461,7 +448,6 @@
 		$csspath = "/user/Koubachi/";
 		
 		$str = "<link rel='stylesheet' type='text/css' href='".$csspath."Koubachi.css'>";
-		$str .= "<link rel='stylesheet' type='text/css' href='".$csspath."jquery-bubble-popup-v3.css'>";
 
 		$bootstrapScript = '
 			var self = this;
