@@ -26,6 +26,7 @@
 	IPSUtils_Include ('IPSLogger.inc.php',      'IPSLibrary::app::core::IPSLogger');
 	IPSUtils_Include ("IPSInstaller.inc.php",            "IPSLibrary::install::IPSInstaller");
 	IPSUtils_Include ("Koubachi_Configuration.inc.php",            "IPSLibrary::config::hardware::Koubachi");
+	IPSUtils_Include ("Koubachi_Parameter.inc.php",            "IPSLibrary::app::hardware::Koubachi");
 	
 	function appendAuthToken($config, $url) {
 		$url .= strpos($url, "?") === FALSE ? "?" : "&";
@@ -202,9 +203,6 @@
 			$staticValueType = getIPSTypeFromXMLType($typeName);
 		}
 		
-		//if(isset($valueType)) IPSLogger_Dbg(__file__, "A: ".print_r($valueType, true));
-		//if(isset($staticValueType)) IPSLogger_Dbg(__file__, "B: ".print_r($staticValueType, true));
-		
 		// check if dynamic and static value types are matching
 		if(isset($valueType) && isset($staticValueType) && $staticValueType["IPS"] != $valueType["IPS"]) {
 			IPSLogger_Dbg(__file__, "Value types not matching for variable '".$varName."'. (Manual type: ".$staticValueType["IPS"].", Auto type: ".$valueType["IPS"]);
@@ -362,17 +360,24 @@
 		} else {
 			$waterLevel = (round($waterLevel * 100, 2))." %";
 		}
-		if($plant[API_XML_PLANT_WATER_PENDING]) {
+		$hasNextWaterDate = $plant[API_XML_PLANT_NEXT_WATER] > 0;
+		if($hasSensorAttached && $plant[API_XML_PLANT_WATER_PENDING]) {
 			$warning = str_replace("{{title}}", "Die Pflanze sollte gegossen werden.<br><br>".i18n('hint').": <br>".$plant[API_XML_PLANT_WATER_INSTRUCTION], $warningTpl);
+		} else if (!$hasSensorAttached && !$hasNextWaterDate) {
+			// show water instruction when there is no sensor attached and no next_water date has been determined
+			// TODO: show water instruction when next_water is 1 day or closer
+			$warning = str_replace("{{title}}", i18n('hint').": <br>".$plant[API_XML_PLANT_WATER_INSTRUCTION], $warningTpl);
 		} else {
 			$warning = "";
 		}
 		$popup = i18n('lastWater').": ".formatDate($plant[API_XML_PLANT_LAST_WATER], "d.m.y H:i");
-		if(!$hasSensorAttached) {
+		if(!$hasSensorAttached && $hasNextWaterDate) {
 			$popup .= "<br>".i18n('nextWater').": ".formatDate($plant[API_XML_PLANT_NEXT_WATER], "d.m.y");
 		}
 		$str .= getHtmlForRow("water", "ipsIconDrops", i18n('water'), $waterLevel, $popup, $warning);
 		
+		// light
+		$warning = "";
 		if(!$hasSensorAttached) {
 			$lightLevel = i18n('noSensor');
 			$extraCss = " ".i18n("cssNoSensor");
@@ -395,13 +400,13 @@
 					$text .= i18n('hint').":<br>".$plant[API_XML_PLANT_LIGHT_HINT];
 				}
 				$warning = str_replace("{{title}}", $text, $warningTpl);
-			} else {
-				$warning = "";
 			}
 			$extraCss = "";
 		}
 		$str .= getHtmlForRow("light".$extraCss, "ipsIconSun", i18n('light'), $lightLevel, "", $warning, $hasSensorAttached);
 		
+		// temperature
+		$warning = "";
 		if(!$hasSensorAttached) {
 			$tempLevel = i18n('noSensor');
 			$extraCss = " ".i18n("cssNoSensor");
