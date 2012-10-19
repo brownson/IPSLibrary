@@ -81,6 +81,11 @@ body  {
 	padding-left: 10px;
 }
 
+.plant .noSensor .data {
+	color: gray;
+	font-style: italic;
+}
+
 .plant .warning {
 	position: absolute;
 	vertical-align: middle;
@@ -103,6 +108,12 @@ body  {
 	opacity: 1;
 	height: auto;
 	padding-bottom: 5px;
+}
+
+.kb-tooltip:before {
+	content: '*';
+	color: #99DD99;
+	padding-right: 2px;
 }
 
 .tooltip {

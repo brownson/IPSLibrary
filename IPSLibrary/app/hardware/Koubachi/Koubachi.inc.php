@@ -303,6 +303,9 @@
 			"lastUpdate" => "Letzte Aktualisierung",
 			"NA" => "Keine Daten",
 			"hint" => "<b>Hinweis</b>",
+			"advice" => "<b>Ratschlag</b>",
+			"noSensor" => "Ohne Sensor",
+			"cssNoSensor" => "noSensor",
 		);
 		
 		//IPSLogger_Dbg(__file__, "I18N: ".print_r($i18n, true));
@@ -323,12 +326,27 @@
 		return $popup;
 	}
 	
+	function getHtmlForRow($name, $icon, $iconTitle, $data, $dataTooltip, $warning) {
+		$html = "<div class='row ".$name."'>";
+		$html .= "<div class='icon ".$icon."' title='".$iconTitle."'></div>";
+		
+		$hasTooltip = strlen($dataTooltip) > 0;
+		if($hasTooltip) {
+			$html .= "<div class='data kb-tooltip' kb-tooltip='".$dataTooltip."'>".$data."</div>";
+		} else {
+			$html .= "<div class='data'>".$data."</div>";
+		}
+		$html .= $warning."</div>";
+		return $html;
+	}
+	
 	function createEntry($plant) {
 		$warningTpl = "<div class='icon ipsIconWarning warning kb-tooltip' kb-tooltip='{{title}}'></div>";
 		
 		$str = "<div class='plant'>";
 		
-		if($plant[API_XML_PLANT_IS_DEVICE_ASSOCIATED]) {
+		$hasSensorAttached = $plant[API_XML_PLANT_IS_DEVICE_ASSOCIATED] === true;
+		if($hasSensorAttached) {
 			$circleColor = "green";
 			$caption = "Mit Sensor verbunden";
 		} else {
@@ -345,69 +363,73 @@
 			$waterLevel = (round($waterLevel * 100, 2))." %";
 		}
 		if($plant[API_XML_PLANT_WATER_PENDING]) {
-			$showWarning = true;
 			$warning = str_replace("{{title}}", "Die Pflanze sollte gegossen werden.<br><br>".i18n('hint').": <br>".$plant[API_XML_PLANT_WATER_INSTRUCTION], $warningTpl);
 		} else {
-			$showWarning = false;
+			$warning = "";
 		}
-		$popup = i18n('lastWater').": ".formatDate($plant[API_XML_PLANT_LAST_WATER], "d.m.y H:i")."<br>".i18n('nextWater').": ".formatDate($plant[API_XML_PLANT_NEXT_WATER], "d.m.y");
-		$str .= "<div class='row water'>";
-		$str .= "<div class='icon ipsIconDrops' title='".i18n('water')."'></div><div class='data kb-tooltip' kb-tooltip='".$popup."'>".$waterLevel."</div>".($showWarning ? $warning : "");
-		$str .= "</div>";
+		$popup = i18n('lastWater').": ".formatDate($plant[API_XML_PLANT_LAST_WATER], "d.m.y H:i");
+		if(!$hasSensorAttached) {
+			$popup .= "<br>".i18n('nextWater').": ".formatDate($plant[API_XML_PLANT_NEXT_WATER], "d.m.y");
+		}
+		$str .= getHtmlForRow("water", "ipsIconDrops", i18n('water'), $waterLevel, $popup, $warning);
 		
-		$lightLevel = $plant[API_XML_PLANT_LIGHT_LEVEL];
-		if(!is_numeric($lightLevel)) {
-			$lightLevel = i18n('NA');
+		if(!$hasSensorAttached) {
+			$lightLevel = i18n('noSensor');
+			$extraCss = " ".i18n("cssNoSensor");
 		} else {
-			$lightLevel = (round($lightLevel * 34650, 2))." Lux";
-		}
-		if(strlen($plant[API_XML_PLANT_LIGHT_ADVICE]) > 0 || strlen($plant[API_XML_PLANT_LIGHT_HINT]) > 0) {
-			$showWarning = true;
-			
-			$text = "";
-			if(strlen($plant[API_XML_PLANT_LIGHT_ADVICE])) {
-				$text .= "<b>Ratschlag</b>: <br>".$plant[API_XML_PLANT_LIGHT_ADVICE];
+			$lightLevel = $plant[API_XML_PLANT_LIGHT_LEVEL];
+			if(!is_numeric($lightLevel)) {
+				$lightLevel = i18n('NA');
+			} else {
+				$lightLevel = (round($lightLevel * 34650, 2))." Lux";
 			}
-			if(strlen($plant[API_XML_PLANT_LIGHT_HINT])) {
-				if(strlen($text) > 0) {
-					$text = "<br><br>";
+			if(strlen($plant[API_XML_PLANT_LIGHT_ADVICE]) > 0 || strlen($plant[API_XML_PLANT_LIGHT_HINT]) > 0) {
+				$text = "";
+				if(strlen($plant[API_XML_PLANT_LIGHT_ADVICE])) {
+					$text .= i18n('advice').": <br>".$plant[API_XML_PLANT_LIGHT_ADVICE];
 				}
-				$text .= i18n('hint').":<br>".$plant[API_XML_PLANT_LIGHT_HINT];
+				if(strlen($plant[API_XML_PLANT_LIGHT_HINT])) {
+					if(strlen($text) > 0) {
+						$text = "<br><br>";
+					}
+					$text .= i18n('hint').":<br>".$plant[API_XML_PLANT_LIGHT_HINT];
+				}
+				$warning = str_replace("{{title}}", $text, $warningTpl);
+			} else {
+				$warning = "";
 			}
-			$warning = str_replace("{{title}}", $text, $warningTpl);
-		} else {
-			$showWarning = false;
+			$extraCss = "";
 		}
-		$str .= "<div class='row light'>";
-		$str .= "<div class='icon ipsIconSun' title='".i18n('light')."'></div><div class='data'>".$lightLevel."</div>".($showWarning ? $warning : "");
-		$str .= "</div>";
+		$str .= getHtmlForRow("light".$extraCss, "ipsIconSun", i18n('light'), $lightLevel, "", $warning, $hasSensorAttached);
 		
-		$tempLevel = $plant[API_XML_PLANT_TEMPERATURE_LEVEL];
-		if(!is_numeric($tempLevel)) {
-			$tempLevel = i18n('NA');
+		if(!$hasSensorAttached) {
+			$tempLevel = i18n('noSensor');
+			$extraCss = " ".i18n("cssNoSensor");
 		} else {
-			$tempLevel = (round($tempLevel * 50, 1))." °C";
-		}
-		if(strlen($plant[API_XML_PLANT_TEMPERATURE_ADVICE]) > 0 || strlen($plant[API_XML_PLANT_TEMPERATURE_HINT]) > 0) {
-			$showWarning = true;
-			
-			$text = "";
-			if(strlen($plant[API_XML_PLANT_TEMPERATURE_ADVICE])) {
-				$text .= "<b>Ratschlag</b>: <br>".$plant[API_XML_PLANT_TEMPERATURE_ADVICE];
+			$tempLevel = $plant[API_XML_PLANT_TEMPERATURE_LEVEL];
+			if(!is_numeric($tempLevel)) {
+				$tempLevel = i18n('NA');
+			} else {
+				$tempLevel = (round($tempLevel * 50, 1))." °C";
 			}
-			if(strlen($plant[API_XML_PLANT_TEMPERATURE_HINT])) {
-				if(strlen($text) > 0) {
-					$text = "<br><br>";
+			if(strlen($plant[API_XML_PLANT_TEMPERATURE_ADVICE]) > 0 || strlen($plant[API_XML_PLANT_TEMPERATURE_HINT]) > 0) {
+				$text = "";
+				if(strlen($plant[API_XML_PLANT_TEMPERATURE_ADVICE])) {
+					$text .= i18n('advice').": <br>".$plant[API_XML_PLANT_TEMPERATURE_ADVICE];
 				}
-				$text .= i18n('hint').":<br>".$plant[API_XML_PLANT_TEMPERATURE_HINT];
+				if(strlen($plant[API_XML_PLANT_TEMPERATURE_HINT])) {
+					if(strlen($text) > 0) {
+						$text = "<br><br>";
+					}
+					$text .= i18n('hint').":<br>".$plant[API_XML_PLANT_TEMPERATURE_HINT];
+				}
+				$warning = str_replace("{{title}}", $text, $warningTpl);
+			} else {
+				$warning = "";
 			}
-			$warning = str_replace("{{title}}", $text, $warningTpl);
-		} else {
-			$showWarning = false;
-		}		
-		$str .= "<div class='row temperature'>";
-		$str .= "<div class='icon ipsIconTemperature' title='".i18n('temperature')."'></div><div class='data'>".$tempLevel."</div>".($showWarning ? $warning : "");
-		$str .= "</div>";
+			$extraCss = "";
+		}
+		$str .= getHtmlForRow("temperature".$extraCss, "ipsIconTemperature", i18n('temperature'), $tempLevel, "", $warning);
 		
 		/*$mistLevel = $plant[API_XML_PLANT_MIST_LEVEL];
 		if(!is_numeric($mistLevel)) {
@@ -416,23 +438,17 @@
 			$mistLevel = (round($mistLevel * 100, 2))." %";
 		}*/
 		$nextMistDate = formatDate($plant[API_XML_PLANT_NEXT_MIST], "d.m.y");
-		print_r($nextMistDate."\n");
 		if($plant[API_XML_PLANT_MIST_PENDING]) {
-			$showWarning = true;
 			$warning = str_replace("{{title}}", "Die Pflanze sollte besprüht werden.<br><br>".i18n('hint').":<br>".$plant[API_XML_PLANT_MIST_INSTRUCTION], $warningTpl);
 		} else {
-			$showWarning = false;
+			$warning = "";
 		}
 		$popup = i18n('lastMisted').": ".formatDate($plant[API_XML_PLANT_LAST_MIST], "d.m.y H:i");
-		$str .= "<div class='row mist'>";
-		$str .= "<div class='icon ipsIconRainfall' title='".i18n('mist')."'></div><div class='data kb-tooltip' kb-tooltip='".$popup."'>".$nextMistDate."</div>".($showWarning ? $warning : "");
-		$str .= "</div>";
+		$str .= getHtmlForRow("mist", "ipsIconRainfall", i18n('mist'), $nextMistDate, $popup, $warning);
 		
-		$showWarning = false;
+		$warning = "";
 		$lastUpdate = formatDate($plant[API_XML_PLANT_LAST_UPDATE], "d.m.y H:i");
-		$str .= "<div class='row update'>";
-		$str .= "<div class='icon ipsIconClock' title='".i18n('lastUpdate')."'></div><div class='data'>".$lastUpdate."</div>".($showWarning ? $warning : "");
-		$str .= "</div>";
+		$str .= getHtmlForRow("update", "ipsIconClock", i18n('lastUpdate'), $lastUpdate, "", $warning);
 		
 		$str .= "</div>";
 		
@@ -456,7 +472,7 @@
 				var outer = self;
 				self.counter = self.counter + 1;
 				
-				console.log("bootstrapping " + script);
+				//console.log("bootstrapping " + script);
 				var oHead = document.getElementsByTagName("HEAD").item(0);
 				var oScript = document.createElement("script");
 				oScript.type = "text/javascript";
@@ -464,7 +480,7 @@
 				
 				var func = function() {
 					outer.counter = outer.counter - 1;
-					console.log("loaded: ", this.src, " - ", outer.counter);
+					//console.log("loaded: ", this.src, " - ", outer.counter);
 					if(outer.counter <= 0) {
 						initKoubachi();
 					}
