@@ -24,7 +24,7 @@ Koubachi.prototype._tooltipHookup = function ($el) {
 		closeEventHandler = false;
 	} else {
 		// display tooltips by hovering with the mouse
-		openEvent = "mouseover";
+		openEvent = "click mouseover";
 		closeEvent = "mouseout";
 		openEventHandler = self._tooltipOpenEventHandler;
 		closeEventHandler = self._tooltipCloseEventHandler;
@@ -45,6 +45,8 @@ Koubachi.prototype._getTooltipNode = function(target) {
 		parent.after(div);
 		tooltip = div;
 		tooltip.bind("click touchend", {}, $.proxy(function() { this._tooltipClose(tooltip);}, this));
+	} else {
+		tooltip.html(target.attr('kb-tooltip'));
 	}
 	return tooltip;
 }
@@ -56,21 +58,36 @@ Koubachi.prototype._tooltipSingleEventHandler = function(evt) {
 	if(this._isTooltipOpen(tooltip)) {
 		this._tooltipClose(tooltip);
 	} else {
+		tooltip.addClass("stayOpen");
 		this._tooltipOpen(tooltip);
 	}
 }
 
 Koubachi.prototype._tooltipOpenEventHandler = function(evt) {
 	var target = $(evt.currentTarget);
-	
+	//console.log(evt);
 	var tooltip = this._getTooltipNode(target);
-	// check if the element is already visible in order to hide it now
-	/*if(this._isTooltipOpen(tooltip)) {
-		this._tooltipClose(tooltip);
+	
+	if(this._isTooltipOpen(tooltip)) {
+		if(evt.type == 'click') {
+			stayOpen = tooltip.data("stayOpen");
+			if(stayOpen) {
+				tooltip.removeClass("stayOpen");
+			} else {
+				tooltip.addClass("stayOpen");
+			}
+			tooltip.data("stayOpen", !stayOpen);			
+		}
 	} else {
 		this._tooltipOpen(tooltip);
-	}*/
-	this._tooltipOpen(tooltip);
+	}
+}
+
+Koubachi.prototype._tooltipCloseEventHandler = function(evt) {
+	var target = $(evt.currentTarget);
+	var tooltip = this._getTooltipNode(target);
+	if(tooltip.data("stayOpen")) return;
+	this._tooltipClose(tooltip);
 }
 
 Koubachi.prototype._isTooltipOpen = function (tooltip) {
@@ -82,13 +99,15 @@ Koubachi.prototype._tooltipOpen = function (tooltip) {
 }
 
 Koubachi.prototype._tooltipClose = function (tooltip) {
+	this._tooltipResetStayOpen(tooltip);
 	tooltip.removeClass("active");
 }
 
-Koubachi.prototype._tooltipCloseEventHandler = function(evt) {
-	var target = $(evt.currentTarget);
-	var tooltip = this._getTooltipNode(target);
-	this._tooltipClose(tooltip);
+Koubachi.prototype._tooltipResetStayOpen = function (tooltip) {
+	if(tooltip.data("stayOpen")) {
+		tooltip.data("stayOpen", false);
+		tooltip.removeClass("stayOpen");
+	}
 }
 
 Koubachi.iPad = false;
