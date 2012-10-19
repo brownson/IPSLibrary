@@ -1,18 +1,18 @@
 <?php
 
-	//namespace domizei\koubachi;
-
-	/**@defgroup plugwise_configuration Koubachi Konfiguration
+	/**@defgroup koubachi_configuration Koubachi Konfiguration
 	* @ingroup koubachi
 	* @{
 	*
 	* Konfigurations File fuer Koubachi.
 	*
-	* @file Plugwise_Configuration.inc.php
+	* @file Koubachi_Configuration.inc.php
 	* @author Dominik Zeiger
 	* @version Version 0.1, 15.10.2012<br/>
 	*
 	*/
+
+	namespace domizei\koubachi;
 	
 	define("APP_KEY", "appKey");
 	define("USER_CREDENTIALS", "userCredentials");
