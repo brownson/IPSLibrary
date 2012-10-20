@@ -157,9 +157,21 @@
 		return $value;
 	}
 	
-	function Koubachi_setIPSValue($varId, $value, $ipsType) {
-		//IPSLogger_Dbg(__file__, "Setting value of $varId (IPS-Type: $ipsType): ".print_r($value, true));
+	function Koubachi_checkCorrectType($varId, $ipsType) {
+		$targetVariableType = IPS_GetVariable($varId)["VariableValue"]["ValueType"];
 		
+		$correctType = $ipsType == $targetVariableType;
+		if(!$correctType) {
+			throw new \Exception("Value types not matching for variable '".IPS_GetName($varId)."'. (New Value type: ".$ipsType.", Target Variable type: ".$targetVariableType);
+		}
+	}
+	
+	function Koubachi_setIPSValue($varId, $value, $ipsType) {
+		$name = IPS_GetName($varId);
+		//IPSLogger_Dbg(__file__, "Setting value of $varId/$name (IPS-Type: $ipsType): ".print_r($value, true));
+		
+		Koubachi_checkCorrectType($varId, $ipsType);
+
 		switch($ipsType) {	
 			case 0:
 				SetValueBoolean($varId, $value);
@@ -199,22 +211,28 @@
 	
 	function Koubachi_CreateVariable($parentId, $node, $varName, $typeName = "") {
 		$valueType = getIPSValueType($node->attributes);
+		$hasTypeFromValue = $valueType["isNull"] === false;
+		
 		if($typeName !== "") {
+			$hasTypeFromDefinition = true;
 			$staticValueType = getIPSTypeFromXMLType($typeName);
+		} else {
+			$hasTypeFromDefinition = false;
 		}
 		
 		// check if dynamic and static value types are matching
-		if(isset($valueType) && isset($staticValueType) && $staticValueType["IPS"] != $valueType["IPS"]) {
+		if($hasTypeFromValue && $hasTypeFromDefinition && $staticValueType["IPS"] != $valueType["IPS"]) {
 			IPSLogger_Dbg(__file__, "Value types not matching for variable '".$varName."'. (Manual type: ".$staticValueType["IPS"].", Auto type: ".$valueType["IPS"]);
 		}
 		
-		if($valueType === false) {
-			IPSLogger_Dbg(__file__, "Unable to determine value type of ".$varName);
-			return false;
+		if(!$hasTypeFromValue && $hasTypeFromDefinition) {
+			// use static type if there is no valid value available
+			$valueType = $staticValueType;
 		}
 		
-		if(!isset($valueType) && isset($staticValueType)) {
-			$valueType = $staticValueType;
+		if(!$hasTypeFromValue && !$hasTypeFromDefinition) {
+			IPSLogger_Wrn(__file__, "Unable to determine value type of ".$varName);
+			return false;
 		}
 		
 		$varProfile = Koubachi_getVariableProfile($varName);
