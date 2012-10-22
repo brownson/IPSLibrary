@@ -322,6 +322,11 @@
 			"advice" => "<b>Ratschlag</b>",
 			"noSensor" => "Ohne Sensor",
 			"cssNoSensor" => "noSensor",
+			"today" => "heute",
+			"yesterday" => "gestern",
+			"tomorrow" => "morgen",
+			"dateFormat" => "d.m.Y",
+			"timeFormat" => "H:i",
 		);
 		
 		//IPSLogger_Dbg(__file__, "I18N: ".print_r($i18n, true));
@@ -333,9 +338,28 @@
 		}
 	}
 	
-	function formatDate($rawValue, $format) {
+	function formatDateTime($rawValue, $showTime = false) {
 		if($rawValue > 0) {
-			$popup = date($format ,$rawValue);
+			$currentTimestamp = time();
+			// format special values: yesterday, today, tomorrow
+			$dayDiff = round(abs($rawValue - $currentTimestamp) / 86400);
+			if($dayDiff == 0) {
+				$popup = i18n('today');
+			} else if ($dayDiff == 1 && $currentTimestamp > $rawValue) {
+				$popup = i18n('yesterday');
+			}  else if ($dayDiff == 1 && $currentTimestamp < $rawValue) {
+				$popup = i18n('tomorrow');
+			}
+			
+			if(!isset($popup)) {
+				// use default date format
+				$popup = date(i18n('dateFormat'), $rawValue);
+			}
+			
+			if ($showTime === true) {
+				// append timeformat
+				$popup .= " ".date(i18n('timeFormat'), $rawValue);
+			}
 		} else {
 			$popup = i18n('NA');
 		}
@@ -388,9 +412,9 @@
 		} else {
 			$warning = "";
 		}
-		$popup = i18n('lastWater').": ".formatDate($plant[API_XML_PLANT_LAST_WATER], "d.m.y H:i");
+		$popup = i18n('lastWater').": ".formatDateTime($plant[API_XML_PLANT_LAST_WATER], true);
 		if(!$hasSensorAttached && $hasNextWaterDate) {
-			$popup .= "<br>".i18n('nextWater').": ".formatDate($plant[API_XML_PLANT_NEXT_WATER], "d.m.y");
+			$popup .= "<br>".i18n('nextWater').": ".formatDateTime($plant[API_XML_PLANT_NEXT_WATER]);
 		}
 		$str .= getHtmlForRow("water", "ipsIconDrops", i18n('water'), $waterLevel, $popup, $warning);
 		
@@ -460,17 +484,17 @@
 		} else {
 			$mistLevel = (round($mistLevel * 100, 2))." %";
 		}*/
-		$nextMistDate = formatDate($plant[API_XML_PLANT_NEXT_MIST], "d.m.y");
+		$nextMistDate = formatDateTime($plant[API_XML_PLANT_NEXT_MIST]);
 		if($plant[API_XML_PLANT_MIST_PENDING]) {
 			$warning = str_replace("{{title}}", "Die Pflanze sollte besprüht werden.<br><br>".i18n('hint').":<br>".$plant[API_XML_PLANT_MIST_INSTRUCTION], $warningTpl);
 		} else {
 			$warning = "";
 		}
-		$popup = i18n('lastMisted').": ".formatDate($plant[API_XML_PLANT_LAST_MIST], "d.m.y H:i");
+		$popup = i18n('lastMisted').": ".formatDateTime($plant[API_XML_PLANT_LAST_MIST], true);
 		$str .= getHtmlForRow("mist", "ipsIconRainfall", i18n('mist'), $nextMistDate, $popup, $warning);
 		
 		$warning = "";
-		$lastUpdate = formatDate($plant[API_XML_PLANT_LAST_UPDATE], "d.m.y H:i");
+		$lastUpdate = formatDateTime($plant[API_XML_PLANT_LAST_UPDATE], true);
 		$str .= getHtmlForRow("update", "ipsIconClock", i18n('lastUpdate'), $lastUpdate, "", $warning);
 		
 		$str .= "</div>";
