@@ -77,7 +77,7 @@
     $ID_ScriptSecurityEnableDisableAlarm = IPS_GetScriptIDByName('Security_EnableDisableAlarm', $CategoryIdApp);
     
     // TODO: enable logging
-	CreateVariable(v_ALARM_ACTIVE, 0 /*Boolean*/, $CategoryIdData, 0, "~Switch", $ID_ScriptSecurityEnableDisableAlarm, false);
+	createAlarmModeVariable($CategoryIdData, $ID_ScriptSecurityEnableDisableAlarm);
 	CreateVariable(cat_MOTION."Log", 3 /* String */, $CategoryIdData, 0, "~HTMLBox", false, false);
 	CreateVariable(cat_SMOKE."Log", 3 /* String */, $CategoryIdData, 0, "~HTMLBox", false, false);
 	CreateVariable(cat_CLOSURE."Log", 3 /* String */, $CategoryIdData, 0, "~HTMLBox", false, false);
@@ -97,6 +97,24 @@
 			
 			$eventId = CreateEvent($deviceId." - On ".$type, $deviceId, $handlerScriptId);
 		}
+	}
+	
+	function createProfile($Name, $suffix, $typ, $digits = 0) {
+		@IPS_DeleteVariableProfile($Name);
+		IPS_CreateVariableProfile($Name, $typ);
+		IPS_SetVariableProfileText($Name, "", $suffix);
+		IPS_SetVariableProfileValues($Name, 0, 0, 0);
+
+		if($digits > 0) {
+			IPS_SetVariableProfileDigits($Name, $digits);
+		}
+	}
+	
+	function createAlarmModeVariable($parentCategory, $scriptId) {
+		$alarmModes = getAlarmModes();
+		CreateProfile_Associations("Security_AlarmModes", $alarmModes[v_ALARM_MODE_NAME], "", $alarmModes[v_ALARM_MODE_COLOR]);
+		
+		CreateVariable(v_ALARM_MODE, 1 /*Integer*/, $parentCategory, 0, "Security_AlarmModes", $scriptId, 0);
 	}
 	
 	Register_PhpErrorHandler($moduleManager);
