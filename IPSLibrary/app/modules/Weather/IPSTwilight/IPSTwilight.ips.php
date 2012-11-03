@@ -65,7 +65,7 @@
 	switch ($_IPS['SENDER']) {
 		case 'WebFront':
 			SetValue($_IPS['VARIABLE'], $_IPS['VALUE']);
-			if ($IPS_VARIABLE==$variableId_Display) {
+			if ($_IPS['VARIABLE']==$variableId_Display) {
 				CopyGraphics($variableId_Display);
 			} else {
 				IPS_RunScript ($_IPS['SELF']);
