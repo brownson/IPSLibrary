@@ -73,21 +73,23 @@
 			$id_value      = CreateVariable(EDIP_VAR_OBJECTEDIT,   1 /*Integer*/, $id_Instance,  70, '', null, 0);
 
 			// Create Serial Port
-         $id_IOComPort = null;
-			if ($configData[EDIP_CONFIG_COMPORT] <> '') {
+			$id_IOComPort = null;
+			if (array_key_exists(EDIP_CONFIG_IOINSTANCE, $configData)) {
+				$id_IOComPort = $configData[EDIP_CONFIG_IOINSTANCE];
+			} elseif ($configData[EDIP_CONFIG_COMPORT] <> '') {
 				$id_IOComPort = CreateSerialPort('EDIP_'.$configData[EDIP_CONFIG_NAME], $configData[EDIP_CONFIG_COMPORT], 115200, 1, 8, 'None',0, $IgnoreIOPortInstanceError);
 			}
 			// Create Register Variable
 			$registerIdConfig = $configData[EDIP_CONFIG_REGISTER];
 			if ($registerIdConfig==null) {
-			   if ($id_IOComPort==null) {
-			      throw new IPSConfigHandlerException('Register Variable and ComPort not defined !!!');
-			   }
+				if ($id_IOComPort==null) {
+					throw new IPSConfigHandlerException('Register Variable and ComPort not defined !!!');
+				}
 				$registerIdConfig = CreateRegisterVariable($configData[EDIP_CONFIG_NAME].'_Register', $CategoryIdHW, $id_ScriptReceive, $id_IOComPort);
 			}
 			// Create Root Category
 			if (!is_numeric($configData[EDIP_CONFIG_ROOT])) {
-			   CreateCategoryPath($configData[EDIP_CONFIG_ROOT]);
+				CreateCategoryPath($configData[EDIP_CONFIG_ROOT]);
 			}
 			
 			SetValue($id_Register, IPSUtil_ObjectIDByPath($registerIdConfig));
