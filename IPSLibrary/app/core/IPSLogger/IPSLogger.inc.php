@@ -129,9 +129,9 @@
 	 * @param $LogContext - Context of Logging (Identifier or Filename).
 	 * @param $LogMessage - Message to be logged
 	 */
-   function IPSLogger_Err($LogContext, $LogMessage) {
-      IPSLogger_Out(c_LogLevel_Error, c_LogType_Error, $LogContext, $LogMessage);
-   }
+	function IPSLogger_Err($LogContext, $LogMessage) {
+		IPSLogger_Out(c_LogLevel_Error, c_LogType_Error, $LogContext, $LogMessage);
+	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	/** Procedure to log a Warning
