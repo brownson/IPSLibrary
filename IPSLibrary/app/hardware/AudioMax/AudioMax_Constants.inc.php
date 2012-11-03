@@ -42,9 +42,9 @@
 	 *
 	 *
 	 */
-	define ('AM_COM_SEPARATOR',				';');
+	define ('AM_COM_SEPARATOR',					';');
 	define ('AM_COM_TERMINATOR',				chr(13));
-	define ('AM_COM_KEEPALIVE',				60);
+	define ('AM_COM_KEEPALIVE',					60);
 	define ('AM_COM_MAXRETRIES',				3);
 	define ('AM_COM_WAIT',						50);
 	define ('AM_COM_MAXWAIT',					500);
@@ -53,10 +53,20 @@
 	define ('AM_TYP_SET',						'SET');
 	define ('AM_TYP_GET',						'GET');
 	define ('AM_TYP_EVT',						'EVT');
+	define ('AM_TYP_DBG',						'DBG');
 
 	// Kommunikations Device Type
 	define ('AM_DEV_SERVER',					'SVR');
 
+	// Error Codes
+	define ('AM_ERR_UNKNOWNCMD1',				'1');
+	define ('AM_ERR_UNKNOWNCMD2',				'2');
+	define ('AM_ERR_UNKNOWNCMD3',				'3');
+	define ('AM_ERR_UNKNOWNCMD4',				'4');
+	define ('AM_ERR_UNKNOWNCMD5',				'5');
+
+	// Acknowledge
+	define ('AM_VAL_ACKNOWLEDGE',				'0');
 
 	// Kommunikations Kommandos
 	define ('AM_CMD_POWER',						'PWR');
