@@ -26,8 +26,8 @@
 	 *
 	 */
 
-	$variableId    = $IPS_VARIABLE;
-	$variableValue = $IPS_VALUE;
+	$variableId    = $_IPS['VARIABLE'];
+	$variableValue = $_IPS['VALUE'];
 
 	SetValue($variableId, $variableValue);
 
