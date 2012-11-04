@@ -57,6 +57,16 @@
 		 * @param IPSComponentSensor $component Sensor Komponente
 		 */
 		public function SyncButton($value, IPSComponentSensor $component) {
+			$this->ExecuteButton();
+		}
+
+		/**
+		 * @public
+		 *
+		 * Ermöglicht das Verarbeiten eines Taster Signals
+		 *
+		 */
+		public function ExecuteButton () {
 			$parameters = array();
 			if ($this->param3<>'') {
 				$parameters[] = $this->param1;
@@ -72,7 +82,6 @@
 			
 			call_user_func_array($this->functionToCall, $parameters);
 		}
-
 
 	}
 

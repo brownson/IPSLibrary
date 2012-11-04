@@ -51,6 +51,16 @@
 		 * @param IPSComponentSensor $component Sensor Komponente
 		 */
 		public function SyncButton($value, IPSComponentSensor $component) {
+			$this->ExecuteButton();
+		}
+
+		/**
+		 * @public
+		 *
+		 * Ermöglicht das Verarbeiten eines Taster Signals
+		 *
+		 */
+		public function ExecuteButton () {
 			$device = new IPSShadowing_Device($this->instanceId);
 			$movementId = GetValue(IPS_GetObjectIDByIdent(c_Control_Movement, $this->instanceId));
 			if ($movementId==c_MovementId_MovingIn or $movementId==c_MovementId_MovingOut or $movementId==c_MovementId_Up or $movementId==c_MovementId_Down) {
@@ -58,9 +68,7 @@
 			} else {
 				$device->MoveByControl($this->movementId);
 			}
-
 		}
-
 
 	}
 

@@ -20,7 +20,7 @@
 	 *  Version 2.50.1, 09.06.2012<br/>
 	 */
 
-	include_once IPS_GetKernelDir().'scripts\\IPSLight.ips.php';
+	IPSUtils_Include ('IPSLight.inc.php',          'IPSLibrary::app::modules::IPSLight');
 	IPSUtils_Include ('IPSModuleSensor.class.php', 'IPSLibrary::app::core::IPSComponent::IPSComponentSensor');
 
 	class IPSModuleSensor_IPSLight extends IPSModuleSensor {
@@ -54,24 +54,49 @@
 		 * @param IPSComponentSensor $component Sensor Komponente
 		 */
 		public function SyncButton($value, IPSComponentSensor $component) {
+			$this->ExecuteButton();
+		}
+
+		/**
+		 * @public
+		 *
+		 * Ermöglicht das Verarbeiten eines Taster Signals
+		 *
+		 */
+		public function ExecuteButton () {
 			switch ($this->lightFunction) {
-				case 'DimRelativByName':
-					DimRelativByName($this->lightObject, $this->lightValue);
+				case 'IPSLight_DimAbsoluteByName':
+					IPSLight_DimAbsoluteByName($this->lightObject, $this->lightValue);
 					break;
-				case 'ToggleSwitchByName':
-					ToggleSwitchByName($this->lightObject);
+				case 'IPSLight_DimRelativByName':
+					IPSLight_DimRelativByName($this->lightObject, $this->lightValue);
 					break;
-				case 'ToggleGroupByName':
-					ToggleGroupByName($this->lightObject);
+
+				case 'IPSLight_SetSwitchByName':
+					IPSLight_SetSwitchByName($this->lightObject, $this->lightValue);
 					break;
-				case 'SetProgramNext':
-					SetProgramNext($this->lightObject);
+				case 'IPSLight_ToggleSwitchByName':
+					IPSLight_ToggleSwitchByName($this->lightObject);
+					break;
+
+
+				case 'IPSLight_SetGroupByName':
+					IPSLight_SetGroupByName($this->lightObject, $this->lightValue);
+					break;
+				case 'IPSLight_ToggleGroupByName':
+					IPSLight_ToggleGroupByName($this->lightObject);
+					break;
+
+				case 'IPSLight_SetProgramNextByName':
+					IPSLight_SetProgramNextByName($this->lightObject);
+					break;
+				case 'IPSLight_SetProgramName':
+					IPSLight_SetProgramName($this->lightObject, $this->lightValue);
 					break;
 				default:
 					IPSLogger_Wrn(__file__, 'Unknown Button Function "'.$this->lightFunction.'"');
 			}
 		}
-
 
 	}
 

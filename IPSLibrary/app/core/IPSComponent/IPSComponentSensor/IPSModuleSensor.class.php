@@ -34,6 +34,14 @@
 		 */
 		abstract public function SyncButton($value, IPSComponentSensor $component);
 
+		/**
+		 * @public
+		 *
+		 * Ermöglicht das Verarbeiten eines Taster Signals
+		 *
+		 */
+		abstract public function ExecuteButton();
+
 
 	}
 

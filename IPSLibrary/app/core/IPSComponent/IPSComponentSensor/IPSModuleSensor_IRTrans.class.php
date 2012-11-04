@@ -54,9 +54,18 @@
 		 * @param IPSComponentSensor $component Sensor Komponente
 		 */
 		public function SyncButton($value, IPSComponentSensor $component) {
-			IRT_SendOnce($this->instanceId, $this->device, $this->button);
+			$this->ExecuteButton();
 		}
 
+		/**
+		 * @public
+		 *
+		 * Ermöglicht das Verarbeiten eines Taster Signals
+		 *
+		 */
+		public function ExecuteButton () {
+			IRT_SendOnce($this->instanceId, $this->device, $this->button);
+		}
 
 	}
 
