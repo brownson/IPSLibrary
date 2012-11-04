@@ -177,7 +177,7 @@
 			}
 			$fileContentNew = substr($fileContent, 0, $pos1).$configString.substr($fileContent, $pos2);
 			file_put_contents($fileNameFull, $fileContentNew);
-			self::Set_EventConfiguration($configuration);
+			self::Set_EventConfigurationAuto($configuration);
 		}
 
 		/**
@@ -207,7 +207,7 @@
 					$moduleParamsNew = explode(',', $moduleParams);
 					$moduleClassNew  = $moduleParamsNew[0];
 
-					$params = $configuration[$variableId];
+					$params = $configurationAuto[$variableId];
 				   
 					for ($i=0; $i<count($params); $i=$i+3) {
 						$moduleParamsCfg = $params[$i+2];
@@ -216,9 +216,9 @@
 						// Found Variable and Module --> Update Configuration
 						if ($moduleClassCfg=$moduleClassNew) {
 							$found = true;
-							$configuration[$variableId][$i]   = $eventType;
-							$configuration[$variableId][$i+1] = $componentParams;
-							$configuration[$variableId][$i+2] = $moduleParams;
+							$configurationAuto[$variableId][$i]   = $eventType;
+							$configurationAuto[$variableId][$i+1] = $componentParams;
+							$configurationAuto[$variableId][$i+2] = $moduleParams;
 						}
 					}
 				}
@@ -226,12 +226,12 @@
 
 				// Variable NOT found --> Create Configuration
 				if (!$found) {
-					$configuration[$variableId][] = $eventType;
-					$configuration[$variableId][] = $componentParams;
-					$configuration[$variableId][] = $moduleParams;
+					$configurationAuto[$variableId][] = $eventType;
+					$configurationAuto[$variableId][] = $componentParams;
+					$configurationAuto[$variableId][] = $moduleParams;
 				}
 
-				self::StoreEventConfiguration($configuration);
+				self::StoreEventConfiguration($configurationAuto);
 				self::CreateEvent($variableId, $eventType);
 			}
 		}
