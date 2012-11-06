@@ -83,8 +83,8 @@
 		 * @param string $destinationList Liste der Files, die erzeugt werden soll
 		 */
 		public function FilterEqualFiles(&$sourceList, &$destinationList) {
-		   $sourceOut      = array();
-		   $destinationOut = array();
+			$sourceOut      = array();
+			$destinationOut = array();
 			foreach ($sourceList as $idx=>$sourceScript) {
 				$sourceFile          = $sourceList[$idx];
 				$destinationFile     = $destinationList[$idx];
@@ -93,18 +93,17 @@
 				if (!file_exists($destinationFile)) {
 					$addFileToList = true;
 				} else {
-				   $sourceContent      = file_get_contents($sourceFile);
-				   $destinationContent = file_get_contents($destinationFile);
-				   $sourceContent      = str_replace(chr(13), '',$sourceContent);
-				   $destinationContent = str_replace(chr(13), '',$destinationContent);
-				   if ($sourceContent == $destinationContent) {
+					$sourceContent      = file_get_contents($sourceFile);
+					$destinationContent = file_get_contents($destinationFile);
+					$sourceContent      = str_replace(chr(13), '',$sourceContent);
+					$destinationContent = str_replace(chr(13), '',$destinationContent);
+					if ($sourceContent == $destinationContent) {
 						$addFileToList = false;
-				   }
+					}
 				}
 				if ($addFileToList) {
-				   $sourceOut[]      = $sourceFile;
-				   $destinationOut[] = $destinationFile;
-
+					$sourceOut[]      = $sourceFile;
+					$destinationOut[] = $destinationFile;
 				};
 			}
 			$sourceList      = $sourceOut;
@@ -119,10 +118,11 @@
 		 *
 		 * @param string $sourceFile Datei die kopiert werden soll
 		 * @param string $destinationFile Datei die erzeugt werden soll
+		 * @param boolean $raiseError gibt an ob ein Error geraised werden soll oder ob die Function im Falle eines Fehlers false retounieren soll
+		 * @return boolean true für OK, false bei Fehler beim Kopiervorgang
 		 * @throws IPSFileHandlerException wenn Fehler beim Erzeugen der Zieldatei auftritt
 		 */
-		public function CopyFile($sourceFile, $destinationFile) {
-
+		public function CopyFile($sourceFile, $destinationFile, $raiseError=true) {
 			$destinationFilePath = pathinfo($destinationFile, PATHINFO_DIRNAME);
 			if (!file_exists($destinationFilePath)) {
 				$this->logHandler->Log("Create Directory $destinationFilePath");
@@ -132,12 +132,11 @@
 				}
 			}
 
-
 			if (strpos($sourceFile, 'https')===0) {
-			   $sourceFile = str_replace('\\','/', $sourceFile);
-			   $sourceFile = str_replace('//','/', $sourceFile);
-			   $sourceFile = str_replace('https:/','https://', $sourceFile);
-				$this->logHandler->Log("Copy $sourceFile --> $destinationFile");
+				$sourceFile = str_replace('\\','/', $sourceFile);
+				$sourceFile = str_replace('//','/', $sourceFile);
+				$sourceFile = str_replace('https:/','https://', $sourceFile);
+				$this->logHandler->Log("Copy $sourceFile ---> $destinationFile");
 
 				$curl_handle=curl_init();
 				curl_setopt($curl_handle, CURLOPT_URL,$sourceFile);
@@ -146,30 +145,36 @@
 				curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
 				curl_setopt($curl_handle, CURLOPT_FAILONERROR, true);
 				$fileContent = curl_exec($curl_handle);
+				curl_close($curl_handle);
 				//$fileContent = html_entity_decode($fileContent, ENT_COMPAT, 'ISO-8859-1');
 				if ($fileContent===false) {
-					throw new IPSFileHandlerException('File '.$destinationFile.' could NOT be found on the Server !!!',
-													E_USER_ERROR);
+					if ($raiseError) {
+						throw new IPSFileHandlerException('File '.$destinationFile.' could NOT be found on the Server !!!',
+						                                  E_USER_ERROR);
+					} else {
+						return false;
+					}
 				}
-				curl_close($curl_handle);
 
-			   $result = file_put_contents($destinationFile, $fileContent);
-			   if ($result===false) {
+				$result = file_put_contents($destinationFile, $fileContent);
+				if ($result===false) {
 					$this->logHandler->Log("Write Destination File $destinationFile failed --> Retry ...");
-			      sleep(1);
-				   $result = file_put_contents($destinationFile, $fileContent);
-				   if ($result===false) {
+					sleep(1);
+					$result = file_put_contents($destinationFile, $fileContent);
+					if ($result===false and $raiseError) {
 						throw new IPSFileHandlerException('Error writing File Content to '.$destinationFile,
 														E_USER_ERROR);
-				   }
-			   }
+					}
+				}
 			} else {
 				$this->logHandler->Log("Copy $sourceFile --> $destinationFile");
-				if (!copy ($sourceFile, $destinationFile)) {
+				$result = @copy ($sourceFile, $destinationFile);
+				if ($result===false and $raiseError) {
 					throw new IPSFileHandlerException('Error while copy File '.$sourceFile.' to '.$destinationFile,
-													E_USER_ERROR);
+					                                  E_USER_ERROR);
 				}
 			}
+			return $result;
 		}
 
 		/**
@@ -198,13 +203,19 @@
 		 *
 		 * @param string $sourceList Liste der Files, die kopiert werden soll
 		 * @param string $destinationList Liste der Files, die erzeugt werden soll
+		 * @param boolean $raiseError gibt an ob ein Error geraised werden soll oder ob die Function im Falle eines Fehlers false retounieren soll
+		 * @return boolean true für OK, false bei Fehler beim Kopiervorgang
 		 * @throws IPSFileHandlerException wenn Fehler beim Erzeugen der Zieldatei auftritt
 		 */
-		public function CopyFiles ($sourceList, $destinationList) {
+		public function CopyFiles ($sourceList, $destinationList, $raiseError=true) {
 			foreach ($sourceList as $idx=>$sourceScript) {
 				$destinationScript     = $destinationList[$idx];
-				$this->CopyFile($sourceScript, $destinationScript);
+				$result = $this->CopyFile($sourceScript, $destinationScript, $raiseError);
+				if ($result===false) {
+					return false;
+				}
 			}
+			return true;
 		}
 	
 		/**
