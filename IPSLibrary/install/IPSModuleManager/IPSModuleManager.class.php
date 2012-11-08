@@ -120,7 +120,7 @@
 			$this->moduleConfigHandler  = new IPSIniConfigHandler($moduleIniFile);
 
 			// Increase PHP Timeout for current Session
-			$timeLimit = $this->managerConfigHandler->GetValueIntDef('TimeLimit', '', '300'); /*2 Minuten*/
+			$timeLimit = $this->managerConfigHandler->GetValueIntDef('TimeLimit', '', '300'); /*5 Minuten*/
 			set_time_limit($timeLimit);
 		}
 

@@ -1,12 +1,14 @@
 <?
-	$remoteRepository = 'https://raw.github.com/brownson/IPSLibrary/Development/';
+	$remoteRepository = 'https://raw.github.com/brownson/IPSLibrary/NewFeatures/';
+	if (isset($repository)) {
+		$remoteRepository = $repository;
+	}
 	$localRepository = IPS_GetKernelDir().'scripts\\';
 
 	$fileList = array(
 		'IPSLibrary\\install\\IPSInstaller\\IPSInstaller.inc.php',
 		'IPSLibrary\\install\\IPSModuleManager\\IPSModuleManager.class.php',
 		'IPSLibrary\\install\\IPSModuleManager\\IPSVersionHandler\\IPSVersionHandler.class.php',
-		'IPSLibrary\\install\\IPSModuleManager\\IPSVersionHandler\\IPSVariableVersionHandler.class.php',
 		'IPSLibrary\\install\\IPSModuleManager\\IPSVersionHandler\\IPSFileVersionHandler.class.php',
 		'IPSLibrary\\install\\IPSModuleManager\\IPSScriptHandler\\IPSScriptHandler.class.php',
 		'IPSLibrary\\install\\IPSModuleManager\\IPSFileHandler\\IPSFileHandler.class.php',
@@ -33,8 +35,8 @@
 	include_once IPS_GetKernelDir().'scripts\\IPSLibrary\\app\\core\\IPSUtils\\IPSUtils.inc.php';
 	IPSUtils_Include ('IPSModuleManager.class.php', 'IPSLibrary::install::IPSModuleManager');
 	$moduleManager = new IPSModuleManager('IPSModuleManager');
-   $moduleManager->LoadModule($remoteRepository, true);
-   $moduleManager->InstallModule();
+	$moduleManager->LoadModule($remoteRepository, true);
+	$moduleManager->InstallModule();
 
 	// -------------------------------------------------------------------------------
 	function LoadFile($sourceFile, $destinationFile) {
@@ -55,26 +57,26 @@
 			//echo 'Loaded '.str_replace(chr(13),'',str_replace(chr(10),'',substr($fileContent,1,200))).'...'.PHP_EOL;
 			curl_close($curl_handle);
 
-	//		$fileContent = html_entity_decode($fileContent, ENT_COMPAT, 'UTF-8');
+		//$fileContent = html_entity_decode($fileContent, ENT_COMPAT, 'UTF-8');
 		} else {
 		   $fileContent = file_get_contents($sourceFile);
 		}
 
-      $destinationFile = str_replace('/','\\',$destinationFile);
+		$destinationFile = str_replace('/','\\',$destinationFile);
 		$destinationFilePath = pathinfo($destinationFile, PATHINFO_DIRNAME);
 		if (!file_exists($destinationFilePath)) {
 			if (!mkdir($destinationFilePath, 0, true)) {
 				throw new Exception('Create Directory '.$destinationFilePath.' failed!');
 			}
 		}
-      $destinationFile = str_replace('\\InitializationFiles\\Default\\','\\InitializationFiles\\',$destinationFile);
-	   if (!file_put_contents($destinationFile, $fileContent)) {
+		$destinationFile = str_replace('\\InitializationFiles\\Default\\','\\InitializationFiles\\',$destinationFile);
+		if (!file_put_contents($destinationFile, $fileContent)) {
 			sleep(1);
 			echo 'Create File '.$destinationFile.' failed --> Retry ...';
 			if (!file_put_contents($destinationFile, $fileContent)) {
 				throw new Exception('Create File '.$destinationFile.' failed!');
-		   }
-	   }
+			}
+		}
 	}
 
 	// ------------------------------------------------------------------------------------------------
