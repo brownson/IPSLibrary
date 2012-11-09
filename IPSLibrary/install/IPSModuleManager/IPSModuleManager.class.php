@@ -832,7 +832,7 @@
 			$repositoryList  = $this->GetScriptList($fileKey, $fileTypeSection, $sourceRepository);
 			$backupList      = $this->GetScriptList($fileKey, $fileTypeSection, $backupHandler->GetBackupDirectory());
 
-			//$this->backupHandler->CreateBackup($repositoryList, $backupList);
+			$this->backupHandler->CreateBackup($repositoryList, $backupList);
 
 			$this->fileHandler->FilterEqualFiles($localList, $repositoryList);
 			$this->fileHandler->WriteFiles($localList, $repositoryList);

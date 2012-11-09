@@ -41,35 +41,35 @@
 			if (IPSModuleManagerGUI_GetLock($action, true)) {
 				IPSLogger_Inf(__file__, 'IPSModuleManagerGUI - Update of all Modules');
 				$moduleManager = new IPSModuleManager();
-				//$moduleManager->UpdateAllModules();
+				$moduleManager->UpdateAllModules();
 			}
 			break;
 		case 'Update':
 			if (IPSModuleManagerGUI_GetLock($action, true)) {
 				IPSLogger_Inf(__file__, 'IPSModuleManagerGUI - Update of Module '.$module.' from Repository "'.$repository.'"');
 				$moduleManager = new IPSModuleManager($module, $repository);
-				//$moduleManager->UpdateModule();
+				$moduleManager->UpdateModule();
 			}
 			break;
 		case 'Install':
 			if (IPSModuleManagerGUI_GetLock($action, true)) {
 				IPSLogger_Inf(__file__, 'IPSModuleManagerGUI - Installation of Module '.$module);
 				$moduleManager = new IPSModuleManager($module);
-				//$moduleManager->InstallModule();
+				$moduleManager->InstallModule();
 			}
 			break;
 		case 'Load':
 			if (IPSModuleManagerGUI_GetLock($action, true)) {
 				IPSLogger_Inf(__file__, 'IPSModuleManagerGUI - Load Files of Module '.$module.' from Repository "'.$repository.'"');
 				$moduleManager = new IPSModuleManager($module, $repository);
-				//$moduleManager->LoadModule();
+				$moduleManager->LoadModule();
 			}
 			break;
 		case 'Delete':
 			if (IPSModuleManagerGUI_GetLock($action, true)) {
 				IPSLogger_Inf(__file__, 'IPSModuleManagerGUI - Delete of Module '.$module);
 				$moduleManager = new IPSModuleManager($module);
-				//$moduleManager->DeleteModule();
+				$moduleManager->DeleteModule();
 			}
 			break;
 		default:
