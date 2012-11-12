@@ -29,16 +29,16 @@
 	 * Prinzipieller Aufbau der Kommunikation:
 	 *   CommandType Command Room Function Value
 	 *
-	 * Jeder Kommando Teil wird durch einen Separator voneinander getrennt (BLANK). Terminiert
+	 * Jeder Kommando Teil wird durch einen Separator voneinander getrennt (Semicolon). Terminiert
 	 * wird jedes Kommando von einem CR.
 	 *
 	 * Examples:
-	 *   set svr pwr 1\<cr\>		        AudioMax Server Ein
-	 *   evt svr kal 0\<cr\>		        Keep alive Message von Server
-	 *   set svr roo 00 1\<cr\>		     Raumverstärker einschalten
-	 *   set svr aud 00 inp 1\<cr\>		  Eingang 2 in Raum 1
-	 *   set svr aud 02 vol 08\<cr\>	     Volume  Raum 2 auf 08
-	 *   set svr aud 04 bas 14\<cr\> 	  Bass Raum 4 auf 14
+	 *   set;svr;pwr;1\<cr\>               AudioMax Server Ein
+	 *   evt;svr;kal;0\<cr\>               Keep alive Message vom Server
+	 *   set;svr;roo;00;1\<cr\>            Raumverstärker in Raum 1 einschalten
+	 *   set;svr;aud;00;inp;1\<cr\>        Eingang 2 in Raum 1 selektieren
+	 *   set;svr;aud;02;vol;08\<cr\>       Lautstärke in Raum 3 auf 8
+	 *   set;svr;aud;03;bas;14\<cr\>       Bass Raum 4 auf 14
 	 *
 	 *
 	 */

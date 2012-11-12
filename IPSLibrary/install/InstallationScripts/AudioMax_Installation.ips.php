@@ -20,27 +20,27 @@
 	 * @ingroup audiomax
 	 * @{
 	 *
+	 * Prinzipieller Aufbau der Kommunikation:
+	 *   CommandType "SVR" Command [Room] [Function] Value
+	 *
 	 * @page audiomax_protocol_types Übersicht über die verschiedenen Befehlstypen
 	 * Grundsätzlich gibt es vier verschiedene Befehlsarten
 	 * - SET:  Setzen von Werten im AudioMax
 	 * - GET:  Abfrage von Serverwerten
 	 * - EVT:  Nachrichten die vom AudioMax selbsttätig gesendet werden
-	 * - MOD:  Setzen von Betriebsarten
 	 *
 	 * @page audiomax_protocol_commands Befehlsaufbau
 	 * -  Alle Befehle können in Groß- oder Kleinbuchstaben geschrieben werden.
-	 * -  Die einzelnen Befehlsteile sind durch Leerzeichen getrennt.
+	 * -  Die einzelnen Befehlsteile sind durch ein Semikolon voneinander getrennt.
 	 * -  Alle Befehle werden mit „Carriage Return“ („CR“, Dezimal 13) beendet
-	 * -  Das System gibt auf jeden Befehl eine Bestätigung
-	 * -  Der AudioMax Server gibt per „GET SVR ?“ alle verfügbaren Befehle aus
+	 * -  Das System gibt auf jeden Befehl eine Bestätigung 
 	 * -  Der AudioServer sendet alle 60 Sekunden eine „Keep Alive“ Meldung
-	 * -  Der AudioMax Server erwartet alle 60 Sekunden eine „Keep Alive“ Meldung vom PC.
+	 * -  Der AudioMax Server erwartet alle 60 Sekunden eine „Keep Alive“ Meldung vom Kommunikations Partner.
 	 * -  Es können Texte auf dem LCD Display ausgegeben werden (Geräte mit Display)
-	 * -  Nach dem Start des AudioMax Servers werden die letzten Audioeinstellungen vor dem letzten Abschalten wiederhergestellt.
 	 *
 	 * @page audiomax_protocol_set SET Kommando
 	 * Werte an AudioMax Server senden:
-	 * - SET SVR AUD [RAUMNUMMER] [AUDIO] [STATUS]    AUDIO (STATUS)
+	 * - SET SVR AUD [RAUMNUMMER] [AUDIO] [VALUE]    
 	 *                             + VOL = Volume (40–0, 40 = Mute)
 	 *                             + INP = Input Analog Signal (0-3)
 	 *                             + GAI = Gain, Verstärkung  (0-15, 0 = 0dB Verstärkung)
@@ -48,31 +48,30 @@
 	 *                             + BAS = Bass (0-15, 15 = +14dB)
 	 *                             + MID = Middle (0-15, 15 = +14dB)
 	 *                             + TRE = Treble (0-15, 15 = +14dB)
-	 * - SET SVR ROO [RAUMNUMMER] [STATUS]     Steuerung Raumverstärker (0 – 3)
+	 * - SET SVR ROO [RAUMNUMMER] [VALUE]      Steuerung Raumverstärker (0 – 3)
 	 * - SET SVR PWR [STATUS]                  AudioMax Server Ein/Aus, (1=On 0=Off)
 	 * - SET SVR TEX [TEXT1] [TEXT2] [TEXT3]   Textausgabe auf LCD Display, max 20 Zeichen pro Zeile, TEXT1 = 2.Zeile, TEXT2 = 3.Zeile, TEXT3 = 4.Zeile
 	 * - SET SVR KAL 0                         “Keep Alive” Signal an PC
-	 * - SET SVR MOD [WERT]   Setze von Betriebsarten (0 = Acknolage, 1 = Debug On/Off, 2 = Button Room Amp, 3 = KAL von PC)
+	 * - SET SVR MOD [MODE] [VALUE]            Setzen von Betriebsarten (0 = Acknolage, 1 = Debug On/Off, 2 = Button Room Amp, 3 = KAL von PC)
 	 *
 	 * @page audiomax_protocol_get GET Kommando
 	 * Werte von AudioMax Server abholen
-	 * - GET SVR AUD [RAUMNUMMER] [AUDIO] [STATUS]    Werte der Audioeinstellungen
-	 * - GET SVR ROO [RAUMNUMMER] [STATUS]            Status der Raumverstärker
-	 * - GET SVR PWR [STATUS]                         Status des Servers
-	 * - GET SVR VER [VERSION]                        Ausgabe der Firmwareversion
-	 * - GET SVR MOD [MODEL]                          Ausgabe AudioMax Version (S404, S408, ..)
-	 * - GET SVR HAR [HARDWARE VERSION, YEAR]         Hardware Version, Herstelljahr
-	 * - GET SVR ?                                    Ausgabe des Hilfetext => Alle Befehle
+	 * - GET SVR AUD [RAUMNUMMER] [AUDIO]     Werte der Audioeinstellungen
+	 * - GET SVR ROO [RAUMNUMMER]             Status der Raumverstärker
+	 * - GET SVR PWR                          Status des Servers
+	 * - GET SVR VER                          Ausgabe der Firmwareversion
+	 * - GET SVR MOD [TYP]                    Ausgabe AudioMax Version (S404, S408, ..)
+	 * - GET SVR HAR                          Hardware Version, Herstelljahr
 	 *
 	 * @page audiomax_protocol_evt EVT Kommando
 	 * AudioMax Server sendet selbständig Statusmeldungen
-	 * - EVT SRV PWR [STATUS]     Statusmeldung nach Power On
-	 * - EVT SVR KAL [STATUS]     „Keep Alive“ Meldung an PC, 0=Standby, 1=Server On
-	 * - EVT SVR ROO [NUMMER] 1   Taste des Raumverstärkers [NUMMER] betätigt (1 = betätigt)
+	 * - EVT SRV [COMMAND] [ROOM] [AUDIO] [VALUE]    Statusmeldungen nach Power On
+	 * - EVT SVR KAL [STATUS]                        „Keep Alive“ Meldung an PC, 0=Standby, 1=Server On
+	 * - EVT SVR ROO [ROOM] 1                        Taste des Raumverstärkers [NUMMER] betätigt (1 = betätigt)
 	 *
 	 * @page audiomax_protocol_mod MOD Kommando
 	 * Mit diesen Befehlen können verschiedene Betriebsarten für den AudioServer gesetzt werden
-	 * EVT SRV MOD [MODE] [STATUS]
+	 * SET SRV MOD [MODE] [STATUS]
 	 * - MODE 0    Acknowledge (Default = 0, 0= Acknowledge 0 bis 5, 1 = Echo des Befehls)
 	 * - MODE 1    Debug Ausgaben (Default = 0, 0 = keine Debug Ausgaben, 1 = Debug Ausgaben)
 	 * - MODE 2    Tasterfunktion Raumverstärker (Default = 0, 0 = nur Meldung an PC, 1 = Der Raumverstärker wird direkt geschalten +  Meldung an PC)
@@ -80,16 +79,17 @@
 	 *
 	 * @page audiomax_protocol_error Acknowledge und Error Code
 	 * Acknowledge:
-	 * MODE0 = 0
-	 * “0“  => Befehl erkannt
+	 *   Error Code:
+	 *    "1"  => Error 1, Command Array 1, Unknown Command  => Fehler im 1. Befehlsteil
+	 *    "2"  => Error 2, Command Array 2, Unknown Command => Fehler im 2. Befehlsteil
+	 *    "3"  => Error 3, Command Array 3, Unknown Command => Fehler im 3. Befehlsteil
+	 *    "4"  => Error 4, Command Array 4, Out Of Range  => Fehler im 4. Befehlsteil
+	 *    "5"  => Error 5, Command Array 5, Out Of Range => Fehler im 5. Befehlsteil
+	 *  Acknowledge Code:
+	 *   MODE0 = 0
+	 *    "0"  => Befehl erkannt
 	 *
-	 * MODE0 = 1    Bei erkanntem Befehl wird der gesendete Befehl als Echo ausgegeben. Fehler werden wie nachfolgend ausgegeben
-	 * Error Code:
-	 * “1”  => Error 1, Command Array 1, Unknown Command  => Fehler im 1. Befehlsteil
-	 * “2”  => Error 2, Command Array 2, Unknown Command => Fehler im 2. Befehlsteil
-	 * “3”  => Error 3, Command Array 3, Unknown Command => Fehler im 3. Befehlsteil
-	 * “4”  => Error 4, Command Array 4, Out Of Range  => Fehler im 4. Befehlsteil
-	 * “5”  => Error 5, Command Array 5, Out Of Range => Fehler im 5. Befehlsteil
+	 *   MODE0 = 1    Bei erkanntem Befehl wird der gesendete Befehl als Echo ausgegeben. 
 	 *
 	 */
 	/** @}*/
@@ -154,7 +154,7 @@
 	$Mobile_Enabled       = $moduleManager->GetConfigValue('Enabled', 'Mobile');
 	$Mobile_Path          = $moduleManager->GetConfigValue('Path', 'Mobile');
 	$Mobile_PathOrder     = $moduleManager->GetConfigValueInt('PathOrder', 'Mobile');
-	$Mobile_PathIcon      = $moduleManager->GetConfigValue('PathOrder', 'Mobile');
+	$Mobile_PathIcon      = $moduleManager->GetConfigValue('PathIcon', 'Mobile');
 	$Mobile_Name          = $moduleManager->GetConfigValue('Name', 'Mobile');
 	$Mobile_Order         = $moduleManager->GetConfigValueInt('Order', 'Mobile');
 	$Mobile_Icon          = $moduleManager->GetConfigValue('Icon', 'Mobile');
