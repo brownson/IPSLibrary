@@ -47,11 +47,9 @@
 	 *
 	 * Parameters:
 	 *   @param integer $cameraIdx  Idx der Kamera in der Konfiguration
-	 *   @result boolean TRUE für OK, bei FALSE erfolgt keine Speicherung des Bildes
 	 *
 	 */
 	function IPSCam_AfterStorePicture($cameraIdx) {
-		return true;
 	}
 
 	/**
@@ -74,11 +72,9 @@
 	 *
 	 * Parameters:
 	 *   @param integer $cameraIdx  Idx der Kamera in der Konfiguration
-	 *   @result boolean TRUE für OK, bei FALSE erfolgt keine Speicherung des Bildes
 	 *
 	 */
 	function IPSCam_AfterStoreMotion($cameraIdx) {
-		return true;
 	}
 
 
