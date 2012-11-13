@@ -17,6 +17,8 @@
 		'IPSLibrary\\app\\core\\IPSConfigHandler\\IPSConfigHandler.class.php',
 		'IPSLibrary\\app\\core\\IPSConfigHandler\\IPSIniConfigHandler.class.php',
 		'IPSLibrary\\app\\core\\IPSUtils\\IPSUtils.inc.php',
+		'IPSLibrary\\config\\KnownRepositories.ini',
+		'IPSLibrary\\config\\AvailableModules.ini',
 		'IPSLibrary\\install\\InstallationScripts\\IPSModuleManager_Installation.ips.php',
 		'IPSLibrary\\install\\InitializationFiles\\Default\\IPSModuleManager.ini',
 		'IPSLibrary\\install\\DownloadListFiles\\IPSModuleManager_FileList.ini',
@@ -31,7 +33,7 @@
 	Register_IPSUtils();
 
 	// Installation of ModuleManager
-	echo 'Installation of ModuleManager';
+	echo 'Installation of ModuleManager'.PHP_EOL;
 	include_once IPS_GetKernelDir().'scripts\\IPSLibrary\\app\\core\\IPSUtils\\IPSUtils.inc.php';
 	IPSUtils_Include ('IPSModuleManager.class.php', 'IPSLibrary::install::IPSModuleManager');
 	$moduleManager = new IPSModuleManager('IPSModuleManager');
