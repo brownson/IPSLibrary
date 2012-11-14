@@ -537,7 +537,10 @@
 		 */
 		public function GetChangeList($moduleName, $filterInstalledChanges=true) {
 			$changeList = array();
-			$version = $this->GetVersion($moduleName);
+			$version = '';
+			if ($this->IsModuleInstalled($moduleName)) {
+				$version = $this->GetVersion($moduleName);
+			}
 			if (array_key_exists($moduleName, $this->changeList)) {
 				foreach ($this->changeList[$moduleName] as $changeVersion=>$changeText) {
 					if ($this->CompareVersionsNewer($version, $changeVersion) or !$filterInstalledChanges) {

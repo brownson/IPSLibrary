@@ -1050,20 +1050,20 @@
 
 	function Debug($msg) {
 		if (isset($_IPS['MODULEMANAGER'])) {
-		   $moduleManager = $_IPS['MODULEMANAGER'];
-		   $moduleManager->LogHandler()->Debug($msg);
+			$moduleManager = $_IPS['MODULEMANAGER'];
+			$moduleManager->LogHandler()->Debug($msg);
 		} elseif (isset($_IPS['SENDER']) and $_IPS['SENDER']=='WebFront') {
 		} else {
-		   echo $msg.PHP_EOL;
+			echo $msg.PHP_EOL;
 		}
 	}
 
 	function Error($msg) {
 		if (isset($_IPS['MODULEMANAGER'])) {
-		   $moduleManager = $_IPS['MODULEMANAGER'];
-		   $moduleManager->LogHandler()->Error($msg);
+			$moduleManager = $_IPS['MODULEMANAGER'];
+			$moduleManager->LogHandler()->Error($msg);
 		} else {
-		   echo $msg.PHP_EOL;
+			echo $msg.PHP_EOL;
 		}
 		throw new Exception($msg);
 	}

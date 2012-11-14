@@ -215,58 +215,69 @@
 	// ---------------------------------------------------------------------------------------------
 	function SearchLastRepositories() {
 		IPSUtils_Include ("IPSModuleManager.class.php", "IPSLibrary::install::IPSModuleManager");
-		$moduleManager = new IPSModuleManager('', '', sys_get_temp_dir(), true);
+		$moduleManager = $_IPS['MODULEMANAGER'];
 		$infos    = $moduleManager->GetModuleInfos();
 		$modules  = $moduleManager->GetInstalledModules();
 
 		//print_r($modules);
 		foreach ($modules as $module=>$data) {
-			$moduleManager  = new IPSModuleManager($module, '', sys_get_temp_dir(), true);
-			$versionHandler = $moduleManager->VersionHandler();
-			$repository     = $versionHandler->GetModuleRepository();
+			$downloadFile = IPS_GetKernelDir().'scripts\\IPSLibrary\\install\\DownloadListFiles\\'.$module.'_FileList.ini';
+			$configFile   = IPS_GetKernelDir().'scripts\\IPSLibrary\\install\\InitializationFiles\\'.$module.'.ini';
+			if (!file_exists($downloadFile) or !file_exists($configFile)) {
+				$moduleManager->LogHandler()->Debug('Remove Module "'.$module.'" from InstalledModules (No Ini Files found)');
+				$versionHandler = new IPSFileVersionHandler($module);
+				$versionHandler->DeleteModule();
+			} else {
+				$moduleManager  = new IPSModuleManager($module, '', sys_get_temp_dir(), true);
+				$versionHandler = $moduleManager->VersionHandler();
+				$repository     = $versionHandler->GetModuleRepository();
 
-			// Search current Repository
-			if ($repository=='') {
-				$files = scandir(IPS_GetKernelDir().'\\logs\\', 1);
-				foreach ($files as $file) {
-					// Found LogFile
-					if ($repository<>'') {
-						break;
-					} elseif (strpos($file,'IPSModuleManager_')!==false) {
-						$fileContent = file_get_contents(IPS_GetKernelDir().'\\logs\\'.$file);
-						$lines = explode(PHP_EOL, $fileContent);
-						$line1 = $lines[0];
-						$line2 = $lines[1];
+				// Search current Repository
+				if ($repository=='') {
+					$files = scandir(IPS_GetKernelDir().'\\logs\\', 1);
+					foreach ($files as $file) {
+						// Found LogFile
+						if ($repository<>'') {
+							break;
+						} elseif (strpos($file,'IPSModuleManager_')!==false) {
+							$fileContent = file_get_contents(IPS_GetKernelDir().'\\logs\\'.$file);
+							$lines = explode(PHP_EOL, $fileContent);
+							$line1 = $lines[0];
+							$line2 = $lines[1];
 
-						// Found LogFile for Module
-						if (   strpos($line1,'Set Version '.$module.'=')!==false
-						    or strpos($line2,''.$module.'_FileList.ini')!==false) {
-							//echo 'found '.$module; //return;
+							// Found LogFile for Module
+							if (   strpos($line1,'Set Version '.$module.'=')!==false
+							    or strpos($line2,''.$module.'_FileList.ini')!==false) {
+								//echo 'found '.$module; //return;
 
-							// Search Repository
-							foreach ($lines as $idx=>$line) {
+								// Search Repository
+								foreach ($lines as $idx=>$line) {
 
-								// Found Repository
-								if (strpos($line,' --> '.IPS_GetKernelDir().'scripts\\IPSLibrary\\install\\DownloadListFiles\\'.$module.'_FileList.ini')!==false) {
-									$start = strpos($line,'Copy ')+5;
-									$end   = strpos($line,'IPSLibrary',strpos($line,'IPSLibrary')+1);
-									$repository = substr($line, $start, $end-$start);
-									break;
+									// Found Repository
+									if (strpos($line,' --> '.IPS_GetKernelDir().'scripts\\IPSLibrary\\install\\DownloadListFiles\\'.$module.'_FileList.ini')!==false) {
+										$start = strpos($line,'Copy ')+5;
+										$end   = strpos($line,'IPSLibrary',strpos($line,'IPSLibrary')+1);
+										$repository = substr($line, $start, $end-$start);
+										break;
+									}
 								}
 							}
 						}
 					}
+					$moduleManager->LogHandler()->Debug('Add Last Repository: '.$module.'='.$repository);
+					$versionHandler->SetModuleRepository($repository);
 				}
-				$versionHandler->SetModuleRepository($repository);
+				echo $module.'='.$repository.PHP_EOL;
 			}
-			echo $module.'='.$repository.PHP_EOL;
 		}
 	}
 
 	// ------------------------------------------------------------------------------------------------
 	function RemoveBlanksBeforePHPTags ($file, $namespace) {
+		$moduleManager = $_IPS['MODULEMANAGER'];
+
 		if ($namespace<>'') {
-		   $namespace = str_replace('::','\\',$namespace).'\\';
+			$namespace = str_replace('::','\\',$namespace).'\\';
 		}
 		$fileNameFull = IPS_GetKernelDir().'scripts\\'.$namespace.$file;
 		if (!file_exists($fileNameFull)) {
@@ -278,10 +289,10 @@
 
 		$pos = strpos($fileContent, ' ');
 		if ($pos === false or $pos > 0) {
-		   return;
+			return;
 		}
 		$fileContentNew = substr($fileContent, 1);
-		echo 'Remove Blanks before PHP Tag from File '.$file.'(Namespace='.$namespace.')'.PHP_EOL;
+		$moduleManager->LogHandler()->Debug('Remove Blanks before PHP Tag from File '.$file.'(Namespace='.$namespace.')');
 		file_put_contents($fileNameFull, $fileContentNew);
 	}
 

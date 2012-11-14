@@ -399,13 +399,23 @@
 		 *
 		 * @return string[] Infos zu Modul
 		 */
-		public function GetModuleInfos() {
-			$infos = $this->versionHandler->GetModuleInfos($this->moduleName);
-
-			$infos['Installed']      = ($this->versionHandler->IsModuleInstalled($this->moduleName)?'Yes':'No');
-			$infos['CurrentVersion'] = $this->versionHandler->GetScriptVersion();
-			$infos['State']          = $this->versionHandler->GetModuleState();
-			$infos['LastRepository'] = $this->versionHandler->GetModuleRepository();
+		public function GetModuleInfos($moduleName='') {
+			if ($moduleName=='') {
+				$moduleName = $this->moduleName;
+			}
+			$infos = $this->versionHandler->GetModuleInfos($moduleName);
+			if ($this->versionHandler->IsModuleInstalled($moduleName)) {
+				$versionHandler = new IPSFileVersionHandler($moduleName);
+				$infos['Installed']      = 'Yes';
+				$infos['CurrentVersion'] = $versionHandler->GetScriptVersion();
+				$infos['State']          = $versionHandler->GetModuleState();
+				$infos['LastRepository'] = $versionHandler->GetModuleRepository();
+			} else {
+				$infos['Installed']      = 'No';
+				$infos['CurrentVersion'] = '';
+				$infos['State']          = '';
+				$infos['LastRepository'] = '';
+			}
 
 			return $infos;
 		}
