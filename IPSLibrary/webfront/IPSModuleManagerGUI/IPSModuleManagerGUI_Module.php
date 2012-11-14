@@ -36,12 +36,9 @@
 	$html = '<h2>'.$module.'</h2>';
 
 	$moduleManager = new IPSModuleManager();
-	$modules = $moduleManager->GetInstalledModules();
+	$modules         = $moduleManager->GetInstalledModules();
+	$infos           = $moduleManager->GetModuleInfos();
 	$moduleInstalled = array_key_exists($module, $modules);
-	
-	$moduleManager = new IPSModuleManager($module);
-	$infos   = $moduleManager->GetModuleInfos();
-
 
 	// Common Section
 	$color='white';

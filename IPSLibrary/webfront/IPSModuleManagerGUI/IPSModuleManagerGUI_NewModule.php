@@ -40,8 +40,7 @@
 	$installedModules = $moduleManager->VersionHandler()->GetInstalledModules();
 	$html = '';
 	foreach ($knownModules as $module=>$data) {
-		$moduleManager = new IPSModuleManager($module);
-		$infos   = $moduleManager->GetModuleInfos();
+		$infos   = $moduleManager->GetModuleInfos($module);
 
 		$html .= '  <tr>';
 		$html .=  GetTableData($module, '', 'Module', $module);

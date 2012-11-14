@@ -31,7 +31,7 @@
 	/** @}*/
 ?>
 
-<table border=1>
+<table border=1 style="font-family:courier; font-size:11px;">
   <tr><th>App</th><th>Type</th><th>Context</th><th>Date/Time</th><th>Message</th></tr>
 <?php
 	IPSUtils_Include ("IPSModuleManager.class.php", "IPSLibrary::install::IPSModuleManager");
