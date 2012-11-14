@@ -37,21 +37,25 @@
 
 	$moduleManager = new IPSModuleManager();
 	$modules         = $moduleManager->GetInstalledModules();
-	$infos           = $moduleManager->GetModuleInfos();
+	$infos           = $moduleManager->GetModuleInfos($module);
 	$moduleInstalled = array_key_exists($module, $modules);
 
 	// Common Section
-	$color='white';
+	$versionColor='white';
+	$stateColor='white';
 	if ($infos['CurrentVersion'] <> $infos['Version'] and $moduleInstalled) { 
-		$color='red'; 
+		$versionColor='red'; 
+	}
+	if ($infos['State']<>'OK' and $moduleInstalled) { 
+		$stateColor='red'; 
 	}
 	$html  .= '<table>';
 	$html  .= '<tr><td><div style="text-align:left; color:grey; padding-left:10px; padding-right:10px;">Beschreibung</div></td>'
 		                   .'<td><div style="text-align:left; color:white; padding-left:10px; padding-right:10px;">'.htmlentities($infos['Description']).'</div></td></tr>';
 	$html  .= '<tr><td><div style="text-align:left; color:grey; padding-left:10px; padding-right:10px;">Modul Status</div></td>'
-		                   .'<td><div style="text-align:left; color:white; padding-left:10px; padding-right:10px;">'.htmlentities($infos['State']).'</div></td></tr>';
+		                   .'<td><div style="text-align:left; color:'.$stateColor.'; padding-left:10px; padding-right:10px;">'.htmlentities($infos['State']).'</div></td></tr>';
 	$html  .= '<tr><td><div style="text-align:left; color:grey; padding-left:10px; padding-right:10px;">Verf&uuml;gbare Version</div></td>'
-		                   .'<td><div style="text-align:left; color:'.$color.'; padding-left:10px; padding-right:10px;">'.htmlentities($infos['Version']).'</div></td></tr>';
+		                   .'<td><div style="text-align:left; color:'.$versionColor.'; padding-left:10px; padding-right:10px;">'.htmlentities($infos['Version']).'</div></td></tr>';
 	$html  .= '<tr><td><div style="text-align:left; color:grey; padding-left:10px; padding-right:10px;">Repository</div></td>'
 		                   .'<td><div style="text-align:left; color:white; padding-left:10px; padding-right:10px;">'.htmlentities($infos['Repository']).'</div></td></tr>';
 	if ($moduleInstalled) {

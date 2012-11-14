@@ -45,16 +45,20 @@
 		$infos['LastRepository']   = str_replace('https://raw.github.com/','...',$infos['LastRepository']);
 		$infos['AvailableVersion']  = '';
 		$versionAttribute = '';
+		$stateAttribute = '';
 		if ($moduleManager->VersionHandler()->CompareVersionsNewer($infos['CurrentVersion'], $infos['Version'])) {
 			$infos['AvailableVersion']  = $infos['Version'];
 			$versionAttribute = 'color:red;';
 			$updateButton = true;
+		} 
+		if ($infos['State']<>'OK') { 
+			$stateAttribute = 'color:red;';
 		}
 		$html .= '  <tr>';
 		$html .=  GetTableData(null, null, $module, '', 'Module', $module);
 		$html .=  GetTableData($infos, 'CurrentVersion');
 		$html .=  GetTableData($infos, 'AvailableVersion', '', $versionAttribute, 'Updates');
-		$html .=  GetTableData($infos, 'State');
+		$html .=  GetTableData($infos, 'State', '', $stateAttribute);
 		//$html .=  GetTableData($infos, 'LastRepository');
 		//$html .=  GetTableData($infos, 'Repository');
 		$html .=  GetTableData($infos, 'Description');
