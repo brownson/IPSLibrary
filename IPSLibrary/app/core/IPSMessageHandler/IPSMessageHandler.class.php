@@ -37,8 +37,8 @@
 
 	class IPSMessageHandler {
 
-		private static $eventConfigurationAuto = null;
-		private static $eventConfigurationCust = null;
+		private static $eventConfigurationAuto = array();
+		private static $eventConfigurationCust = array();
 
 		/**
 		 * @public
