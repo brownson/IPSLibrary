@@ -14,8 +14,6 @@
 	IPSUtils_Include ("IPSModuleManagerGUI.inc.php", "IPSLibrary::app::modules::IPSModuleManagerGUI");
 	IPSUtils_Include ("IPSModuleManager.class.php", "IPSLibrary::install::IPSModuleManager");
 
-	//IPSLogger_Err(__file__, 'action='.$action);
-	 
 	$id       = $_GET['id'];
 	$action   = $_GET['action'];
 	$module   = $_GET['module'];
@@ -24,7 +22,7 @@
 	$moduleManager = new IPSModuleManager('', '', sys_get_temp_dir(), true);
 	$repository = '';
 	if ($module<>'') {
-		$moduleInfos = $moduleManager->GetModuleInfos();
+		$moduleInfos = $moduleManager->GetModuleInfos($module);
 		$repository  = $moduleInfos['Repository'];
 	}
 	
