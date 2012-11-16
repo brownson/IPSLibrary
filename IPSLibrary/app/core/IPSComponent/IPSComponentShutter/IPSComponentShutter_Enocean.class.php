@@ -25,7 +25,7 @@
 
 		private $instanceId;
 		private $isRunningId;
-	
+
 		/**
 		 * @public
 		 *
@@ -61,7 +61,7 @@
 		/**
 		 * @public
 		 *
-		 * Function um Events zu behandeln, diese Funktion wird vom IPSMessageHandler aufgerufen, um ein aufgetretenes Event 
+		 * Function um Events zu behandeln, diese Funktion wird vom IPSMessageHandler aufgerufen, um ein aufgetretenes Event
 		 * an das entsprechende Module zu leiten.
 		 *
 		 * @param integer $variable ID der auslösenden Variable
@@ -84,7 +84,7 @@
 				SetValue($this->isRunningId, true);
 			}
 		}
-		
+
 		/**
 		 * @public
 		 *
@@ -96,7 +96,7 @@
 				SetValue($this->isRunningId, true);
 			}
 		}
-		
+
 		/**
 		 * @public
 		 *
@@ -104,7 +104,7 @@
 		 */
 		public function Stop() {
 			if(GetValue($this->isRunningId)) {
-				$value = GetValue(IPS_GetObjectIDByIdent($this->instanceId, "StatusVariable"));
+				$value = GetValue(IPS_GetObjectIDByIdent("StatusVariable", $this->instanceId));
 				ENO_SwitchMode($this->instanceId, $value);
 				SetValue($this->isRunningId, false);
 			}
