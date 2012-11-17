@@ -329,8 +329,8 @@
 		 * @param string $value Wert der Variable
 		 */
 		public function HandleEvent($variable, $value) {
-			$configurationAuto = IPSMessageHandler_GetEventConfiguration();
-			$configurationCust = IPSMessageHandler_GetEventConfigurationCust();
+			$configurationAuto = self::Get_EventConfigurationAuto();
+			$configurationCust = self::Get_EventConfigurationCust();
 
 			if (array_key_exists($variable, $configurationCust)) {
 				$params = $configurationCust[$variable];
