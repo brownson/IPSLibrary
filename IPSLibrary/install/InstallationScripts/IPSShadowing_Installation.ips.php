@@ -406,15 +406,17 @@
 	$scenarioManager = new IPSShadowing_ScenarioManager();
 	$scenarioManager->AssignAllScenarioAssociations();
 
-	$ScenarioId = @IPS_GetObjectIDByIdent('Alle Schliessen', $CategoryIdScenarios);
+	$ScenarioId = @IPS_GetObjectIDByName('Alle Schliessen', $CategoryIdScenarios);
 	if ($ScenarioId===false) {
+		echo 'Create Scenario "Alle Schliessen"'.PHP_EOL;
 		$scenarioId = $scenarioManager->Create('Alle Schliessen', c_MovementId_Closed);
 		$scenario = new IPSShadowing_Scenario($scenarioId);
 		$scenario->ResetEditMode();
 
 	}
-	$ScenarioId = @IPS_GetObjectIDByIdent('Alle Öffnen', $CategoryIdScenarios);
+	$ScenarioId = @IPS_GetObjectIDByName('Alle Öffnen', $CategoryIdScenarios);
 	if ($ScenarioId===false) {
+		echo 'Create Scenario "Alle Öffnen"'.PHP_EOL;
 		$scenarioManager->Create('Alle Öffnen', c_MovementId_Opened);
 		$scenario = new IPSShadowing_Scenario($scenarioId);
 		$scenario->ResetEditMode();
@@ -481,6 +483,86 @@
 		}
 		$Idx = $Idx  + 10;
 	}
+
+	// Deletion of old Devices
+	// -----------------------
+	$deviceConfig        = get_ShadowingConfiguration();
+	$categoryIdDevices   = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSShadowing.Devices');
+	$deviceIds           = IPS_GetChildrenIDs($categoryIdDevices);
+	foreach ($deviceIds as $deviceIdx=>$deviceId) {
+	   $deviceName = IPS_GetName($deviceId);
+	   if (!array_key_exists($deviceName, $deviceConfig)) {
+	      echo 'Remove DeviceData of unknown Device='.$deviceName.PHP_EOL;
+			EmptyCategory($deviceId);
+			DeleteCategory($deviceId);
+	   }
+	}
+
+	// Type Correction of Scenarios
+	// ----------------------------
+	$MovementIds = array(
+        c_MovementId_Space          => c_Movement_Space,
+        c_MovementId_NoAction        => c_Movement_NoAction,
+        c_MovementId_Up              => c_Movement_Up,
+        c_MovementId_Down              => c_Movement_Down,
+        c_MovementId_Stop              => c_Movement_Stop,
+        c_MovementId_90              => c_Movement_90,
+        c_MovementId_75              => c_Movement_75,
+        c_MovementId_50              => c_Movement_50,
+        c_MovementId_Closed          => c_Movement_Closed,
+        c_MovementId_Opened          => c_Movement_Opened,
+        c_MovementId_Dimout          => c_Movement_Dimout,
+        c_MovementId_Shadowing          => c_Movement_Shadowing,
+        c_MovementId_MovedOut      => c_Movement_MovedOut,
+        c_MovementId_MovedIn          => c_Movement_MovedIn,
+        c_MovementId_MovingOut     => c_Movement_MovingOut,
+        c_MovementId_MovingIn      => c_Movement_MovingIn,
+		);
+	$categoryIdDevices   = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSShadowing.Devices');
+	$categoryIdScenarios = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSShadowing.Scenarios');
+	$scenarios           = IPS_GetChildrenIDs($categoryIdScenarios);
+	$deviceConfig        = get_ShadowingConfiguration();
+	foreach ($scenarios as $scenarioId) {
+		echo 'Found Scenario='.IPS_GetName($scenarioId).PHP_EOL;
+		foreach ($deviceConfig as $deviceIdent=>$deviceData) {
+			$controlId = @IPS_GetObjectIDByIdent($deviceIdent, $scenarioId);
+			if ($controlId!==false) {
+				$movementId = GetValue($controlId);
+				$invalid = false;
+				switch ($deviceData[c_Property_ShadowingType]) {
+					case c_ShadowingType_Jalousie:
+						if ($movementId<>c_MovementId_NoAction and $movementId<>c_MovementId_Shadowing and $movementId<>c_MovementId_Dimout
+							and $movementId<>c_MovementId_Opened and $movementId<>c_MovementId_Stop) {
+                            $invalid = true;
+						}
+						break;
+					case c_ShadowingType_Shutter:
+						if ($movementId<>c_MovementId_NoAction and $movementId<>c_MovementId_Closed and $movementId<>c_MovementId_90
+							and $movementId<>c_MovementId_50 and $movementId<>c_MovementId_50
+							and $movementId<>c_MovementId_Opened and $movementId<>c_MovementId_Stop) {
+                            $invalid = true;
+						}
+						break;
+					case c_ShadowingType_Marquees:
+						if ($movementId<>c_MovementId_NoAction and $movementId<>c_MovementId_MovedOut and $movementId<>c_MovementId_MovedIn
+							and $movementId<>c_MovementId_75 and $movementId<>c_MovementId_50 and $movementId<>c_MovementId_Stop) {
+							$invalid = true;
+						}
+						break;
+				}
+				if ($invalid) {
+					echo '   INVALID --> '.IPS_GetName($controlId).'='.$MovementIds[$movementId].PHP_EOL;
+					echo '   --> Repair, Set "NoAction"'.PHP_EOL;
+					SetValue($controlId, c_MovementId_NoAction);
+				} else {
+					echo '   OK --> '.IPS_GetName($controlId).'='.$MovementIds[$movementId].PHP_EOL;
+				}
+			}
+		}
+	}
+
+	// Correction of Profiles
+	// ----------------------
 	$profileManager = new IPSShadowing_ProfileManager();
 	$profileManager->AssignAllProfileAssociations();
 	$profileManager->CorrectDeletedDeviceProfiles();
