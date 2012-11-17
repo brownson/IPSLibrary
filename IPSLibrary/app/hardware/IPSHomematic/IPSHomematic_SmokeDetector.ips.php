@@ -26,15 +26,13 @@
 	 *
 	 */
 
-	IPSUtils_Include ("IPSLogger.inc.php",                      "IPSLibrary::app::core::IPSLogger");
+	IPSUtils_Include ('IPSHomematic.inc.php',          'IPSLibrary::app::hardware::IPSHomematic');
 
 	$sender     = $_IPS['SENDER'];
 	$variableId = $_IPS['VARIABLE'];
 	$value      = $_IPS['VALUE'];
-	$detectorName = IPS_GetName(IPS_GetParent($variableId));
 	if ($value) {
-		IPSLogger_Wrn(__file__, 'Alarm by SmokeDetector '.$detectorName);
-		IPSLogger_SendProwlMessage('Alarm', 'Rauchmelder "'.$detectorName.'" hat ausgelöst !!!', 0);
+		IPSHomematic_OnActivateSmokeDetector($variableId);
 	}
 
 	/** @}*/

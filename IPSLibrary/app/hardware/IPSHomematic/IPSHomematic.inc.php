@@ -20,16 +20,17 @@
 	 * @ingroup hardware
 	 * @{
 	 *
-	 * @file          IPSHomematic_Utils.inc.php
+	 * @file          IPSHomematic.inc.php
 	 * @author        Andreas Brauneis
 	 * @version
 	 *  Version 2.50.1, 14.07.2012<br/>
 	 *
 	 */
 
-    IPSUtils_Include ("IPSLogger.inc.php",                   "IPSLibrary::app::core::IPSLogger");
+    IPSUtils_Include ('IPSLogger.inc.php',                   'IPSLibrary::app::core::IPSLogger');
 	IPSUtils_Include ('IPSHomematic_Constants.inc.php',      'IPSLibrary::app::hardware::IPSHomematic');
 	IPSUtils_Include ('IPSHomematic_Configuration.inc.php',  'IPSLibrary::config::hardware::IPSHomematic');
+	IPSUtils_Include ('IPSHomematic_Custom.inc.php',         'IPSLibrary::config::hardware::IPSHomematic');
 	IPSUtils_Include ('IPSHomematic_Utils.inc.php',          'IPSLibrary::app::hardware::IPSHomematic');
 	IPSUtils_Include ('IPSHomematic_Manager.class.php',      'IPSLibrary::app::hardware::IPSHomematic');
 

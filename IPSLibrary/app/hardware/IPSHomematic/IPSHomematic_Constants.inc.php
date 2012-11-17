@@ -26,6 +26,11 @@
 	 *
 	 */
 
+	define ('HM_PROPERTY_SERIAL',				0);
+	define ('HM_PROPERTY_CHANNEL',				1);
+	define ('HM_PROPERTY_PROTOCOL',				2);
+	define ('HM_PROPERTY_TYPE',					3);
+
 	define ('HM_PROTOCOL_BIDCOSRF',				'BidCos-RF');
 	define ('HM_PROTOCOL_BIDCOSWI',				'BidCos-WI');
 

@@ -27,8 +27,51 @@
 	 *
 	 */
 
-	// Device Configuration
-	// --------------------------------------------------------------------------
+	/**
+	 *
+	 * Defintion der Homematic Instanzen
+	 * 
+	 * Die Konfiguration erfolgt in Form eines Arrays, für jede Homematic Instanz wird ein Eintrag im Array erzeugt.
+	 *   Name                  - Name des jeweiligen Homematic Devices
+	 *
+	 *   HM_PROPERTY_SERIAL    - Seriennummer des Homematic Devices
+	 *
+	 *   HM_PROPERTY_CHANNEL   - Kanal des Homematic Devices
+	 *
+	 *   HM_PROPERTY_PROTOCOL  - Protokoll des Homematic Devices (Wired oder Funk), mögliche Werte:
+	 *                             HM_PROTOCOL_BIDCOSRF - Funk
+	 *                             HM_PROTOCOL_BIDCOSWI - Wired
+	 *
+	 *   HM_PROPERTY_TYPE      - Type des Homematic Devices, mögliche Werte:
+	 *                             HM_TYPE_LIGHT
+	 *                             HM_TYPE_SHUTTER
+	 *                             HM_TYPE_DIMMER
+	 *                             HM_TYPE_BUTTON
+	 *                             HM_TYPE_SMOKEDETECTOR
+	 *                             HM_TYPE_SWITCH
+	 *
+	 * Eine ausführliche Beispielliste findet sich auch im Example Ordner
+	 *
+	 * Beispiel:
+	 * @code
+        function IPSPowerControl_GetSensorConfiguration() {
+          return array(
+            'Name1'    => array(HM_PROPERTY_SERIAL      => 'IEQ0004711',
+                                HM_PROPERTY_CHANNEL     => 1,
+                                HM_PROPERTY_PROTOCOL    => HM_PROTOCOL_BIDCOSRF,
+                                HM_PROPERTY_TYPE        => HM_TYPE_LIGHT,
+                          ),
+            'Name2'    => array(HM_PROPERTY_SERIAL      => 'IEQ0004712',
+                                HM_PROPERTY_CHANNEL     => 1,
+                                HM_PROPERTY_PROTOCOL    => HM_PROTOCOL_BIDCOSRF,
+                                HM_PROPERTY_TYPE        => HM_TYPE_DIMMER,
+                          ),
+             );
+        }
+	 * @endcocde
+	 *
+	 * @return string Liefert Array mit den Daten der Mess Sensoren
+	 */
 	function get_HomematicConfiguration() {
 		return array(
 			// ===== Werkstatt ========================================================================
