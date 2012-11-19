@@ -242,8 +242,14 @@
 						} elseif (strpos($file,'IPSModuleManager_')!==false) {
 							$fileContent = file_get_contents(IPS_GetKernelDir().'\\logs\\'.$file);
 							$lines = explode(PHP_EOL, $fileContent);
-							$line1 = $lines[0];
-							$line2 = $lines[1];
+							$line1 = '';
+							$line2 = '';
+							if (count($lines)>0) {
+								$line1 = $lines[0];
+							}
+							if (count($lines)>1) {
+								$line2 = $lines[1];
+							}
 
 							// Found LogFile for Module
 							if (   strpos($line1,'Set Version '.$module.'=')!==false
