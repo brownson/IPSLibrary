@@ -145,9 +145,9 @@
 		/**
 		 * @public
 		 *
-		 * Lesen der aktuellen Script Version
+		 * Lesen der aktuellen Install Version
 		 *
-		 * @return string Script Version
+		 * @return string Install Version
 		 */
 		public function GetInstallVersion() {
 			$moduleVersion = $this->GetProperty($this::PROPERTY_INSTALLVERSION);
@@ -247,7 +247,7 @@
 				throw new IPSVersionHandlerException('Versions Fehler:'.PHP_EOL
 				                                    .'========================================================================'.PHP_EOL
 				                                    .'=== Modul '.$moduleName.' ist veraltet und benötigt ein Update'.PHP_EOL
-				                                    .'===   Aktuelle Version:  '.$versionHandler->GetModuleVersion().PHP_EOL
+				                                    .'===   Aktuelle Version:  '.$versionHandler->GetScriptVersion().PHP_EOL
 				                                    .'===   Benötigte Version: '.$moduleVersion.PHP_EOL
 				                                    .'========================================================================'.PHP_EOL
 				                                    );

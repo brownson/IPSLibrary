@@ -139,6 +139,14 @@
 				$this->logHandler->Log("Copy $sourceFile ---> $destinationFile");
 
 				$curl_handle=curl_init();
+				global $_IPS;
+				if (array_key_exists('PROXY', $_IPS)) {
+					$proxy = $_IPS['PROXY'];
+					if ( $proxy != '' ) {
+						curl_setopt($curl_handle, CURLOPT_HTTPPROXYTUNNEL, 1);
+						curl_setopt($curl_handle, CURLOPT_PROXY, $proxy);
+					}
+				}
 				curl_setopt($curl_handle, CURLOPT_URL,$sourceFile);
 				curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT,10);
 				curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER,true);
