@@ -86,7 +86,7 @@
 		if ($text=='') {
 			$text='-';
 		}
-		$text = htmlentities($text, ENT_COMPAT, 'ISO-8859-1'));
+		$text = htmlentities($text, ENT_COMPAT, 'ISO-8859-1');
 		if ($action<>'') {
 			$text = '<a style="'.$displayAttributes.'" href="#" onClick=trigger_button(\''.$action.'\',\''.$module.'\',\''.$info.'\')>'.$text.'</a>';
 		}
