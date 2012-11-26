@@ -46,5 +46,38 @@
 		return $result;
 	}
 
+	function IPSModuleManagerGUI_StoreParameters($module, $data) {
+		$fileUsr   = IPS_GetKernelDir().'scripts\\IPSLibrary\\install\\InitializationFiles\\'.$module.'.ini';
+		$configUsr = parse_ini_file($fileUsr, true);
+		$fileDef   = IPS_GetKernelDir().'scripts\\IPSLibrary\\install\\InitializationFiles\\Default\\'.$module.'.ini';
+		$configDef = parse_ini_file($fileDef, true);
+		if (!array_key_exists('ID', $configDef)) {
+			$configDef['ID'] = '';
+		}
+		$fileContent = '';
+		foreach ($configDef as $section=>$sectionValue) {
+			if ($section=='WFC10' or $section=='Mobile') {
+				$fileContent .= '['.$section.']'.PHP_EOL;
+				foreach ($sectionValue as $property=>$value) {
+					if (array_key_exists($property, $configUsr)) {
+						$value = $configUsr[$property];
+					}
+					if (array_key_exists($section.$property, $data)) {
+						$value = $data[$section.$property];
+						$value = html_entity_decode($value, ENT_COMPAT, 'UTF-8');
+					}
+					$fileContent .= $property.'="'.$value.'"'.PHP_EOL;
+				}
+			} else {
+				$value = $sectionValue;
+				if (array_key_exists($section, $configUsr)) {
+					$value = $configUsr[$section];
+				}
+				$fileContent .= $section.'="'.$value.'"'.PHP_EOL;
+			}
+		}
+		file_put_contents($fileUsr, $fileContent);
+	}
+
     /** @}*/
 ?>

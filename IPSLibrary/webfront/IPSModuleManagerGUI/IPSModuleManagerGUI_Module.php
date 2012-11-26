@@ -51,7 +51,7 @@
 	}
 	$html  .= '<table>';
 	$html  .= '<tr><td><div style="text-align:left; color:grey; padding-left:10px; padding-right:10px;">Beschreibung</div></td>'
-		                   .'<td><div style="text-align:left; color:white; padding-left:10px; padding-right:10px;">'.htmlentities($infos['Description']).'</div></td></tr>';
+		                   .'<td><div style="text-align:left; color:white; padding-left:10px; padding-right:10px;">'.htmlentities($infos['Description'], ENT_COMPAT, 'ISO-8859-1').'</div></td></tr>';
 	$html  .= '<tr><td><div style="text-align:left; color:grey; padding-left:10px; padding-right:10px;">Modul Status</div></td>'
 		                   .'<td><div style="text-align:left; color:'.$stateColor.'; padding-left:10px; padding-right:10px;">'.htmlentities($infos['State']).'</div></td></tr>';
 	$html  .= '<tr><td><div style="text-align:left; color:grey; padding-left:10px; padding-right:10px;">Verf&uuml;gbare Version</div></td>'
@@ -74,6 +74,7 @@
 		} else {
 			$html .= '<input type="button" name="Text" value="Modul Update"       onclick="trigger_button(\'Update\', \''.$module.'\', \'\')">';
 			$html .= '<input type="button" name="Text" value="Modul Installieren" onclick="trigger_button(\'Install\',\''.$module.'\', \'\')">';
+			$html .= '<input type="button" name="Text" value="Installations Wizard" onclick="trigger_button(\'Wizard\',\''.$module.'\', \'\')">';
 			$html .= '<input type="button" name="Text" value="Modul L&ouml;schen" onclick="trigger_button(\'Delete\', \''.$module.'\', \'\')">';
 		}
 	} else {
@@ -105,10 +106,11 @@
 	// ChangeList
 	$html .= '<h5>Liste der &Auml;nderungen</h5>';
 	$changes = $moduleManager->VersionHandler()->GetChangeList($module, false);
+	krsort ($changes);
 	$html  .= '<table>';
 	foreach ($changes as $version=>$change) {
 		$html  .= '<tr><td><div style="text-align:left; color:grey; padding-left:10px; padding-right:10px;">'.$version.'</div></td>'
-		                   .'<td><div style="text-align:left; color:grey; padding-left:10px; padding-right:10px;">'.htmlentities($change).'</div></td></tr>';
+		                   .'<td><div style="text-align:left; color:grey; padding-left:10px; padding-right:10px;">'.htmlentities($change, ENT_COMPAT, 'ISO-8859-1').'</div></td></tr>';
 	}
 	$html  .= '</table>';
 

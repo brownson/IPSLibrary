@@ -48,7 +48,7 @@
 		            .'<td><div style="text-align:left; color:grey; padding-left:10px; padding-right:10px;">'.$infos['Repository'].'</div></td></tr>';
 		foreach ($changes as $version=>$change) {
 			$text .= '<tr><td><div style="text-align:left; color:white; padding-left:10px; padding-right:10px;">Version '.$version.'</div></td>'
-			            .'<td><div style="text-align:left; color:white; padding-left:10px; padding-right:10px;">'.htmlentities($change).'</div></td></tr>';
+			            .'<td><div style="text-align:left; color:white; padding-left:10px; padding-right:10px;">'.htmlentities($change, ENT_COMPAT, 'ISO-8859-1').'</div></td></tr>';
 		}
 		$text .= '</table>';
 		$html .= '  <tr>';
@@ -86,7 +86,7 @@
 		if ($text=='') {
 			$text='-';
 		}
-		$text = htmlentities($text);
+		$text = htmlentities($text, ENT_COMPAT, 'ISO-8859-1'));
 		if ($action<>'') {
 			$text = '<a style="'.$displayAttributes.'" href="#" onClick=trigger_button(\''.$action.'\',\''.$module.'\',\''.$info.'\')>'.$text.'</a>';
 		}

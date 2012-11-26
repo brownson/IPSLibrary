@@ -27,6 +27,19 @@
 	}
 	
 	switch ($action) {
+		case IPSMMG_ACTION_STOREANDINSTALL:
+			IPSModuleManagerGUI_StoreParameters($module, $_GET);
+			if (IPSModuleManagerGUI_GetLock($action, true)) {
+				IPSLogger_Inf(__file__, 'IPSModuleManagerGUI - Installation of Module '.$module);
+				$moduleManager = new IPSModuleManager($module);
+				$moduleManager->InstallModule();
+			}
+			IPSModuleManagerGUI_SetPage(IPSMMG_ACTION_MODULE, $module);
+			break;
+		case IPSMMG_ACTION_STORE:
+			IPSModuleManagerGUI_StoreParameters($module, $_GET);
+			IPSModuleManagerGUI_SetPage(IPSMMG_ACTION_MODULE, $module);
+			break;
 		case 'Refresh':
 			break;
 		case 'SearchUpdates':
@@ -62,6 +75,7 @@
 				$moduleManager = new IPSModuleManager($module, $repository);
 				$moduleManager->LoadModule();
 			}
+			IPSModuleManagerGUI_SetPage(IPSMMG_ACTION_MODULE, $module);
 			break;
 		case 'Delete':
 			if (IPSModuleManagerGUI_GetLock($action, true)) {
@@ -69,6 +83,7 @@
 				$moduleManager = new IPSModuleManager($module);
 				$moduleManager->DeleteModule();
 			}
+			IPSModuleManagerGUI_SetPage(IPSMMG_ACTION_OVERVIEW, $module);
 			break;
 		default:
 			IPSModuleManagerGUI_SetPage($action, $module, $info);

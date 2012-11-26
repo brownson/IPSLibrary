@@ -37,7 +37,8 @@
 		<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
 		<meta http-equiv="Pragma" content="no-cache">
 		<meta http-equiv="Expires" content="0">
-
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+			
 		<style type="text/css">html, body { margin: 0; padding: 0; }</style>
 		<link href="/user/default.css" rel="stylesheet" type="text/css" />
 
@@ -52,6 +53,58 @@
 						url: "http://"+serverAddr+"/user/IPSModuleManagerGUI/IPSModuleManagerGUI_Receiver.php",
 						data: "id="+id+"&action="+action+"&module="+module+"&info="+info});
 			}
+
+			function trigger_button2(action, module, info) {
+				var serverAddr = "<?echo $_SERVER["HTTP_HOST"];?>";
+				var id         = $(this).attr("id");
+				var WFC10Enabled        = $("#WFC10Enabled").is(':checked');
+				var WFC10TabPaneExclusive = $("#WFC10TabPaneExclusive").is(':checked');
+				var WFC10Path           = $("#WFC10Path").val();
+				var WFC10TabPaneParent  = $("#WFC10TabPaneParent").val();
+				var WFC10TabPaneItem    = $("#WFC10TabPaneItem").val();
+				var WFC10TabPaneIcon    = $("#WFC10TabPaneIcon").val();
+				var WFC10TabPaneName    = $("#WFC10TabPaneName").val();
+				var WFC10TabPaneOrder   = $("#WFC10TabPaneOrder").val();
+				var WFC10TabItem        = $("#WFC10TabItem").val();
+				var WFC10TabIcon        = $("#WFC10TabIcon").val();
+				var WFC10TabName        = $("#WFC10TabName").val();
+				var WFC10TabOrder       = $("#WFC10TabOrder").val();
+	
+				var MobileEnabled        = $("#MobileEnabled").is(':checked');
+				var MobilePath           = $("#MobilePath").val();
+				var MobilePathIcon       = $("#MobilePathIcon").val();
+				var MobilePathOrder      = $("#MobilePathOrder").val();
+				var MobileName           = $("#MobileName").val();
+				var MobileIcon           = $("#MobileIcon").val();
+				var MobileOrder          = $("#MobileOrder").val();
+
+				$.ajax({type: "POST",
+						url: "http://"+serverAddr+"/user/IPSModuleManagerGUI/IPSModuleManagerGUI_Receiver.php",
+						data: encodeURIComponent("id="+id+"&action="+action+"&module="+module+"&info="+info
+						       +"&WFC10Enabled="+WFC10Enabled
+						       +"&WFC10TabPaneExclusive="+WFC10TabPaneExclusive
+						       +"&WFC10Path="+WFC10Path
+						       +"&WFC10TabPaneParent="+WFC10TabPaneParent
+						       +"&WFC10TabPaneItem="+WFC10TabPaneItem
+						       +"&WFC10TabPaneIcon="+WFC10TabPaneIcon
+						       +"&WFC10TabPaneName="+WFC10TabPaneName
+						       +"&WFC10TabPaneOrder="+WFC10TabPaneOrder
+						       +"&WFC10TabItem="+WFC10TabItem
+						       +"&WFC10TabIcon="+WFC10TabIcon
+						       +"&WFC10TabName="+WFC10TabName
+						       +"&WFC10TabOrder="+WFC10TabOrder
+						       +"&MobileEnabled="+MobileEnabled
+						       +"&MobilePath="+MobilePath
+						       +"&MobilePathIcon="+MobilePathIcon
+						       +"&MobilePathOrder="+MobilePathOrder
+						       +"&MobileName="+MobileName
+						       +"&MobileIcon="+MobileIcon
+						       +"&MobileOrder="+MobileOrder)
+						});
+						
+			}
+
+
 		</script>
 
 	</head>
@@ -85,6 +138,9 @@
 					break;
 				case IPSMMG_ACTION_MODULE:
 					include 'IPSModuleManagerGUI_Module.php';
+					break;
+				case IPSMMG_ACTION_WIZARD:
+					include 'IPSModuleManagerGUI_Wizard.php';
 					break;
 				case IPSMMG_ACTION_LOGS:
 					include 'IPSModuleManagerGUI_Logs.php';

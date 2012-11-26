@@ -40,7 +40,10 @@
 	define ('IPSMMG_ACTION_LOGS',				'Logs');
 	define ('IPSMMG_ACTION_LOGFILE',			'LogFile');
 	define ('IPSMMG_ACTION_MODULE',				'Module');
+	define ('IPSMMG_ACTION_WIZARD',				'Wizard');
 	define ('IPSMMG_ACTION_NEWMODULE',			'NewModule');
+	define ('IPSMMG_ACTION_STORE',				'Store');
+	define ('IPSMMG_ACTION_STOREANDINSTALL',	'StoreAndInstall');
 
 	/** @}*/
 ?>
