@@ -38,7 +38,6 @@
 		const CHANGELIST       = 'ChangeList';        // ChangeList
 		const REQUIREDMODULES  = 'RequiredModules';   // Required Modules
 
-	   
 		protected $configData              = array();
 
 		/**
@@ -104,7 +103,14 @@
 		 * @throws IPSConfigurationException wenn der betroffene Parameter nicht gefunden wurde
 		 */
 		public function GetValueBool ($key, $section=null) {
-			return (boolean)$this->GetValue($key, $section);
+			$value = $this->GetValue($key, $section);
+			if ($value=='false') {
+				return false;
+			} elseif ($value=='true') {
+				return true;
+			} else {
+				return (boolean)$value;
+			}
 		}
 
 		/**
@@ -176,7 +182,14 @@
 		 * @return boolean retouniert den Wert des übergebenen Parameters
 		 */
 		public function GetValueBoolDef ($key, $section=null, $defaultValue="") {
-			return (boolean)$this->GetValueDef($key, $section, $defaultValue);
+			$value = $this->GetValueDef($key, $section, $defaultValue);
+			if ($value=='false') {
+				return false;
+			} elseif ($value=='true') {
+				return true;
+			} else {
+				return (boolean)$value;
+			}
 		}
 
 		/**
