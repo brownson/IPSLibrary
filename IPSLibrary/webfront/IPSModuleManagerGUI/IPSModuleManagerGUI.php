@@ -42,7 +42,7 @@
 		<style type="text/css">html, body { margin: 0; padding: 0; }</style>
 		<link href="/user/default.css" rel="stylesheet" type="text/css" />
 
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script type="text/javascript" src="jquery.min.js"></script>
 
 		<script type="text/javascript">
 			function trigger_button(action, module, info) {
@@ -50,7 +50,7 @@
 				var id         = $(this).attr("id");
 
 				$.ajax({type: "POST",
-						url: "http://"+serverAddr+"/user/IPSModuleManagerGUI/IPSModuleManagerGUI_Receiver.php",
+						url: location.protocol+"//"+serverAddr+"/user/IPSModuleManagerGUI/IPSModuleManagerGUI_Receiver.php",
 						data: "id="+id+"&action="+action+"&module="+module+"&info="+info});
 			}
 
@@ -79,7 +79,7 @@
 				var MobileOrder          = $("#MobileOrder").val();
 
 				$.ajax({type: "POST",
-						url: "http://"+serverAddr+"/user/IPSModuleManagerGUI/IPSModuleManagerGUI_Receiver.php",
+						url: location.protocol+"//"+serverAddr+"/user/IPSModuleManagerGUI/IPSModuleManagerGUI_Receiver.php",
 						data: encodeURIComponent("id="+id+"&action="+action+"&module="+module+"&info="+info
 						       +"&WFC10Enabled="+WFC10Enabled
 						       +"&WFC10TabPaneExclusive="+WFC10TabPaneExclusive
@@ -118,7 +118,7 @@
 		<BR>
 		<?php
 			IPSUtils_Include ("IPSModuleManagerGUI.inc.php", "IPSLibrary::app::modules::IPSModuleManagerGUI");
-			
+
 			$baseId  = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSModuleManagerGUI');
 			$action  = GetValue(IPS_GetObjectIDByIdent(IPSMMG_VAR_ACTION, $baseId));
 			$module  = GetValue(IPS_GetObjectIDByIdent(IPSMMG_VAR_MODULE, $baseId));
