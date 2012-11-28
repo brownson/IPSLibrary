@@ -79,7 +79,6 @@
                                       HM_PROPERTY_PROTOCOL    => HM_PROTOCOL_BIDCOSRF,
                                       HM_PROPERTY_TYPE        => HM_TYPE_LIGHT,
                                 ),
-			);
 		);
 	}
 

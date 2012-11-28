@@ -55,7 +55,7 @@
 		foreach ($sensorList as $idx=>$value) {
 			$returnList[$idx] = $value;
 		}
-		return = $returnList;
+		return $returnList;
 	}
 
 	/** 
@@ -75,7 +75,7 @@
 		foreach ($sensorList as $idx=>$value) {
 			$returnList[$idx] = $value;
 		}
-		return = $returnList;
+		return $returnList;
 	}
 
 	/** @}*/

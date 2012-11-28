@@ -71,6 +71,7 @@
 			              IPSPC_PROPERTY_VARWATT     => 11111,
 			              IPSPC_PROPERTY_VARKWH      => 22222,
 			              ),
+			);
 	}
 	
 
