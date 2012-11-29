@@ -37,14 +37,14 @@
 	 * als Float Value enth‰lt.
 	 * Die Verlinkung der Variable erfolgt entweder direkt durch Angabe der ID oder durch Angabe des Pfades.
 	 */
-	define ("c_Setting_TempSensorIndoor",		"Program.WeatherStation.IndoorTemperature");
+	define ("c_Setting_TempSensorIndoor",		"");
 
 	/**
 	 * Definition des Aussentemperatur Sensors, die Konstante muﬂ auf eine Variable verweisen, die die aktuelle Aussentemperatur
 	 * als Float Value enth‰lt.
 	 * Die Verlinkung der Variable erfolgt entweder direkt durch Angabe der ID oder durch Angabe des Pfades.
 	 */
-	define ("c_Setting_TempSensorOutdoor",	"Program.WeatherStation.OutdoorTemperature");
+	define ("c_Setting_TempSensorOutdoor",	"");
 
 	/**
 	 * Definition des Helligkeits Sensors, die Konstante muﬂ auf eine Variable verweisen, die die aktuelle Helligkeit
@@ -66,7 +66,7 @@
 	 * Diese Variable kann alternativ zu dem Anwesenheits Flag gesetzt werden.
 	 * Die Verlinkung der Variable erfolgt entweder direkt durch Angabe der ID oder durch Angabe des Pfades.
 	 */
-	define ("c_Setting_AbsencePath",			"Program.Presence.OutOfHome");
+	define ("c_Setting_AbsencePath",			"");
 
 	/**
 	 * Definition des Tagesbeginn Zeitpunktes, die Konstante muﬂ auf eine Variable verweisen, die die Zeit in der Form
