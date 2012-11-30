@@ -29,22 +29,22 @@
 	 * Prinzipieller Aufbau der Kommunikation:
 	 *   CommandType Command Room Function Value
 	 *
-	 * Jeder Kommando Teil wird durch einen Separator voneinander getrennt (BLANK). Terminiert
+	 * Jeder Kommando Teil wird durch einen Separator voneinander getrennt (Semicolon). Terminiert
 	 * wird jedes Kommando von einem CR.
 	 *
 	 * Examples:
-	 *   set svr pwr 1\<cr\>		        AudioMax Server Ein
-	 *   evt svr kal 0\<cr\>		        Keep alive Message von Server
-	 *   set svr roo 00 1\<cr\>		     Raumverstärker einschalten
-	 *   set svr aud 00 inp 1\<cr\>		  Eingang 2 in Raum 1
-	 *   set svr aud 02 vol 08\<cr\>	     Volume  Raum 2 auf 08
-	 *   set svr aud 04 bas 14\<cr\> 	  Bass Raum 4 auf 14
+	 *   set;svr;pwr;1\<cr\>               AudioMax Server Ein
+	 *   evt;svr;kal;0\<cr\>               Keep alive Message vom Server
+	 *   set;svr;roo;00;1\<cr\>            Raumverstärker in Raum 1 einschalten
+	 *   set;svr;aud;00;inp;1\<cr\>        Eingang 2 in Raum 1 selektieren
+	 *   set;svr;aud;02;vol;08\<cr\>       Lautstärke in Raum 3 auf 8
+	 *   set;svr;aud;03;bas;14\<cr\>       Bass Raum 4 auf 14
 	 *
 	 *
 	 */
-	define ('AM_COM_SEPARATOR',				';');
+	define ('AM_COM_SEPARATOR',					';');
 	define ('AM_COM_TERMINATOR',				chr(13));
-	define ('AM_COM_KEEPALIVE',				60);
+	define ('AM_COM_KEEPALIVE',					60);
 	define ('AM_COM_MAXRETRIES',				3);
 	define ('AM_COM_WAIT',						50);
 	define ('AM_COM_MAXWAIT',					500);
@@ -53,10 +53,20 @@
 	define ('AM_TYP_SET',						'SET');
 	define ('AM_TYP_GET',						'GET');
 	define ('AM_TYP_EVT',						'EVT');
+	define ('AM_TYP_DBG',						'DBG');
 
 	// Kommunikations Device Type
 	define ('AM_DEV_SERVER',					'SVR');
 
+	// Error Codes
+	define ('AM_ERR_UNKNOWNCMD1',				'1');
+	define ('AM_ERR_UNKNOWNCMD2',				'2');
+	define ('AM_ERR_UNKNOWNCMD3',				'3');
+	define ('AM_ERR_UNKNOWNCMD4',				'4');
+	define ('AM_ERR_UNKNOWNCMD5',				'5');
+
+	// Acknowledge
+	define ('AM_VAL_ACKNOWLEDGE',				'0');
 
 	// Kommunikations Kommandos
 	define ('AM_CMD_POWER',						'PWR');

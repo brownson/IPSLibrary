@@ -32,7 +32,6 @@
 	/** @}*/
 
 	/**@defgroup ipsedip IPSEDIP 
-	 * @ingroup hardware
 	 * @{
 	 *
 	 * Es handelt sich bei IPSEDIP um Scripts, mit denen es möglich ist IPS Strukturen auf einem EDIP43 Display
@@ -54,6 +53,8 @@
 	IPSUtils_Include ("IPSLogger.inc.php", "IPSLibrary::app::core::IPSLogger");
 	IPSUtils_Include ("IPSEDIP_Configuration.inc.php", "IPSLibrary::config::hardware::IPSEDIP");
 
+	$_IPS['ABORT_ON_ERROR']    = true;
+
    /**
     * @class IPSEDIP
     *
@@ -70,6 +71,7 @@
 		protected $rootId=0;
 		protected $currentId=0;
 		private   $registerId=0;
+		private   $errorcounter=0;
 
 		protected $objectIdsId=0;
 		protected $objectValuesId=0;
@@ -368,15 +370,15 @@
 				switch($object['ObjectType']) {
 					case 0: // Category
 					case 1: // Instance
-						echo 'Found Category '.$name."\n";
+						//echo 'Found Category '.$name."\n";
 						$this->AddObjectCategory($linkId, $childrenId, $name, $position);
 						break;
 					case 2: // Variable
-						echo 'Found Variable '.$name."\n";
+						//echo 'Found Variable '.$name."\n";
 						$this->AddObjectVariable($linkId, $childrenId, $name, $position);
 						break;
 					case 3: // Script
-						echo 'Found Script '.$name."\n";
+						//echo 'Found Script '.$name."\n";
 						$this->AddObjectScript($linkId, $childrenId, $name, $position);
 						break;
 					default:
@@ -585,7 +587,17 @@
 			$string .= chr($checkSum % 256);
 
 			//IPSLogger_Com(__file__,'Send Msg to EDIP: '.$string);
-			RegVar_SendText($this->registerId, $string);
+			$result = @RegVar_SendText($this->registerId, $string);
+			if ($result===false) {
+			   $instanceId = IPS_GetInstance($this->registerId)['ConnectionID'];
+      		IPS_SetProperty($instanceId, 'Open', false);
+      		IPS_SetProperty($instanceId, 'Open', true);
+				IPS_ApplyChanges($instanceId);
+				$this->errorCounter++;
+				if ($this->errorCounter==2) {
+					IPSLogger_Wrn(__file__, 'Error sending EDIP Message to "'.IPS_GetName($this->instanceId).'"');
+				}
+			}
 			ips_sleep($this->sendDelay);
 		}
 	}

@@ -32,85 +32,160 @@
 	IPSUtils_Include ("IPSShadowing_Constants.inc.php",      "IPSLibrary::app::modules::IPSShadowing");
 	IPSUtils_Include ("IPSTwilight_Configuration.inc.php", "IPSLibrary::config::modules::Weather::IPSTwilight");
 
-	/**
-	 * Definition des Innenemperatur Sensors, die Konstante muﬂ auf eine Variable verweisen, die die aktuelle Innentemperatur
+	/** Temperatursensor Innen
+	 *
+	 * Definition des Innentemperatur Sensors, die Konstante muﬂ auf eine Variable verweisen, die die aktuelle Innentemperatur
 	 * als Float Value enth‰lt.
 	 * Die Verlinkung der Variable erfolgt entweder direkt durch Angabe der ID oder durch Angabe des Pfades.
+	 *
+	 * Dieser Parameter kann jederzeit ge‰ndert werden, keine Installation erforderlich.
 	 */
-	define ("c_Setting_TempSensorIndoor",		"Program.WeatherStation.IndoorTemperature");
+	define ("IPSSHADOWING_TEMPSENSORINDOOR",		"");
 
-	/**
+	/** Temperatursensor Aussen
+	 *
 	 * Definition des Aussentemperatur Sensors, die Konstante muﬂ auf eine Variable verweisen, die die aktuelle Aussentemperatur
 	 * als Float Value enth‰lt.
 	 * Die Verlinkung der Variable erfolgt entweder direkt durch Angabe der ID oder durch Angabe des Pfades.
+	 *
+	 * Dieser Parameter kann jederzeit ge‰ndert werden, keine Installation erforderlich.
 	 */
-	define ("c_Setting_TempSensorOutdoor",	"Program.WeatherStation.OutdoorTemperature");
+	define ("IPSSHADOWING_TEMPSENSOROUTDOOR",	"");
 
-	/**
+	/** Helligkeitssensor
+	 *
 	 * Definition des Helligkeits Sensors, die Konstante muﬂ auf eine Variable verweisen, die die aktuelle Helligkeit
 	 * als Integer oder Float Value enth‰lt.
 	 * Die Verlinkung der Variable erfolgt entweder direkt durch Angabe der ID oder durch Angabe des Pfades.
+	 *
+	 * Dieser Parameter kann jederzeit ge‰ndert werden, keine Installation erforderlich.
 	 */
-	define ("c_Setting_BrightnessSensor",	'');
+	define ("IPSSHADOWING_BRIGHTNESSSENSOR",	'');
 
-	/**
+	/** Regensensor
+	 *
+	 * Definition des Regen Sensors, die Konstante muﬂ auf eine Variable verweisen, die den Wert des Sensors als 
+	 * boolschen Wert enth‰lt.
+	 * Die Verlinkung der Variable erfolgt entweder direkt durch Angabe der ID oder durch Angabe des Pfades.
+	 *
+	 * Dieser Parameter kann jederzeit ge‰ndert werden, keine Installation erforderlich.
+	 */
+	define ("IPSSHADOWING_RAINSENSOR",		"");
+
+	/** Windsensor
+	 *
+	 * Definition des Wind Sensors, die Konstante muﬂ auf eine Variable verweisen, die den Wert des Sensors als 
+	 * Float Wert mit Angabe in "kmh" enth‰lt, 
+	 * Die Verlinkung der Variable erfolgt entweder direkt durch Angabe der ID oder durch Angabe des Pfades.
+	 *
+	 * Dieser Parameter kann jederzeit ge‰ndert werden, keine Installation erforderlich.
+	 */
+	define ("IPSSHADOWING_WINDSENSOR",		"");
+
+	/** Anwesenheits Flag
+	 *
 	 * Definition des Anwesenheits Flags, die Konstante muﬂ auf eine Variable verweisen, die den aktuellen Anwesenheits Status als
 	 * boolean Wert enth‰lt (true bedeutet Anwesend).
 	 * Die Verlinkung der Variable erfolgt entweder direkt durch Angabe der ID oder durch Angabe des Pfades.
+	 *
+	 * Dieser Parameter kann jederzeit ge‰ndert werden, keine Installation erforderlich.
 	 */
-	define ("c_Setting_PresentPath",			'');
+	define ("IPSSHADOWING_PRESENT",			'');
 
-	/**
+	/** Abwesenheits Flag
+	 *
 	 * Definition des Abwesenheits Flags, die Konstante muﬂ auf eine Variable verweisen, die den aktuellen Abwesenheits Status als
 	 * boolean Wert enth‰lt (true bedeutet Abwesend).
 	 * Diese Variable kann alternativ zu dem Anwesenheits Flag gesetzt werden.
 	 * Die Verlinkung der Variable erfolgt entweder direkt durch Angabe der ID oder durch Angabe des Pfades.
+	 *
+	 * Dieser Parameter kann jederzeit ge‰ndert werden, keine Installation erforderlich.
 	 */
-	define ("c_Setting_AbsencePath",			"Program.Presence.OutOfHome");
+	define ("IPSSHADOWING_ABSENCE",			"");
 
-	/**
+	/** Zeitpunkt Sonnenaufgang
+	 *
 	 * Definition des Tagesbeginn Zeitpunktes, die Konstante muﬂ auf eine Variable verweisen, die die Zeit in der Form
 	 * hh:mm enth‰lt.
 	 * Verlinkung erfolgt direkt durch Angabe der ID oder durch Angabe des Pfades.
+	 *
+	 * Dieser Parameter kann jederzeit ge‰ndert werden, keine Installation erforderlich.
 	 */
-	define ("c_Setting_TwilightBgnOfDayPath",			"Program.IPSLibrary.data.modules.Weather.IPSTwilight.Values.SunriseBegin");
+	define ("IPSSHADOWING_TWILIGHTSUNRISE",			"Program.IPSLibrary.data.modules.Weather.IPSTwilight.Values.SunriseBegin");
 
-	/**
+	/** Zeitpunkt Sonnenuntergang
+	 *
 	 * Definition des Tagesend Zeitpunktes, die Konstante muﬂ auf eine Variable verweisen, die die Zeit in der Form
 	 * hh:mm enth‰lt.
 	 * Verlinkung erfolgt direkt durch Angabe der ID oder durch Angabe des Pfades.
+	 *
+	 * Dieser Parameter kann jederzeit ge‰ndert werden, keine Installation erforderlich.
 	 */
-	define ("c_Setting_TwilightEndOfDayPath",			"Program.IPSLibrary.data.modules.Weather.IPSTwilight.Values.SunriseEnd");
+	define ("IPSSHADOWING_TWILIGHTSUNSET",			"Program.IPSLibrary.data.modules.Weather.IPSTwilight.Values.SunriseEnd");
 	
-	/**
+	/** Zeitpunkt limited Sonnenaufgang
+	 * 
 	 * Definition des "limited" Tagesbeginn Zeitpunktes, die Konstante muﬂ auf eine Variable verweisen, die die Zeit in der Form
 	 * hh:mm enth‰lt. Durch diese Variable ist es mˆglich, dass der Tagesbeginn in bestimmten Grenzen liegen muﬂ.
 	 * Verlinkung erfolgt direkt durch Angabe der ID oder durch Angabe des Pfades.
+	 *
+	 * Dieser Parameter kann jederzeit ge‰ndert werden, keine Installation erforderlich.
 	 */
-	define ("c_Setting_TwilightLimitedBgnOfDayPath",	"Program.IPSLibrary.data.modules.Weather.IPSTwilight.Values.SunriseBeginLimited");
+	define ("IPSSHADOWING_TWILIGHTSUNRISELIMITED",	"Program.IPSLibrary.data.modules.Weather.IPSTwilight.Values.SunriseBeginLimited");
 
-	/**
+	/** Zeitpunkt limited Sonnenuntergang
+	 *
 	 * Definition des "limited" Tagesend Zeitpunktes, die Konstante muﬂ auf eine Variable verweisen, die die Zeit in der Form
 	 * hh:mm enth‰lt. Durch diese Variable ist es mˆglich, dass der Tagesbeginn in bestimmten Grenzen liegen muﬂ.
 	 * Verlinkung erfolgt direkt durch Angabe der ID oder durch Angabe des Pfades.
+	 *
+	 * Dieser Parameter kann jederzeit ge‰ndert werden, keine Installation erforderlich.
 	 */
-	define ("c_Setting_TwilightLimitedEndOfDayPath",	"Program.IPSLibrary.data.modules.Weather.IPSTwilight.Values.SunriseEndLimited");
+	define ("IPSSHADOWING_TWILIGHTSUNSETLIMITED",	"Program.IPSLibrary.data.modules.Weather.IPSTwilight.Values.SunriseEndLimited");
 
 	/**
 	 * Angabe des Breitengrades zur Berechnung des Sonnenstandes
+	 *
+	 * Dieser Parameter kann jederzeit ge‰ndert werden, keine Installation erforderlich.
 	 */
 	define ('IPSSHADOWING_LATITUDE', IPSTWILIGHT_LATITUDE);
 
 	/**
 	* Angabe des L‰ngengrades zur Berechnung des Sonnenstandes
+	 *
+	 * Dieser Parameter kann jederzeit ge‰ndert werden, keine Installation erforderlich.
 	*/
 	define ('IPSSHADOWING_LONGITUDE', IPSTWILIGHT_LONGITUDE);
+
+	/**
+	 * Ausrichtung des Geb‰udes
+	 * 
+	 * Dieser Wert spezifiziert die Abweichung von der Ausrichtung des Geb‰udes Richtung S¸den in Grad.
+	 *
+	 * Dieser Parameter kann jederzeit ge‰ndert werden, keine Installation erforderlich.
+	 */
+	define ('IPSSHADOWING_BUILDINGORIENTATION',   -15);
+	
+	/**
+	 * Verh‰ltnis der Geb‰udew‰nde
+	 *
+	 * Mit diesem Parameter kann das Verh‰ltnis der L‰nge der Geb‰udew‰nde in der Grafik ver‰ndert werden. 
+	 *
+	 * 0 bedeutet dass alle Geb‰udew‰nde gleich lang sind, bei positiven Werten wird die s¸dliche Seite des Geb‰udes
+	 * breiter und umgekehrt.
+	 *
+	 * Dieser Parameter kann jederzeit ge‰ndert werden, keine Installation erforderlich.
+	 */
+	define ('IPSSHADOWING_BUILDINGRELATION',      10);
 	
 
 	/**
 	 * Definiert die Anzahl der Meldungen, die im Applikation Logging Window angezeigt werden.
+	 *
+	 * Dieser Parameter kann jederzeit ge‰ndert werden, keine Installation erforderlich.
 	 */
-	define ("c_LogMessage_Count",				30);
+	define ("IPSSHADOWING_LOGMESSAGECOUNT",				30);
+
 
 	
 	/**

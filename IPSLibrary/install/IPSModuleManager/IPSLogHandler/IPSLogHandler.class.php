@@ -23,6 +23,7 @@
 		private static $logDirectory="";
 		private static $logFile="";
 		private static $debugMode=false;
+		private static $silentMode=false;
 		private $logContext="";
 
 		/**
@@ -34,17 +35,54 @@
 		 * @param string $logDirectory Verzeichnis für Log File
 		 * @param string $logFile Name des Log Files
 		 * @param string $debugMode Debug Mode, Switch für Ausgae von Debug Meldungen
+		 * @param string $silentMode bei TRUE werden Meldungen nicht mit ECHO gelogged
 		 */
-		public function __construct($logContext, $logDirectory ,$logFile='' , $debugMode=true) {
+		public function __construct($logContext, $logDirectory, $moduleName='', $debugMode=true, $silentMode=false, $logFile='') {
 			if ($logFile=='') {
-				$logFile = 'IPSModuleManager_'.date("Y-m-d_Hi").'.log';
+				$logFile = 'IPSModuleManager_'.date("Y-m-d_Hi").'_'.$moduleName.'.log';
 			}
 			self::$logDirectory = $logDirectory;
 			self::$logFile      = $logFile;
 			self::$debugMode    = $debugMode;
+			self::$silentMode   = $silentMode;
 			$this->logContext   = $logContext;
 		}
 
+		/**
+		 * @public
+		 *
+		 * Liefert eine Liste aller LogFiles in absteigender Reihenfolge (Neueste Files zuerst)
+		 *
+		 * @param integer $limit Maximale Anzahl von Einträgen
+		 * @return string[] Liste der LogFiles
+		 */
+		public function GetLogFileList($limit=10) {
+			$result = array();
+			$files = scandir(self::$logDirectory, 1);
+			foreach ($files as $idx=>$file) {
+				// Found LogFile
+				if (strpos($file,'IPSModuleManager_')!==false and $idx<=$limit) {
+					$result[] = self::$logDirectory.$file;
+				}
+			}
+			return $result;
+		}
+
+
+		/**
+		 * @public
+		 *
+		 * Liefert den Inhalt eines LogFiles
+		 *
+		 * @param string $fileName Name des LogFiles
+		 * @return string[] Zeilen des LogFiles
+		 */
+		public function GetLogFileContent($fileName) {
+			$fileContent = file_get_contents(self::$logDirectory.$fileName);
+			$logLines = explode(PHP_EOL, $fileContent);
+
+			return $logLines;
+		}
 
 		/**
 		 * @public
@@ -67,9 +105,9 @@
 		 */
 		public static function GetLogger($logContext) {
 			if (self::$logDirectory=='' or self::$logFile=='') {
-			   die('LogFile NOT assigned !!!');
+				die('LogFile NOT assigned !!!');
 			}
-			return new IPSLogHandler($logContext, IPSLogHandler::$logDirectory, IPSLogHandler::$logFile, IPSLogHandler::$debugMode);
+			return new IPSLogHandler($logContext, IPSLogHandler::$logDirectory, null, IPSLogHandler::$debugMode, IPSLogHandler::$silentMode, IPSLogHandler::$logFile);
 		}
 
 		private function WriteFile($msg) {
@@ -86,10 +124,12 @@
 		}
 
 		private function WritePHPConsole($msg) {
-			$out  = 'IPSModuleManager-Log-';
-			$out .= substr(str_pad($this->logContext,20,' '),0,20);
-			$out .= date('Y-m-d H:i:s').substr(microtime(),1,3).'  '.$msg;
-			echo $out."\n";
+			if (!self::$silentMode) {
+				$out  = 'IPSModuleManager-Log-';
+				$out .= substr(str_pad($this->logContext,20,' '),0,20);
+				$out .= date('Y-m-d H:i:s').substr(microtime(),1,3).'  '.$msg;
+				echo $out."\n";
+			}
 		}
 		
 		private function WriteIPSConsole($msg) {

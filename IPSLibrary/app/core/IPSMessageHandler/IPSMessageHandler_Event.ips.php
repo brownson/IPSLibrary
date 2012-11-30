@@ -11,8 +11,8 @@
 	 *
 	 */
 
-	$variable = $_IPS['VARIABLE']; 
-	$value    = $_IPS['VALUE']; 
+	$variable = $_IPS['VARIABLE'];
+	$value    = $_IPS['VALUE'];
 
 	IPSUtils_Include ('IPSMessageHandler.class.php', 'IPSLibrary::app::core::IPSMessageHandler');
 

@@ -15,8 +15,8 @@
 	include_once "Entertainment.inc.php";
 
 
-	if($IPS_SENDER == "RegisterVariable") {
-   	Onkyo_ReceiveData_Register($IPS_INSTANCE, $IPS_VALUE);
+	if($_IPS['SENDER'] == "RegisterVariable") {
+   	Onkyo_ReceiveData_Register($_IPS['INSTANCE'], $_IPS['VALUE']);
 	}
 	
 	

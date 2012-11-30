@@ -19,7 +19,9 @@
     * Version 2.50.1, 31.01.2012<br/>
     */
 
-	abstract class IPSComponentRGB_IPS868 extends IPSComponentRGB {
+	IPSUtils_Include ('IPSComponentRGB.class.php', 'IPSLibrary::app::core::IPSComponent::IPSComponentRGB');
+
+	class IPSComponentRGB_IPS868 extends IPSComponentRGB {
 
 		private $instanceId;
 	
@@ -50,6 +52,19 @@
 		/**
 		 * @public
 		 *
+		 * Funktion liefert String IPSComponent Constructor String.
+		 * String kann dazu benützt werden, das Object mit der IPSComponent::CreateObjectByParams
+		 * wieder neu zu erzeugen.
+		 *
+		 * @return string Parameter String des IPSComponent Object
+		 */
+		public function GetComponentParams() {
+			return get_class($this).','.$this->instanceId;
+		}
+
+		/**
+		 * @public
+		 *
 		 * Zustand Setzen 
 		 *
 		 * @param boolean $power RGB Gerät On/Off
@@ -57,7 +72,7 @@
 		 * @param integer $level Dimmer Einstellung der RGB Beleuchtung (Wertebereich 0-100)
 		 */
 		public function SetState($power, $color, $level) {
-			if (!power) {
+			if (!$power) {
 				@PJ_DimRGBW ($this->instanceId, 0, 2, 0, 2, 0, 2, 0, 2);
 			} else {
 				$red    = floor($color/256/256);
