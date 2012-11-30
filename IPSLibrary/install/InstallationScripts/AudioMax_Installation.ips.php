@@ -198,7 +198,7 @@
 	$id_AudioMaxServerId = CreateDummyInstance("AudioMax_Server", $CategoryIdData, 10);
 	$id_Power            = CreateVariable(AM_VAR_MAINPOWER,       0 /*Boolean*/, $id_AudioMaxServerId,  10, '~Switch',              $id_ScriptSettings, false, 'Power');
 	$id_Busy             = CreateVariable(AM_VAR_BUSY,            0 /*Boolean*/, $id_AudioMaxServerId,  20, 'AudioMax_Busy',        null,               false, 'Distance');
-	$id_Connection       = CreateVariable(AM_VAR_CONNECTION,      0 /*Boolean*/, $id_AudioMaxServerId,  30, 'AudioMax_Connection',  $id_ScriptSettings, true,  '');
+	$id_Connection       = CreateVariable(AM_VAR_CONNECTION,      0 /*Boolean*/, $id_AudioMaxServerId,  30, 'AudioMax_Connection',  $id_ScriptSettings, false,  '');
 	$id_LastError        = CreateVariable(AM_VAR_LASTERROR,       3 /*String*/,  $id_AudioMaxServerId,  40, '~String',              null,               '',    'Warning');
 	$id_LastCommand      = CreateVariable(AM_VAR_LASTCOMMAND,     3 /*String*/,  $id_AudioMaxServerId,  50, '~String',              null,               '',    'Information');
 	$id_InputBuffer      = CreateVariable(AM_VAR_INPUTBUFFER,     3 /*String*/,  $id_AudioMaxServerId,  60, '~String',              null,               '',    'Information');
@@ -214,7 +214,7 @@
 
 	if ($AudioMaxRoomInstallation) {
 		$RoomIds = array();
-		for ($RoomId=1;$RoomId<=AM_CONFIG_ROOM_COUNT;$RoomId++) {
+		for ($RoomId=1;$RoomId<=4;$RoomId++) {
 			$RoomInstanceId = CreateDummyInstance("AudioMax_Room".$RoomId, $CategoryIdData, 100+$RoomId);
 			$RoomIds[]      = $RoomInstanceId;
 
@@ -230,8 +230,10 @@
 		}
 
 		SetValue($id_RoomIds, implode(',',$RoomIds));
-		SetValue($id_Port,      $id_IOComPort);
 		SetValue($id_RoomCount, AM_CONFIG_ROOM_COUNT);
+		if (AM_CONFIG_COM_PORT<>'') {
+			SetValue($id_Port,      $id_IOComPort);
+		}
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------

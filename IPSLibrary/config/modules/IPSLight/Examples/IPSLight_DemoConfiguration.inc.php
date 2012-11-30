@@ -69,7 +69,7 @@
                IPSLIGHT_NAME            => 'Küche',
                IPSLIGHT_GROUPS          => 'Erdgeschoss,All',
                IPSLIGHT_TYPE            => IPSLIGHT_TYPE_SWITCH',
-               IPSLIGHT_COMPONENT       => 'IPSComponentSwitch_Homematic,12345',
+               IPSLIGHT_COMPONENT       => 'IPSComponentSwitch_Dummy,12345',
                IPSLIGHT_POWERCIRCLE     => 1,
                IPSLIGHT_POWERWATT       => 60),
             'Ambiente'  =>  array(
@@ -86,40 +86,40 @@
 	function IPSLight_GetLightConfiguration() {
 		return array(
 			// ===== Erdgeschoss ==================================================================
-			'Esstisch'         =>	array('Esstisch',      'Erdgeschoss,All', 'Switch', 'IPSComponentSwitch_Homematic,32626','L1',110),
-			'Wohnzimmer'       =>	array('Wohnzimmer',    'Erdgeschoss,All', 'Switch', 'IPSComponentSwitch_Homematic,48611','L1',140),
-			'Ambiente'         =>	array('Ambiente',      'Erdgeschoss,All', 'RGB',    'IPSComponentRGB_IPS868,36525','L1',10),
-			'Wohnbereich'      =>	array('Wohnbereich',   'Erdgeschoss,All', 'Switch', 'IPSComponentSwitch_Homematic,17605','L1',110),
-			'Kueche'           =>	array('Küche',         'Erdgeschoss,All', 'Switch', 'IPSComponentSwitch_Homematic,27179','L2',10),
-			'Arbeitszimmer'    =>	array('Arbeitszimmer', 'Erdgeschoss,All', 'Switch', 'IPSComponentSwitch_Homematic,24592','L1',12),
-			'Vorzimmer'        =>	array('Vorzimmer',     'Erdgeschoss,All', 'Switch', 'IPSComponentSwitch_Homematic,11022','L3',90),
-			'WC'               =>	array('WC',            'Erdgeschoss,All', 'Switch', 'IPSComponentSwitch_Homematic,21180','L3',40),
-			'Abstellraum'      =>	array('Abstellraum',   'Erdgeschoss,All', 'Switch', 'IPSComponentSwitch_Homematic,13545','L3',110),
+			'Esstisch'         =>	array('Esstisch',      'Erdgeschoss,All', 'Switch', 'IPSComponentSwitch_Dummy,32626','L1',100),
+			'Wohnzimmer'       =>	array('Wohnzimmer',    'Erdgeschoss,All', 'Switch', 'IPSComponentSwitch_Dummy,48611','L1',100),
+			'Ambiente'         =>	array('Ambiente',      'Erdgeschoss,All', 'RGB',    'IPSComponentRGB_Dummy,36525','L1',10),
+			'Wohnbereich'      =>	array('Wohnbereich',   'Erdgeschoss,All', 'Switch', 'IPSComponentSwitch_Dummy,17605','L1',100),
+			'Kueche'           =>	array('Küche',         'Erdgeschoss,All', 'Switch', 'IPSComponentSwitch_Dummy,27179','L2',10),
+			'Arbeitszimmer'    =>	array('Arbeitszimmer', 'Erdgeschoss,All', 'Switch', 'IPSComponentSwitch_Dummy,24592','L1',10),
+			'Vorzimmer'        =>	array('Vorzimmer',     'Erdgeschoss,All', 'Switch', 'IPSComponentSwitch_Dummy,11022','L3',60),
+			'WC'               =>	array('WC',            'Erdgeschoss,All', 'Switch', 'IPSComponentSwitch_Dummy,21180','L3',40),
+			'Abstellraum'      =>	array('Abstellraum',   'Erdgeschoss,All', 'Switch', 'IPSComponentSwitch_Dummy,13545','L3',60),
 
 			// ===== Obergeschoss ==================================================================
-			'Bad'              =>	array('Bad',           'Obergeschoss,All', 'Switch', 'IPSComponentSwitch_Homematic,51577','L1',0),
-			'Gaestezimmer'     =>	array('Spielezimmer',  'Obergeschoss,All', 'Switch', 'IPSComponentSwitch_Homematic,32432','L1',0),
-			'Kinderzimmer'     =>	array('Zimmer Jonas',  'Obergeschoss,All', 'Switch', 'IPSComponentSwitch_Homematic,52619','L1',0),
-			'Schlafzimmer'     =>	array('Schlafzimmer',  'Obergeschoss,All', 'Switch', 'IPSComponentSwitch_Homematic,45579','L1',0),
-			'Schrankraum'      =>	array('Schrankraum',   'Obergeschoss,All', 'Switch', 'IPSComponentSwitch_Homematic,18743','L1',0),
-			'Vorraum'          =>	array('Vorraum',       'Obergeschoss,All', 'Switch', 'IPSComponentSwitch_Homematic,59085','L1',0),
-			'Stiege OG'        =>	array('Stiege OG',     'Obergeschoss,All', 'Switch', 'IPSComponentSwitch_Homematic,19661','L1',0),
+			'Bad'              =>	array('Bad',           'Obergeschoss,All', 'Switch', 'IPSComponentSwitch_Dummy,51577','L1',0),
+			'Gaestezimmer'     =>	array('Spielezimmer',  'Obergeschoss,All', 'Switch', 'IPSComponentSwitch_Dummy,32432','L1',0),
+			'Kinderzimmer'     =>	array('Zimmer Jonas',  'Obergeschoss,All', 'Switch', 'IPSComponentSwitch_Dummy,52619','L1',0),
+			'Schlafzimmer'     =>	array('Schlafzimmer',  'Obergeschoss,All', 'Switch', 'IPSComponentSwitch_Dummy,45579','L1',0),
+			'Schrankraum'      =>	array('Schrankraum',   'Obergeschoss,All', 'Switch', 'IPSComponentSwitch_Dummy,18743','L1',0),
+			'Vorraum'          =>	array('Vorraum',       'Obergeschoss,All', 'Switch', 'IPSComponentSwitch_Dummy,59085','L1',0),
+			'Stiege OG'        =>	array('Stiege OG',     'Obergeschoss,All', 'Switch', 'IPSComponentSwitch_Dummy,19661','L1',0),
 
 			// ===== Kellergeschoss ==================================================================
-			'Stiege KG'        =>	array('Bad',          'Kellergeschoss,All', 'Switch', 'IPSComponentSwitch_Homematic,21631','L1',0),
-			'Technikraum'      =>	array('Technikraum',  'Kellergeschoss,All', 'Switch', 'IPSComponentSwitch_Homematic,40611','L1',0),
-			'Werkstatt'        =>	array('Werkstatt',    'Kellergeschoss,All', 'Switch', 'IPSComponentSwitch_Homematic,39307','L1',0),
-			'WellnessWand'     =>	array('Wandleuchte',  'Kellergeschoss,All,Wellness', 'Dimmer', 'IPSComponentDimmer_Homematic,10608','L2',380),
-			'WellnessDecke'    =>	array('Decke',        'Kellergeschoss,All,Wellness', 'Dimmer', 'IPSComponentDimmer_Homematic,22847','L2',60),
-			'WellnessSauna'    =>	array('Sauna',        'Kellergeschoss,All,Wellness', 'Switch', 'IPSComponentSwitch_Homematic,43774','L2',60),
-			'WellnessDusche'   =>	array('Dusche',       'Kellergeschoss,All,Wellness', 'Switch', 'IPSComponentSwitch_Homematic,21540','L2',8),
-			'WellnessAmbiente' =>	array('Ambiente',     'Kellergeschoss,All,Wellness', 'Switch', 'IPSComponentSwitch_Homematic,28131','L2',4),
+			'Stiege KG'        =>	array('Bad',          'Kellergeschoss,All', 'Switch', 'IPSComponentSwitch_Dummy,21631','L1',0),
+			'Technikraum'      =>	array('Technikraum',  'Kellergeschoss,All', 'Switch', 'IPSComponentSwitch_Dummy,40611','L1',0),
+			'Werkstatt'        =>	array('Werkstatt',    'Kellergeschoss,All', 'Switch', 'IPSComponentSwitch_Dummy,39307','L1',0),
+			'WellnessWand'     =>	array('Wandleuchte',  'Kellergeschoss,All,Wellness', 'Dimmer', 'IPSComponentDimmer_Dummy,10608','L2',380),
+			'WellnessDecke'    =>	array('Decke',        'Kellergeschoss,All,Wellness', 'Dimmer', 'IPSComponentDimmer_Dummy,22847','L2',60),
+			'WellnessSauna'    =>	array('Sauna',        'Kellergeschoss,All,Wellness', 'Switch', 'IPSComponentSwitch_Dummy,43774','L2',60),
+			'WellnessDusche'   =>	array('Dusche',       'Kellergeschoss,All,Wellness', 'Switch', 'IPSComponentSwitch_Dummy,21540','L2',10),
+			'WellnessAmbiente' =>	array('Ambiente',     'Kellergeschoss,All,Wellness', 'Switch', 'IPSComponentSwitch_Dummy,28131','L2',10),
 
 			// ===== Aussen ==================================================================
-			'TerrasseHauswand' =>	array('Hauswand',    'Aussen,All', 'Switch', 'IPSComponentSwitch_Homematic,34233','L1',120),
-			'TerrasseGarten'   =>	array('Garten',      'Aussen,All', 'Switch', 'IPSComponentSwitch_Homematic,50936','L1',60),
-			'TerrassePergola'  =>	array('Pergola',     'Aussen,All', 'Switch', 'IPSComponentSwitch_Homematic,34391','L1',8),
-			'TerrasseTisch'    =>	array('Tisch',       'Aussen,All', 'Switch', 'IPSComponentSwitch_Homematic,58524','L1',4),
+			'TerrasseHauswand' =>	array('Hauswand',    'Aussen,All', 'Switch', 'IPSComponentSwitch_Dummy,34233','L1',120),
+			'TerrasseGarten'   =>	array('Garten',      'Aussen,All', 'Switch', 'IPSComponentSwitch_Dummy,50936','L1',60),
+			'TerrassePergola'  =>	array('Pergola',     'Aussen,All', 'Switch', 'IPSComponentSwitch_Dummy,34391','L1',12),
+			'TerrasseTisch'    =>	array('Tisch',       'Aussen,All', 'Switch', 'IPSComponentSwitch_Dummy,58524','L1',6),
 		);
 	}
 
