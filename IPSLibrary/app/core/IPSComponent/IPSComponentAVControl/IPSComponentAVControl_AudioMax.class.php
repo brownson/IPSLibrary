@@ -10,21 +10,21 @@
 	IPSUtils_Include ('IPSComponentAVControl.class.php', 'IPSLibrary::app::core::IPSComponent::IPSComponentAVControl');
 	IPSUtils_Include ("AudioMax.inc.php",                'IPSLibrary::app::hardware::AudioMax');
 
-   /**
-    * @class IPSComponentAVControl_AudioMax
-    *
-    * Definiert ein IPSComponentAVControl_AudioMax Object, das ein IPSComponentAVControl Object mit Hilfe der
+	/**
+	 * @class IPSComponentAVControl_AudioMax
+	 *
+	 * Definiert ein IPSComponentAVControl_AudioMax Object, das ein IPSComponentAVControl Object mit Hilfe der
 	 * AudioMax MultiRoom Steuerung e-Service Online implementiert
-    *
-    * @author Andreas Brauneis
-    * @version
-    * Version 2.50.1, 31.01.2012<br/>
-    */
+	 *
+	 * @author Andreas Brauneis
+	 * @version
+	 * Version 2.50.1, 31.01.2012<br/>
+	 */
 
 	class IPSComponentAVControl_AudioMax extends IPSComponentAVControl{
 
 		private $instanceId;
-	
+
 		/**
 		 * @public
 		 *
@@ -34,8 +34,8 @@
 		 */
 		public function __construct($instanceId) {
 			$this->instanceId = (int)$instanceId;
-		   if ($this->instanceId==null) {
-		   	$this->instanceId = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.hardware.AudioMax.AudioMax_Server');
+			if ($this->instanceId==null) {
+				$this->instanceId = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.hardware.AudioMax.AudioMax_Server');
 			}
 		}
 
@@ -49,7 +49,7 @@
 		 * @return string Parameter String des IPSComponent Object
 		 */
 		public function GetComponentParams() {
-			return get_class(this).','.$this->instanceId;
+			return get_class($this).','.$this->instanceId;
 		}
 
 
@@ -75,10 +75,16 @@
 			switch($command) {
 				case AM_CMD_POWER:
 				case AM_CMD_ROOM:
-				   for ($roomId=0;$roomId<AM_CONFIG_ROOM_COUNT;$roomId++) {
-					   $status = AudioMax_GetMainPower($this->instanceId) and AudioMax_GetRoomPower($this->instanceId, $roomId);
+					if (!AudioMax_GetMainPower($this->instanceId) and $command==AM_CMD_ROOM) {
+						break;
+					}
+					for ($roomId=0;$roomId<AM_CONFIG_ROOM_COUNT;$roomId++) {
+						$status = '0';
+						if (AudioMax_GetMainPower($this->instanceId) and AudioMax_GetRoomPower($this->instanceId, $roomId)) {
+							$status='1';
+						}
 						$module->SyncPower($status, $roomId, $this);
-				   }
+					}
 					break;
 				case AM_CMD_AUDIO:
 					if (count($parameters)<6) return;
@@ -87,22 +93,25 @@
 					$value    = $parameters[5];
 					switch($function) {
 						case AM_FNC_BALANCE:
-						   $module->SyncBalance($value, $roomId, $this);
+							$module->SyncBalance($value * 100 / AM_VAL_BALANCE_MAX, $roomId, $this);
 							break;
 						case AM_FNC_VOLUME:
-						   $module->SyncVolume($value, $roomId, $this);
+							$module->SyncVolume($value * 100 / AM_VAL_VOLUME_MAX, $roomId, $this);
+							break;
+						case AM_FNC_MUTE:
+							$module->SyncMute($value, $roomId, $this);
 							break;
 						case AM_FNC_TREBLE:
-						   $module->SyncTreble($value, $roomId, $this);
+							$module->SyncTreble($value * 100 / AM_VAL_TREBLE_MAX, $roomId, $this);
 							break;
 						case AM_FNC_MIDDLE:
-						   $module->SyncMiddle($value, $roomId, $this);
+							$module->SyncMiddle($value * 100 / AM_VAL_MIDDLE_MAX, $roomId, $this);
 							break;
 						case AM_FNC_BASS:
-						   $module->SyncBass($value, $roomId, $this);
+							$module->SyncBass($value * 100 / AM_VAL_BASS_MAX, $roomId, $this);
 							break;
 						case AM_FNC_INPUTSELECT:
-						   $module->SyncSource($value, $roomId, $this);
+							$module->SyncSource($value, $roomId, $this);
 							break;
 						case AM_FNC_INPUTGAIN:
 							break;
@@ -115,6 +124,13 @@
 			}
 		}
 
+		private function HandleError($result) {
+			if ($result==false) {
+				$errorMessage = GetValue(IPS_GetObjectIDByIdent(AM_VAR_LASTERROR, $this->instanceId));
+				trigger_error($errorMessage);
+			}
+		}
+		
 		/**
 		 * @public
 		 *
@@ -124,18 +140,20 @@
 		 * @param boolean $value Wert für Power (Wertebereich false=Off, true=On)
 		 */
 		public function SetPower($outputId, $value) {
-		   AudioMax_SetRoomPower($this->instanceId, $outputId, $value);
+			$result = AudioMax_SetRoomPower($this->instanceId, $outputId, $value);
+			$this->HandleError($result);
 			if ($value) {
-		   	AudioMax_SetMainPower($this->instanceId, $value);
+				$result = AudioMax_SetMainPower($this->instanceId, $value);
 			} else {
-			   $allRoomesOff = true;
+				$allRoomesOff = true;
 				for ($roomId=0;$roomId<AM_CONFIG_ROOM_COUNT;$roomId++) {
-					$allRoomesOff = $allRoomesOff and !AudioMax_GetRoomPower($this->instanceId, $roomId);
+					$allRoomesOff = ($allRoomesOff and !AudioMax_GetRoomPower($this->instanceId, $roomId));
 				}
 				if ($allRoomesOff) {
-			   	AudioMax_SetMainPower($this->instanceId, $value);
+					$result = AudioMax_SetMainPower($this->instanceId, $value);
 				}
 			}
+			$this->HandleError($result);
 		}
 
 		/**
@@ -161,7 +179,7 @@
 		 * @param integer $value Eingang der gesetzt werden soll (Wertebereich 0 - x)
 		 */
 		public function SetSource($outputId, $value) {
-			AudioMax_SetRoomPower($this->instanceId, $outputId, $value);
+			$this->HandleError(AudioMax_SetInputSelect($this->instanceId, $outputId, $value));
 		}
 
 		/**
@@ -173,7 +191,7 @@
 		 * @return integer Eingang der gerade gewählt ist (Wertebereich 0 - x)
 		 */
 		public function GetSource($outputId) {
-			return AudioMax_SetRoomPower($this->instanceId, $outputId);
+			return AudioMax_GetInputSelect($this->instanceId, $outputId);
 		}
 
 		/**
@@ -185,7 +203,7 @@
 		 * @param integer $value Wert der Lautstärke (Wertebereich 0 - 100)
 		 */
 		public function SetVolume($outputId, $value) {
-		   AudioMax_SetVolume($this->instanceId, $outputId, $value * AM_VAL_VOLUME_MAX / 100);
+			$this->HandleError(AudioMax_SetVolume($this->instanceId, $outputId, $value * AM_VAL_VOLUME_MAX / 100));
 		}
 
 		/**
@@ -197,7 +215,7 @@
 		 * @return integer Wert der Lautstärke (Wertebereich 0 - 100)
 		 */
 		public function GetVolume($outputId) {
-		   return AudioMax_GetVolume($this->instanceId, $outputId) * 100 / AM_VAL_VOLUME_MAX;
+			return AudioMax_GetVolume($this->instanceId, $outputId) * 100 / AM_VAL_VOLUME_MAX;
 		}
 
 		/**
@@ -209,7 +227,18 @@
 		 * @param boolean $value Wert für Muting (Wertebereich true oder false)
 		 */
 		public function SetMute($outputId, $value) {
-		   return AudioMax_SetMute($this->instanceId, $outputId, $value);
+			$this->HandleError(AudioMax_SetMute($this->instanceId, $outputId, $value));
+		}
+
+		/**
+		 * @public
+		 *
+		 * Setzen des Mutings für einen Ausgang
+		 *
+		 * @param integer $outputId Ausgang der geändert werden soll (Wertebereich 0 - x)
+		 */
+		public function ToggleMute($outputId) {
+			$this->HandleError(AudioMax_SetMute($this->instanceId, $outputId, !AudioMax_GetMute($this->instanceId)));
 		}
 
 		/**
@@ -221,7 +250,7 @@
 		 * @return boolean Wert für Muting (Wertebereich true oder false)
 		 */
 		public function GetMute($outputId) {
-		   return AudioMax_GetMute($this->instanceId, $outputId);
+			return AudioMax_GetMute($this->instanceId, $outputId);
 		}
 
 		/**
@@ -233,7 +262,7 @@
 		 * @param integer $value Wert für Balance (Wertebereich: Links 0 - 50 , 51 - 100 Rechts)
 		 */
 		public function SetBalance($outputId, $value) {
-		   AudioMax_SetBalance($this->instanceId, $outputId, $value * AM_VAL_BALANCE_MAX / 100);
+			$this->HandleError(AudioMax_SetBalance($this->instanceId, $outputId, $value * AM_VAL_BALANCE_MAX / 100));
 		}
 
 		/**
@@ -245,7 +274,7 @@
 		 * @return integer Wert für Balance (Wertebereich: Links 0 - 50 , 51 - 100 Rechts)
 		 */
 		public function GetBalance($outputId) {
-		   return AudioMax_GetBalance($this->instanceId, $outputId) * 100 / AM_VAL_BALANCE_MAX;
+			return AudioMax_GetBalance($this->instanceId, $outputId) * 100 / AM_VAL_BALANCE_MAX;
 		}
 
 		/**
@@ -257,7 +286,7 @@
 		 * @param integer $value Wert für Höhen (Wertebereich 0 - 100)
 		 */
 		public function SetTreble($outputId, $value) {
-		   AudioMax_SetTreble($this->instanceId, $outputId, $value * AM_VAL_TREBLE_MAX / 100);
+			$this->HandleError(AudioMax_SetTreble($this->instanceId, $outputId, $value * AM_VAL_TREBLE_MAX / 100));
 		}
 
 		/**
@@ -269,7 +298,7 @@
 		 * @return integer Wert der Höhen (Wertebereich 0 -100)
 		 */
 		public function GetTreble($outputId) {
-		   return AudioMax_GetTreble($this->instanceId, $outputId) * 100 / AM_VAL_TREBLE_MAX;
+			return AudioMax_GetTreble($this->instanceId, $outputId) * 100 / AM_VAL_TREBLE_MAX;
 		}
 
 		/**
@@ -281,7 +310,7 @@
 		 * @param integer $value Wert für Mitten (Wertebereich 0 - 100)
 		 */
 		public function SetMiddle($outputId, $value) {
-		   AudioMax_SetMiddle($this->instanceId, $outputId, $value * AM_VAL_MIDDLE_MAX / 100);
+			$this->HandleError(AudioMax_SetMiddle($this->instanceId, $outputId, $value * AM_VAL_MIDDLE_MAX / 100));
 		}
 
 		/**
@@ -293,7 +322,7 @@
 		 * @return integer Wert der Mitten (Wertebereich 0 -100)
 		 */
 		public function GetMiddle($outputId) {
-		   return AudioMax_GetMiddle($this->instanceId, $outputId) * 100 / AM_VAL_MIDDLE_MAX;
+			return AudioMax_GetMiddle($this->instanceId, $outputId) * 100 / AM_VAL_MIDDLE_MAX;
 		}
 
 		/**
@@ -305,7 +334,7 @@
 		 * @param integer $value Wert für Bässe (Wertebereich 0 - 100)
 		 */
 		public function SetBass($outputId, $value) {
-		   AudioMax_SetBass($this->instanceId, $outputId, $value * AM_VAL_BASS_MAX / 100);
+			$this->HandleError(AudioMax_SetBass($this->instanceId, $outputId, $value * AM_VAL_BASS_MAX / 100));
 		}
 
 		/**
@@ -317,7 +346,7 @@
 		 * @return integer Wert der Bässe (Wertebereich 0 -100)
 		 */
 		public function GetBass($outputId) {
-		   return AudioMax_GetBass($this->instanceId, $outputId) * 100 / AM_VAL_BASS_MAX;
+			return AudioMax_GetBass($this->instanceId, $outputId) * 100 / AM_VAL_BASS_MAX;
 		}
 
 	}

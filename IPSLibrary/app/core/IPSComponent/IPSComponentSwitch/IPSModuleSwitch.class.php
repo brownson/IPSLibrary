@@ -29,7 +29,7 @@
 		 *
 		 * @param boolean $state aktueller Status des Gerätes
 		 */
-		abstract public function SyncState($state);
+		abstract public function SyncState($state, IPSComponentSwitch $componentToSync);
 
 	}
 

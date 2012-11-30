@@ -19,11 +19,13 @@
     * Version 2.50.1, 31.01.2012<br/>
     */
 
-	abstract class IPSComponentShutter_Enocean extends IPSComponentShutter {
+	IPSUtils_Include ('IPSComponentShutter.class.php', 'IPSLibrary::app::core::IPSComponent::IPSComponentShutter');
+
+	class IPSComponentShutter_Enocean extends IPSComponentShutter {
 
 		private $instanceId;
 		private $isRunningId;
-	
+
 		/**
 		 * @public
 		 *
@@ -35,18 +37,31 @@
 			$this->instanceId = IPSUtil_ObjectIDByPath($instanceId);
 			$this->isRunningId  = @IPS_GetObjectIDByIdent('isrunning', $this->instanceId);
 			if($this->isRunningId===false) {
-				$this->isRunningId = IPS_CreateVariable($this->instanceId);
-				IPS_SetParent($this->isRunningId, $id);
+				$this->isRunningId = IPS_CreateVariable(0 /*Boolean*/);
+				IPS_SetParent($this->isRunningId, $this->instanceId);
 				IPS_SetName($this->isRunningId, 'IsRunning');
 				IPS_SetIdent($this->isRunningId, 'isrunning');
-				IPS_SetInfo($this->isRunningId, "This Variable was created by Script IPSComponentShutter_FS20");
+				IPS_SetInfo($this->isRunningId, "This Variable was created by Script IPSComponentShutter_Enocean");
 			}
 		}
 
 		/**
 		 * @public
 		 *
-		 * Function um Events zu behandeln, diese Funktion wird vom IPSMessageHandler aufgerufen, um ein aufgetretenes Event 
+		 * Funktion liefert String IPSComponent Constructor String.
+		 * String kann dazu benützt werden, das Object mit der IPSComponent::CreateObjectByParams
+		 * wieder neu zu erzeugen.
+		 *
+		 * @return string Parameter String des IPSComponent Object
+		 */
+		public function GetComponentParams() {
+			return get_class($this).','.$this->instanceId;
+		}
+
+		/**
+		 * @public
+		 *
+		 * Function um Events zu behandeln, diese Funktion wird vom IPSMessageHandler aufgerufen, um ein aufgetretenes Event
 		 * an das entsprechende Module zu leiten.
 		 *
 		 * @param integer $variable ID der auslösenden Variable
@@ -65,11 +80,11 @@
 		 */
 		public function MoveUp(){
 			if(!GetValue($this->isRunningId)) {
-				ENO_SwitchMode($this->InstanceId, true);
+				ENO_SwitchMode($this->instanceId, true);
 				SetValue($this->isRunningId, true);
 			}
 		}
-		
+
 		/**
 		 * @public
 		 *
@@ -77,11 +92,11 @@
 		 */
 		public function MoveDown(){
 			if(!GetValue($this->isRunningId)) {
-				ENO_SwitchMode($this->InstanceId, false);
+				ENO_SwitchMode($this->instanceId, false);
 				SetValue($this->isRunningId, true);
 			}
 		}
-		
+
 		/**
 		 * @public
 		 *
@@ -89,8 +104,8 @@
 		 */
 		public function Stop() {
 			if(GetValue($this->isRunningId)) {
-				$value = GetValue(IPS_GetObjectIDByIdent($this->InstanceId, "StatusVariable")
-				ENO_SwitchMode($this->InstanceId, $value);
+				$value = GetValue(IPS_GetObjectIDByIdent("StatusVariable", $this->instanceId));
+				ENO_SwitchMode($this->instanceId, $value);
 				SetValue($this->isRunningId, false);
 			}
 		}

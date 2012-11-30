@@ -19,7 +19,9 @@
     * Version 2.50.1, 31.01.2012<br/>
     */
 
-	abstract class IPSComponentShutter_FS20 extends IPSComponentShutter {
+	IPSUtils_Include ('IPSComponentShutter.class.php', 'IPSLibrary::app::core::IPSComponent::IPSComponentShutter');
+
+	class IPSComponentShutter_FS20 extends IPSComponentShutter {
 
 		private $instanceId;
 		private $isRunningId;
@@ -35,12 +37,25 @@
 			$this->instanceId = IPSUtil_ObjectIDByPath($instanceId);
 			$this->isRunningId  = @IPS_GetObjectIDByIdent('isrunning', $this->instanceId);
 			if($this->isRunningId===false) {
-				$this->isRunningId = IPS_CreateVariable($this->instanceId);
-				IPS_SetParent($this->isRunningId, $id);
+				$this->isRunningId = IPS_CreateVariable(0);
+				IPS_SetParent($this->isRunningId, $this->instanceId);
 				IPS_SetName($this->isRunningId, 'IsRunning');
 				IPS_SetIdent($this->isRunningId, 'isrunning');
 				IPS_SetInfo($this->isRunningId, "This Variable was created by Script IPSComponentShutter_FS20");
 			}
+		}
+
+		/**
+		 * @public
+		 *
+		 * Funktion liefert String IPSComponent Constructor String.
+		 * String kann dazu benützt werden, das Object mit der IPSComponent::CreateObjectByParams
+		 * wieder neu zu erzeugen.
+		 *
+		 * @return string Parameter String des IPSComponent Object
+		 */
+		public function GetComponentParams() {
+			return get_class($this).','.$this->instanceId;
 		}
 
 		/**
@@ -65,7 +80,7 @@
 		 */
 		public function MoveUp(){
 			if(!GetValue($this->isRunningId)) {
-				FS20_SwitchMode($this->InstanceId, true);
+				FS20_SwitchMode($this->instanceId, true);
 				SetValue($this->isRunningId, true);
 			}
 		}
@@ -77,7 +92,7 @@
 		 */
 		public function MoveDown(){
 			if(!GetValue($this->isRunningId)) {
-				FS20_SwitchMode($this->InstanceId, false);
+				FS20_SwitchMode($this->instanceId, false);
 				SetValue($this->isRunningId, true);
 			}
 		}
@@ -89,8 +104,8 @@
 		 */
 		public function Stop() {
 			if(GetValue($this->isRunningId)) {
-				$value = GetValue(IPS_GetObjectIDByIdent($this->InstanceId, "StatusVariable")
-				FS20_SwitchMode($this->InstanceId, $value);
+				$value = GetValue(IPS_GetObjectIDByIdent("StatusVariable", $this->instanceId));
+				FS20_SwitchMode($this->instanceId, $value);
 				SetValue($this->isRunningId, false);
 			}
 		}

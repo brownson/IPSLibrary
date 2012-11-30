@@ -19,9 +19,12 @@
     * Version 2.50.1, 31.01.2012<br/>
     */
 
-	abstract class IPSComponentShutter_1Wire extends IPSComponentShutter {
+	IPSUtils_Include ('IPSComponentShutter.class.php', 'IPSLibrary::app::core::IPSComponent::IPSComponentShutter');
+
+	class IPSComponentShutter_1Wire extends IPSComponentShutter {
 
 		private $instanceId;
+		private $reverseControl;
 	
 		/**
 		 * @public
@@ -29,9 +32,24 @@
 		 * Initialisierung eines IPSComponentShutter_1Wire Objektes
 		 *
 		 * @param integer $instanceId InstanceId des 1Wire Devices
+		 * @param boolean $reverseControl Reverse Ansteuerung des Devices
 		 */
-		public function __construct($instanceId) {
-			$this->instanceId = IPSUtil_ObjectIDByPath($instanceId);
+		public function __construct($instanceId, $reverseControl=false) {
+			$this->instanceId     = IPSUtil_ObjectIDByPath($instanceId);
+			$this->reverseControl = $reverseControl;
+		}
+
+		/**
+		 * @public
+		 *
+		 * Funktion liefert String IPSComponent Constructor String.
+		 * String kann dazu benützt werden, das Object mit der IPSComponent::CreateObjectByParams
+		 * wieder neu zu erzeugen.
+		 *
+		 * @return string Parameter String des IPSComponent Object
+		 */
+		public function GetComponentParams() {
+			return get_class($this).','.$this->instanceId;
 		}
 
 		/**
@@ -55,8 +73,13 @@
 		 * Hinauffahren der Beschattung
 		 */
 		public function MoveUp(){
-			@TMEX_F29_SetStrobe($this->instanceId, True);
-			@TMEX_F29_SetPort((integer)$this->instanceId, (integer)120+128);
+			if ($this->reverseControl) {
+				@TMEX_F29_SetStrobe($this->instanceId, True);
+				@TMEX_F29_SetPort((integer)$this->instanceId, (integer)120);
+			} else {
+				@TMEX_F29_SetStrobe($this->instanceId, True);
+				@TMEX_F29_SetPort((integer)$this->instanceId, (integer)120+128);
+			}
 		}
 		
 		/**
@@ -65,8 +88,13 @@
 		 * Hinunterfahren der Beschattung
 		 */
 		public function MoveDown(){
-			@TMEX_F29_SetStrobe($this->instanceId, True);
-			@TMEX_F29_SetPort((integer)$this->instanceId, (integer)120);
+			if ($this->reverseControl) {
+				@TMEX_F29_SetStrobe($this->instanceId, True);
+				@TMEX_F29_SetPort((integer)$this->instanceId, (integer)120+128);
+			} else {
+				@TMEX_F29_SetStrobe($this->instanceId, True);
+				@TMEX_F29_SetPort((integer)$this->instanceId, (integer)120);
+			}
 		}
 		
 		/**

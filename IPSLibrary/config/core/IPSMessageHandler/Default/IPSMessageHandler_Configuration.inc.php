@@ -1,4 +1,4 @@
- <?
+<?
 	/**@defgroup ipsmessagehandler_configuration IPSMessageHandler Konfiguration
 	 * @ingroup ipsmessagehandler
 	 * @{
@@ -14,7 +14,8 @@
 
 	/**
 	 *
-	 * Liefert Liste mit Event Variablen, die vom MessageHandler bearbeitet werden.
+	 * Liefert Liste mit Event Variablen, die vom MessageHandler bearbeitet werden. Diese Liste wurde von
+	 * den Installations Prozeduren befüllt.
 	 *
 	 * @return string[] Key-Value Array mit Event Variablen und der dazugehörigen Parametern
 	 */
@@ -25,10 +26,32 @@
 		return $eventConfiguration;
 	}
 
-	/*
+	/**
 	 *
+	 * Liefert Liste mit Event Variablen, die vom MessageHandler bearbeitet werden. Diese Liste kann vom Anwender 
+	 * frei definiert werden
 	 *
+	 * @return string[] Key-Value Array mit Event Variablen und der dazugehörigen Parametern
 	 */
+	function IPSMessageHandler_GetEventConfigurationCust() {
+		$config = array(
+			);
+
+		return $config;
+	}
 	 
-	/** @}*/
+	/**
+	 *
+	 * Liefert Liste mit IR Befehlen, die vom MessageHandler bearbeitet werden.
+	 *
+	 * @return string[] Key-Value Array mit Event Variablen und der dazugehörigen Parametern
+	 */
+	function IPSMessageHandler_GetEventConfigurationIR() {
+		$config = array(
+			);
+		return $config;
+	}
+
+
+/** @}*/
 ?>

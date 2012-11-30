@@ -32,10 +32,24 @@
 		 * Initialisierung eines IPSComponentSwitch_1WireD2408 Objektes
 		 *
 		 * @param integer $instanceId InstanceId des 1WireD2408 Devices
+		 * @param integer $channelId Kanal des 1WireD2408 Devices
 		 */
 		public function __construct($instanceId, $channelId) {
 			$this->instanceId = IPSUtil_ObjectIDByPath($instanceId);
-			$this->channelId  = $channelId;
+			$this->channelId  = (int)$channelId;
+		}
+
+		/**
+		 * @public
+		 *
+		 * Funktion liefert String IPSComponent Constructor String.
+		 * String kann dazu benützt werden, das Object mit der IPSComponent::CreateObjectByParams
+		 * wieder neu zu erzeugen.
+		 *
+		 * @return string Parameter String des IPSComponent Object
+		 */
+		public function GetComponentParams() {
+			return get_class($this).','.$this->instanceId.','.$this->channelId;
 		}
 
 		/**

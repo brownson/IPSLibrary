@@ -30,12 +30,14 @@
     */
 
 	abstract class IPSConfigHandler {
-		const VERSION          = 'Version';           // Current Module Verison
+		const SCRIPTVERSION    = 'Version';           // Current Module Verison (Script)
+		const INSTALLVERSION   = 'InstallVersion';    // Current Module Verison (Installation)
 		const MODULENAMESPACE  = 'ModuleNamespace';   // Module Namespace
 		const SOURCEREPOSITORY = 'SourceRepository';  // Pfad/Url zum Source Repository
 		const LOGDIRECTORY     = 'LogDirectory';      // Logging Directory
+		const CHANGELIST       = 'ChangeList';        // ChangeList
+		const REQUIREDMODULES  = 'RequiredModules';   // Required Modules
 
-	   
 		protected $configData              = array();
 
 		/**
@@ -48,10 +50,10 @@
 		 * @return boolean liefert Existenz des übergebenen Parameters
 		 */
 		public function ExistsValue($key, $section=null) {
-		   if ($section==null) {
-			   return array_key_exists($key,$this->configData);
+			if ($section==null) {
+				return array_key_exists($key,$this->configData);
 			} else {
-			   return (array_key_exists($section,$this->configData) and array_key_exists($key,$this->configData[$section]));
+				return (array_key_exists($section,$this->configData) and array_key_exists($key,$this->configData[$section]));
 			}
 		}
 
@@ -66,10 +68,10 @@
 		 * @throws IPSConfigurationException wenn der betroffene Parameter nicht gefunden wurde
 		 */
 		public function GetValue($key, $section=null) {
-		   if (!$this->ExistsValue($key, $section)) {
+			if (!$this->ExistsValue($key, $section)) {
 				throw new IPSConfigurationException('Configuration Value with Key='.$key.' could NOT be found (Section="'.$section.'")',
-												E_USER_ERROR);
-		   } elseif ($section==null) {
+				                                    E_USER_ERROR);
+			} elseif ($section==null) {
 				return $this->configData[$key];
 			} else {
 				return $this->configData[$section][$key];
@@ -87,7 +89,7 @@
 		 * @throws IPSConfigurationException wenn der betroffene Parameter nicht gefunden wurde
 		 */
 		public function GetValueInt ($key, $section=null) {
-		   return (int)$this->GetValue($key, $section);
+			return (int)$this->GetValue($key, $section);
 		}
 
 		/**
@@ -101,7 +103,14 @@
 		 * @throws IPSConfigurationException wenn der betroffene Parameter nicht gefunden wurde
 		 */
 		public function GetValueBool ($key, $section=null) {
-		   return (boolean)$this->GetValue($key, $section);
+			$value = $this->GetValue($key, $section);
+			if ($value=='false') {
+				return false;
+			} elseif ($value=='true') {
+				return true;
+			} else {
+				return (boolean)$value;
+			}
 		}
 
 		/**
@@ -115,7 +124,7 @@
 		 * @throws IPSConfigurationException wenn der betroffene Parameter nicht gefunden wurde
 		 */
 		public function GetValueFloat ($key, $section=null) {
-		   return (float)$this->GetValue($key, $section);
+			return (float)$this->GetValue($key, $section);
 		}
 
 		/**
@@ -130,14 +139,14 @@
 		 * @return string liefert den Wert des übergebenen Parameters
 		 */
 		public function GetValueDef($key, $section=null, $defaultValue="") {
-		   if ($section==null) {
-			   if ($this->ExistsValue($key, $section)) {
+			if ($section==null) {
+				if ($this->ExistsValue($key, $section)) {
 					$result = $this->configData[$key];
 				} else {
 					$result = $defaultValue;
 				}
 			} else {
-			   if ($this->ExistsValue($key, $section)) {
+				if ($this->ExistsValue($key, $section)) {
 					$result = $this->configData[$section][$key];
 				} else {
 					$result = $defaultValue;
@@ -158,7 +167,7 @@
 		 * @return integer retouniert den Wert des übergebenen Parameters
 		 */
 		public function GetValueIntDef($key, $section=null, $defaultValue="") {
-		   return (int)$this->GetValueDef($key, $section, $defaultValue);
+			return (int)$this->GetValueDef($key, $section, $defaultValue);
 		}
 
 		/**
@@ -173,7 +182,14 @@
 		 * @return boolean retouniert den Wert des übergebenen Parameters
 		 */
 		public function GetValueBoolDef ($key, $section=null, $defaultValue="") {
-		   return (boolean)$this->GetValueDef($key, $section, $defaultValue);
+			$value = $this->GetValueDef($key, $section, $defaultValue);
+			if ($value=='false') {
+				return false;
+			} elseif ($value=='true') {
+				return true;
+			} else {
+				return (boolean)$value;
+			}
 		}
 
 		/**
@@ -188,7 +204,7 @@
 		 * @return float retouniert den Wert des übergebenen Parameters
 		 */
 		public function GetValueFloatDef ($key, $section=null, $defaultValue="") {
-		   return (float)$this->GetValueDef($key, $section, $defaultValue);
+			return (float)$this->GetValueDef($key, $section, $defaultValue);
 		}
 
 	}

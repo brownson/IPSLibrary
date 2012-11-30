@@ -18,7 +18,6 @@
 	 *
 	 */
 
-
 	/** Anlegen einer Kategorie.
 	 *
 	 * Die Funktion legt eine Kategory, als übergeordnete ID dient dabei $ParentId. Sollte
@@ -180,6 +179,7 @@
 		$ident = str_replace(array('"','\'','%','&','(',')','=','#','<','>','|','\\'), '', $ident);
 		$ident = str_replace(array(',','.',':',';','!','?'), '', $ident);
 		$ident = str_replace(array('+','-','/','*'), '', $ident);
+		$ident = str_replace(array('ß'), 'ss', $ident);
 		return $ident;
 	}
 
@@ -281,7 +281,7 @@
 	 *
 	 */
 	function CreateDummyInstance ($Name, $ParentId, $Position=0) {
-	   return CreateInstance ($Name, $ParentId, "{485D0419-BE97-4548-AA9C-C083EB82E61E}", $Position);
+		return CreateInstance ($Name, $ParentId, "{485D0419-BE97-4548-AA9C-C083EB82E61E}", $Position);
 	}
 
 	/** Anlegen einer IO Instanze mit seriellem Port
@@ -541,12 +541,12 @@
 			if ($ident<>"") {
 				IPS_SetIdent($LinkId, Get_IdentByName($Name));
 			}
-			IPS_SetLinkChildID($LinkId, $Link);
+			IPS_SetLinkTargetID($LinkId, $Link);
 			IPS_SetPosition($LinkId, $Position);
 			Debug ('Created Link '.$Name.'='.$LinkId."");
 		}
 		UpdateObjectData($LinkId, $Position);
-		IPS_SetLinkChildID($LinkId, $Link);
+		IPS_SetLinkTargetID($LinkId, $Link);
 		return $LinkId;
 	}
 
@@ -583,7 +583,7 @@
 			IPS_SetParent($LinkId, $ParentId);
 			IPS_SetPosition($LinkId, $Position);
 		}
-		IPS_SetLinkChildID($LinkId, $LinkChildId);
+		IPS_SetLinkTargetID($LinkId, $LinkChildId);
 		if ($ident<>"") {
 			IPS_SetIdent($LinkId, $ident);
 		}
@@ -1050,19 +1050,20 @@
 
 	function Debug($msg) {
 		if (isset($_IPS['MODULEMANAGER'])) {
-		   $moduleManager = $_IPS['MODULEMANAGER'];
-		   $moduleManager->LogHandler()->Debug($msg);
+			$moduleManager = $_IPS['MODULEMANAGER'];
+			$moduleManager->LogHandler()->Debug($msg);
+		} elseif (isset($_IPS['SENDER']) and $_IPS['SENDER']=='WebFront') {
 		} else {
-		   echo $msg.PHP_EOL;
+			echo $msg.PHP_EOL;
 		}
 	}
 
 	function Error($msg) {
 		if (isset($_IPS['MODULEMANAGER'])) {
-		   $moduleManager = $_IPS['MODULEMANAGER'];
-		   $moduleManager->LogHandler()->Error($msg);
+			$moduleManager = $_IPS['MODULEMANAGER'];
+			$moduleManager->LogHandler()->Error($msg);
 		} else {
-		   echo $msg.PHP_EOL;
+			echo $msg.PHP_EOL;
 		}
 		throw new Exception($msg);
 	}

@@ -20,13 +20,28 @@
     */
 	class IPSFileVersionHandler extends IPSVersionHandler {
 
-		const FILE_INSTALLED_MODULES   = 'IPSLibrary\\config\\InstalledModules.ini';
+		const FILE_INSTALLED_MODULES       = 'IPSLibrary\\config\\InstalledModules.ini';
+		const FILE_AVAILABLE_MODULES       = 'IPSLibrary\\config\\AvailableModules.ini';
+		const FILE_KNOWN_MODULES           = 'IPSLibrary\\config\\KnownModules.ini';
+		const FILE_KNOWN_REPOSITORIES      = 'IPSLibrary\\config\\KnownRepositories.ini';
+		const FILE_KNOWN_USERREPOSITORIES  = 'IPSLibrary\\config\\KnownUserRepositories.ini';
+		const FILE_REPOSITORY_VERSIONS     = 'IPSLibrary\\config\\RepositoryVersions.ini';
+		const FILE_CHANGELIST              = 'IPSLibrary\\config\\ChangeList.ini';
+		const FILE_REQUIRED_MODULES        = 'IPSLibrary\\config\\RequiredModules.ini';
+ 		const FILE_DOWNLOADLIST_PATH       = "IPSLibrary\\install\\DownloadListFiles\\";
+		const FILE_DOWNLOADLIST_SUFFIX     = '_FileList.ini';
 
-		private $fileName;
-		private $moduleList;
+		private $fileNameAvailableModules;
+		private $fileNameInstalledModules;
+		private $fileNameKnownModules;
+		private $fileNameKnownRepositories;
+		private $fileNameRepositoryVersions;
+		private $fileNameChangeList;
+		private $fileNameRequiredModules;
+		private $fileNameDownloadList;
 
 		/**
-       * @public
+		 * @public
 		 *
 		 * Initialisierung des IPSFileVersionHandler
 		 *
@@ -37,209 +52,265 @@
 				die("ModuleName must have a Value!");
 			}
 			parent::__construct($moduleName);
-			$this->fileName   = IPS_GetKernelDir().'scripts\\'.$this::FILE_INSTALLED_MODULES;
+			$this->fileNameInstalledModules      = IPS_GetKernelDir().'scripts\\'.$this::FILE_INSTALLED_MODULES;
+			$this->fileNameAvailableModules      = IPS_GetKernelDir().'scripts\\'.$this::FILE_AVAILABLE_MODULES;
+			$this->fileNameKnownModules          = IPS_GetKernelDir().'scripts\\'.$this::FILE_KNOWN_MODULES;
+			$this->fileNameKnownRepositories     = IPS_GetKernelDir().'scripts\\'.$this::FILE_KNOWN_REPOSITORIES;
+			$this->fileNameKnownUserRepositories = IPS_GetKernelDir().'scripts\\'.$this::FILE_KNOWN_USERREPOSITORIES;
+			$this->fileNameRepositoryVersions    = IPS_GetKernelDir().'scripts\\'.$this::FILE_REPOSITORY_VERSIONS;
+			$this->fileNameChangeList            = IPS_GetKernelDir().'scripts\\'.$this::FILE_CHANGELIST;
+			$this->fileNameRequiredModules       = IPS_GetKernelDir().'scripts\\'.$this::FILE_REQUIRED_MODULES;
+			$this->fileNameDownloadList          = IPS_GetKernelDir().'scripts\\'.$this::FILE_DOWNLOADLIST_PATH.$moduleName.$this::FILE_DOWNLOADLIST_SUFFIX;
 
-			$this->LoadVersionFile();
-			if (!array_key_exists($moduleName, $this->moduleList)) {
-			   $this->moduleList[$moduleName] = '';
+			$this->ReloadVersionData();
+		}
+
+		public function ReloadVersionData() {
+			$this->LoadFileInstalledModules();
+			$this->LoadFileKnownRepositories();
+			$this->LoadFileKnownModules();
+			$this->LoadFileRepositoryVersions();
+			$this->LoadFileChangeList();
+			$this->LoadFileRequiredModules();
+
+			if (!array_key_exists($this->moduleName, $this->installedModules)) {
+				$this->installedModules[$this->moduleName] = '';
 			}
-			
 		}
 		
-		private function LoadVersionFile() {
-		   if (file_exists($this->fileName)) {
-			   $fileContent = file_get_contents($this->fileName);
-			   $lines = explode(PHP_EOL, $fileContent);
-			   foreach ($lines as $line) {
-			      $content = explode('=', $line);
-					if (count($content)>0) {
-               	$this->moduleList[$content[0]] = $content[1];
-               }
-			   }
-			   
-		   } else {
-				$this->moduleList = array();
+		private function LoadFileRequiredModules() {
+			if (file_exists($this->fileNameRequiredModules)) {
+				$this->requiredModules = parse_ini_file($this->fileNameRequiredModules, true);
 			}
 		}
 
-		private function WriteVersionFile() {
+		private function LoadFileChangeList() {
+			if (file_exists($this->fileNameChangeList)) {
+				$this->changeList = parse_ini_file($this->fileNameChangeList, true);
+			}
+		}
+
+		private function LoadFileKnownModules() {
+			if (file_exists($this->fileNameKnownModules)) {
+				$this->knownModules = parse_ini_file($this->fileNameKnownModules, true);
+			}
+		}
+
+		private function LoadFileKnownRepositories() {
+			if (!file_exists($this->fileNameKnownRepositories)) {
+				die('KnownModules.ini does NOT exists!');
+			} elseif (file_exists($this->fileNameKnownUserRepositories)) {
+				$this->knownRepositories = parse_ini_file($this->fileNameKnownUserRepositories, true);
+			} else {
+				$this->knownRepositories = parse_ini_file($this->fileNameKnownRepositories, true);
+			}
+		}
+
+		private function LoadFileRepositoryVersions() {
+			if (file_exists($this->fileNameRepositoryVersions)) {
+				$this->repositoryVersions = parse_ini_file($this->fileNameRepositoryVersions, true);
+			}
+		}
+
+		private function LoadFileInstalledModules() {
+			if (file_exists($this->fileNameInstalledModules)) {
+				$fileContent = file_get_contents($this->fileNameInstalledModules);
+				$lines = explode(PHP_EOL, $fileContent);
+				foreach ($lines as $line) {
+					$content = explode('=', $line);
+					if (count($content)>0) {
+						$this->installedModules[$content[0]] = $content[1];
+					}
+				}
+			} else {
+				$this->installedModules = array();
+			}
+		}
+
+		private function WriteFileInstalledModules() {
 			$fileContent = '';
-			foreach ($this->moduleList as $moduleName=>$moduleVersion) {
-			   if ($fileContent <> '') {
-			      $fileContent .= PHP_EOL;
-			   }
+			foreach ($this->installedModules as $moduleName=>$moduleVersion) {
+				if ($fileContent <> '') {
+					$fileContent .= PHP_EOL;
+				}
 				$fileContent .= $moduleName.'='.$moduleVersion;
 			}
-			file_put_contents($this->fileName, $fileContent);
+			file_put_contents($this->fileNameInstalledModules, $fileContent);
 		}
 
-		private function VersionToArray($moduleVersion) {
-			if ($moduleVersion=='') {
-				$moduleVersion = IPS_GetKernelVersion();
+		/**
+		 * @public
+		 *
+		 * Speicherung der Versions Daten
+		 *
+		 * @param string $moduleName Name des Modules
+		 */
+		protected function StoreModuleVersions() {
+			$this->WriteFileInstalledModules();
+		}
+
+		/**
+		 * @public
+		 *
+		 * Erzeugt das File KnownModules
+		 */
+		public function BuildKnownModules() {
+			$knownRepositories    = $this->GetKnownRepositories();
+			$knownModules         = array();
+			$repositoryVersions   = array();
+			$changeList           = array();
+			$requiredModules      = array();
+			foreach ($knownRepositories as $repositoryIdx=>$repository) {
+				echo 'Process Repsoitory '.$repository.PHP_EOL;
+				$fileHandler         = new IPSFileHandler();
+				$repository = IPSFileHandler::AddTrailingPathDelimiter($repository);
+				$localAvailableModuleList      = sys_get_temp_dir().'\\AvailableModules.ini';
+				$repositoryAvailableModuleList = $repository.'IPSLibrary\\config\\AvailableModules.ini';
+				$fileHandler->CopyFiles(array($repositoryAvailableModuleList), array($localAvailableModuleList));
+
+				$availableModules = parse_ini_file($localAvailableModuleList, true);
+				foreach ($availableModules as $moduleName=>$moduleData) {
+					$moduleProperties  = explode('|',$moduleData);
+					$modulePath        = $moduleProperties[0];
+					$moduleDescription = '';
+					if (array_key_exists(1, $moduleProperties)) {
+						$moduleDescription = $moduleProperties[1];
+					}
+					
+					$localDownloadIniFile      = sys_get_temp_dir().'\\DownloadListfile.ini';
+					$repositoryDownloadIniFile = $repository.'IPSLibrary\\install\\DownloadListFiles\\'.$moduleName.'_FileList.ini';
+					$result = $fileHandler->CopyFiles(array($repositoryDownloadIniFile), array($localDownloadIniFile), false);
+					if ($result===false) {
+						echo '   '.$moduleName.'could NOT be found in '.$repository.PHP_EOL;
+					} else {
+						echo '   Processing '.$moduleName.' in '.$repository.PHP_EOL;
+						$configHandler    = new IPSIniConfigHandler($localDownloadIniFile);
+						$availableVersion = $configHandler->GetValue(IPSConfigHandler::SCRIPTVERSION);
+						$changeListModule = $configHandler->GetValueDef(IPSConfigHandler::CHANGELIST, null, array());
+						$requiredModulesOfModule = $configHandler->GetValueDef(IPSConfigHandler::REQUIREDMODULES, null, array());
+
+						$replaceModule = false;
+						if (!array_key_exists($moduleName, $knownModules)) {
+							$replaceModule = true;
+						} elseif ($versionHandler->CompareVersionsNewer($knownModules[$moduleName]['Version'], $availableVersion)) {
+							$replaceModule = true;
+						} elseif ($versionHandler->CompareVersionsEqual($knownModules[$moduleName]['Version'], $availableVersion)
+								  and $versionHandler->IsModuleInstalled($moduleName)) {
+							$versionHandler   = new IPSFileVersionHandler($moduleName);
+							if ($versionHandler->GetModuleRepository()==$repository) {
+								$replaceModule = true;
+							}
+						} else {
+						}
+
+						if ($replaceModule) {
+							$knownModules[$moduleName]['Version']     = $availableVersion;
+							$knownModules[$moduleName]['Repository']  = $repository;
+							$knownModules[$moduleName]['Description'] = $moduleDescription;
+							$knownModules[$moduleName]['Path']        = $modulePath;
+							if ($this->IsModuleInstalled($moduleName)) {
+								$versionHandler   = new IPSFileVersionHandler($moduleName);
+							}
+							$knownModules[$moduleName]['LastRepository'] = $versionHandler->GetModuleRepository();
+							$changeList[$moduleName] = $changeListModule;
+							$requiredModules[$moduleName] = $requiredModulesOfModule;
+						}
+						$repositoryVersions[$moduleName][$repository] = $availableVersion;
+					}
+				}
+
 			}
-			$moduleVersionArray = explode('.', $moduleVersion);
-			$moduleVersionArray = array_pad($moduleVersionArray, 3, 0);
-			$moduleVersionArray = array_pad($moduleVersionArray, 5, '');
-			return $moduleVersionArray;
-		}
 
+			$fileContent = '';
+			foreach ($knownModules as $moduleName=>$moduleData) {
+				$fileContent .= '['.$moduleName.']'.PHP_EOL;
+				foreach ($moduleData as $property=>$value) {
+					// "//192.168..." not handled correct in case of usage ""
+					if ($property=='Repository') {
+						$fileContent .= $property.'='.$value.''.PHP_EOL;
+					} else {
+						$fileContent .= $property.'="'.$value.'"'.PHP_EOL;
+					}
+				}
+			}
+			file_put_contents($this->fileNameKnownModules, $fileContent);
+
+			$fileContent = '';
+			foreach ($repositoryVersions as $moduleName=>$moduleData) {
+				$fileContent .= '['.$moduleName.']'.PHP_EOL;
+				foreach ($moduleData as $property=>$value) {
+					$fileContent .= $property.'="'.$value.'"'.PHP_EOL;
+				}
+			}
+			file_put_contents($this->fileNameRepositoryVersions, $fileContent);
+
+			$fileContent = '';
+			foreach ($changeList as $moduleName=>$moduleData) {
+				$fileContent .= '['.$moduleName.']'.PHP_EOL;
+				foreach ($moduleData as $property=>$value) {
+					$fileContent .= $property.'="'.$value.'"'.PHP_EOL;
+				}
+			}
+			file_put_contents($this->fileNameChangeList, $fileContent);
+
+			$fileContent = '';
+			foreach ($requiredModules as $moduleName=>$moduleData) {
+				$fileContent .= '['.$moduleName.']'.PHP_EOL;
+				foreach ($moduleData as $property=>$value) {
+					$fileContent .= $property.'="'.$value.'"'.PHP_EOL;
+				}
+			}
+			file_put_contents($this->fileNameRequiredModules, $fileContent);
+
+			$this->LoadFileKnownModules();
+			$this->LoadFileRepositoryVersions();
+			$this->LoadFileChangeList();
+			$this->LoadFileRequiredModules();
+		}
+		
 		/**
 		 * @public
 		 *
-		 * Lesen der aktuellen Module Version
-		 *
-		 * @return string Liefert die aktuelle Module Version
+		 * Erhöht die Versionsnummer im entsprechenden Download File und legt den übergebenen Text 
+		 * unter der ChangeList des Modules ab.
+		 * 
 		 */
-		public function GetModuleVersion() {
-		   if ($this->moduleName == $this::MODULE_IPS) {
-				$moduleVersion=IPS_GetKernelVersion();
-		   } else {
-				$moduleVersion=$this->moduleList[$this->moduleName];
-		   }
-			return $moduleVersion;
-		}
+		public function IncreaseModuleVersion($changeText, $installationRequired=false) {
+			$file       = parse_ini_file($this->fileNameDownloadList, true);
+			$version    = $file['Version'];
+			$version    = $this->VersionToArray($version);
+			$version[2] = (int)$version[2] + 1;
+			unset($version[4]);
+			if ($version[3]=='') {
+				unset($version[3]);
+			}
+			$version = implode('.',$version);
 
-		/**
-		 * @public
-		 *
-		 * Lesen der aktuellen Module Version
-		 *
-		 * @return string Liefert die aktuelle Module Version as Array
-		 */
-		public function GetModuleVersionArray() {
-			return $this->VersionToArray($this->GetModuleVersion());
-		}
-
-		/**
-		 * @public
-		 *
-		 * Überprüft die Version eines Modules mit dem Namen $moduleName and erzeugt einen Fehler, wenn
-		 * die installierte Version < der übergebenen Version ist.
-		 *
-		 * Examples:
-		 *   installed=2.5.3, required=2.5.3 --> OK
-		 *   installed=2.5.3, required=2.5.2 --> OK
-		 *   installed=2.5.3, required=2.4.4 --> OK
-		 *   installed=2.4.3, required=2.5.2 --> Error
-		 *   installed=2.5.1, required=2.5.2 --> Error
-		 *
-		 * @param string $moduleName Name des Modules, das überprüft werden soll
-		 * @param string $moduleVersion Version des Modules
-		 * @throws IPSVersionHandlerException wenn Version nicht korrekt ist
-		 */
-		public function CheckModuleVersion($moduleName, $moduleVersion) {
-		   $versionHandler = new IPSFileVersionHandler($moduleName);
-			$versionInstalled = $versionHandler->GetModuleVersionArray();
-			$versionRequired  = $this->VersionToArray($moduleVersion);
+			$file['Version'] = $version;
+			if ($installationRequired) {
+				$file['InstallVersion'] = $version;
+			}
+			$file['ChangeList'][$version] = $changeText;
 			
-			if ($versionRequired[0] > $versionInstalled[0] or
-			    $versionRequired[1] > $versionInstalled[1] or
-				 $versionRequired[2] > $versionInstalled[2]) {
-				 throw new IPSVersionHandlerException('Versions Fehler:'.PHP_EOL
-																  .'========================================================================'.PHP_EOL
-				                                      .'=== Modul '.$moduleName.' ist veraltet und benötigt ein Update'.PHP_EOL
-				                                      .'===   Aktuelle Version:  '.$versionHandler->GetModuleVersion().PHP_EOL
-				                                      .'===   Benötigte Version: '.$moduleVersion.PHP_EOL
-																  .'========================================================================'.PHP_EOL
-																  );
+			$fileContent = '';
+			foreach ($file as $section=>$sectionValue) {
+				if ($section=='Version' or $section=='InstallVersion' or $section=='ModuleNamespace') {
+					$fileContent .= $section.'="'.$sectionValue.'"'.PHP_EOL;
+				} else {
+					$fileContent .= '['.$section.']'.PHP_EOL;
+					foreach ($sectionValue as $property=>$value) {
+						if ($section=='ChangeList' or $section=='RequiredModules') {
+							$fileContent .= $property.'="'.$value.'"'.PHP_EOL;
+						} else {
+							foreach ($value as $key=>$data) {
+								$fileContent .= $property.'[]="'.$data.'"'.PHP_EOL;
+							}
+						}
+					}
+				}
 			}
+			file_put_contents($this->fileNameDownloadList, $fileContent);
 		}
-
-		/**
-		 * @public
-		 *
-		 * Überprüft ob ein Module in der spezifizierten Version installiert ist.
-		 *
-		 * @param string $moduleVersion Version des Modules (Format IPSMajorVersion.IPSMinorVersion.ModuleVersion.ModuleStatus.InstallationStatus)
-		 * @return boolean Liefert true wenn Module installiert, andernfalls false
-		 */
-	 	public function IsVersionInstalled($moduleVersion) {
-			$versionInstalled = $this->GetModuleVersionArray();
-			$versionRequired  = $this->VersionToArray($moduleVersion);
-
-			$result = ($versionRequired[0] == $versionInstalled[0] and
-			           $versionRequired[1] == $versionInstalled[1] and
-				        $versionRequired[2] == $versionInstalled[2]);
-
-			return $result;
-	 	}
-	 	
-		/**
-		 * @public
-		 *
-		 * Löschen eines Modules
-		 */
-		public function DeleteModule() {
-			$this->logHandler->Log('Remove Module '.$this->moduleName.' from Versioning System');
-		   unset($this->moduleList[$this->moduleName]);
-		   $this->WriteVersionFile();
-		}
-
-		/**
-		 * @public
-		 *
-		 * Schreiben der aktuellen Module Version
-		 *
-		 * @param string $moduleVersion Name des Modules
-		 */
-		public function SetModuleVersion($moduleVersion) {
-			$this->logHandler->Log('Set Version '.$this->moduleName.'='.$moduleVersion);
-		   $this->moduleList[$this->moduleName] = $moduleVersion;
-		   $this->WriteVersionFile();
-		}
-
-		/**
-		 * @public
-		 *
-		 * Aktuelle Module Version auf "Loading" setzen
-		 */
-		public function SetModuleVersionLoading() {
-		   $moduleVersionArray = $this->GetModuleVersionArray();
-		   $moduleVersionArray[4] = $this::VERSION_LOADING;
-		   $moduleVersion = implode('.',$moduleVersionArray);
-			$this->SetModuleVersion($moduleVersion);
-		}
-
-		/**
-		 * @public
-		 *
-		 * Aktuelle Module Version auf "Loaded" setzen
-		 */
-		public function SetModuleVersionLoaded() {
-		   $moduleVersionArray = $this->GetModuleVersionArray();
-		   $moduleVersionArray[4] = $this::VERSION_LOADED;
-		   $moduleVersion = implode('.',$moduleVersionArray);
-			$this->SetModuleVersion($moduleVersion);
-		}
-
-		/**
-		 * @public
-		 *
-		 * Aktuelle Module Version auf "Installing" setzen
-		 */
-		public function SetModuleVersionInstalling() {
-		   $moduleVersionArray = $this->GetModuleVersionArray();
-		   $moduleVersionArray[4] = $this::VERSION_INSTALLING;
-		   $moduleVersion = implode('.',$moduleVersionArray);
-			$this->SetModuleVersion($moduleVersion);
-		}
-
-		/**
-		 * @public
-		 *
-		 * Liefert eine Liste aller installierten Module
-		 *
-		 * @return string[] Liste der installierten Module
-		 */
-		public function GetInstalledModules() {
-			$result = array();
-			foreach ($this->moduleList as $moduleName=>$moduleVersion) {
-				$result[$moduleName] = $moduleVersion;
-			}
-			return $result;
-		}
-
-
 	}
 
 	/** @}*/

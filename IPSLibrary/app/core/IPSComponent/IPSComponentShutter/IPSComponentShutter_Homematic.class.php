@@ -19,19 +19,24 @@
     * Version 2.50.1, 31.01.2012<br/>
     */
 
-	abstract class IPSComponentShutter_Homematic extends IPSComponentShutter {
+	IPSUtils_Include ('IPSComponentShutter.class.php', 'IPSLibrary::app::core::IPSComponent::IPSComponentShutter');
+
+	class IPSComponentShutter_Homematic extends IPSComponentShutter {
 
 		private $instanceId;
-	
+		private $reverseControl;
+
 		/**
 		 * @public
 		 *
 		 * Initialisierung eines IPSComponentShutter_Homematic Objektes
 		 *
 		 * @param integer $instanceId InstanceId des Homematic Devices
+		 * @param boolean $reverseControl Reverse Ansteuerung des Devices
 		 */
-		public function __construct($instanceId) {
-			$this->instanceId = IPSUtil_ObjectIDByPath($instanceId);
+		public function __construct($instanceId, $reverseControl=false) {
+			$this->instanceId     = IPSUtil_ObjectIDByPath($instanceId);
+			$this->reverseControl = $reverseControl;
 		}
 
 		/**
@@ -45,6 +50,24 @@
 		 * @param IPSModuleShutter $module Module Object an das das aufgetretene Event weitergeleitet werden soll
 		 */
 		public function HandleEvent($variable, $value, IPSModuleShutter $module){
+		   if ($this->reverseControl) {
+				$module->SyncPosition(($value*100), $this);
+			} else {
+				$module->SyncPosition(100-($value*100), $this);
+			}
+		}
+
+		/**
+		 * @public
+		 *
+		 * Funktion liefert String IPSComponent Constructor String.
+		 * String kann dazu benützt werden, das Object mit der IPSComponent::CreateObjectByParams
+		 * wieder neu zu erzeugen.
+		 *
+		 * @return string Parameter String des IPSComponent Object
+		 */
+		public function GetComponentParams() {
+			return get_class($this).','.$this->instanceId;
 		}
 
 		/**
@@ -53,7 +76,11 @@
 		 * Hinauffahren der Beschattung
 		 */
 		public function MoveUp(){
-			HM_WriteValueFloat($this->InstanceId , 'LEVEL', 1);
+		   if ($this->reverseControl) {
+				HM_WriteValueFloat($this->instanceId , 'LEVEL', 0);
+			} else {
+				HM_WriteValueFloat($this->instanceId , 'LEVEL', 1);
+			}
 		}
 		
 		/**
@@ -62,7 +89,11 @@
 		 * Hinunterfahren der Beschattung
 		 */
 		public function MoveDown(){
-			HM_WriteValueFloat($this->InstanceId , 'LEVEL', 0);
+		   if ($this->reverseControl) {
+				HM_WriteValueFloat($this->instanceId , 'LEVEL', 1);
+			} else {
+				HM_WriteValueFloat($this->instanceId , 'LEVEL', 0);
+			}
 		}
 		
 		/**
@@ -71,7 +102,7 @@
 		 * Stop
 		 */
 		public function Stop() {
-			HM_WriteValueFloat($this->InstanceId , 'STOP', true);
+			HM_WriteValueBoolean($this->instanceId , 'STOP', true);
 		}
 
 	}
