@@ -165,20 +165,7 @@
 		$variableIdValueWatt    = CreateVariable(IPSPC_VAR_VALUEWATT.$idx,   2 /*float*/,   $categoryIdValues,  200+$idx, '~Watt.14490', null,              0, 'Lightning');
 	}
 
-//	$instanceId = CreateDummyInstance("Details", 37588, 10);
-//	foreach (IPSPowerControl_GetValueConfiguration() as $idx=>$data) {
-//		$variableId = IPS_GetObjectIDByIdent(IPSPC_VAR_VALUEWATT.$idx, $categoryIdValues);
-//		CreateLink($data[IPSPC_PROPERTY_NAME], $variableId, $instanceId, $idx);
-//	}
-
-//	$instanceId = CreateDummyInstance("Verbraucher", 10023, 15);
-//	foreach (IPSPowerControl_GetValueConfiguration() as $idx=>$data) {
-//		$variableId = IPS_GetObjectIDByIdent(IPSPC_VAR_VALUEWATT.$idx, $categoryIdValues);
-//		CreateLink($data[IPSPC_PROPERTY_NAME], $variableId, $instanceId, $idx);
-//	}
- return;
-
-/*	// ===================================================================================================
+	// ===================================================================================================
 	// Activate Variable Logging
 	// ===================================================================================================
 	$archiveHandlerList = IPS_GetInstanceListByModuleID ('{43192F0B-135B-4CE7-A0A7-1475603F3060}');
@@ -196,7 +183,7 @@
 		}
 	}
 	IPS_ApplyChanges($archiveHandlerId);
-*/
+
 	// ----------------------------------------------------------------------------------------------------------------------------
 	// Webfront Installation
 	// ----------------------------------------------------------------------------------------------------------------------------
