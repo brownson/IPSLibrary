@@ -118,6 +118,8 @@
 	$categoryIdSettings  = CreateCategory('Settings',  $CategoryIdData, 200);
 	$controlIdPriority   = CreateVariable(HM_CONTROL_PRIORITY,   1 /*Integer*/, $categoryIdSettings, 10, 'IPSHomematic_Priority', $scriptIdChangeSettings, 2, 'Warning');
 
+	$moduleManager->LogHandler()->Log("Check Homematic Instances");
+
 	// Homematic Instances
 	foreach (get_HomematicConfiguration() as $component=>$componentData) {
 		$propertyAddress  = $componentData[0];
@@ -151,6 +153,8 @@
 	// Webfront Installation
 	// ----------------------------------------------------------------------------------------------------------------------------
 	if ($WFC10_Enabled) {
+		$moduleManager->LogHandler()->Log('Generate WebFront Interface');
+
 		$categoryIdWebFront         = CreateCategoryPath($WFC10_Path);
 		EmptyCategory($categoryIdWebFront);
 		$categoryIdWebFrontLeft          = CreateCategory('Left',  $categoryIdWebFront, 10);
@@ -183,6 +187,8 @@
 	// Mobile Installation
 	// ----------------------------------------------------------------------------------------------------------------------------
 	if ($Mobile_Enabled) {
+		$moduleManager->LogHandler()->Log('Generate Mobile Interface');
+
 		$categoryIdMobile    = CreateCategoryPath($Mobile_Path, $Mobile_PathOrder, $Mobile_PathIcon);
 		$categoryIdMobile    = CreateCategory($Mobile_Name1,  $categoryIdMobile, $Mobile_Order1, $Mobile_Icon1);
 
@@ -208,6 +214,7 @@
 		foreach (IPS_GetInstanceListByModuleID("{EE4A81C6-5C90-4DB7-AD2F-F6BBD521412E}") as $HomematicModuleId ) {
 			$HMAddress = HM_GetAddress($HomematicModuleId);
 			if ($HMAddress=="$Address:$Channel") {
+				$moduleManager->LogHandler()->Log("Found existing HomaticModule '$Name' Address=$Address, Channel=$Channel, Protocol=$Protocol");
 				return $HomematicModuleId;
 			}
 		}
