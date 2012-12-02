@@ -48,9 +48,9 @@
 		if (array_key_exists($module, $installedModules)) {
 			$html .= '<td></td>';
 		} elseif ($processing) {
-			$html .= '<td>processing ...</td>';
+			$html .= '<td><input type="button" disabled name="Text" value="Modul Laden" onclick="trigger_button(\'Load\', \''.$module.'\', \'\')"></td>';
 		} else {
-			$html .= '<td><input type="button" name="Text" value="Modul Laden" onclick="trigger_button(\'Load\', \''.$module.'\', \'\')"></td>';
+			$html .= '<td><input type="button"  name="Text" value="Modul Laden" onclick="trigger_button(\'Load\', \''.$module.'\', \'\')"></td>';
 		}
 		$html .=  GetTableData($infos['Description']);
 		$html .= '</tr>'.PHP_EOL;
@@ -59,7 +59,12 @@
 ?>
 </table>
 
+
 <?php
+	if ($processing) {
+		echo 'Processing...  ';
+	}
+
 	function GetTableData($value='', $displayAttributes='', $action='', $module='', $info='') {
 		$text = $value;
 		if ($text=='') {
