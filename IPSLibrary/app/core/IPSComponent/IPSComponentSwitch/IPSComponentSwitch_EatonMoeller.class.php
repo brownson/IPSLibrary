@@ -47,6 +47,7 @@
 		 * @param IPSModuleSwitch $module Module Object an das das aufgetretene Event weitergeleitet werden soll
 		 */
 		public function HandleEvent($variable, $value, IPSModuleSwitch $module){
+			$module->SyncState($value, $this);
 		}
 
 		/**
