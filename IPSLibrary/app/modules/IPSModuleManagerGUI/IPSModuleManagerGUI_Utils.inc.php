@@ -51,8 +51,10 @@
 		$configUsr = parse_ini_file($fileUsr, true);
 		$fileDef   = IPS_GetKernelDir().'scripts\\IPSLibrary\\install\\InitializationFiles\\Default\\'.$module.'.ini';
 		$configDef = parse_ini_file($fileDef, true);
-		if (!array_key_exists('ID', $configDef)) {
-			$configDef['ID'] = '';
+		if (array_key_exists('WFC10', $configDef)) {
+			if (!array_key_exists('ID', $configDef['WFC10'])) {
+				$configDef['WFC10']['ID'] = '';
+			}
 		}
 		$fileContent = '';
 		foreach ($configDef as $section=>$sectionValue) {
