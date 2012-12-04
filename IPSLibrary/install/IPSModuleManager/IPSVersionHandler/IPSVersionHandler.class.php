@@ -43,6 +43,7 @@
 		const STATE_LOADING           = 'Loading';
 		const STATE_LOADED            = 'Loaded';
 		const STATE_INSTALLING        = 'Installing';
+		const STATE_DELETING          = 'Deleting';
 		const STATE_INSTALLED         = 'OK';
 		
 		const PROPERTY_VERSION        = 0;
@@ -368,6 +369,16 @@
 			$this->logHandler->Log('Remove Module '.$this->moduleName.' from Versioning System');
 			unset($this->installedModules[$this->moduleName]);
 			$this->StoreModuleVersions();
+		}
+
+		/**
+		 * @public
+		 *
+		 * Aktuelle Module Version auf "Deleting" setzen
+		 */
+		public function SetVersionDeleting() {
+			$this->logHandler->Log('Set State '.$this->moduleName.'=Deleting');
+			$this->SetProperty($this::PROPERTY_STATE, $this::STATE_DELETING);
 		}
 
 		/**

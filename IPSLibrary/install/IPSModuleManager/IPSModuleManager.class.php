@@ -747,7 +747,7 @@
 				}
 				$this->logHandler->Log('Delete Objects in Category='.$path.', ID='.$categoryID);
 
-				DeleteCategory($categoryID);
+				DeleteObject($categoryID);
 			}
 		}
 
@@ -773,6 +773,8 @@
 		 *
 		 */
 		public function DeleteModule() {
+			$this->versionHandler->SetVersionDeleting();
+
 			if ($this->moduleName=='IPSModuleManager') {
 				throw new Exception('Deinstallation of IPSModuleManager currenty NOT supported !!!');
 				
