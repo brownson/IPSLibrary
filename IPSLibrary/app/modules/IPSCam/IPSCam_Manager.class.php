@@ -268,19 +268,25 @@
 			$instanceIdCameraHist = IPS_GetObjectIDByName('History', $this->categoryIdCamPanel);
 			$instanceIdSettings   = IPS_GetObjectIDByIdent('Einstellungen', $this->categoryIdCamPanel);
 
-			$linkIdPower = IPS_GetObjectIDByName('Power', $instanceIdPower);
-			$variableIdPower = $this->config[$cameraIdx][IPSCAM_PROPERTY_SWITCHPOWER];
-			IPS_SetHidden($linkIdPower, ($variableIdPower==''));
-			if ($variableIdPower<>'') {
-				$variableIdPower = IPSUtil_ObjectIDByPath($variableIdPower);
-				IPS_SetLinkTargetID($linkIdPower, $variableIdPower);
+			$linkIdPower     = IPS_GetObjectIDByName('Power', $instanceIdPower);
+			$variableIdPower = '';
+			if (array_key_exists(IPSCAM_PROPERTY_SWITCHPOWER, $this->config[$cameraIdx])) { 
+				$variableIdPower = $this->config[$cameraIdx][IPSCAM_PROPERTY_SWITCHPOWER];
+				IPS_SetHidden($linkIdPower, ($variableIdPower==''));
+				if ($variableIdPower<>'') {
+					$variableIdPower = IPSUtil_ObjectIDByPath($variableIdPower);
+					IPS_SetLinkTargetID($linkIdPower, $variableIdPower);
+				}
 			}
 			$linkIdWLAN = IPS_GetObjectIDByName('WLAN', $instanceIdPower);
-			$variableIdWLAN = $this->config[$cameraIdx][IPSCAM_PROPERTY_SWITCHWLAN];
-			IPS_SetHidden($linkIdWLAN, ($variableIdWLAN==''));
-			if ($variableIdWLAN<>'') {
-				$variableIdWLAN = IPSUtil_ObjectIDByPath($variableIdWLAN);
-				IPS_SetLinkTargetID($linkIdWLAN, $variableIdWLAN);
+			$variableIdWLAN = '';
+			if (array_key_exists(IPSCAM_PROPERTY_SWITCHWLAN, $this->config[$cameraIdx])) { 
+				$variableIdWLAN = $this->config[$cameraIdx][IPSCAM_PROPERTY_SWITCHWLAN];
+				IPS_SetHidden($linkIdWLAN, ($variableIdWLAN==''));
+				if ($variableIdWLAN<>'') {
+					$variableIdWLAN = IPSUtil_ObjectIDByPath($variableIdWLAN);
+					IPS_SetLinkTargetID($linkIdWLAN, $variableIdWLAN);
+				}
 			}
 
 			switch ($mode) {
@@ -477,15 +483,19 @@
 				$cameraIdx = GetValue($variableIdCamSelect);
 			}
 			$cameraAvailable = true;
-			$variableIdPower = $this->config[$cameraIdx][IPSCAM_PROPERTY_SWITCHPOWER];
-			if ($variableIdPower<>'') {
-				$variableIdPower = IPSUtil_ObjectIDByPath($variableIdPower);
-				$cameraAvailable = ($cameraAvailable and GetValue($variableIdPower));
+			if (array_key_exists(IPSCAM_PROPERTY_SWITCHPOWER, $this->config[$cameraIdx])) { 
+				$variableIdPower = $this->config[$cameraIdx][IPSCAM_PROPERTY_SWITCHPOWER];
+				if ($variableIdPower<>'') {
+					$variableIdPower = IPSUtil_ObjectIDByPath($variableIdPower);
+					$cameraAvailable = ($cameraAvailable and GetValue($variableIdPower));
+				}
 			}
-			$variableIdWLAN = $this->config[$cameraIdx][IPSCAM_PROPERTY_SWITCHWLAN];
-			if ($variableIdWLAN<>'') {
-				$variableIdWLAN = IPSUtil_ObjectIDByPath($variableIdWLAN);
-				$cameraAvailable = ($cameraAvailable and GetValue($variableIdWLAN));
+			if (array_key_exists(IPSCAM_PROPERTY_SWITCHWLAN, $this->config[$cameraIdx])) { 
+				$variableIdWLAN = $this->config[$cameraIdx][IPSCAM_PROPERTY_SWITCHWLAN];
+				if ($variableIdWLAN<>'') {
+					$variableIdWLAN = IPSUtil_ObjectIDByPath($variableIdWLAN);
+					$cameraAvailable = ($cameraAvailable and GetValue($variableIdWLAN));
+				}
 			}
 			return $cameraAvailable;
 		}
