@@ -74,11 +74,6 @@
 
 	function get_HomematicConfiguration() {
 		return array(
-            'Licht_Küche'    => array(HM_PROPERTY_SERIAL      => 'IEQ0004711',
-                                      HM_PROPERTY_CHANNEL     => 1,
-                                      HM_PROPERTY_PROTOCOL    => HM_PROTOCOL_BIDCOSRF,
-                                      HM_PROPERTY_TYPE        => HM_TYPE_LIGHT,
-                                ),
 		);
 	}
 
