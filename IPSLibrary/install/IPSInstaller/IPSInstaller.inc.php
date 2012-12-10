@@ -562,6 +562,15 @@
 		return $LinkId;
 	}
 
+	/*
+	 * Simulate IPS_SetLinkTargetID for IP-Symcon < 2.6
+	 */
+	if (!function_exists('IPS_SetLinkTargetID')) {
+		function IPS_SetLinkTargetID($LinkID, $TargetID) {
+			return IPS_SetLinkChildID($LinkID, $TargetID);
+		}		
+	}
+
 	/** Anlegen eines Links
 	 *
 	 * Die Funktion sucht in der spezifizierten Parent Kategorie alle vorhandenen Links und überprüft ob einer der
@@ -586,12 +595,12 @@
 				if ($Link['LinkChildID']==$LinkChildId) {
 					$LinkId = $ObjectId;
 					break;
-			   }
+				}
 			}
 		}
 
-	   if ($LinkId === false) {
- 			$LinkId = IPS_CreateLink();
+		if ($LinkId === false) {
+			$LinkId = IPS_CreateLink();
 			IPS_SetParent($LinkId, $ParentId);
 			IPS_SetPosition($LinkId, $Position);
 		}
