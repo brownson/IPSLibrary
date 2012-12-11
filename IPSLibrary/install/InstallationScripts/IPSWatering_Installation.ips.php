@@ -179,14 +179,15 @@
 		$WebFrontOverviewBottom2  = CreateCategory(    'Bottom_2', $WebFrontOverviewId,    40);
 
 		DeleteWFCItems($WFC10_ConfigId, $WFC10_TabPaneItem);
+		$UId = date('Hi');
 		CreateWFCItemTabPane   ($WFC10_ConfigId, $WFC10_TabPaneItem,             $WFC10_TabPaneParent,           $WFC10_TabPaneOrder, $WFC10_TabPaneName, $WFC10_TabPaneIcon);
 		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OV',       $WFC10_TabPaneItem.'',          10, $WFC10_TabName1, $WFC10_TabIcon1, 0 /*Horizontal*/, 300 /*Hight*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OVTop',    $WFC10_TabPaneItem.'_OV',       10, '', '', 1 /*Vertical*/, 430 /*Width*/, 1 /*Target=Pane2*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OVBottom', $WFC10_TabPaneItem.'_OV',       20, '', '', 1 /*Vertical*/, 430 /*Width*/, 1 /*Target=Pane2*/, 1/*UsePixel*/, 'true');
-		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OVTop1',   $WFC10_TabPaneItem.'_OVTop',    10, 'Column_1', '', $WebFrontOverviewTop1 /*BaseId*/, 'false' /*BarBottomVisible*/);
-		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OVTop2',   $WFC10_TabPaneItem.'_OVTop',    10, 'Column_2', '', $WebFrontOverviewTop2 /*BaseId*/, 'false' /*BarBottomVisible*/);
-		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OVBottom1',$WFC10_TabPaneItem.'_OVBottom', 20, 'Column_1', '', $WebFrontOverviewBottom1 /*BaseId*/, 'false' /*BarBottomVisible*/);
-		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OVBottom2',$WFC10_TabPaneItem.'_OVBottom', 20, 'Column_2', '', $WebFrontOverviewBottom2 /*BaseId*/, 'false' /*BarBottomVisible*/);
+		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OVTop1'.$UId,   $WFC10_TabPaneItem.'_OVTop',    10, 'Column_1', '', $WebFrontOverviewTop1 /*BaseId*/, 'false' /*BarBottomVisible*/);
+		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OVTop2'.$UId,   $WFC10_TabPaneItem.'_OVTop',    10, 'Column_2', '', $WebFrontOverviewTop2 /*BaseId*/, 'false' /*BarBottomVisible*/);
+		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OVBottom1'.$UId,$WFC10_TabPaneItem.'_OVBottom', 20, 'Column_1', '', $WebFrontOverviewBottom1 /*BaseId*/, 'false' /*BarBottomVisible*/);
+		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OVBottom2'.$UId,$WFC10_TabPaneItem.'_OVBottom', 20, 'Column_2', '', $WebFrontOverviewBottom2 /*BaseId*/, 'false' /*BarBottomVisible*/);
 
 		// Webfront Overview
 		$Idx = 10;
@@ -199,7 +200,7 @@
 
 			// Detailed CirclyData
 			$WebFrontDetailId  = CreateCategory($CircleId, $WebFrontId, 100+$Idx);
-			CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_'.$Idx,$WFC10_TabPaneItem.'', 100+$Idx, $CircleName, '', $WebFrontDetailId /*BaseId*/, 'false' /*BarBottomVisible*/);
+			CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_'.$Idx.$UId,$WFC10_TabPaneItem.'', 100+$Idx, $CircleName, '', $WebFrontDetailId /*BaseId*/, 'false' /*BarBottomVisible*/);
 			CreateLink('Status',             get_WateringControlId(c_Control_Active,     $CirclyId),  $WebFrontDetailId, 10);
 			CreateLink('Automatik',          get_WateringControlId(c_Control_Automatic,  $CirclyId),  $WebFrontDetailId, 20);
 			CreateLink('Programm',           get_WateringControlId(c_Control_Program,    $CirclyId),  $WebFrontDetailId, 30);

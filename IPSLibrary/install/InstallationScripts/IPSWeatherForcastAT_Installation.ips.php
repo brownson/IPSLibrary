@@ -88,7 +88,7 @@
 	$Mobile_Enabled       = $moduleManager->GetConfigValue('Enabled', 'Mobile');
 	$Mobile_Path          = $moduleManager->GetConfigValue('Path', 'Mobile');
 	$Mobile_PathOrder     = $moduleManager->GetConfigValueInt('PathOrder', 'Mobile');
-	$Mobile_PathIcon      = $moduleManager->GetConfigValue('PathOrder', 'Mobile');
+	$Mobile_PathIcon      = $moduleManager->GetConfigValue('PathIcon', 'Mobile');
 	$Mobile_Name          = $moduleManager->GetConfigValue('Name', 'Mobile');
 	$Mobile_Order         = $moduleManager->GetConfigValueInt('Order', 'Mobile');
 	$Mobile_Icon          = $moduleManager->GetConfigValue('Icon', 'Mobile');
@@ -104,43 +104,45 @@
 	$scriptId_Refresh  = IPS_GetScriptIDByName('IPSWeatherForcastAT_Refresh',  $categoryId_App);
 	$timerId_Refresh   = CreateTimer_CyclicByMinutes ('Refresh', $scriptId_Refresh, 30) ;
 
+	CreateProfile_Count        ('IPSWeatherForcastAT_Temp',  null, null,  null,     null, " °C", null);
+	
 	// Create Variables
-	$LastRefreshDateTime     = CreateVariable("LastRefreshDateTime",    3 /*String*/,  $categoryId_Data,  10, '~String',  null, '');
-	$LastRefreshTime         = CreateVariable("LastRefreshTime",        3 /*String*/,  $categoryId_Data,  20, '~String',  null, '');
+	$LastRefreshDateTime     = CreateVariable("LastRefreshDateTime",    3 /*String*/,  $categoryId_Data,  10,  '~String',  null, '');
+	$LastRefreshTime         = CreateVariable("LastRefreshTime",        3 /*String*/,  $categoryId_Data,  20,  '~String',  null, '');
 	$TodaySeaLevel           = CreateVariable("SeaLevel",               1 /*Integer*/, $categoryId_Data,  30,  null,       null, 0);
 	$TodayAirHumidity        = CreateVariable("AirHumidity",            3 /*String*/,  $categoryId_Data,  40,  '~String',  null, '');
 	$TodayWind               = CreateVariable("Wind",                   3 /*String*/,  $categoryId_Data,  50,  '~String',  null, '');
 
 	$TodayDayOfWeek          = CreateVariable("TodayDay",               3 /*String*/,  $categoryId_Data,  100,  '~String',  null, '');
-	$TodayTempCurrent        = CreateVariable("TodayTempCurrent",       1 /*Integer*/, $categoryId_Data,  110,  null,       null, 0);
-	$TodayTempMin            = CreateVariable("TodayTempMin",           1 /*Integer*/, $categoryId_Data,  120,  null,       null, 0);
-	$TodayTempMax            = CreateVariable("TodayTempMax",           1 /*Integer*/, $categoryId_Data,  130,  null,       null, 0);
+	$TodayTempCurrent        = CreateVariable("TodayTempCurrent",       1 /*Integer*/, $categoryId_Data,  110,  'IPSWeatherForcastAT_Temp',       null, 0);
+	$TodayTempMin            = CreateVariable("TodayTempMin",           1 /*Integer*/, $categoryId_Data,  120,  'IPSWeatherForcastAT_Temp',       null, 0);
+	$TodayTempMax            = CreateVariable("TodayTempMax",           1 /*Integer*/, $categoryId_Data,  130,  'IPSWeatherForcastAT_Temp',       null, 0);
 	$TodayIcon               = CreateVariable("TodayIcon",              3 /*String*/,  $categoryId_Data,  140,  '~String',  null, '');
 	$TodayTextShort          = CreateVariable("TodayForecastLong",      3 /*String*/,  $categoryId_Data,  150,  '~String',  null, '');
-	$TodayTextLong           = CreateVariable("TodayForecastShort",     3 /*String*/,  $categoryId_Data,  160, '~String',  null, '');
+	$TodayTextLong           = CreateVariable("TodayForecastShort",     3 /*String*/,  $categoryId_Data,  160,  '~String',  null, '');
 
 	$Forecast1DayOfWeek       = CreateVariable("TomorrowDay",           3 /*String*/,  $categoryId_Data,  200,  '~String',  null, '');
-	$Forecast1TempMin         = CreateVariable("TomorrowTempMin",       1 /*Integer*/, $categoryId_Data,  210,  null,       null, 0);
-	$Forecast1TempMax         = CreateVariable("TomorrowTempMax",       1 /*Integer*/, $categoryId_Data,  220,  null,       null, 0);
+	$Forecast1TempMin         = CreateVariable("TomorrowTempMin",       1 /*Integer*/, $categoryId_Data,  210,  'IPSWeatherForcastAT_Temp',       null, 0);
+	$Forecast1TempMax         = CreateVariable("TomorrowTempMax",       1 /*Integer*/, $categoryId_Data,  220,  'IPSWeatherForcastAT_Temp',       null, 0);
 	$Forecast1TextShort       = CreateVariable("TomorrowForecastLong",  3 /*String*/,  $categoryId_Data,  230,  '~String',  null, '');
 	$Forecast1TextLong        = CreateVariable("TomorrowForecastShort", 3 /*String*/,  $categoryId_Data,  240,  '~String',  null, '');
 	$Forecast1Icon            = CreateVariable("TomorrowIcon",          3 /*String*/,  $categoryId_Data,  250,  '~String',  null, '');
 
 	$Forecast2DayOfWeek       = CreateVariable("Tomorrow1Day",          3 /*String*/,  $categoryId_Data,  300,  '~String',  null, '');
-	$Forecast2TempMin         = CreateVariable("Tomorrow1TempMin",      1 /*Integer*/, $categoryId_Data,  310,  null,       null, 0);
-	$Forecast2TempMax         = CreateVariable("Tomorrow1TempMax",      1 /*Integer*/, $categoryId_Data,  320,  null,       null, 0);
+	$Forecast2TempMin         = CreateVariable("Tomorrow1TempMin",      1 /*Integer*/, $categoryId_Data,  310,  'IPSWeatherForcastAT_Temp',       null, 0);
+	$Forecast2TempMax         = CreateVariable("Tomorrow1TempMax",      1 /*Integer*/, $categoryId_Data,  320,  'IPSWeatherForcastAT_Temp',       null, 0);
 	$Forecast2TextShort       = CreateVariable("Tomorrow1ForecastLong", 3 /*String*/,  $categoryId_Data,  330,  '~String',  null, '');
 	$Forecast2TextLong        = CreateVariable("Tomorrow1ForecastShort",3 /*String*/,  $categoryId_Data,  340,  '~String',  null, '');
 	$Forecast2Icon            = CreateVariable("Tomorrow1Icon",         3 /*String*/,  $categoryId_Data,  350,  '~String',  null, '');
 
 	$Forecast3DayOfWeek       = CreateVariable("Tomorrow2Day",          3 /*String*/,  $categoryId_Data,  400,  '~String',  null, '');
-	$Forecast3TempMin         = CreateVariable("Tomorrow2TempMin",      1 /*Integer*/, $categoryId_Data,  410,  null,       null, 0);
-	$Forecast3TempMax         = CreateVariable("Tomorrow2TempMax",      1 /*Integer*/, $categoryId_Data,  420,  null,       null, 0);
+	$Forecast3TempMin         = CreateVariable("Tomorrow2TempMin",      1 /*Integer*/, $categoryId_Data,  410,  'IPSWeatherForcastAT_Temp',       null, 0);
+	$Forecast3TempMax         = CreateVariable("Tomorrow2TempMax",      1 /*Integer*/, $categoryId_Data,  420,  'IPSWeatherForcastAT_Temp',       null, 0);
 	$Forecast3TextShort       = CreateVariable("Tomorrow2ForecastLong", 3 /*String*/,  $categoryId_Data,  430,  '~String',  null, '');
 	$Forecast3TextLong        = CreateVariable("Tomorrow2ForecastShort",3 /*String*/,  $categoryId_Data,  440,  '~String',  null, '');
 	$Forecast3Icon            = CreateVariable("Tomorrow2Icon",         3 /*String*/,  $categoryId_Data,  450,  '~String',  null, '');
 
-	$iForecast                = CreateVariable("iForecast",             3 /*String*/,  $categoryId_Data,  1000, '~HTMLBox', null, '');
+	$iForecast                = CreateVariable("iForecast",             3 /*String*/,  $categoryId_Data,  1000, '~HTMLBox', null, '', 'Cloud');
 	SetValue($iForecast, '<iframe frameborder="0" width="100%" height="4000px" src="/user/IPSWeatherForcastAT/Weather.php"</iframe>');
 
 	// Webfront Installation

@@ -12,7 +12,7 @@
 
   <body>
 		<?
-			IPSUtils_Include ("Entertainment.ips.php", "IPSLibrary::app::modules::Entertainment");
+			IPSUtils_Include ("Entertainment.inc.php", "IPSLibrary::app::modules::Entertainment");
 			$Program = get_DeviceControlValue(c_Device_TopfieldSat, c_Control_Program);
 			$Names   = get_DeviceControlConfigValue(c_Device_TopfieldSat, c_Control_Program, c_Property_Names);
 			$Codes   = get_DeviceControlConfigValue(c_Device_TopfieldSat, c_Control_Program, c_Property_Codes);

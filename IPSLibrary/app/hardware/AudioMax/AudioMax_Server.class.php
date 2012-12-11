@@ -51,6 +51,12 @@
 
 		/**
 		 * @private
+		 * Retry Count Senden
+		 */
+		private $retryCount;
+
+		/**
+		 * @private
 		 * Debugging of AudioMax Server Enabled/Disabled
 		 */
 		private $debugEnabled;
@@ -63,8 +69,9 @@
 		 * @param integer $instanceId - ID des AudioMax Server.
 		 */
 		public function __construct($instanceId) {
-			$this->instanceId = $instanceId;
+			$this->instanceId   = $instanceId;
 			$this->debugEnabled = GetValue(IPS_GetObjectIDByIdent(AM_VAR_MODESERVERDEBUG, $this->instanceId));
+			$this->retryCount  = 0;
 		}
 
 		/**
@@ -92,7 +99,7 @@
 			IPSLogger_Err(__file__, $msg);
 			$this->Log('Inf', $msg);
 			$variableId  = IPS_GetObjectIDByIdent(AM_VAR_LASTERROR, $this->instanceId);
-			SetValue($variableId, $errorText);
+			SetValue($variableId, $msg);
 		}
 		
 		/**
@@ -403,7 +410,7 @@
 		 * Setzt das BUSY Flag des AudioMax Server
 		 */
 		private function SetBusy() {
-			$result = IPS_SemaphoreEnter('AudioMax', 1000);
+			$result = IPS_SemaphoreEnter('AudioMax', 2000);
 			$VariableId = IPS_GetObjectIDByIdent(AM_VAR_BUSY, $this->instanceId);
 			SetValue($VariableId, true);
 			return $result;
@@ -620,6 +627,7 @@
 		 */
 		private function WaitForServerResponse($type, $command, $roomId, $function, $value) {
 			$result = false;
+			$error  = '';
 
 			$inputBufferId = IPS_GetObjectIDByIdent(AM_VAR_INPUTBUFFER, $this->instanceId);
 			$waited = 0;
@@ -630,7 +638,29 @@
 				if ($message<>'') {
 					$waited = AM_COM_MAXWAIT;
 					$params  = explode(AM_COM_SEPARATOR, $message);
-					if ($params[2] == AM_CMD_POWER) {
+					if ($message==AM_VAL_ACKNOWLEDGE) {
+						if (GetValue(IPS_GetObjectIDByIdent(AM_VAR_MODEACKNOWLEDGE, $this->instanceId))==1) {
+							$result = true;
+						} else {
+							$result = false;
+							$error  = 'Ack Mode NOT Active';
+						}
+					} elseif ($message==AM_ERR_UNKNOWNCMD1) {
+						$result = false;
+						$error  = 'Unknown Command Part 1';
+					} elseif ($message==AM_ERR_UNKNOWNCMD2) {
+						$result = false;
+						$error  = 'Unknown Command Part 2';
+					} elseif ($message==AM_ERR_UNKNOWNCMD3) {
+						$result = false;
+						$error  = 'Unknown Command Part 3';
+					} elseif ($message==AM_ERR_UNKNOWNCMD4) {
+						$result = false;
+						$error  = 'Out of Range Part 4';
+					} elseif ($message==AM_ERR_UNKNOWNCMD5) {
+						$result = false;
+						$error  = 'Out of Range Part 5';
+					} elseif ($params[2] == AM_CMD_POWER) {
 						$result = $value==$params[3];
 					} elseif ($params[2] == AM_CMD_KEEPALIVE) {
 						$result = $value==$params[3];
@@ -640,17 +670,21 @@
 						$result = $roomId==$params[3] and $function==$params[4] and $value==$params[5];
 					} elseif ($params[2] == AM_CMD_MODE) {
 						$result = $function==$params[3] and $value==$params[4];
-					} elseif (GetValue(IPS_GetObjectIDByIdent(AM_VAR_MODEACKNOWLEDGE, $this->instanceId))==1) {
-						if ($message=='0') {
-							$result = true;
-						} else {
-							$this->LogErr('Received invalid Acknowledge from Server: '.$message);
-							$result = false;
-						}
 					} else {
-						$this->LogErr('Received invalid Acknowledge from Server: '.$message);
 						$result = false;
 					}
+				} else {
+					$error = 'Timeout';
+				}
+			}
+			if (!$result) {
+				if ($error<>'') {
+					$error = ' ('.$error.')';
+				}
+				if ($this->retryCount==AM_COM_MAXRETRIES) {
+					$this->LogErr('Received invalid Acknowledge from Server: '.$message.$error);
+				} else {
+					$this->LogTrc('Received invalid Acknowledge from Server: '.$message.$error);
 				}
 			}
 			return $result;
@@ -691,18 +725,18 @@
 						} elseif (!GetValue(IPS_GetObjectIDByIdent(AM_VAR_CONNECTION, $this->instanceId))) {
 							$this->SetValue($type, $command, $roomId, $function, $value);
 						} else {
-							$retryCount = 1;
-							while ($retryCount<=AM_COM_MAXRETRIES) {
+							$this->retryCount = 1;
+							while ($this->retryCount<=AM_COM_MAXRETRIES) {
 								if ($this->WaitForServerResponse($type, $command, $roomId, $function, $value)) {
 									$this->SetValue($type, $command, $roomId, $function, $value);
-									$retryCount = AM_COM_MAXRETRIES;
+									$this->retryCount = AM_COM_MAXRETRIES;
 								} else {
-									$this->LogDbg('Timeout or invalid Response while waiting for Server Response (Retry='.$retryCount.') --> Resend Message '.
+									$this->LogTrc('Timeout or invalid Response while waiting for Server Response (Retry='.$this->retryCount.') --> Resend Message '.
 									              $this->BuildMsg($type, $command, $roomId, $function, $value, false));
 									SetValue(IPS_GetObjectIDByIdent(AM_VAR_INPUTBUFFER, $this->instanceId), '');
 									$result = $this->SendDataComPort($type, $command, $roomId, $function, $value);
 								}
-								$retryCount = $retryCount + 1;
+								$this->retryCount++;
 							}
 						}
 					}
@@ -732,12 +766,11 @@
 			switch ($params[0]) {
 				case AM_TYP_EVT:
 					if ($params[2] == AM_CMD_POWER) {
-
+						$this->ValidateAndSetValue(AM_TYP_SET, AM_CMD_POWER, null, null, $params[3]);
 					} elseif ($params[2] == AM_CMD_MODE) {
 						$this->ValidateAndSetValue(AM_TYP_SET, AM_CMD_MODE, null, $params[3], $params[4]);
 					} elseif ($params[2] == AM_CMD_KEEPALIVE) {
 						SetValue(IPS_GetObjectIDByIdent(AM_VAR_KEEPALIVEFLAG, $this->instanceId), true);
-						$this->ValidateAndSetValue(AM_TYP_SET, AM_CMD_POWER, null, null, $params[3]);
 					} elseif ($params[2] == AM_CMD_ROOM) {
 						$this->ValidateAndSetValue(AM_TYP_SET, AM_CMD_ROOM, $params[3], null, $params[4]);
 					} elseif ($params[2] == AM_CMD_AUDIO) {
@@ -750,8 +783,16 @@
 				case AM_TYP_SET:
 					SetValue(IPS_GetObjectIDByIdent(AM_VAR_INPUTBUFFER, $this->instanceId), $message);
 					break;
+				case AM_TYP_DBG:
+					break;
+				case AM_ERR_UNKNOWNCMD1:
+				case AM_ERR_UNKNOWNCMD2:
+				case AM_ERR_UNKNOWNCMD3:
+				case AM_ERR_UNKNOWNCMD4:
+				case AM_ERR_UNKNOWNCMD5:
+					break;
 				default:
-					//$this->LogErr("Received invalid Message=".$message.', Type='.$params[0]);
+					$this->LogInf("Received unknown Message=".$message.', Type='.$params[0]);
 					break;
 			}
 		}

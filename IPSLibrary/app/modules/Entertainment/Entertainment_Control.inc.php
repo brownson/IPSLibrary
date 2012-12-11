@@ -165,12 +165,12 @@
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function get_SourceIdxByRoomId($RoomId) {
 		$RoomName = IPS_GetName($RoomId);
-	   $RoomData = get_RoomConfiguration();
+		$RoomData = get_RoomConfiguration();
 		$SourceName = $RoomData[$RoomName][c_Control_Source][c_Property_Name];
 
-	   $ChildrenIds = IPS_GetChildrenIDs($RoomId);
+		$ChildrenIds = IPS_GetChildrenIDs($RoomId);
 		foreach($ChildrenIds as $ChildrenIdx => $ChildrenId) {
-		   if (IPS_GetName($ChildrenId) == $SourceName) {
+			if (IPS_GetName($ChildrenId) == $SourceName) {
 				return GetValue($ChildrenId);
 			}
 		}
@@ -250,8 +250,8 @@
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function get_ActiveRoomIds () {
-   	$RoomIds = IPS_GetChildrenIDs(c_ID_Roomes);
-   	$ActiveRoomIds = array();
+		$RoomIds = IPS_GetChildrenIDs(c_ID_Roomes);
+		$ActiveRoomIds = array();
 		foreach ($RoomIds as $RoomId) {
 			$PowerId = get_ControlIdByRoomId($RoomId, c_Control_RoomPower);
 			if (GetValue($PowerId)) {
@@ -367,13 +367,13 @@
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function get_SourceListByDeviceName($DeviceName) {
-	   $SourceConfig = get_SourceConfiguration();
-	   $SourceList   = array();
-	   foreach ($SourceConfig as $RoomName=>$RoomSources) {
-	      $RoomId = get_RoomId($RoomName);
-	      $CurrentIdx  = get_SourceIdxByRoomId($RoomId);
-	      foreach ($RoomSources as $SourceIdx=>$SourceData) {
-	   		$DeviceNames = get_DeviceNamesByRoomId($RoomId, $SourceIdx, array(c_Property_Output));
+		$SourceConfig = get_SourceConfiguration();
+		$SourceList   = array();
+		foreach ($SourceConfig as $RoomName=>$RoomSources) {
+			$RoomId = get_RoomId($RoomName);
+			$CurrentIdx  = get_SourceIdxByRoomId($RoomId);
+			foreach ($RoomSources as $SourceIdx=>$SourceData) {
+				$DeviceNames = get_DeviceNamesByRoomId($RoomId, $SourceIdx, array(c_Property_Output));
 				if (in_array($DeviceName, $DeviceNames)) {
                     if (!array_key_exists($RoomId, $SourceList)) {
                         $SourceList[$RoomId] = $SourceIdx;
@@ -383,9 +383,9 @@
                         break;
 					}
 				}
-	      }
-	   }
-	   return $SourceList;
+			}
+		}
+		return $SourceList;
 	}
 
   /** @}*/

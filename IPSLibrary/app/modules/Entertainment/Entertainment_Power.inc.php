@@ -39,8 +39,8 @@
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function Entertainment_SetDevicePower($PowerId, $Value, $MessageType=c_MessageType_Action) {
-	   $DeviceName = IPS_GetName(IPS_GetParent($PowerId));
-      Entertainment_SetDevicePowerByDeviceName($DeviceName, $Value, $MessageType);
+		$DeviceName = IPS_GetName(IPS_GetParent($PowerId));
+		Entertainment_SetDevicePowerByDeviceName($DeviceName, $Value, $MessageType);
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
@@ -48,10 +48,10 @@
 		IPSLogger_Trc(__file__, 'Handle Device Power for "'.$DeviceName.'" '.bool2OnOff($Value));
 		$PowerId = get_ControlIdByDeviceName($DeviceName, c_Control_DevicePower, false);
 		if ($PowerId!==false) {
-		   if (!is_bool($Value)) { 												/*Toggle Power Value*/
-      		$Value = !GetValue($PowerId);
+			if (!is_bool($Value)) { 												/*Toggle Power Value*/
+				$Value = !GetValue($PowerId);
 				IPSLogger_Dbg(__file__, "Toogle Device Power for '$DeviceName' to ".bool2OnOff($Value));
-   		}
+			}
 			if (GetValue($PowerId) <> $Value) {
 				IPSLogger_Inf(__file__, 'Set Device Power for "'.$DeviceName.'" '.bool2OnOff($Value));
 				if ($Value) {
@@ -64,7 +64,7 @@
 				SetValue($PowerId, $Value);
 				Entertainment_Connect($DeviceName, $Value, true);
 				Entertainment_SetDeviceControlByDeviceName($DeviceName, c_Control_Muting, false);
-		      Entertainment_SetRoomPowerByDeviceName($DeviceName, $Value);
+				Entertainment_SetRoomPowerByDeviceName($DeviceName, $Value);
 			}
 		}
 	}

@@ -15,21 +15,21 @@
 	 */
 	include "IPSLogger_Constants.inc.php";
 
-	if ($IPS_VARIABLE==c_ID_EMailOutEnabled) {
+	if ($_IPS['VARIABLE']==c_ID_EMailOutEnabled) {
 		if (c_ID_SmtpDevice <> 0) {
-			SetValue($IPS_VARIABLE, $IPS_VALUE);
+			SetValue($_IPS['VARIABLE'], $_IPS['VALUE']);
 			
 			if (!GetValue(c_ID_EMailOutEnabled)) {
 				SetValue(c_ID_EMailOutMsgList, '');          	
 				IPS_SetScriptTimer(c_ID_ScriptSendMail, 0);		
 			}
 		}
-	} else if ($IPS_VARIABLE==c_ID_ProwlOutEnabled) {
+	} else if ($_IPS['VARIABLE']==c_ID_ProwlOutEnabled) {
 		if (c_Key_ProwlService <> '') {
-			SetValue($IPS_VARIABLE, $IPS_VALUE);
+			SetValue($_IPS['VARIABLE'], $_IPS['VALUE']);
 		}
 	} else {
-		SetValue($IPS_VARIABLE, $IPS_VALUE);
+		SetValue($_IPS['VARIABLE'], $_IPS['VALUE']);
 	}
 	;
 	/** @}*/

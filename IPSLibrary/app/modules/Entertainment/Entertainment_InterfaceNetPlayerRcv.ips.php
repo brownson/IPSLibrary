@@ -22,11 +22,11 @@
 	
 	IPS_SemaphoreEnter('NetPlayer', 1000);
 
-	if($IPS_SENDER == "Variable") {
-	   $variableName = IPS_GetName($IPS_VARIABLE);
+	if($_IPS['SENDER'] == "Variable") {
+	   $variableName = IPS_GetName($_IPS['VARIABLE']);
 		switch ($variableName) {
 		   case 'Power':
-		      if ($IPS_VALUE) {
+		      if ($_IPS['VALUE']) {
 					Entertainment_ReceiveData(array(c_Comm_NetPlayer, 'netplayer', 'poweron'), c_MessageType_Info);
 				} else {
 					Entertainment_ReceiveData(array(c_Comm_NetPlayer, 'netplayer', 'poweroff'), c_MessageType_Info);
@@ -45,8 +45,8 @@
 		      //Entertainment_RefreshRemoteControlByDeviceName(c_Device_NetPlayer, c_Control_iRemoteSource);
 		   	break;
 		   case 'ControlType':
-		      //IPSLogger_Com(__file__, "Receive RemoteControlType $IPS_VALUE for NetPlayer");
-				//Entertainment_ReceiveData(array(c_Comm_NetPlayer, 'netplayertype', (string)$IPS_VALUE), c_MessageType_Info);
+		      //IPSLogger_Com(__file__, "Receive RemoteControlType $_IPS['VALUE'] for NetPlayer");
+				//Entertainment_ReceiveData(array(c_Comm_NetPlayer, 'netplayertype', (string)$_IPS['VALUE']), c_MessageType_Info);
 		   	break;
 		   default:
 		      IPSLogger_Err(__file__, "Unknown Variable $variableName");

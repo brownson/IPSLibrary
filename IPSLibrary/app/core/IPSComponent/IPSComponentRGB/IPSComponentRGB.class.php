@@ -12,13 +12,15 @@
    /**
     * @class IPSComponentRGB
     *
-    * Definiert ein IPSComponentRGB Object, das als Wrapper für Dimmer Geräte verschiedener Hersteller 
+    * Definiert ein IPSComponentRGB Object, das als Wrapper für RGB Geräte verschiedener Hersteller 
     * verwendet werden kann.
     *
     * @author Andreas Brauneis
     * @version
     * Version 2.50.1, 31.01.2012<br/>
     */
+
+	IPSUtils_Include ('IPSComponent.class.php', 'IPSLibrary::app::core::IPSComponent');
 
 	abstract class IPSComponentRGB extends IPSComponent {
 
@@ -30,9 +32,9 @@
 		 *
 		 * @param integer $variable ID der auslösenden Variable
 		 * @param string $value Wert der Variable
-		 * @param IPSModuleDimmer $module Module Object an das das aufgetretene Event weitergeleitet werden soll
+		 * @param IPSModuleRGB $module Module Object an das das aufgetretene Event weitergeleitet werden soll
 		 */
-		abstract public function HandleEvent($variable, $value, IPSModuleDimmer $module);
+		abstract public function HandleEvent($variable, $value, IPSModuleRGB $module);
 
 		/**
 		 * @public

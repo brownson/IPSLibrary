@@ -33,8 +33,8 @@
 
  	include_once 'AudioMax.inc.php';
 
-	$variableId    = $IPS_VARIABLE;
-	$variableValue = $IPS_VALUE;
+	$variableId    = $_IPS['VARIABLE'];
+	$variableValue = $_IPS['VALUE'];
 	$variableIdent = IPS_GetIdent($variableId);
 
 	$serverId = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.hardware.AudioMax.AudioMax_Server');

@@ -47,6 +47,20 @@
 		 * @param IPSModuleSwitch $module Module Object an das das aufgetretene Event weitergeleitet werden soll
 		 */
 		public function HandleEvent($variable, $value, IPSModuleSwitch $module){
+			$module->SyncState($value, $this);
+		}
+
+		/**
+		 * @public
+		 *
+		 * Funktion liefert String IPSComponent Constructor String.
+		 * String kann dazu benützt werden, das Object mit der IPSComponent::CreateObjectByParams
+		 * wieder neu zu erzeugen.
+		 *
+		 * @return string Parameter String des IPSComponent Object
+		 */
+		public function GetComponentParams() {
+			return get_class($this).','.$this->instanceId;
 		}
 
 		/**
@@ -68,7 +82,7 @@
 		 * @return boolean aktueller Schaltzustand  
 		 */
 		public function GetState() {
-			GetValue(IPS_GetVariableIDByName('STATE', $this->instanceId));
+			GetValue(IPS_GetVariableIDByIdent('STATE', $this->instanceId));
 		}
 
 	}

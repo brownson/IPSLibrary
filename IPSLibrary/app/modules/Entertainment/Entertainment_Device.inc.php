@@ -17,6 +17,9 @@
 		$ProfileName = $VariableObject['VariableCustomProfile'];
 		$ProfileObject = IPS_GetVariableProfile($ProfileName);
 		$MaxValue = Count($ProfileObject['Associations']);
+		if ($MaxValue==0) {
+			$MaxValue = $ProfileObject['MaxValue'];
+		}
 		return $MaxValue;
 	}
 
@@ -70,6 +73,20 @@
 		  												  array(c_Property_CommMode), $MessageType);
 			Entertainment_SetRoomControlByDeviceControlId($Id, $Value);
 		}
+	}
+
+	// ---------------------------------------------------------------------------------------------------------------------------
+	function Entertainment_SetVolumeDiff($Id, $Diff, $MessageType=c_MessageType_Action) {
+		$MaxValue = get_MaxValueByControlId($Id);
+		IPSLogger_Inf(__file__, 'Max='.$MaxValue);
+		$Value    = GetValue($Id) + $Diff;
+		if ($Value > $MaxValue) {
+			$Value = $MaxValue;
+		}
+		if ($Value < 0) {
+			$Value = 0;
+		}
+		Entertainment_SetVolume($Id, $Value, $MessageType);
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------

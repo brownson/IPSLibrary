@@ -31,6 +31,7 @@
 
 	define ('EDIP_CONFIG_NAME',						'Name');
 	define ('EDIP_CONFIG_REGISTER',					'RegisterVariableId');
+	define ('EDIP_CONFIG_IOINSTANCE',				'IO_InstanceId');
 	define ('EDIP_CONFIG_COMPORT',					'ComPort');
 	define ('EDIP_CONFIG_ROOT',						'RootId');
 	define ('EDIP_CONFIG_REFRESHMETHOD',			'RefreshMethod');

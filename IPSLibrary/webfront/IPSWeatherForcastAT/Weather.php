@@ -43,8 +43,8 @@
 
 		<?
 			$agent  = $_SERVER['HTTP_USER_AGENT'];
-			$iPhone = preg_match("@ipod@i", $agent) || preg_match("@ipad@i", $agent) || preg_match("@iphone@i",$agent);
-			if ($iPhone) {
+			$mobile = preg_match("@ipod@i", $agent) || preg_match("@ipad@i", $agent) || preg_match("@iphone@i",$agent);
+			if ($mobile) {
 				echo '<link rel="stylesheet" type="text/css" href="/user/IPSWeatherForcastAT/iWeather.css" />';
 			} else {
 				echo '<link rel="stylesheet" type="text/css" href="/user/IPSWeatherForcastAT/Weather.css" />';
@@ -117,10 +117,14 @@
 				<div class="containerForecastIcon1"><?php echo '<div class="pictureForecast"><img src="'.IPSWeatherFAT_GetValue('TomorrowIcon').'" alt="'.htmlentities(IPSWeatherFAT_GetValue('TomorrowForecastShort')).'"/></div>';?></div>
 				<div class="containerForecastIcon2"><?php echo '<div class="pictureForecast"><img src="'.IPSWeatherFAT_GetValue('Tomorrow1Icon').'" alt="'.htmlentities(IPSWeatherFAT_GetValue('Tomorrow1ForecastShort')).'"/></div>';?></div>
 				<div class="containerForecastIcon3"><?php echo '<div class="pictureForecast"><img src="'.IPSWeatherFAT_GetValue('Tomorrow2Icon').'" alt="'.htmlentities(IPSWeatherFAT_GetValue('Tomorrow2ForecastShort')).'"/></div>';?></div>
-				<div class="containerForecastText1"><?php echo IPSWeatherFAT_GetValue('TomorrowForecastLong');?></div>
-				<div class="containerForecastText2"><?php echo IPSWeatherFAT_GetValue('Tomorrow1ForecastLong');?></div>
 				<?php
-					if ($iPhone) {
+					if (IPSWEATHERFAT_COUNT_DETAILS >= 1 or $mobile) {
+						echo '<div class="containerForecastText1">'.IPSWeatherFAT_GetValue('TomorrowForecastLong').'</div>';
+					}
+					if (IPSWEATHERFAT_COUNT_DETAILS >= 2 or $mobile) {
+						echo '<div class="containerForecastText2">'.IPSWeatherFAT_GetValue('Tomorrow1ForecastLong').'</div>';
+					}
+					if (IPSWEATHERFAT_COUNT_DETAILS >= 3 or $mobile) {
 						echo '<div class="containerForecastText3">'.IPSWeatherFAT_GetValue('Tomorrow2ForecastLong').'</div>';
 					}
 				?>

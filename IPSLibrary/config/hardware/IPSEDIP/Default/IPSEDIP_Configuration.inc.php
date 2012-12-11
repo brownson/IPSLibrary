@@ -5,7 +5,7 @@
 	 *
 	 * EDIP Konfiguration
 	 *
-	 * @file          Default/IPSEDIP_Configuration.inc.php
+	 * @file          IPSEDIP\IPSEDIP_Configuration.inc.php
 	 * @author        Andreas Brauneis
 	 * @version
 	 * Version 2.50.1, 31.01.2012<br/>
@@ -36,9 +36,6 @@
    * - EDIP_CONFIG_REGISTER:       ID der Register Variable, die für das EDIP Display verwendet werden soll. Alternativ kann auch das ComPort angegeben
    *                               werden (in diesem Fall wird die Register Variable durch die Installations Prozedur automatisch angelegt).
    *
-   * - EDIP_CONFIG_COMPORT:        Com Port, das zur Kommunikation mit dem EDIP Display genützt werden soll. Wird nichts angegeben, muß die IO-Instance
-   *                               manuell angelegt werden. 
-   *
    * - EDIP_CONFIG_ROOT:           Root ID, die für das 1. EDIP Display verwendet werden soll.
    *
    * - EDIP_CONFIG_CLASSNAME:      Name der Klasse, die zur Ansteuerung des Displays verwendet werden soll, folgende Klassen stehen derzeit zur Auswahl:
@@ -61,7 +58,6 @@
    *     EDIP_CONFIG_NR1 => array(
    *       EDIP_CONFIG_NAME              => 'Vorzimmer',
    *       EDIP_CONFIG_REGISTER          => 12345,
-   *       EDIP_CONFIG_COMPORT           => '',
    *       EDIP_CONFIG_ROOT              => 12345,
    *       EDIP_CONFIG_REFRESHMETHOD     => EDIP_REFRESHMETHOD _NONE,
    *       EDIP_CONFIG_CLASSNAME         => EDIP_CLASSNAME_EDIP43));

@@ -22,20 +22,20 @@
 	// ---------------------------------------------------------------------------------------------------------------------------
 	// WebFront
 	// ---------------------------------------------------------------------------------------------------------------------------
-	if ($IPS_SENDER == "WebFront") {
-		$ControlType = get_ControlType($IPS_VARIABLE);
+	if ($_IPS['SENDER'] == "WebFront") {
+		$ControlType = get_ControlType($_IPS['VARIABLE']);
 		switch ($ControlType) {
 		   case c_Control_RoomPower:
-		      Entertainment_SetRoomPower($IPS_VARIABLE, $IPS_VALUE);
+		      Entertainment_SetRoomPower($_IPS['VARIABLE'], $_IPS['VALUE']);
 		      break;
 		   case c_Control_DevicePower:
-		      Entertainment_SetDevicePower($IPS_VARIABLE, $IPS_VALUE);
+		      Entertainment_SetDevicePower($_IPS['VARIABLE'], $_IPS['VALUE']);
 		      break;
 		   case c_Control_Source:
-		      Entertainment_SetSource($IPS_VARIABLE, $IPS_VALUE);
+		      Entertainment_SetSource($_IPS['VARIABLE'], $_IPS['VALUE']);
 		      break;
 		   case c_Control_Group:
-		      Entertainment_SetGroupControlVisibility($IPS_VARIABLE, $IPS_VALUE);
+		      Entertainment_SetGroupControlVisibility($_IPS['VARIABLE'], $_IPS['VALUE']);
 		      break;
 		   case c_Control_Muting:
 		   case c_Control_Volume:
@@ -45,10 +45,10 @@
 		   case c_Control_Bass:
 		   case c_Control_Mode:
 		   case c_Control_Program:
-		      Entertainment_SetControl($IPS_VARIABLE, $IPS_VALUE);
+		      Entertainment_SetControl($_IPS['VARIABLE'], $_IPS['VALUE']);
 		      break;
 			default:
-				IPSLogger_Err(__file__, 'Unknown Control with ID='.$IPS_VARIABLE.' !');
+				IPSLogger_Err(__file__, 'Unknown Control with ID='.$_IPS['VARIABLE'].' !');
 		}
 	}
 
