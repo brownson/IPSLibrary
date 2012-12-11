@@ -173,7 +173,7 @@
 		// Homematic
 		if ($componentClass=='IPSComponentSwitch_Homematic') {
 			$instanceId = IPSUtil_ObjectIDByPath($componentParams[1]);
-			$variableId = @IPS_GetObjectIDByName('STATE', $instanceId);
+			$variableId = @IPS_GetObjectIDByIdent('STATE', $instanceId);
 			if ($variableId===false) {
 				$moduleManager->LogHandler()->Log('Variable with Name STATE could NOT be found for Homematic Instance='.$instanceId);
 			} else {
