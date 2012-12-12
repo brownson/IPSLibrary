@@ -22,7 +22,7 @@
      * @file          NetIO230B_Installation.ips.php
      * @author        Dominik Zeiger
      * @version
-     *  Version 2.50.1, 17.07.2012<br/>
+     *  Version 1.0.010, 17.07.2012<br/>
      *
      */
 

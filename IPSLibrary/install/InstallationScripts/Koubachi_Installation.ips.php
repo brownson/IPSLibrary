@@ -22,7 +22,7 @@
      * @file          Koubachi_Installation.ips.php
      * @author        Dominik Zeiger
      * @version
-     *  Version 0.1, 15.10.2012<br/>
+     *  Version 1.0.008, 15.10.2012<br/>
      *
      */
 	 

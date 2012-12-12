@@ -22,7 +22,7 @@
      * @file          FritzBox_Installation.ips.php
      * @author        Dominik Zeiger
      * @version
-     *  Version 2.50.1, 31.01.2012<br/>
+     *  Version 0.0.001, 31.01.2012<br/>
      *
      */
 
