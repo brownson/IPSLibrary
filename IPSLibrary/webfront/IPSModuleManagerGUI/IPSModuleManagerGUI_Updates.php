@@ -58,7 +58,7 @@
 		if (!$processing) {
 			$html .= '<td><input type="button" name="Text" value="Update" onclick="trigger_button(\'Update\', \''.$module.'\', \'\')"></td>';
 		} else {
-			$html .= '<td>processing ...</td>';
+			$html .= '<td><input type="button" disabled name="Text" value="Update" onclick="trigger_button(\'Update\', \''.$module.'\', \'\')"></td>';
 		}
 		$html .= '<td><div style="text-align:left; overflow:hidden; padding-left:10px; padding-right:10px;">'.$text.'</div></td>';
 		$html .= '</tr>'.PHP_EOL;
@@ -72,7 +72,6 @@
 	$properties = '';
 	if ($processing) {
 		$properties = 'disabled';
-		echo 'Processing...  ';
 	}
 	if (count($modules)>0) {
 		echo '<input type="button"  '.$properties.' name="Text" value="Update aller Module" onclick="trigger_button(\'UpdateAll\', \'\', \'\')">';

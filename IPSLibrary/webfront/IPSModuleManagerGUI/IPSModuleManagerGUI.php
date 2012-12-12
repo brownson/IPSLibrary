@@ -116,8 +116,6 @@
 		<a href="#" onClick=trigger_button('Logs','','')>Log File's</a> |
 		<a href="#" onClick=trigger_button('Updates','','')>Update's</a> |
 		<a href="#" onClick=trigger_button('NewModule','','')>Neues Modul</a>
-		<BR>
-		<BR>
 		<?php
 			IPSUtils_Include ("IPSModuleManagerGUI.inc.php", "IPSLibrary::app::modules::IPSModuleManagerGUI");
 
@@ -129,8 +127,13 @@
 			$processing = !IPSModuleManagerGUI_GetLock();
 			if (!$processing) {
 				IPSModuleManagerGUI_ReleaseLock();
+			} else {
+				echo '| Processing ...';
 			}
-
+		?>
+		<BR>
+		<BR>
+		<?php
 			switch($action) {
 				case IPSMMG_ACTION_OVERVIEW:
 					include 'IPSModuleManagerGUI_Overview.php';

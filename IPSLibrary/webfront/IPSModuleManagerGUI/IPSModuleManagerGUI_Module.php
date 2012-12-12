@@ -68,17 +68,17 @@
 	
 	// Update Section
 	$html .= '<p>';
-	if (!$processing) {
-		if (!$moduleInstalled) {
-			$html .= '<input type="button" name="Text" value="Modul Laden"       onclick="trigger_button(\'Load\', \''.$module.'\', \'\')">';
-		} else {
-			$html .= '<input type="button" name="Text" value="Modul Update"       onclick="trigger_button(\'Update\', \''.$module.'\', \'\')">';
-			$html .= '<input type="button" name="Text" value="Modul Installieren" onclick="trigger_button(\'Install\',\''.$module.'\', \'\')">';
-			$html .= '<input type="button" name="Text" value="Installations Wizard" onclick="trigger_button(\'Wizard\',\''.$module.'\', \'\')">';
-			$html .= '<input type="button" name="Text" value="Modul L&ouml;schen" onclick="trigger_button(\'Delete\', \''.$module.'\', \'\')">';
-		}
+	$properties = '';
+	if ($processing) {
+		$properties = 'disabled';
+	}
+	if (!$moduleInstalled) {
+		$html .= '<input type="button"  '.$properties.' name="Text" value="Modul Laden"       onclick="trigger_button(\'Load\', \''.$module.'\', \'\')">';
 	} else {
-		echo 'processing ...';
+		$html .= '<input type="button"  '.$properties.' name="Text" value="Modul Update"       onclick="trigger_button(\'Update\', \''.$module.'\', \'\')">';
+		$html .= '<input type="button"  '.$properties.' name="Text" value="Modul Installieren" onclick="trigger_button(\'Install\',\''.$module.'\', \'\')">';
+		$html .= '<input type="button"  '.$properties.' name="Text" value="Installations Wizard" onclick="trigger_button(\'Wizard\',\''.$module.'\', \'\')">';
+		$html .= '<input type="button"  '.$properties.' name="Text" value="Modul L&ouml;schen" onclick="trigger_button(\'Delete\', \''.$module.'\', \'\')">';
 	}
 	$html .= '</p>';
 	
@@ -106,7 +106,6 @@
 	// ChangeList
 	$html .= '<h5>Liste der &Auml;nderungen</h5>';
 	$changes = $moduleManager->VersionHandler()->GetChangeList($module, false);
-	krsort ($changes);
 	$html  .= '<table>';
 	foreach ($changes as $version=>$change) {
 		$html  .= '<tr><td><div style="text-align:left; color:grey; padding-left:10px; padding-right:10px;">'.$version.'</div></td>'
