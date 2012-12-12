@@ -61,10 +61,6 @@
 
 
 <?php
-	if ($processing) {
-		echo 'Processing...  ';
-	}
-
 	function GetTableData($value='', $displayAttributes='', $action='', $module='', $info='') {
 		$text = $value;
 		if ($text=='') {

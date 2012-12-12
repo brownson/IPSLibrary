@@ -85,12 +85,12 @@
 	
 	// Update Section
 	$html .= '<p>';
-	if (!$processing) {
-		$html .= '<input type="button" name="Text" value="Einstellungen Speichern und Installieren" onclick="trigger_button2(\'StoreAndInstall\',\''.$module.'\', \'\')">';
-		$html .= '<input type="button" name="Text" value="Einstellungen Speichern" onclick="trigger_button2(\'Store\',\''.$module.'\', \'\')">';
-	} else {
-		echo 'processing ...';
+	$properties = '';
+	if ($processing) {
+		$properties = 'disabled';
 	}
+	$html .= '<input type="button" '.$properties.' name="Text" value="Einstellungen Speichern und Installieren" onclick="trigger_button2(\'StoreAndInstall\',\''.$module.'\', \'\')">';
+	$html .= '<input type="button" '.$properties.' name="Text" value="Einstellungen Speichern" onclick="trigger_button2(\'Store\',\''.$module.'\', \'\')">';
 	$html .= '</p>';
 	
 

@@ -73,7 +73,6 @@
 	$properties = '';
 	if ($processing) {
 		$properties = 'disabled';
-		echo 'Processing...  ';
 	}
 	if (count($modules)>0) {
 		echo '<input type="button" '.$properties.' name="Text" value="Update aller Module" onclick="trigger_button(\'UpdateAll\', \'\', \'\')">';

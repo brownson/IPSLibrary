@@ -559,9 +559,13 @@
 					}
 				}
 			}
+			uksort($changeList, 'version_compare_custom');  
+			
 			return $changeList;
 		}
 
+		
+		
 		/**
 		 * @public
 		 *
@@ -660,5 +664,25 @@
 
 	}
 
+	
+	function version_compare_custom($a, $b) {
+		$result = 0;
+		$partsA = explode(".", $a);
+		$partsB = explode(".", $b);
+		$maxParts = min(count($partsA), count($partsB));
+		for($i = 0; $i < $maxParts; $i++) {
+			if(is_numeric($partsA[$i]) && is_numeric($partsB[$i])) {
+				$va = (int) $partsA[$i];
+				$vb = (int) $partsB[$i];
+				$result = $va == $vb ? 0 : ($va > $vb ? -1 : 1);
+			} else {
+				$result = $a == $b ? 0 : ($a > $b ? -1 : 1);
+			}
+			if($result != 0) {
+				break;
+			}
+		}
+		return $result;
+	} 
 	/** @}*/
 ?>
