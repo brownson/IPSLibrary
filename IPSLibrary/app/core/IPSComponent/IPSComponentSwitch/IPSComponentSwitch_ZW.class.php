@@ -68,7 +68,7 @@
 		 * @return string Parameter String des IPSComponent Object
 		 */
 		public function GetComponentParams() {
-			return get_class($this).','.$this->instanceId.','.$this->channelId;
+			return get_class($this).','.$this->instanceId.','.$this->channel;
 		}
 
 		/**
