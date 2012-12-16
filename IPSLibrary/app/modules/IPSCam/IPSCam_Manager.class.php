@@ -944,7 +944,7 @@
 				}
 			} else {
 				if (($htmlHeight+$streamHeight) <= $maxHeight) {
-					$height = null;
+					$height = $streamHeight;
 				} else {
 					$height = $streamHeight - ($htmlHeight + $streamHeight - $maxHeight) - 10; // StreamHeight - Diff
 				}

@@ -31,7 +31,7 @@
 	/** @}*/
 
 	$agent  = $_SERVER['HTTP_USER_AGENT'];
-	$mobileGUI = preg_match("@ipod@i", $agent) || preg_match("@ipad@i", $agent) || preg_match("@iphone@i",$agent);
+	$mobileGUI = preg_match("@ipod@i", $agent) || preg_match("@iphone@i",$agent);
 	if ($mobileGUI) {
 		echo '<link rel="stylesheet" type="text/css" href="/user/IPSCam/IPSCam_CameraMobile.css" />'.PHP_EOL.PHP_EOL;
 	} else {
