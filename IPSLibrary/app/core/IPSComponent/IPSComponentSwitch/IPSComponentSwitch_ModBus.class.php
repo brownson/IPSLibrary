@@ -69,7 +69,7 @@
 		 * @return boolean aktueller Schaltzustand  
 		 */
 		public function GetState() {
-			GetValue(IPS_GetVariableIDByName('Value', $this->instanceId));
+			GetValue(IPS_GetObjectIDByIdent('Value', $this->instanceId));
 		}
 
 	}
