@@ -24,7 +24,7 @@
 	 * @version
 	 *  Version 2.50.1, 29.09.2012<br/>
 	 *
-	 * IPSPowerControl Kamera Management
+	 * IPSPowerControl Manager
 	 */
 
 	/**
@@ -254,7 +254,7 @@
 		}
 
 		private function RebuildGraph () {
-			$variableIdValueType = IPS_GetObjectIDByIdent(IPSPC_VAR_TYPEOFFSET, $this->categoryIdCommon);
+			$variableIdChartType = IPS_GetObjectIDByIdent(IPSPC_VAR_TYPEOFFSET, $this->categoryIdCommon);
 			$variableIdPeriod    = IPS_GetObjectIDByIdent(IPSPC_VAR_PERIODCOUNT, $this->categoryIdCommon);
 			$variableIdChartHTML = IPS_GetObjectIDByIdent(IPSPC_VAR_CHARTHTML,  $this->categoryIdCommon);
 
@@ -271,15 +271,16 @@
 			                        IPSPC_TYPE_OFF         => 'Off',
 			                        IPSPC_TYPE_PIE         => 'Pie');
 
-			if (!array_key_exists(GetValue($variableIdValueType), $valueTypeList)) {
-				SetValue($variableIdValueType, IPSPC_TYPE_KWH);
+			if (!array_key_exists(GetValue($variableIdChartType), $valueTypeList)) {
+				SetValue($variableIdChartType, IPSPC_TYPE_KWH);
 			}
 			if (!array_key_exists(GetValue($variableIdPeriod), $periodList)) {
 				SetValue($variableIdPeriod, IPSPC_PERIOD_DAY);
 			}
 
-			$archiveHandlerId = IPS_GetInstanceIDByName("Archive Handler", 0);
-			$valueType = GetValue($variableIdValueType);
+			$archiveHandlerList = IPS_GetInstanceListByModuleID ('{43192F0B-135B-4CE7-A0A7-1475603F3060}');
+			$archiveHandlerId   = $archiveHandlerList[0];
+			$chartType          = GetValue($variableIdChartType);
 
 			$CfgDaten['ContentVarableId'] = $variableIdChartHTML ;
 			$CfgDaten['Ips']['ChartType'] = 'Highcharts'; // Highcharts oder Highstock (default = Highcharts)
@@ -312,10 +313,12 @@
 			}
 
 			foreach ($this->valueConfig as $valueIdx=>$valueData) {
+				$valueType = $valueData[IPSPC_PROPERTY_VALUETYPE];
 				if ($valueData[IPSPC_PROPERTY_DISPLAY]) {
 					$variableIdValueDisplay   = IPS_GetVariableIDByName(IPSPC_VAR_SELECTVALUE.$valueIdx, $this->categoryIdCommon);
-					$variableIdValueKWH       = IPS_GetVariableIDByName(IPSPC_VAR_VALUEKWH.$valueIdx, $this->categoryIdValues);
-					$variableIdValueWatt      = IPS_GetVariableIDByName(IPSPC_VAR_VALUEWATT.$valueIdx, $this->categoryIdValues);
+					$variableIdValueKWH       = @IPS_GetVariableIDByName(IPSPC_VAR_VALUEKWH.$valueIdx,  $this->categoryIdValues);
+					$variableIdValueWatt      = @IPS_GetVariableIDByName(IPSPC_VAR_VALUEWATT.$valueIdx, $this->categoryIdValues);
+					$variableIdValueM3        = @IPS_GetVariableIDByName(IPSPC_VAR_VALUEM3.$valueIdx, $this->categoryIdValues);
 
 					$serie = array();
 					$serie['type']          = 'column';
@@ -338,7 +341,7 @@
 					$serie['marker']['states']['hover']['radius']    = 4;
 					$serie['marker']['states']['hover']['lineWidth'] = 1;
 
-					switch ($valueType) {
+					switch ($chartType) {
 						case IPSPC_TYPE_OFF:
 							SetValue($variableIdChartHTML, '');
 							return;
@@ -347,12 +350,12 @@
 							$serie['Unit']        = "kWh";
 							$serie['ScaleFactor'] = 1;
 							$serie['name']        = $valueData[IPSPC_PROPERTY_NAME];
-							$serie['Id']          = IPS_GetVariableIDByName(IPSPC_VAR_VALUEKWH.$valueIdx, $this->categoryIdValues);
-							if ($valueData[IPSPC_PROPERTY_VALUETYPE]==IPSPC_VALUETYPE_TOTAL and $valueType==IPSPC_TYPE_STACK2) {
+							$serie['Id']          = $variableIdValueKWH;
+							if ($variableIdValueKWH!==false and $valueData[IPSPC_PROPERTY_VALUETYPE]==IPSPC_VALUETYPE_TOTAL and $chartType==IPSPC_TYPE_STACK2) {
 								$serie['zIndex']  = 100;
 								$serie['stack']  = 'Total';
 								$CfgDaten['series'][] = $serie;
-							} elseif ($valueData[IPSPC_PROPERTY_VALUETYPE]==IPSPC_VALUETYPE_DETAIL) {
+							} elseif ($variableIdValueKWH!==false and $valueData[IPSPC_PROPERTY_VALUETYPE]==IPSPC_VALUETYPE_DETAIL) {
 								$serie['zIndex']  = 110;
 								$serie['stack']  = 'Detail';
 								$CfgDaten['series'][] = $serie;
@@ -361,15 +364,15 @@
 							$CfgDaten['yAxis'][0]['title']['text'] = "Verbrauch";
 							$CfgDaten['yAxis'][0]['stackLabels']['enabled']    = true;
 							$CfgDaten['yAxis'][0]['stackLabels']['formatter']  = "@function() { return this.total.toFixed(1) }@";
+							$CfgDaten['yAxis'][0]['Unit'] = "kWh";
 							$CfgDaten['plotOptions']['column']['stacking']     = "normal";
 							$CfgDaten['plotOptions']['column']['borderColor']  = "#666666";
 							$CfgDaten['plotOptions']['column']['borderWidth']  = 0;
 							$CfgDaten['plotOptions']['column']['shadow']       = true;
-							$CfgDaten['yAxis'][0]['Unit'] = "kWh";
  							break;
 						case IPSPC_TYPE_PIE:
 							$serie['type'] = 'pie';
-							if ($valueData[IPSPC_PROPERTY_VALUETYPE]==IPSPC_VALUETYPE_DETAIL) {
+							if ($variableIdValueKWH!==false and $valueData[IPSPC_PROPERTY_VALUETYPE]==IPSPC_VALUETYPE_DETAIL) {
 								$data_array	= AC_GetAggregatedValues($archiveHandlerId, $variableIdValueKWH, $aggType, $CfgDaten["StartTime"],$CfgDaten["EndTime"], 100);
 								$value=0;
 								for($i=0;$i<count($data_array)-1;$i++) {
@@ -387,41 +390,68 @@
 							}
 							break;
 						case IPSPC_TYPE_WATT:
-							if (GetValue($variableIdValueDisplay)) {
+							if ($variableIdValueWatt!==false and GetValue($variableIdValueDisplay)) {
 								$serie['Unit']        = "Watt";
 								$serie['ScaleFactor'] = 1;
 								$serie['name']        = $valueData[IPSPC_PROPERTY_NAME];
-								$serie['Id']          = IPS_GetVariableIDByName(IPSPC_VAR_VALUEWATT.$valueIdx, $this->categoryIdValues);
+								$serie['Id']          = $variableIdValueWatt;
 								$CfgDaten['series'][] = $serie;
 								$CfgDaten['yAxis'][0]['title']['text'] = "Verbrauch";
 								$CfgDaten['yAxis'][0]['Unit'] = "Watt";
-							}
-							break;
-						case IPSPC_TYPE_KWH:
-							if (GetValue($variableIdValueDisplay)) {
-								$serie['Unit']        = "kWh";
-								$serie['ScaleFactor'] = 1;
-								$serie['name']        = $valueData[IPSPC_PROPERTY_NAME];
-								$serie['Id']          = IPS_GetVariableIDByName(IPSPC_VAR_VALUEKWH.$valueIdx, $this->categoryIdValues);
-								$CfgDaten['series'][] = $serie;
-								$CfgDaten['yAxis'][0]['title']['text'] = "Verbrauch";
-								$CfgDaten['yAxis'][0]['Unit'] = "kWh";
+							} elseif ($variableIdValueWatt===false and GetValue($variableIdValueDisplay)) {
+								SetValue($variableIdValueDisplay, false);
 							}
 							break;
 						case IPSPC_TYPE_EURO:
+						case IPSPC_TYPE_KWH:
 							if (GetValue($variableIdValueDisplay)) {
-								$serie['Unit']        = "Euro";
-								$serie['ScaleFactor'] = IPSPC_ELECTRICITYRATE/100;
 								$serie['name']        = $valueData[IPSPC_PROPERTY_NAME];
-								$serie['Id']          = IPS_GetVariableIDByName(IPSPC_VAR_VALUEKWH.$valueIdx, $this->categoryIdValues);
-								$CfgDaten['series'][] = $serie;
-								$CfgDaten['yAxis'][0]['title']['text'] = "Verbrauch";
-								$CfgDaten['yAxis'][0]['Unit'] = "Euro";
+								if ($valueType==IPSPC_VALUETYPE_GAS) {
+									$yAxisText = ($chartType==IPSPC_TYPE_EURO)?"Euro":"Gas / Wasser";
+									$yAxisIdx  = $this->GetYAxisIdx($CfgDaten, $yAxisText);
+									$serie['Unit']        = ($chartType==IPSPC_TYPE_EURO)?"Euro":"m³";
+									$serie['Id']          = $variableIdValueM3;
+									$serie['ScaleFactor'] = ($chartType==IPSPC_TYPE_EURO)?(IPSPC_GASRATE_KWH*IPSPC_GASRATE_EURO/100):1;
+									$serie['yAxis']       = $yAxisIdx;
+									$CfgDaten['series'][] = $serie;
+									$CfgDaten['yAxis'][$yAxisIdx]['title']['text'] = $yAxisText;
+									$CfgDaten['yAxis'][$yAxisIdx]['Unit']          = $serie['Unit'];
+									$CfgDaten['yAxis'][$yAxisIdx]['stackLabels']['enabled']    = true;
+									$CfgDaten['yAxis'][$yAxisIdx]['stackLabels']['formatter']  = "@function() { return this.total.toFixed(1) }@";
+								} elseif ($valueType==IPSPC_VALUETYPE_WATER) {
+									$yAxisText = ($chartType==IPSPC_TYPE_EURO)?"Euro":"Gas / Wasser";
+									$yAxisIdx  = $this->GetYAxisIdx($CfgDaten, $yAxisText);
+									$serie['Unit']        = ($chartType==IPSPC_TYPE_EURO)?"Euro":"m³";
+									$serie['Id']          = $variableIdValueM3;
+									$serie['ScaleFactor'] = ($chartType==IPSPC_TYPE_EURO)?(IPSPC_WATERRATE/100):1;
+									$serie['yAxis']       = $yAxisIdx;
+									$CfgDaten['series'][] = $serie;
+									$CfgDaten['yAxis'][$yAxisIdx]['title']['text'] = $yAxisText;
+									$CfgDaten['yAxis'][$yAxisIdx]['Unit']          = $serie['Unit'];
+									$CfgDaten['yAxis'][$yAxisIdx]['stackLabels']['enabled']    = true;
+									$CfgDaten['yAxis'][$yAxisIdx]['stackLabels']['formatter']  = "@function() { return this.total.toFixed(1) }@";
+								} else {
+									$yAxisText = ($chartType==IPSPC_TYPE_EURO)?"Euro":"Strom";
+									$yAxisIdx  = $this->GetYAxisIdx($CfgDaten, $yAxisText);
+									$serie['Unit']        = ($chartType==IPSPC_TYPE_EURO)?"Euro":"kWh";
+									$serie['Id']          = $variableIdValueKWH;
+									$serie['ScaleFactor'] = ($chartType==IPSPC_TYPE_EURO)?(IPSPC_ELECTRICITYRATE/100):1;
+									$serie['yAxis']       = $yAxisIdx;
+									$CfgDaten['series'][] = $serie;
+									$CfgDaten['yAxis'][$yAxisIdx]['title']['text'] = $yAxisText;
+									$CfgDaten['yAxis'][$yAxisIdx]['Unit']          = $serie['Unit'];
+									$CfgDaten['yAxis'][$yAxisIdx]['stackLabels']['enabled']    = true;
+									$CfgDaten['yAxis'][$yAxisIdx]['stackLabels']['formatter']  = "@function() { return this.total.toFixed(1) }@";
+								}
 							}
 							break;
 						default:
 					}
 				}
+			}
+			if (!array_key_exists('series', $CfgDaten)) {
+				SetValue($variableIdChartHTML, '');
+				return;
 			}
 
 			// Create Chart with Config File
@@ -432,23 +462,53 @@
 			WriteContentWithFilename ($CfgDaten, $tmpFilename);      
 		}
 
+		private function GetYAxisIdx($CfgDaten, $text) {
+			$maxIdx = -1;
+			if (array_key_exists('yAxis', $CfgDaten)) {
+				foreach ($CfgDaten['yAxis'] as $idx=>$data) {
+					$maxIdx = $idx;
+					if ($data['title']['text'] == $text) {
+						return $idx;
+					}
+				}
+			}
+			return ($maxIdx+1);
+		}
+		
 		private function CalculateKWHValues () {
 			// Prepare Value Lists for Callback
 			$sensorValuesKWH = array();
 			$calcValuesKWH   = array();
 			foreach ($this->sensorConfig as $sensorIdx=>$sensorData) {
-				$variableIdKWH = IPSUtil_ObjectIDByPath($sensorData[IPSPC_PROPERTY_VARKWH]);
-				$sensorValuesKWH[$sensorIdx] = GetValue($variableIdKWH);
+				$sensorValue = 0;
+				if (array_key_exists(IPSPC_PROPERTY_VARKWH, $sensorData) and $sensorData[IPSPC_PROPERTY_VARKWH] <> null) {
+					$variableIdKWH = IPSUtil_ObjectIDByPath($sensorData[IPSPC_PROPERTY_VARKWH]);
+					$sensorValue    = GetValue($variableIdKWH);
+					echo 'SensorValue'.$sensorIdx.' '.$variableIdKWH.'='.$sensorValue.PHP_EOL;
+				} elseif (array_key_exists(IPSPC_PROPERTY_VARM3, $sensorData) and $sensorData[IPSPC_PROPERTY_VARM3] <> null) {
+					$variableIdm3 = IPSUtil_ObjectIDByPath($sensorData[IPSPC_PROPERTY_VARM3]);
+					$sensorValue    = GetValue($variableIdm3);
+				}
+				$sensorValuesKWH[$sensorIdx] = $sensorValue;
 			}
 			foreach ($this->valueConfig as $valueIdx=>$valueData) {
 				$calcValuesKWH[$sensorIdx] = 0;
 			}
 			// Calculate Value
 			$calcValuesKWH = IPSPowerControl_CalculateValuesKWH($sensorValuesKWH, $calcValuesKWH);
+			
 			// Write Values
 			foreach ($this->valueConfig as $valueIdx=>$valueData) {
-				$variableId = IPS_GetObjectIDByIdent(IPSPC_VAR_VALUEKWH.$valueIdx, $this->categoryIdValues);
-				SetValue($variableId, $calcValuesKWH[$valueIdx]);
+				$variableId = @IPS_GetObjectIDByIdent(IPSPC_VAR_VALUEKWH.$valueIdx, $this->categoryIdValues);
+				if ($variableId!==false) {
+					echo 'Write '.$variableId.'='.$calcValuesKWH[$valueIdx].PHP_EOL;
+					SetValue($variableId, $calcValuesKWH[$valueIdx]);
+				} else {
+					$variableId = @IPS_GetObjectIDByIdent(IPSPC_VAR_VALUEM3.$valueIdx, $this->categoryIdValues);
+					if ($variableId!==false) {
+						SetValue($variableId, $calcValuesKWH[$valueIdx]);
+					}
+				}
 			}
 		}
 		
@@ -457,8 +517,12 @@
 			$sensorValuesWatt = array();
 			$calcValuesWatt   = array();
 			foreach ($this->sensorConfig as $sensorIdx=>$sensorData) {
-				$variableIdWatt = IPSUtil_ObjectIDByPath($sensorData[IPSPC_PROPERTY_VARWATT]);
-				$sensorValuesWatt[$sensorIdx] = GetValue($variableIdWatt);
+				$sensorValue = 0;
+				if (array_key_exists(IPSPC_PROPERTY_VARWATT, $sensorData) and $sensorData[IPSPC_PROPERTY_VARWATT] <> null) {
+					$variableIdWatt = IPSUtil_ObjectIDByPath($sensorData[IPSPC_PROPERTY_VARWATT]);
+					$sensorValue    = GetValue($variableIdWatt);
+				}
+				$sensorValuesWatt[$sensorIdx] = $sensorValue;
 			}
 			foreach ($this->valueConfig as $valueIdx=>$valueData) {
 				$calcValuesWatt[$sensorIdx] = 0;
@@ -467,8 +531,10 @@
 			$calcValuesWatt = IPSPowerControl_CalculateValuesWatt($sensorValuesWatt, $calcValuesWatt);
 			// Write Values
 			foreach ($this->valueConfig as $valueIdx=>$valueData) {
-				$variableId = IPS_GetObjectIDByIdent(IPSPC_VAR_VALUEWATT.$valueIdx, $this->categoryIdValues);
-				SetValue($variableId, $calcValuesWatt[$valueIdx]);
+				$variableId = @IPS_GetObjectIDByIdent(IPSPC_VAR_VALUEWATT.$valueIdx, $this->categoryIdValues);
+				if ($variableId!==false) {
+					SetValue($variableId, $calcValuesWatt[$valueIdx]);
+				}
 			}
 		}
 
