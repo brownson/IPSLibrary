@@ -29,7 +29,7 @@
 	 * Prinzipieller Aufbau der Kommunikation:
 	 *   CommandType Command Room Function Value
 	 *
-	 * Jeder Kommando Teil wird durch einen Separator voneinander getrennt (Semicolon). Terminiert
+	 * Jeder Kommando Teil wird durch einen Separator voneinander getrennt (Semikolon). Terminiert
 	 * wird jedes Kommando von einem CR.
 	 *
 	 * Examples:
@@ -45,7 +45,7 @@
 	define ('AM_COM_SEPARATOR',					';');
 	define ('AM_COM_TERMINATOR',				chr(13));
 	define ('AM_COM_KEEPALIVE',					60);
-	define ('AM_COM_MAXRETRIES',				3);
+	define ('AM_COM_MAXRETRIES',				4);
 	define ('AM_COM_WAIT',						50);
 	define ('AM_COM_MAXWAIT',					500);
 
@@ -144,7 +144,7 @@
 	define ('AM_VAR_ROOMCOUNT',					'ROOM_COUNT');
 	define ('AM_VAR_ROOMIDS',					'ROOM_IDS');
 	define ('AM_VAR_PORTID',					'PORT_ID');
-	define ('AM_VAR_KEEPALIVEFLAG',				'KEEP_ALIVE_FLAG');
+	define ('AM_VAR_KEEPALIVECOUNT',			'KEEP_ALIVE_COUNT');
 	define ('AM_VAR_KEEPALIVESTATUS',			'KEEP_ALIVE_STATUS');
 	define ('AM_VAR_LASTERROR',					'LAST_ERROR');
 	define ('AM_VAR_LASTCOMMAND',				'LAST_COMMAND');

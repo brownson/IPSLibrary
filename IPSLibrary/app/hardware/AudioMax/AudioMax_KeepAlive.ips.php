@@ -34,33 +34,37 @@
 	$serverId  = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.hardware.AudioMax.AudioMax_Server');
 	$eventName = IPS_GetName($_IPS['EVENT']);
 	
+	// Alle 60 Sek wird KeepAlive Message zum Server gesendet
 	if ($eventName == 'SendAlive') {
 		$server = new AudioMax_Server($serverId);
 		$server->SendData(AM_TYP_SET, AM_CMD_KEEPALIVE, null, null, '0');
 	}
 
+	// Alle 65 Sekunden wird überprüft, ob eine KeepAlive Message vom Server erhalten wurde.
+	// Keep Alive Count wird alle 65 Sekunden erhöht und muss innerhalb des nächsten
+	// Zyklus durch eine Message vom Server wieder auf 0 gesetzt werden.
 	if ($eventName == 'CheckAlive') {
-	   // Read KeepAliveStatus: false=Error, true=OK
+		// Read KeepAliveStatus: false=Error, true=OK
 		$id_Status = IPS_GetVariableIDByName(AM_VAR_KEEPALIVESTATUS, $serverId);
 
-		// Read KeepAliveFlag: false=Waiting, true=OK
-		$id_Flag   = IPS_GetVariableIDByName(AM_VAR_KEEPALIVEFLAG,   $serverId);
+		// Read KeepAliveFlag: ">0"=Waiting, 0=OK
+		$id_Count  = IPS_GetVariableIDByName(AM_VAR_KEEPALIVECOUNT,  $serverId);
 
-		// Flag still Not assigned and Status=OK -> Status=Error
-		if (!GetValue($id_Flag) and GetValue($id_Status)) {
-		   SetValue($id_Status, false);
-		   IPSLogger_Wrn(__file__, 'AudioMax KeepAlive Message Stream is broken');
-		   
-		// Flag OK and Status Error -> Status=OK
-		} else if (GetValue($id_Flag) and !GetValue($id_Status)) {
-		   SetValue($id_Status, true);
-		   IPSLogger_Inf(__file__, 'AudioMax KeepAlive Message Stream is online again');
+		// Count not reseted by KeepAlive Message and Status=OK -> Status=Error
+		if (GetValue($id_Count) > 1 and GetValue($id_Status)) {
+			SetValue($id_Status, false);
+			IPSLogger_Wrn(__file__, 'AudioMax KeepAlive Message Stream is broken');
+
+		// Count cleared by KeepAlive and Status Error -> Status=OK
+		} else if (GetValue($id_Count)==0 and !GetValue($id_Status)) {
+			SetValue($id_Status, true);
+			IPSLogger_Inf(__file__, 'AudioMax KeepAlive Message Stream is online again');
 
 		} else {
 		}
 
 		// KeepAliveFlag=Waiting
-		SetValue($id_Flag, false);
+		SetValue($id_Count, GetValue($id_Count)+1);
 	}
 
 	/** @}*/

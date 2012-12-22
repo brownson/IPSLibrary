@@ -97,7 +97,7 @@
 		 */
 		private function LogErr($msg) {
 			IPSLogger_Err(__file__, $msg);
-			$this->Log('Inf', $msg);
+			$this->Log('Err', $msg);
 			$variableId  = IPS_GetObjectIDByIdent(AM_VAR_LASTERROR, $this->instanceId);
 			SetValue($variableId, $msg);
 		}
@@ -410,9 +410,11 @@
 		 * Setzt das BUSY Flag des AudioMax Server
 		 */
 		private function SetBusy() {
-			$result = IPS_SemaphoreEnter('AudioMax', 2000);
-			$VariableId = IPS_GetObjectIDByIdent(AM_VAR_BUSY, $this->instanceId);
-			SetValue($VariableId, true);
+			$result = IPS_SemaphoreEnter('AudioMax', 3000);
+			if ($result===true) {
+				$VariableId = IPS_GetObjectIDByIdent(AM_VAR_BUSY, $this->instanceId);
+				SetValue($VariableId, true);
+			}
 			return $result;
 		}
 
@@ -770,7 +772,7 @@
 					} elseif ($params[2] == AM_CMD_MODE) {
 						$this->ValidateAndSetValue(AM_TYP_SET, AM_CMD_MODE, null, $params[3], $params[4]);
 					} elseif ($params[2] == AM_CMD_KEEPALIVE) {
-						SetValue(IPS_GetObjectIDByIdent(AM_VAR_KEEPALIVEFLAG, $this->instanceId), true);
+						SetValue(IPS_GetObjectIDByIdent(AM_VAR_KEEPALIVECOUNT, $this->instanceId), 0);
 					} elseif ($params[2] == AM_CMD_ROOM) {
 						$this->ValidateAndSetValue(AM_TYP_SET, AM_CMD_ROOM, $params[3], null, $params[4]);
 					} elseif ($params[2] == AM_CMD_AUDIO) {
