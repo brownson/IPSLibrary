@@ -22,7 +22,8 @@
 	 * @file          IPSShadowing_Device.class.php
 	 * @author        Andreas Brauneis
 	 * @version
-	 * Version 2.50.1, 21.03.2012<br/>
+	 *   Version 2.50.1, 21.03.2012<br/>
+	 *   Version 2.50.2, 29.12.2012  Added Reset of Flags after Change of Day/Night<br/>
 	 *
 	 * Funktionen zum Bewegen der Beschattung 
 	 */
@@ -510,6 +511,7 @@
 
 		// ----------------------------------------------------------------------------------------------------------------------------
 		public function CheckPrograms($profileManager) {
+			$deviceName        = IPS_GetIdent($this->deviceId);
 			$profileIdTemp     = GetValue(IPS_GetObjectIDByIdent(c_Control_ProfileTemp, $this->deviceId));
 			$profileIdSun      = GetValue(IPS_GetObjectIDByIdent(c_Control_ProfileSun, $this->deviceId));
 			$profileIdBgnOfDay = GetValue(IPS_GetObjectIDByIdent(c_Control_ProfileBgnOfDay, $this->deviceId));
@@ -520,8 +522,6 @@
 			$programDay        = GetValue(IPS_GetObjectIDByIdent(c_Control_ProgramDay, $this->deviceId));
 			$programNight      = GetValue(IPS_GetObjectIDByIdent(c_Control_ProgramNight, $this->deviceId));
 			$programWeather    = null;
-			$changeByTemp      = GetValue(IPS_GetObjectIDByIdent(c_Control_TempChange, $this->deviceId));
-			$changeByUser      = GetValue(IPS_GetObjectIDByIdent(c_Control_ManualChange, $this->deviceId));
 			$automaticActive   = GetValue(IPS_GetObjectIDByIdent(c_Control_Automatic, $this->deviceId));
 			$tempIndoorPath    = $this->GetPropertyValue(c_Property_TempSensorIndoor);
 
@@ -532,11 +532,30 @@
 			}
 
 			$isDay               = $profileManager->IsDay($profileIdBgnOfDay, $profileIdEndOfDay);
+			$isDayNightChange    = $profileManager->IsDayNightChange($profileIdBgnOfDay, $profileIdEndOfDay);
 			$closeByTemp         = $profileManager->CloseByTemp($profileIdSun, $profileIdTemp, $tempIndoorPath);
 			$shadowingByTemp     = $profileManager->ShadowingByTemp($profileIdSun, $profileIdTemp, $tempIndoorPath);
 			$openByTemp          = $profileManager->OpenByTemp($profileIdSun, $profileIdTemp, $tempIndoorPath);
 			$activationByWeather = $profileManager->ActivationByWeather($profileIdWeather);
 
+
+			// Reset Manual Change Flag
+			if ($isDayNightChange) {
+				if (GetValue(IPS_GetObjectIDByIdent(c_Control_ManualChange, $this->deviceId))) {
+					IPSLogger_Dbg(__file__, "Reset ManualChange Flag for Device '$deviceName'");
+					SetValue(IPS_GetObjectIDByIdent(c_Control_ManualChange, $this->deviceId), false);
+				}
+				if (GetValue(IPS_GetObjectIDByIdent(c_Control_TempChange, $this->deviceId))) {
+					IPSLogger_Dbg(__file__, "Reset TempChange Flag for Device '$deviceName'");
+					SetValue(IPS_GetObjectIDByIdent(c_Control_TempChange, $this->deviceId), false);
+				}
+			}
+
+			$changeByTemp      = GetValue(IPS_GetObjectIDByIdent(c_Control_TempChange, $this->deviceId));
+			$changeByUser      = GetValue(IPS_GetObjectIDByIdent(c_Control_ManualChange, $this->deviceId));
+
+			// Check all Programs
+			// --------------------------------------------------------------------------------
 			// Automatic Off ...
 			if (!$automaticActive) {
 				$programInfo = 'Automatic Off';

@@ -22,24 +22,13 @@
 	 * @file          IPSShadowing_ResetTimer.ips.php
 	 * @author        Andreas Brauneis
 	 * @version
-	 * Version 2.50.1, 21.03.2012<br/>
+	 *   Version 2.50.1, 21.03.2012<br/>
+	 *   Version 2.50.2, 29.12.2012  Removed Reset of Flags, now done after Change of Day/Night<br/>
 	 *
-	 * Reset von "ManualChange" und "TempChange" Flag und Berechung der neuen Tages und End Zeiten
+	 * Reset of Flags
 	 */
 
 	include_once "IPSShadowing.inc.php";
-
-	// Reset Manual Change Flags
-	$categoryIdDevices = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSShadowing.Devices');
-	$DeviceIds = IPS_GetChildrenIds($categoryIdDevices);
-	foreach($DeviceIds as $DeviceId) {
-		if (GetValue(IPS_GetObjectIDByIdent(c_Control_ManualChange, $DeviceId))) {
-			SetValue(IPS_GetObjectIDByIdent(c_Control_ManualChange, $DeviceId), false);
-		}
-		if (GetValue(IPS_GetObjectIDByIdent(c_Control_TempChange, $DeviceId))) {
-			SetValue(IPS_GetObjectIDByIdent(c_Control_TempChange, $DeviceId), false);
-		}
-	}
 
 	/** @}*/
 ?>
