@@ -45,7 +45,7 @@
 	define ('AM_COM_SEPARATOR',					';');
 	define ('AM_COM_TERMINATOR',				chr(13));
 	define ('AM_COM_KEEPALIVE',					60);
-	define ('AM_COM_MAXRETRIES',				4);
+	define ('AM_COM_MAXRETRIES',				8);
 	define ('AM_COM_WAIT',						50);
 	define ('AM_COM_MAXWAIT',					500);
 
