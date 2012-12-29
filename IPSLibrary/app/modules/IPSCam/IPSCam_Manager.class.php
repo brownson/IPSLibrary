@@ -363,8 +363,8 @@
 					IPS_SetName($timerId, $timerName);
 					IPS_SetIdent($timerId, $timerName);
 				}
-				$hours = $timerValue % 60*60;
-				$mins  = $timerValue % 60;
+				$hours = (int)($timerValue / (60*60));
+				$mins  = (int)($timerValue / 60);
 				$secs  = $timerValue;
 				if ($startTime=='Once') {
 					$nextTime = strtotime('+'.$timerValue.' sec');
