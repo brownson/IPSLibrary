@@ -484,7 +484,7 @@
 				if (array_key_exists(IPSPC_PROPERTY_VARKWH, $sensorData) and $sensorData[IPSPC_PROPERTY_VARKWH] <> null) {
 					$variableIdKWH = IPSUtil_ObjectIDByPath($sensorData[IPSPC_PROPERTY_VARKWH]);
 					$sensorValue    = GetValue($variableIdKWH);
-					echo 'SensorValue'.$sensorIdx.' '.$variableIdKWH.'='.$sensorValue.PHP_EOL;
+					//echo 'SensorValue'.$sensorIdx.' '.$variableIdKWH.'='.$sensorValue.PHP_EOL;
 				} elseif (array_key_exists(IPSPC_PROPERTY_VARM3, $sensorData) and $sensorData[IPSPC_PROPERTY_VARM3] <> null) {
 					$variableIdm3 = IPSUtil_ObjectIDByPath($sensorData[IPSPC_PROPERTY_VARM3]);
 					$sensorValue    = GetValue($variableIdm3);
@@ -492,16 +492,26 @@
 				$sensorValuesKWH[$sensorIdx] = $sensorValue;
 			}
 			foreach ($this->valueConfig as $valueIdx=>$valueData) {
-				$calcValuesKWH[$sensorIdx] = 0;
+				$calcValuesKWH2[$valueIdx] = 0;
+				$variableId = @IPS_GetObjectIDByIdent(IPSPC_VAR_VALUEKWH.$valueIdx, $this->categoryIdValues);
+				if ($variableId!==false) {
+					$calcValuesKWH2[$valueIdx] = GetValue($variableId);
+				} else {
+					$variableId = @IPS_GetObjectIDByIdent(IPSPC_VAR_VALUEM3.$valueIdx, $this->categoryIdValues);
+					if ($variableId!==false) {
+						$calcValuesKWH2[$valueIdx] = GetValue($variableId);
+					}
+				}
 			}
+
 			// Calculate Value
-			$calcValuesKWH = IPSPowerControl_CalculateValuesKWH($sensorValuesKWH, $calcValuesKWH);
+			$calcValuesKWH = IPSPowerControl_CalculateValuesKWH($sensorValuesKWH, $calcValuesKWH2);
 			
 			// Write Values
 			foreach ($this->valueConfig as $valueIdx=>$valueData) {
+				echo 'Write '.$valueData[IPSPC_PROPERTY_NAME].'='.$calcValuesKWH[$valueIdx].', Old='.$calcValuesKWH2[$valueIdx].', Diff='.($calcValuesKWH[$valueIdx]-$calcValuesKWH2[$valueIdx]).PHP_EOL;
 				$variableId = @IPS_GetObjectIDByIdent(IPSPC_VAR_VALUEKWH.$valueIdx, $this->categoryIdValues);
 				if ($variableId!==false) {
-					echo 'Write '.$variableId.'='.$calcValuesKWH[$valueIdx].PHP_EOL;
 					SetValue($variableId, $calcValuesKWH[$valueIdx]);
 				} else {
 					$variableId = @IPS_GetObjectIDByIdent(IPSPC_VAR_VALUEM3.$valueIdx, $this->categoryIdValues);
@@ -533,6 +543,7 @@
 			foreach ($this->valueConfig as $valueIdx=>$valueData) {
 				$variableId = @IPS_GetObjectIDByIdent(IPSPC_VAR_VALUEWATT.$valueIdx, $this->categoryIdValues);
 				if ($variableId!==false) {
+					echo 'Write '.$variableId.'='.$calcValuesWatt[$valueIdx].', Name='.$valueData[IPSPC_PROPERTY_NAME].PHP_EOL;
 					SetValue($variableId, $calcValuesWatt[$valueIdx]);
 				}
 			}

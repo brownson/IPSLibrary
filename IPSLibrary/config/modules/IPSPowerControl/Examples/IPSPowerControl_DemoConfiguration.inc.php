@@ -113,6 +113,8 @@
 	 *                                IPSPC_VALUETYPE_TOTAL  ... definiert die Variable als Summenwert über alle Stromkreise
 	 *                                IPSPC_VALUETYPE_DETAIL ... definiert die Variable als Detailwert eines Stromkreises
 	 *                                IPSPC_VALUETYPE_OTHER  ... übrige Werte (weder Total noch Detail)
+	 *                                IPSPC_VALUETYPE_WATER  ... Werte eines Wasserverbrauchs Sensors
+	 *                                IPSPC_VALUETYPE_GAS    ... Werte eines Gas Sensors
 	 *
 	 * Eine ausführliche Beispielliste findet sich auch im Example Ordner
 	 *
@@ -125,7 +127,7 @@
                            IPSPC_PROPERTY_DISPLAY     => true,
                            IPSPC_PROPERTY_VALUETYPE   => IPSPC_VALUETYPE_TOTAL,
                           ),
-             5    => array(IPSPC_PROPERTY_NAME        => 'Waschmaschine',
+             1    => array(IPSPC_PROPERTY_NAME        => 'Waschmaschine',
                            IPSPC_PROPERTY_DISPLAY     => true,
                            IPSPC_PROPERTY_VALUETYPE   => IPSPC_VALUETYPE_DETAIL,
                           ),
@@ -203,6 +205,31 @@
 	 *
 	 */
 	define ("IPSPC_ELECTRICITYRATE",    18 /*Cents per KWh*/);
+
+	/** IPSPowerControl Wasserkosten  
+	 *
+	 * Definiert die Kosten für Wasser in Euro pro m³, dieser Wert wird für die Umrechung in die 
+	 * Kosten bei der Generierung der Charts verwendet.
+	 *
+	 */
+	define ("IPSPC_WATERRATE",    1300 /*Cents per m³*/);
+
+	/** IPSPowerControl Umrechnung von Gas m³  in kWh
+	 *
+	 * Definiert den Faktor, der für die Umrechung von m³ in kWh verwendet werden soll (dieser Faktor 
+	 * ist von mehreren Dingen abhängig, eine genaue Angabe ist vom jeweiligen Gasversorger zu 
+	 * erfragen. Für eine grobe Annäherungsrechung kann ein Faktor von 10 verwendet werden).
+	 *
+	 */
+	define ("IPSPC_GASRATE_KWH",    10.6 /*1m³ = kWh*/);
+
+	/** IPSPowerControl Gaskosten  
+	 *
+	 * Definiert die Kosten für Gas in Cent pro m³, dieser Wert wird für die Umrechung in die 
+	 * Kosten bei der Generierung der Charts verwendet.
+	 *
+	 */
+	define ("IPSPC_GASRATE_EURO",    7.6 /*Cents per KWh*/);
 
 
 	/** IPSPowerControl Aktualisierungs Interval Watt 
