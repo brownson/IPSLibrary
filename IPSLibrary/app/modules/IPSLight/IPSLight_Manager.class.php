@@ -340,7 +340,17 @@
 				$switches = explode(',',  $switches);
 				foreach ($switches as $idx=>$switchName) {
 					$switchId = $this->GetSwitchIdByName($switchName);
-					$this->SetSwitch($switchId, true, true, false);
+					$configLights = IPSLight_GetLightConfiguration();
+					$lightType    = $configLights[$switchName][IPSLIGHT_TYPE];
+					if ($lightType==IPSLIGHT_TYPE_SWITCH) {
+						$this->SetSwitch($switchId, true);
+					} elseif ($lightType==IPSLIGHT_TYPE_DIMMER) {
+						$this->SetDimmer($switchId, true);
+					} elseif ($lightType==IPSLIGHT_TYPE_RGB) {
+						$this->SetRGB($switchId, true);
+					} else {
+						trigger_error('Unknown LightType '.$lightType.' for Light '.$configName);
+					}
 				}
 			}
 			// Light Off
