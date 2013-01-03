@@ -160,7 +160,7 @@
 	 * Kosten bei der Generierung der Charts verwendet.
 	 *
 	 */
-	define ("IPSPC_WATERRATE",    1300 /*Cents per m³*/);
+	define ("IPSPC_WATERRATE",    130 /*Cents per m³*/);
 
 	/** IPSPowerControl Umrechnung von Gas m³  in kWh
 	 *
