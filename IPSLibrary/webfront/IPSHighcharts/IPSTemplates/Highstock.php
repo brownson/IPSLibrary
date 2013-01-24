@@ -106,7 +106,7 @@
 		<title>Highcharts</title>
 		
 		<!-- 1. Add these JavaScript inclusions in the head of your page -->
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script type="text/javascript" src="/user/IPSHighcharts/Highcharts/js/jquery.min.js"></script> 
 		<script type="text/javascript" src="/user/IPSHighcharts/Highcharts/js/highstock.js"></script>
 		
 		<!-- 1a) add a theme file -->
