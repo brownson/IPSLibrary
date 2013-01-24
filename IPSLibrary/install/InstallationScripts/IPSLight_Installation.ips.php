@@ -180,6 +180,16 @@
 				$moduleManager->LogHandler()->Log('Register OnChangeEvent vor Homematic Instance='.$instanceId);
 				$messageHandler->RegisterOnChangeEvent($variableId, $component, 'IPSModuleSwitch_IPSLight,');
 			}
+		// EIB
+		elseif ($componentClass=='IPSComponentSwitch_EIB') {
+			$instanceId = IPSUtil_ObjectIDByPath($componentParams[1]);
+			$variableId = @IPS_GetObjectIDByIdent('Value', $instanceId);
+			if ($variableId===false) {
+				$moduleManager->LogHandler()->Log('Variable with Name Value could NOT be found for EIB Instance='.$instanceId);
+			} else {
+				$moduleManager->LogHandler()->Log('Register OnChangeEvent vor EIB Instance='.$instanceId);
+				$messageHandler->RegisterOnChangeEvent($variableId, $component, 'IPSModuleSwitch_IPSLight,');
+			}
 		} else {
 			//$moduleManager->LogHandler()->Log('Found Component '.$componentClass);
 		}
