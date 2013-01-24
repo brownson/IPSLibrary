@@ -181,7 +181,7 @@
 				$messageHandler->RegisterOnChangeEvent($variableId, $component, 'IPSModuleSwitch_IPSLight,');
 			}
 		// EIB
-		elseif ($componentClass=='IPSComponentSwitch_EIB') {
+		} elseif ($componentClass=='IPSComponentSwitch_EIB') {
 			$instanceId = IPSUtil_ObjectIDByPath($componentParams[1]);
 			$variableId = @IPS_GetObjectIDByIdent('Value', $instanceId);
 			if ($variableId===false) {
