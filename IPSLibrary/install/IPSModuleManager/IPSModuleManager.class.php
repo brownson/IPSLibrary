@@ -183,9 +183,16 @@
 		 */
 		public function GetConfigValue($key, $section=null) {
 			if ($this->moduleConfigHandler->ExistsValue($key, $section)) {
-				return $this->moduleConfigHandler->GetValue($key, $section);
+				$result = $this->moduleConfigHandler->GetValue($key, $section);
 			} else {
-				return $this->managerConfigHandler->GetValue($key, $section);
+				$result = $this->managerConfigHandler->GetValue($key, $section);
+			}
+			if ($result == 'true') {
+				return true;
+			} elseif ($result == 'false') {
+				return false;
+			} else {
+				return $result;
 			}
 		}
 
@@ -216,7 +223,7 @@
 		 * @throws ConfigurationException wenn der betroffene Parameter nicht gefunden wurde
 		 */
 		public function GetConfigValueBool ($key, $section=null) {
-		   return (boolean)$this->GetConfigValue($key, $section);
+			return (boolean)$this->GetConfigValue($key, $section);
 		}
 
 		/**
