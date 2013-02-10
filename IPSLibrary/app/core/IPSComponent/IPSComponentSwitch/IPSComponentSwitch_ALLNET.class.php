@@ -3,34 +3,34 @@
 	 * @{
 	 *
  	 *
-	 * @file          IPSComponentSwitch_FS20.class.php
-	 * @author        Andreas Brauneis
+	 * @file          IPSComponentSwitch_ALLNET.class.php
+	 * @author        Juergen Gerharz      
 	 *
 	 *
 	 */
 
    /**
-    * @class IPSComponentSwitch_FS20
+    * @class IPSComponentSwitch_ALLNET
     *
-    * Definiert ein IPSComponentSwitch_FS20 Object, das ein IPSComponentSwitch Object für FS20 implementiert.
+    * Definiert ein IPSComponentSwitch_ALLNET Object, das ein IPSComponentSwitch Object für ALLNET implementiert.
     *
-    * @author Andreas Brauneis
+    * @author Juergen Gerharz
     * @version
-    * Version 2.50.1, 31.01.2012<br/>
+    * Version 2.50.1, 06.02.2013<br/>
     */
 
 	IPSUtils_Include ('IPSComponentSwitch.class.php', 'IPSLibrary::app::core::IPSComponent::IPSComponentSwitch');
 
-	class IPSComponentSwitch_FS20 extends IPSComponentSwitch {
+	class IPSComponentSwitch_ALLNET extends IPSComponentSwitch {
 
 		private $instanceId;
 	
 		/**
 		 * @public
 		 *
-		 * Initialisierung eines IPSComponentSwitch_FS20 Objektes
+		 * Initialisierung eines IPSComponentSwitch_ALLNET Objektes
 		 *
-		 * @param integer $instanceId InstanceId des FS20 Devices
+		 * @param integer $instanceId InstanceId des ALLNET Devices
 		 */
 		public function __construct($instanceId) {
 			$this->instanceId = IPSUtil_ObjectIDByPath($instanceId);
@@ -70,11 +70,8 @@
 		 *
 		 * @param boolean $value Wert für Schalter
 		 */
-		public function SetState($value,$duration=false) {
-		  if ( !$duration )
-			  FS20_SwitchMode($this->instanceId, $value);
-			else
-        FS20_SwitchDuration($this->instanceId, $value,$duration);   
+		public function SetState($value) {
+			ALL_SwitchMode($this->instanceId, $value);
 		}
 
 		/**
@@ -85,9 +82,8 @@
 		 * @return boolean aktueller Schaltzustand  
 		 */
 		public function GetState() {
-			$value = GetValueBoolean(IPS_GetObjectIDByIdent("StatusVariable",$this->instanceId)); 
+		  $value = GetValueBoolean(IPS_GetObjectIDByIdent("StatusVariable",$this->instanceId)); 
 			return $value;
-
 		}
 
 	}
