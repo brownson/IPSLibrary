@@ -287,8 +287,8 @@
 			SetValue($variableId, $value);
 			if (!$switchValue and ($variableId==$levelId or $variableId==$colorId)) {
 				SetValue($switchId, true);
-				$switchValue = true;
 			}
+			$switchValue  = GetValue($switchId);
 			IPSLogger_Inf(__file__, 'Turn Light '.$configName.' '.($switchValue?'On, Level='.GetValue($levelId).', Color='.GetValue($colorId):'Off'));
 
 			if (IPSLight_BeforeSwitch($switchId, $switchValue)) {
