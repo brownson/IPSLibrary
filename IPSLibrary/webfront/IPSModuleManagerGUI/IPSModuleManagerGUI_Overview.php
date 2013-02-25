@@ -70,14 +70,14 @@
 
 
 <?php
-	if (!$processing) {
-		if (count($modules)>0) {
-			echo '<input type="button" name="Text" value="Update aller Module" onclick="trigger_button(\'UpdateAll\', \'\', \'\')">';
-		}
-		echo '<input type="button" name="Text" value="Nach neuen Update\'s Suchen" onclick="trigger_button(\'SearchUpdates\', \'\', \'\')">';
-	} else {
-		echo 'processing ...';
+	$properties = '';
+	if ($processing) {
+		$properties = 'disabled';
 	}
+	if (count($modules)>0) {
+		echo '<input type="button" '.$properties.' name="Text" value="Update aller Module" onclick="trigger_button(\'UpdateAll\', \'\', \'\')">';
+	}
+	echo '<input type="button" '.$properties.' name="Text" value="Nach neuen Update\'s Suchen" onclick="trigger_button(\'SearchUpdates\', \'\', \'\')">';
 ?>
 
 

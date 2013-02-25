@@ -32,6 +32,7 @@
 	IPSUtils_Include ("IPSLogger.inc.php",                         "IPSLibrary::app::core::IPSLogger");
 	IPSUtils_Include ("IPSPowerControl_Constants.inc.php",         "IPSLibrary::app::modules::IPSPowerControl");
 	IPSUtils_Include ("IPSPowerControl_Configuration.inc.php",     "IPSLibrary::config::modules::IPSPowerControl");
+	IPSUtils_Include ("IPSPowerControl_Utils.inc.php",             "IPSLibrary::app::modules::IPSPowerControl");
 	IPSUtils_Include ("IPSPowerControl_Custom.inc.php",            "IPSLibrary::config::modules::IPSPowerControl");
 	IPSUtils_Include ("IPSPowerControl_Manager.class.php",         "IPSLibrary::app::modules::IPSPowerControl");
 

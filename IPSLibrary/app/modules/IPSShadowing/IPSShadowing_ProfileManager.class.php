@@ -225,6 +225,16 @@
 			return !$this->IsDay($profileIdBgnOfDay, $profileIdEndOfDay);
 		}
 		
+		public function IsDayNightChange($profileIdBgnOfDay, $profileIdEndOfDay) {
+			$profileBgnOfDay = $this->profilesBgnOfDay[$profileIdBgnOfDay];
+			$profileEndOfDay = $this->profilesEndOfDay[$profileIdEndOfDay];
+			$timeCurrent = time();
+			$timeLast    = time()-300;
+
+			return (($timeCurrent > $profileBgnOfDay->GetTime() and  $timeLast < $profileBgnOfDay->GetTime()) or 
+			        ($timeCurrent > $profileEndOfDay->GetTime() and  $timeLast < $profileEndOfDay->GetTime()));
+		}
+
 		public function GetPresent() {
 			return $this->present;
 		}

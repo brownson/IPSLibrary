@@ -17,7 +17,7 @@
 	define ("c_LogId", "IPSLogger_PurgeLogFiles");
 
 	PurgeLogFiles(c_File_Directory, c_File_Extension, c_ID_FileOutEnabled, c_ID_FileOutDays);
-	PurgeLogFiles(c_Log4IPS_Directory, c_Log4IPS_Extension, c_ID_FileOutEnabled, c_ID_Log4IPSOutDays);
+	PurgeLogFiles(c_Log4IPS_Directory, c_Log4IPS_Extension, c_ID_Log4IPSOutEnabled, c_ID_Log4IPSOutDays);
 
 	function PurgeLogFiles($Directory, $Extension, $ID_OutSwitch, $ID_OutDays) {
 	   if (GetValue($ID_OutSwitch)) {

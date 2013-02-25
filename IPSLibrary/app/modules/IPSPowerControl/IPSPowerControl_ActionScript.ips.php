@@ -46,11 +46,13 @@
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 	} else {
-		$eventId   = 39939;
+		$eventId = IPSUtil_ObjectIDByPath('Program.IPSLibrary.app.modules.IPSPowerControl.IPSPowerControl_ActionScript.CalculateWattValues');
+		$pcManager = new IPSPowerControl_Manager();
+		//$pcManager->ActivateTimer($eventId);
 
+		$eventId = IPSUtil_ObjectIDByPath('Program.IPSLibrary.app.modules.IPSPowerControl.IPSPowerControl_ActionScript.CalculateKWHValues');
 		$pcManager = new IPSPowerControl_Manager();
 		$pcManager->ActivateTimer($eventId);
-
 	}
 
     /** @}*/

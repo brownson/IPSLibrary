@@ -56,27 +56,28 @@
 
 			function trigger_button2(action, module, info) {
 				var serverAddr = "<?echo $_SERVER["HTTP_HOST"];?>";
-				var id         = $(this).attr("id");
-				var WFC10Enabled        = $("#WFC10Enabled").is(':checked');
+				var id                    = $(this).attr("id");
+				var WFC10Enabled          = $("#WFC10Enabled").is(':checked');
 				var WFC10TabPaneExclusive = $("#WFC10TabPaneExclusive").is(':checked');
-				var WFC10Path           = $("#WFC10Path").val();
-				var WFC10TabPaneParent  = $("#WFC10TabPaneParent").val();
-				var WFC10TabPaneItem    = $("#WFC10TabPaneItem").val();
-				var WFC10TabPaneIcon    = $("#WFC10TabPaneIcon").val();
-				var WFC10TabPaneName    = $("#WFC10TabPaneName").val();
-				var WFC10TabPaneOrder   = $("#WFC10TabPaneOrder").val();
-				var WFC10TabItem        = $("#WFC10TabItem").val();
-				var WFC10TabIcon        = $("#WFC10TabIcon").val();
-				var WFC10TabName        = $("#WFC10TabName").val();
-				var WFC10TabOrder       = $("#WFC10TabOrder").val();
+				var WFC10Path             = $("#WFC10Path").val();
+				var WFC10ID               = $("#WFC10ID").val();
+				var WFC10TabPaneParent    = $("#WFC10TabPaneParent").val();
+				var WFC10TabPaneItem      = $("#WFC10TabPaneItem").val();
+				var WFC10TabPaneIcon      = $("#WFC10TabPaneIcon").val();
+				var WFC10TabPaneName      = $("#WFC10TabPaneName").val();
+				var WFC10TabPaneOrder     = $("#WFC10TabPaneOrder").val();
+				var WFC10TabItem          = $("#WFC10TabItem").val();
+				var WFC10TabIcon          = $("#WFC10TabIcon").val();
+				var WFC10TabName          = $("#WFC10TabName").val();
+				var WFC10TabOrder         = $("#WFC10TabOrder").val();
 	
-				var MobileEnabled        = $("#MobileEnabled").is(':checked');
-				var MobilePath           = $("#MobilePath").val();
-				var MobilePathIcon       = $("#MobilePathIcon").val();
-				var MobilePathOrder      = $("#MobilePathOrder").val();
-				var MobileName           = $("#MobileName").val();
-				var MobileIcon           = $("#MobileIcon").val();
-				var MobileOrder          = $("#MobileOrder").val();
+				var MobileEnabled         = $("#MobileEnabled").is(':checked');
+				var MobilePath            = $("#MobilePath").val();
+				var MobilePathIcon        = $("#MobilePathIcon").val();
+				var MobilePathOrder       = $("#MobilePathOrder").val();
+				var MobileName            = $("#MobileName").val();
+				var MobileIcon            = $("#MobileIcon").val();
+				var MobileOrder           = $("#MobileOrder").val();
 
 				$.ajax({type: "POST",
 						url: location.protocol+"//"+serverAddr+"/user/IPSModuleManagerGUI/IPSModuleManagerGUI_Receiver.php",
@@ -84,6 +85,7 @@
 						       +"&WFC10Enabled="+WFC10Enabled
 						       +"&WFC10TabPaneExclusive="+WFC10TabPaneExclusive
 						       +"&WFC10Path="+WFC10Path
+						       +"&WFC10ID="+WFC10ID
 						       +"&WFC10TabPaneParent="+WFC10TabPaneParent
 						       +"&WFC10TabPaneItem="+WFC10TabPaneItem
 						       +"&WFC10TabPaneIcon="+WFC10TabPaneIcon
@@ -114,8 +116,6 @@
 		<a href="#" onClick=trigger_button('Logs','','')>Log File's</a> |
 		<a href="#" onClick=trigger_button('Updates','','')>Update's</a> |
 		<a href="#" onClick=trigger_button('NewModule','','')>Neues Modul</a>
-		<BR>
-		<BR>
 		<?php
 			IPSUtils_Include ("IPSModuleManagerGUI.inc.php", "IPSLibrary::app::modules::IPSModuleManagerGUI");
 
@@ -127,8 +127,13 @@
 			$processing = !IPSModuleManagerGUI_GetLock();
 			if (!$processing) {
 				IPSModuleManagerGUI_ReleaseLock();
+			} else {
+				echo '| Processing ...';
 			}
-
+		?>
+		<BR>
+		<BR>
+		<?php
 			switch($action) {
 				case IPSMMG_ACTION_OVERVIEW:
 					include 'IPSModuleManagerGUI_Overview.php';

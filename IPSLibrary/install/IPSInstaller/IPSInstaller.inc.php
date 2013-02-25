@@ -65,6 +65,45 @@
 		IPS_DeleteCategory($CategoryId);
 	}
 
+	/** Löschen eines beliebigen Objektes
+	 *
+	 * Die Funktion löscht ein IP-Symcon Object mit der übergebenen ID.
+	 *
+	 * @param integer $objectId ID des Objektes
+	 *
+	 */
+	function DeleteObject($ObjectId) {
+		$Object     = IPS_GetObject($ObjectId);
+		$ObjectType = $Object['ObjectType'];
+		switch ($ObjectType) {
+			case 0: // Category
+				DeleteCategory($ObjectId);
+				break;
+			case 1: // Instance
+				EmptyCategory($ObjectId);
+				IPS_DeleteInstance($ObjectId);
+				break;
+			case 2: // Variable
+				IPS_DeleteVariable($ObjectId);
+				break;
+			case 3: // Script
+				IPS_DeleteScript($ObjectId, false);
+				break;
+			case 4: // Event
+				IPS_DeleteEvent($ObjectId);
+				break;
+			case 5: // Media
+				IPS_DeleteMedia($ObjectId, true);
+				break;
+			case 6: // Link
+				IPS_DeleteLink($ObjectId);
+				break;
+			default:
+				Error ("Found unknown ObjectType $ObjectType");
+		}
+	}
+	
+	
 	/** Löschen des Inhalts einer Kategorie inklusve Inhalt
 	 *
 	 * Die Funktion löscht den gesamtem Inhalt einer Kategorie
@@ -79,34 +118,7 @@
 
 		$ChildrenIds = IPS_GetChildrenIDs($CategoryId);
 		foreach ($ChildrenIds as $ObjectId) {
-			$Object     = IPS_GetObject($ObjectId);
-			$ObjectType = $Object['ObjectType'];
-			switch ($ObjectType) {
-				case 0: // Category
-					DeleteCategory($ObjectId);
-					break;
-				case 1: // Instance
-					EmptyCategory($ObjectId);
-					IPS_DeleteInstance($ObjectId);
-					break;
-				case 2: // Variable
-					IPS_DeleteVariable($ObjectId);
-					break;
-				case 3: // Script
-					IPS_DeleteScript($ObjectId, false);
-					break;
-				case 4: // Event
-					IPS_DeleteEvent($ObjectId);
-					break;
-				case 5: // Media
-					IPS_DeleteMedia($ObjectId, true);
-					break;
-				case 6: // Link
-					IPS_DeleteLink($ObjectId);
-					break;
-				default:
-					Error ("Found unknown ObjectType $ObjectType");
-			}
+			DeleteObject($ObjectId);
 		}
 		Debug ("Empty Category ID=$CategoryId");
 	}
@@ -550,6 +562,15 @@
 		return $LinkId;
 	}
 
+	/*
+	 * Simulate IPS_SetLinkTargetID for IP-Symcon < 2.6
+	 */
+	if (!function_exists('IPS_SetLinkTargetID')) {
+		function IPS_SetLinkTargetID($LinkID, $TargetID) {
+			return IPS_SetLinkChildID($LinkID, $TargetID);
+		}		
+	}
+
 	/** Anlegen eines Links
 	 *
 	 * Die Funktion sucht in der spezifizierten Parent Kategorie alle vorhandenen Links und überprüft ob einer der
@@ -574,12 +595,12 @@
 				if ($Link['LinkChildID']==$LinkChildId) {
 					$LinkId = $ObjectId;
 					break;
-			   }
+				}
 			}
 		}
 
-	   if ($LinkId === false) {
- 			$LinkId = IPS_CreateLink();
+		if ($LinkId === false) {
+			$LinkId = IPS_CreateLink();
 			IPS_SetParent($LinkId, $ParentId);
 			IPS_SetPosition($LinkId, $Position);
 		}

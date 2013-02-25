@@ -43,6 +43,7 @@
 		const STATE_LOADING           = 'Loading';
 		const STATE_LOADED            = 'Loaded';
 		const STATE_INSTALLING        = 'Installing';
+		const STATE_DELETING          = 'Deleting';
 		const STATE_INSTALLED         = 'OK';
 		
 		const PROPERTY_VERSION        = 0;
@@ -373,6 +374,16 @@
 		/**
 		 * @public
 		 *
+		 * Aktuelle Module Version auf "Deleting" setzen
+		 */
+		public function SetVersionDeleting() {
+			$this->logHandler->Log('Set State '.$this->moduleName.'=Deleting');
+			$this->SetProperty($this::PROPERTY_STATE, $this::STATE_DELETING);
+		}
+
+		/**
+		 * @public
+		 *
 		 * Aktuelle Module Version auf "Loading" setzen
 		 *
 		 * @param string $version aktuelle Version des Modules
@@ -548,9 +559,13 @@
 					}
 				}
 			}
+			uksort($changeList, 'version_compare_custom');  
+			
 			return $changeList;
 		}
 
+		
+		
 		/**
 		 * @public
 		 *
@@ -649,5 +664,25 @@
 
 	}
 
+	
+	function version_compare_custom($a, $b) {
+		$result = 0;
+		$partsA = explode(".", $a);
+		$partsB = explode(".", $b);
+		$maxParts = min(count($partsA), count($partsB));
+		for($i = 0; $i < $maxParts; $i++) {
+			if(is_numeric($partsA[$i]) && is_numeric($partsB[$i])) {
+				$va = (int) $partsA[$i];
+				$vb = (int) $partsB[$i];
+				$result = $va == $vb ? 0 : ($va > $vb ? -1 : 1);
+			} else {
+				$result = $a == $b ? 0 : ($a > $b ? -1 : 1);
+			}
+			if($result != 0) {
+				break;
+			}
+		}
+		return $result;
+	} 
 	/** @}*/
 ?>

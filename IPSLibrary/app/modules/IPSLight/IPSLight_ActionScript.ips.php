@@ -30,9 +30,10 @@
 
 	include_once "IPSLight.inc.php";
 	
-	$variableId   = $_IPS['VARIABLE'];
-	$value        = $_IPS['VALUE'];
-	$categoryName = IPS_GetName(IPS_GetParent($_IPS['VARIABLE']));
+	$variableId    = $_IPS['VARIABLE'];
+	$value         = $_IPS['VALUE'];
+	$categoryName  = IPS_GetName(IPS_GetParent($_IPS['VARIABLE']));
+	$variableIdent = IPS_GetIdent($variableId);
 	
 	// ----------------------------------------------------------------------------------------------------------------------------
 	if ($_IPS['SENDER']=='WebFront') {
@@ -46,11 +47,28 @@
 			case 'Programs':
 				IPSLight_SetProgram($variableId, $value);
 				break;
+			case 'Simulation':
+				if ($variableIdent==IPSLIGHT_SIMULATION_VARSTATE) {
+					IPSLight_SetSimulationState($value);
+				} elseif ($variableIdent==IPSLIGHT_SIMULATION_VARMODE) {
+					IPSLight_SetSimulationMode($value);
+				} elseif ($variableIdent==IPSLIGHT_SIMULATION_VARDAYS) {
+					IPSLight_SetSimulationDays($value);
+				} else {
+					trigger_error('Unknown Ident '.$variableIdent);
+				}
+				break;
 			default:
 				trigger_error('Unknown Category '.$categoryName);
 		}
 
-	// ----------------------------------------------------------------------------------------------------------------------------
+	} elseif ($_IPS['SENDER']=='TimerEvent') {
+		$eventId   = $_IPS['EVENT'];
+
+		$lightSimulator = new IPSLight_Simulator();
+		$lightSimulator->ExecuteTimer();
+
+		// ----------------------------------------------------------------------------------------------------------------------------
 	} else {
 	}
 

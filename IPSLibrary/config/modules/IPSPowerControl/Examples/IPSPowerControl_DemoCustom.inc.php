@@ -53,19 +53,14 @@
 	function IPSPowerControl_CalculateValuesWatt($sensorList, $valueList) {
 		$returnList = $valueList;
 
-		$id = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSPowerControl.Custom');
-		$kwh_HomeControl = GetValue(IPS_GetVariableIDByName('HC_KWH',$id));
-		$kwh_Washing     = GetValue(IPS_GetVariableIDByName('WM_KWH',$id));
-		$kwh_Dryer       = GetValue(IPS_GetVariableIDByName('TR_KWH',$id));
-		$kwh_Heating     = GetValue(IPS_GetVariableIDByName('HZ_KWH',$id));
-
 		$L1          = $sensorList[0];
 		$L2          = $sensorList[1];
 		$L3          = $sensorList[2];
-		$homeControl = ($sensorList[3]/10/2/1000 - $kwh_HomeControl)*1000*60;
-		$washing     = ($sensorList[4]/10/2/1000 - $kwh_Washing)*1000*60;
-		$dryer       = ($sensorList[5]/10/2/1000 - $kwh_Dryer)*1000*60;
-		$heating     = ($sensorList[6]/10/2/1000 - $kwh_Heating)*1000*60;
+		$homeControl = IPSPowerControl_KWH2Watt(3, 1/20000);
+		$washing     = IPSPowerControl_KWH2Watt(4, 1/20000);
+		$dryer       = IPSPowerControl_KWH2Watt(5, 1/20000);
+		$heating     = IPSPowerControl_KWH2Watt(6, 1/20000);
+
 		$ventilation = 50;
 		$sauna = 0;
 		$light = 0;
@@ -75,6 +70,7 @@
 		$L2 = $L2 - $washing;
 		$L3 = $L3 - $ventilation;
 		
+		// Calculate Light
 		IPSUtils_Include ("IPSLight.inc.php", "IPSLibrary::app::modules::IPSLight");
 		$lightManager = new IPSLight_Manager();
 		$lightL1 = $lightManager->GetPowerConsumption('L1');
@@ -85,6 +81,7 @@
 		$L2      = $L2 - $lightL2;
 		$L3      = $L3 - $lightL3;
 
+		// Calculate Sauna
 		if ($L1>=2000 and $L2>=2000 and $L3>=2000) {
 			$sauna= 6000;
 			$L1 = $L1 - 2000;
@@ -92,28 +89,18 @@
 			$L3 = $L3 - 2000;
 		}
 
-		$txt = "LiL1=$lightL1,LiL2=$lightL2,LiL3=$lightL3,Sa=$sauna,WM=$washing,TR=$dryer,HZ=$heating,HC=$homeControl,L1=$L1,L2=$L2,L3=$L3";
-		if ($L1<0) {
-			$L1=0;
-		}
-		if ($L2<0) {
-			$L2=0;
-		}
-		if ($L3<0) {
-			$L3=0;
-		}
+		// Correct Values
+		if ($L1<0) { $L1=0; }
+		if ($L2<0) { $L2=0; }
+		if ($L3<0) { $L3=0; }
 		
-		// Store KWH Values
-		SetValue(IPS_GetVariableIDByName('HC_KWH',$id), $sensorList[3]/10/2/1000);
-		SetValue(IPS_GetVariableIDByName('WM_KWH',$id), $sensorList[4]/10/2/1000);
-		SetValue(IPS_GetVariableIDByName('TR_KWH',$id), $sensorList[5]/10/2/1000);
-		SetValue(IPS_GetVariableIDByName('HZ_KWH',$id), $sensorList[6]/10/2/1000);
-		SetValue(IPS_GetVariableIDByName('SAUNA_KWH',$id), GetValue(IPS_GetVariableIDByName('SAUNA_KWH',$id)) + $sauna/1000/60);
-		SetValue(IPS_GetVariableIDByName('LIGHT_KWH',$id), GetValue(IPS_GetVariableIDByName('LIGHT_KWH',$id)) + $light/1000/60);
-		SetValue(IPS_GetVariableIDByName('KWL_KWH',  $id), GetValue(IPS_GetVariableIDByName('KWL_KWH',  $id)) + $ventilation/1000/60);
-		SetValue(IPS_GetVariableIDByName('L1_KWH',   $id), GetValue(IPS_GetVariableIDByName('L1_KWH',   $id)) + $L1/1000/60);
-		SetValue(IPS_GetVariableIDByName('L2_KWH',   $id), GetValue(IPS_GetVariableIDByName('L2_KWH',   $id)) + $L2/1000/60);
-		SetValue(IPS_GetVariableIDByName('L3_KWH',   $id), GetValue(IPS_GetVariableIDByName('L3_KWH',   $id)) + $L3/1000/60);
+		// Store calculated KWH Values
+		IPSPowerControl_AddCalculatedValue('SAUNA_KWH', $sauna/1000/60);
+		IPSPowerControl_AddCalculatedValue('LIGHT_KWH', $light/1000/60);
+		IPSPowerControl_AddCalculatedValue('KWL_KWH',   $ventilation/1000/60);
+		IPSPowerControl_AddCalculatedValue('L1_KWH',    $L1/1000/60);
+		IPSPowerControl_AddCalculatedValue('L2_KWH',    $L2/1000/60);
+		IPSPowerControl_AddCalculatedValue('L3_KWH',    $L3/1000/60);
 
 		// Build Return List
 		$returnList[0]  = $sensorList[0] + $sensorList[1] + $sensorList[2];
@@ -147,23 +134,21 @@
 	 *
 	 */
 	function IPSPowerControl_CalculateValuesKWH($sensorList, $valueList) {
-		$returnList = $valueList;
-		
-		$id = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSPowerControl.Custom');
 		$returnList[0]  = $sensorList[0]+$sensorList[1]+$sensorList[2];
 		$returnList[1]  = $sensorList[0];
 		$returnList[2]  = $sensorList[1];
 		$returnList[3]  = $sensorList[2];
-		$returnList[4]  = $sensorList[3]/10/2/1000;
-		$returnList[5]  = $sensorList[4]/10/2/1000;
-		$returnList[6]  = $sensorList[5]/10/2/1000;
-		$returnList[7]  = $sensorList[6]/10/2/1000;
-		$returnList[8]  = GetValue(IPS_GetVariableIDByName('SAUNA_KWH',$id));
-		$returnList[9]  = GetValue(IPS_GetVariableIDByName('LIGHT_KWH',$id));
-		$returnList[10] = GetValue(IPS_GetVariableIDByName('KWL_KWH',$id));
-		$returnList[11] = GetValue(IPS_GetVariableIDByName('L1_KWH',$id));
-		$returnList[12] = GetValue(IPS_GetVariableIDByName('L2_KWH',$id));
-		$returnList[13] = GetValue(IPS_GetVariableIDByName('L3_KWH',$id));
+		$returnList[4]  = IPSPowerControl_Value2KWH(3, 1/20000);
+		$returnList[5]  = IPSPowerControl_Value2KWH(4, 1/20000);
+		$returnList[6]  = IPSPowerControl_Value2KWH(5, 1/20000);
+		$returnList[7]  = IPSPowerControl_Value2KWH(6, 1/20000);
+		$returnList[8]  = IPSPowerControl_GetCalculatedValue('SAUNA_KWH');
+		$returnList[9]  = IPSPowerControl_GetCalculatedValue('LIGHT_KWH');
+		$returnList[10] = IPSPowerControl_GetCalculatedValue('KWL_KWH');
+		$returnList[11] = IPSPowerControl_GetCalculatedValue('L1_KWH');
+		$returnList[12] = IPSPowerControl_GetCalculatedValue('L2_KWH');
+		$returnList[13] = IPSPowerControl_GetCalculatedValue('L3_KWH');
+		$returnList[14] = IPSPowerControl_Value2M3(7, 1/10, true);
 
 		return $returnList;
 	}

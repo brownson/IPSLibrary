@@ -270,7 +270,6 @@
 		 * @return array[int] Homematic Instance IDs
 		 */
 		public function GetMaintainanceInstanceList() {
-			$homematicConfiguration    = get_HomematicConfiguration();
 			$homematicInstanceList     = IPS_GetInstanceListByModuleID("{EE4A81C6-5C90-4DB7-AD2F-F6BBD521412E}");
 			$homematicAddressList      = array();
 			$homematicMaintainanceList = array();
@@ -278,16 +277,13 @@
 			foreach ($homematicInstanceList as $homematicInstanceId ) {
 				$homematicAddress = HM_GetAddress($homematicInstanceId);
 				$homematicAddressList[$homematicAddress] = $homematicInstanceId;
-			}
-
-			foreach ($homematicConfiguration as $homematicItem) {
-				$homematicAddress    = $homematicItem[0].':0';
-				$homematicInstanceId = $homematicAddressList[$homematicAddress];
-				if (!array_key_exists($homematicInstanceId, $homematicMaintainanceList)) {
+				
+				$pos = strpos($homematicAddress, ':0');
+				if ($pos !== false) {
 					$homematicMaintainanceList[$homematicInstanceId] = $homematicInstanceId;
 				}
 			}
-			
+
 			return $homematicMaintainanceList;
 		}
 	}

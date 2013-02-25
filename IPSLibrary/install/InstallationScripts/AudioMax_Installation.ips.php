@@ -16,12 +16,12 @@
 	 * along with the IPSLibrary. If not, see http://www.gnu.org/licenses/gpl.txt.
 	 */    
 
-	 /**@defgroup audiomax_protocol AudioMax Kommunikations Protokol
+	 /**@defgroup audiomax_protocol AudioMax Kommunikations Protokoll
 	 * @ingroup audiomax
 	 * @{
 	 *
 	 * Prinzipieller Aufbau der Kommunikation:
-	 *   CommandType "SVR" Command [Room] [Function] Value
+	 *   CommandType "SVR" Command [Room] [Audio] Value
 	 *
 	 * @page audiomax_protocol_types Übersicht über die verschiedenen Befehlstypen
 	 * Grundsätzlich gibt es vier verschiedene Befehlsarten
@@ -52,7 +52,7 @@
 	 * - SET SVR PWR [STATUS]                  AudioMax Server Ein/Aus, (1=On 0=Off)
 	 * - SET SVR TEX [TEXT1] [TEXT2] [TEXT3]   Textausgabe auf LCD Display, max 20 Zeichen pro Zeile, TEXT1 = 2.Zeile, TEXT2 = 3.Zeile, TEXT3 = 4.Zeile
 	 * - SET SVR KAL 0                         “Keep Alive” Signal an PC
-	 * - SET SVR MOD [MODE] [VALUE]            Setzen von Betriebsarten (0 = Acknolage, 1 = Debug On/Off, 2 = Button Room Amp, 3 = KAL von PC)
+	 * - SET SVR MOD [MODE] [VALUE]            Setzen von Betriebsarten (0 = Acknowledge, 1 = Debug On/Off, 2 = Button Room Amp, 3 = KAL von PC)
 	 *
 	 * @page audiomax_protocol_get GET Kommando
 	 * Werte von AudioMax Server abholen
@@ -190,7 +190,6 @@
 	CreateProfile_Count ('AudioMax_InputGain',    AM_VAL_INPUTGAIN_MIN,    1, AM_VAL_INPUTGAIN_MAX,    "", "%");
 	CreateProfile_Associations ('AudioMax_InputSelect', array(AM_CONFIG_INPUTNAME1, AM_CONFIG_INPUTNAME2, AM_CONFIG_INPUTNAME3, AM_CONFIG_INPUTNAME4));
 	CreateProfile_Switch ('AudioMax_Mute',            'Aus', 'An', "", -1, 0x00ff00);
-	CreateProfile_Switch ('AudioMax_KeepAliveFlag',   'Waiting', 'OK', "", -1, 0x00ff00);
 	CreateProfile_Switch ('AudioMax_KeepAliveStatus', 'KeepAlive Error', 'KeepAlive OK', "", 0xaa0000, 0x00ff00);
 	CreateProfile_Switch ('AudioMax_Busy',            'Bereit', 'Aktiv', "", -1, 0x0000ff);
 	CreateProfile_Switch ('AudioMax_Connection',      'Deaktiviert', 'Aktiv', "", 0xaa0000, 0x0000ff, 'LockOpen', 'LockClosed');
@@ -198,11 +197,11 @@
 	$id_AudioMaxServerId = CreateDummyInstance("AudioMax_Server", $CategoryIdData, 10);
 	$id_Power            = CreateVariable(AM_VAR_MAINPOWER,       0 /*Boolean*/, $id_AudioMaxServerId,  10, '~Switch',              $id_ScriptSettings, false, 'Power');
 	$id_Busy             = CreateVariable(AM_VAR_BUSY,            0 /*Boolean*/, $id_AudioMaxServerId,  20, 'AudioMax_Busy',        null,               false, 'Distance');
-	$id_Connection       = CreateVariable(AM_VAR_CONNECTION,      0 /*Boolean*/, $id_AudioMaxServerId,  30, 'AudioMax_Connection',  $id_ScriptSettings, false,  '');
+	$id_Connection       = CreateVariable(AM_VAR_CONNECTION,      0 /*Boolean*/, $id_AudioMaxServerId,  30, 'AudioMax_Connection',  $id_ScriptSettings, true,  '');
 	$id_LastError        = CreateVariable(AM_VAR_LASTERROR,       3 /*String*/,  $id_AudioMaxServerId,  40, '~String',              null,               '',    'Warning');
 	$id_LastCommand      = CreateVariable(AM_VAR_LASTCOMMAND,     3 /*String*/,  $id_AudioMaxServerId,  50, '~String',              null,               '',    'Information');
 	$id_InputBuffer      = CreateVariable(AM_VAR_INPUTBUFFER,     3 /*String*/,  $id_AudioMaxServerId,  60, '~String',              null,               '',    'Information');
-	$id_KeepAliveFlag    = CreateVariable(AM_VAR_KEEPALIVEFLAG,   0 /*Boolean*/, $id_AudioMaxServerId,  70, 'AudioMax_KeepAliveFlag',   null,           false, 'Lightning');
+	$id_KeepAliveCount   = CreateVariable(AM_VAR_KEEPALIVECOUNT,  1 /*Integer*/, $id_AudioMaxServerId,  70, '',                     null,               0, '');
 	$id_KeepAliveStatus  = CreateVariable(AM_VAR_KEEPALIVESTATUS, 0 /*Boolean*/, $id_AudioMaxServerId,  80, 'AudioMax_KeepAliveStatus', null,           true,  'Repeat');
 	$id_ModePowerRequest = CreateVariable(AM_VAR_MODEPOWERREQUEST,0 /*Boolean*/, $id_AudioMaxServerId,  90, '~Switch',               $id_ScriptSettings,true,  'Gear');
 	$id_ModeServerDebug  = CreateVariable(AM_VAR_MODESERVERDEBUG, 0 /*Boolean*/, $id_AudioMaxServerId, 100, '~Switch',               $id_ScriptSettings,true,  'Gear');
@@ -212,9 +211,14 @@
 	$id_RoomIds          = CreateVariable(AM_VAR_ROOMIDS,         3 /*String*/,  $id_AudioMaxServerId, 310, '',                      null,              '',    '');
 	$id_RoomCount        = CreateVariable(AM_VAR_ROOMCOUNT,       1 /*Integer*/, $id_AudioMaxServerId, 320, '',                      null,              0,     '');
 
+	$id_KeepAliveFlag    = @IPS_GetObjectIDByIdent('KEEP_ALIVE_FLAG', $id_AudioMaxServerId);
+	if ($id_KeepAliveFlag!==false) {
+		IPS_DeleteVariable($id_KeepAliveFlag);
+	}
+	
 	if ($AudioMaxRoomInstallation) {
 		$RoomIds = array();
-		for ($RoomId=1;$RoomId<=4;$RoomId++) {
+		for ($RoomId=1;$RoomId<=AM_CONFIG_ROOM_COUNT;$RoomId++) {
 			$RoomInstanceId = CreateDummyInstance("AudioMax_Room".$RoomId, $CategoryIdData, 100+$RoomId);
 			$RoomIds[]      = $RoomInstanceId;
 
@@ -252,7 +256,6 @@
 		CreateLink('Eingangs Buffer',      $id_InputBuffer,      $instanceIdServer, 40);
 		CreateLink('Letzter Befehl',       $id_LastCommand,      $instanceIdServer, 50);
 		CreateLink('Letzter Fehler',       $id_LastError,        $instanceIdServer, 60);
-		CreateLink('"KeepAlive" Flag',     $id_KeepAliveFlag,    $instanceIdServer, 70);
 		CreateLink('"KeepAlive" Status',   $id_KeepAliveStatus,  $instanceIdServer, 80);
 		CreateLink('Acknowledge Modus',    $id_ModeAcknowledge,  $instanceIdServer, 90);
 		CreateLink('EmulateState Modus',   $id_ModeEmulateState, $instanceIdServer, 100);
@@ -320,7 +323,6 @@
 		CreateLink('Eingangs Buffer',      $id_InputBuffer,      $instanceIdServer, 40);
 		CreateLink('Letzter Befehl',       $id_LastCommand,      $instanceIdServer, 50);
 		CreateLink('Letzter Fehler',       $id_LastError,        $instanceIdServer, 60);
-		CreateLink('"KeepAlive" Flag',     $id_KeepAliveFlag,    $instanceIdServer, 70);
 		CreateLink('"KeepAlive" Status',   $id_KeepAliveStatus,  $instanceIdServer, 80);
 		CreateLink('Acknowledge Modus',    $id_ModeAcknowledge,  $instanceIdServer, 90);
 		CreateLink('EmulateState Modus',   $id_ModeEmulateState, $instanceIdServer, 100);

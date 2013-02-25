@@ -32,16 +32,20 @@
 	define ('IPSPC_PROPERTY_NAME',				'Name');
 	define ('IPSPC_PROPERTY_VARWATT',			'VariableWatt');
 	define ('IPSPC_PROPERTY_VARKWH',			'VariableKWH');
+	define ('IPSPC_PROPERTY_VARM3',				'VariableM3');
 	define ('IPSPC_PROPERTY_DISPLAY',			'Display');
 	define ('IPSPC_PROPERTY_VALUETYPE',			'ValueType');
 
 	define ('IPSPC_VALUETYPE_TOTAL',			'Total');
 	define ('IPSPC_VALUETYPE_DETAIL',			'Detail');
 	define ('IPSPC_VALUETYPE_OTHER',			'Other');
+	define ('IPSPC_VALUETYPE_WATER',			'Water');
+	define ('IPSPC_VALUETYPE_GAS',				'Gas');
 
 	// Storage of calculated Values
 	define ('IPSPC_VAR_VALUEKWH',				'ValueKWH_');
 	define ('IPSPC_VAR_VALUEWATT',				'ValueWatt_');
+	define ('IPSPC_VAR_VALUEM3',				'ValueM3_');
 	// Selection
 	define ('IPSPC_VAR_SELECTVALUE',			'SelectValue');
 	define ('IPSPC_VAR_PERIODCOUNT',			'PeriodAndCount');
@@ -63,8 +67,10 @@
 	define ('IPSPC_COUNT_VALUE',				20002);
 	define ('IPSPC_COUNT_PLUS',					20003);
 
-	define ('IPSPC_TYPE_KWH',					10);
-	define ('IPSPC_TYPE_WATT',					11);
+	define ('IPSPC_TYPE_WATER',					8);
+	define ('IPSPC_TYPE_GAS',					9);
+	define ('IPSPC_TYPE_WATT',					10);
+	define ('IPSPC_TYPE_KWH',					11);
 	define ('IPSPC_TYPE_EURO',					12);
 	define ('IPSPC_TYPE_STACK',					13);
 	define ('IPSPC_TYPE_STACK2',				14);

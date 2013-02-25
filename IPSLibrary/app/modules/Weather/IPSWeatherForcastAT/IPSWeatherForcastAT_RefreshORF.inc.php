@@ -32,7 +32,12 @@
  
 	function IPSWeatherFAT_RefreshORF() {
 		// Wetter für Niederösterreich von ORF auslesen
-		$lHTML=file_get_contents(IPSWEATHERFAT_ORF_URL);
+		$lHTML=@file_get_contents(IPSWEATHERFAT_ORF_URL);
+		if ($lHTML===false) {
+			IPSLogger_Dbg(__file__, 'ORF Detail Forcast is empty ...');
+			echo 'ORF Detail Forcast is empty ...';
+			return false;
+		}
 
 		$forcast = ExtractData($lHTML, '<div class="fulltextWrapper" role="article">', '<div class="webcamLinks', true, false);
 		$forcastToday = '<h2>'.ExtractData($forcast, '<h2>', '</h2>').'</h2>';

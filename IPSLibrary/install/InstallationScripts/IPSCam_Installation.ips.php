@@ -302,16 +302,20 @@
 			CreateLink('Bild Aktualisieren',  IPSUtil_ObjectIDByPath('Program.IPSLibrary.app.modules.IPSCam.IPSCam_RefreshPicture'), $mobileIdCam, 30);
 			CreateLink('Bild Speichern',      IPSUtil_ObjectIDByPath('Program.IPSLibrary.app.modules.IPSCam.IPSCam_StorePicture'), $mobileIdCam, 40);
 
-			$variableIdPower = $camConfig[$cameraIdx][IPSCAM_PROPERTY_SWITCHPOWER];
-			if ($variableIdPower<>'') {
-				$id = CreateLink('Power',  IPSUtil_ObjectIDByPath($variableIdPower), $mobileIdCam, 50);
-				IPS_SetIcon($id, 'Power');
+			if (array_key_exists(IPSCAM_PROPERTY_SWITCHPOWER, $camConfig[$cameraIdx])) { 
+				$variableIdPower = $camConfig[$cameraIdx][IPSCAM_PROPERTY_SWITCHPOWER];
+				if ($variableIdPower<>'') {
+					$id = CreateLink('Power',  IPSUtil_ObjectIDByPath($variableIdPower), $mobileIdCam, 50);
+					IPS_SetIcon($id, 'Power');
+				}
 			}
 
-			$variableIdWLAN = $camConfig[$cameraIdx][IPSCAM_PROPERTY_SWITCHWLAN];
-			if ($variableIdWLAN<>'') {
-				$id = CreateLink('WLAN',  IPSUtil_ObjectIDByPath($variableIdWLAN), $mobileIdCam, 60);
-				$id = IPS_SetIcon($id, 'Intensity');
+			if (array_key_exists(IPSCAM_PROPERTY_SWITCHWLAN, $camConfig[$cameraIdx])) { 
+				$variableIdWLAN = $camConfig[$cameraIdx][IPSCAM_PROPERTY_SWITCHWLAN];
+				if ($variableIdWLAN<>'') {
+					$id = CreateLink('WLAN',  IPSUtil_ObjectIDByPath($variableIdWLAN), $mobileIdCam, 60);
+					$id = IPS_SetIcon($id, 'Intensity');
+				}
 			}
 
 			$categoryIdSettings = CreateCategory('Einstellungen', $categoryIdCam, 100);

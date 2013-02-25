@@ -91,7 +91,7 @@
 		}
 
 		public function UpdateProfileInfo() {
-			$info  = ''.($this->activationByWeather?'Profil aktiv':'Profil inaktiv').' (WindSensor='.($this->windSensor==null?'"nicht vorhanden"':$this->windSensor.' kmh');
+			$info  = ''.($this->activationByWeather?'Profil aktiv':'Profil inaktiv').' (WindSensor='.($this->windSensor===null?'"nicht vorhanden"':$this->windSensor.' kmh');
 			if (IPSSHADOWING_RAINSENSOR <> '') {
 				$info .= ', RegenSensor='.($this->rainSensor?'Regen)':'kein Regen)');
 			} else {

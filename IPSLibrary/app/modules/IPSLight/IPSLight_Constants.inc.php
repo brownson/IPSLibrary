@@ -35,11 +35,15 @@
 	define ('IPSLIGHT_COMPONENT',			3);
 	define ('IPSLIGHT_POWERCIRCLE',			4);
 	define ('IPSLIGHT_POWERWATT',			5);
-	define ('IPSLIGHT_ACTIVATABLE',			6);
-	define ('IPSLIGHT_PROGRAMON',			7);
-	define ('IPSLIGHT_PROGRAMOFF',			8);
-	define ('IPSLIGHT_PROGRAMLEVEL',		9);
-	define ('IPSLIGHT_PROGRAMRGB',			10);
+	define ('IPSLIGHT_SIMULATION',			6);
+
+	define ('IPSLIGHT_ACTIVATABLE',			100);
+
+	define ('IPSLIGHT_PROGRAMON',			200);
+	define ('IPSLIGHT_PROGRAMOFF',			201);
+	define ('IPSLIGHT_PROGRAMLEVEL',		202);
+	define ('IPSLIGHT_PROGRAMRGB',			203);
+
 	define ('IPSLIGHT_WFCSPLITPANEL',		'WFCSplitPanel');
 	define ('IPSLIGHT_WFCCATEGORY',			'WFCCategory');
 	define ('IPSLIGHT_WFCGROUP',			'WFCGroup');
@@ -54,6 +58,18 @@
 	define ('IPSLIGHT_DEVICE_COLOR',		'#Color');
 	define ('IPSLIGHT_DEVICE_LEVEL',		'#Level');
 
+	// Simulation Constants
+	define ('IPSLIGHT_SIMULATION_DATEFMT',	'Ymd');
+	define ('IPSLIGHT_SIMULATION_TIMEFMT',	'His');
+	define ('IPSLIGHT_SIMULATION_VARTIME',	'LastTime');
+	define ('IPSLIGHT_SIMULATION_VARDATE',	'FileDate');
+	define ('IPSLIGHT_SIMULATION_VARSTATE',	'State');
+	define ('IPSLIGHT_SIMULATION_VARDAYS',	'DaysBack');
+	define ('IPSLIGHT_SIMULATION_VARMODE',	'DayMode');
+
+	define ('IPSLIGHT_SIMULATION_MODEDAYS',	0);
+	define ('IPSLIGHT_SIMULATION_MODEUSR1',	1);
+	define ('IPSLIGHT_SIMULATION_MODEUSR2',	2);
 
 	/** @}*/
 ?>

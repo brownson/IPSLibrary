@@ -35,8 +35,6 @@
 	IPSUtils_Include ("IPSWeatherForcastAT_Utils.inc.php",         "IPSLibrary::app::modules::Weather::IPSWeatherForcastAT");
 	IPSUtils_Include ("IPSLogger.inc.php",                         "IPSLibrary::app::core::IPSLogger");
 
-
-
 	if (Sys_Ping(IPSWEATHERFAT_EXTERNAL_IP, 100)) {
 		IPSLogger_Trc(__file__, "Refresh Weather Data");
 

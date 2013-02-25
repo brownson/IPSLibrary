@@ -57,6 +57,12 @@
 		private $programCategoryId;
 
 		/**
+		 * @private
+		 * LightSimulator 
+		 */
+		private $lightSimulator;
+
+		/**
 		 * @public
 		 *
 		 * Initialisierung des IPSLight_Manager Objektes
@@ -67,6 +73,7 @@
 			$this->switchCategoryId  = IPS_GetObjectIDByIdent('Switches', $baseId);
 			$this->groupCategoryId   = IPS_GetObjectIDByIdent('Groups', $baseId);
 			$this->programCategoryId = IPS_GetObjectIDByIdent('Programs', $baseId);
+			$this->lightSimulator    = new IPSLight_Simulator();
 		}
 
 		/**
@@ -189,8 +196,8 @@
 			if (GetValue($switchId)==$value) {
 				return;
 			}
-			$configName   = $this->GetConfigNameById($switchId);
-			$configLights = IPSLight_GetLightConfiguration();
+			$configName      = $this->GetConfigNameById($switchId);
+			$configLights    = IPSLight_GetLightConfiguration();
 			$componentParams = $configLights[$configName][IPSLIGHT_COMPONENT];
 			$component       = IPSComponent::CreateObjectByParams($componentParams);
 
@@ -199,6 +206,7 @@
 
 			if (IPSLight_BeforeSwitch($switchId, $value)) {
 				$component->SetState($value);
+				$this->lightSimulator->StoreStatusChange($switchId, $value);
 			}
 			IPSLight_AfterSwitch($switchId, $value);
 
@@ -242,6 +250,7 @@
 
 			if (IPSLight_BeforeSwitch($switchId, $switchValue)) {
 				$component->SetState(GetValue($switchId), GetValue($levelId));
+				$this->lightSimulator->StoreStatusChange($switchId, GetValue($switchId), GetValue($levelId));
 			}
 			IPSLight_AfterSwitch($switchId, $switchValue);
 
@@ -284,6 +293,7 @@
 
 			if (IPSLight_BeforeSwitch($switchId, $switchValue)) {
 				$component->SetState(GetValue($switchId), GetValue($colorId), GetValue($levelId));
+				$this->lightSimulator->StoreStatusChange($switchId, GetValue($switchId), GetValue($levelId), GetValue($colorId));
 			}
 			IPSLight_AfterSwitch($switchId, $switchValue);
 
@@ -340,7 +350,17 @@
 				$switches = explode(',',  $switches);
 				foreach ($switches as $idx=>$switchName) {
 					$switchId = $this->GetSwitchIdByName($switchName);
-					$this->SetSwitch($switchId, true, true, false);
+					$configLights = IPSLight_GetLightConfiguration();
+					$lightType    = $configLights[$switchName][IPSLIGHT_TYPE];
+					if ($lightType==IPSLIGHT_TYPE_SWITCH) {
+						$this->SetSwitch($switchId, true);
+					} elseif ($lightType==IPSLIGHT_TYPE_DIMMER) {
+						$this->SetDimmer($switchId, true);
+					} elseif ($lightType==IPSLIGHT_TYPE_RGB) {
+						$this->SetRGB($switchId, true);
+					} else {
+						trigger_error('Unknown LightType '.$lightType.' for Light '.$configName);
+					}
 				}
 			}
 			// Light Off
@@ -484,6 +504,7 @@
 				if (GetValue($switchId) <> $deviceState) {
 					IPSLogger_Inf(__file__, 'Synchronize StateChange from Light '.$switchName.', State='.($deviceState?'On':'Off'));
 					SetValue($switchId, $deviceState);
+					$this->lightSimulator->StoreStatusChange($switchId, $deviceState);
 					$this->SynchronizeGroupsBySwitch($switchId);
 					$this->SynchronizeProgramsBySwitch($switchId);
 				}

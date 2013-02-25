@@ -100,6 +100,7 @@
 
 	$categoryIdCommon   = CreateCategory('Common',  $CategoryIdData, 10);
 	$categoryIdValues   = CreateCategory('Values',  $CategoryIdData, 20);
+	$categoryIdCustom   = CreateCategory('Custom',  $CategoryIdData, 30);
 
 	// Add Scripts
 	$scriptIdActionScript   = IPS_GetScriptIDByName('IPSPowerControl_ActionScript', $CategoryIdApp);
@@ -160,43 +161,45 @@
 	$variableIdChartHtml   = CreateVariable(IPSPC_VAR_CHARTHTML,   3 /*String*/,  $categoryIdCommon, 100, '~HTMLBox',                        $scriptIdActionScript, '<iframe frameborder="0" width="100%" height="530px"  src="../user/Highcharts/IPS_Template.php"</iframe>', 'Graph');
 
 	foreach (IPSPowerControl_GetValueConfiguration() as $idx=>$data) {
+		$valueType = $data[IPSPC_PROPERTY_VALUETYPE];
+		switch($valueType) {
+			case IPSPC_VALUETYPE_GAS:
+				$variableIdValueM3     = CreateVariable(IPSPC_VAR_VALUEM3.$idx,    2 /*float*/,   $categoryIdValues,  100+$idx, '~Gas',    null,          0, 'Lightning');
+				break;
+			case IPSPC_VALUETYPE_WATER:
+				$variableIdValueM3     = CreateVariable(IPSPC_VAR_VALUEM3.$idx,    2 /*float*/,   $categoryIdValues,  100+$idx, '~Water',    null,          0, 'Lightning');
+				break;
+			default:
+				$variableIdValueKWH     = CreateVariable(IPSPC_VAR_VALUEKWH.$idx,    2 /*float*/,   $categoryIdValues,  100+$idx, '~Electricity',    null,          0, 'Lightning');
+				$variableIdValueWatt    = CreateVariable(IPSPC_VAR_VALUEWATT.$idx,   2 /*float*/,   $categoryIdValues,  200+$idx, '~Watt.14490',     null,          0, 'Lightning');
+		}
 		$variableIdSelectValue  = CreateVariable(IPSPC_VAR_SELECTVALUE.$idx, 0 /*Boolean*/, $categoryIdCommon,  100+$idx, '~Switch', $scriptIdActionScript, 0, 'Lightning');
-		$variableIdValueKWH     = CreateVariable(IPSPC_VAR_VALUEKWH.$idx,    2 /*float*/,   $categoryIdValues,  100+$idx, '',            null,              0, 'Lightning');
-		$variableIdValueWatt    = CreateVariable(IPSPC_VAR_VALUEWATT.$idx,   2 /*float*/,   $categoryIdValues,  200+$idx, '~Watt.14490', null,              0, 'Lightning');
 	}
 
-//	$instanceId = CreateDummyInstance("Details", 37588, 10);
-//	foreach (IPSPowerControl_GetValueConfiguration() as $idx=>$data) {
-//		$variableId = IPS_GetObjectIDByIdent(IPSPC_VAR_VALUEWATT.$idx, $categoryIdValues);
-//		CreateLink($data[IPSPC_PROPERTY_NAME], $variableId, $instanceId, $idx);
-//	}
-
-//	$instanceId = CreateDummyInstance("Verbraucher", 10023, 15);
-//	foreach (IPSPowerControl_GetValueConfiguration() as $idx=>$data) {
-//		$variableId = IPS_GetObjectIDByIdent(IPSPC_VAR_VALUEWATT.$idx, $categoryIdValues);
-//		CreateLink($data[IPSPC_PROPERTY_NAME], $variableId, $instanceId, $idx);
-//	}
- return;
-
-/*	// ===================================================================================================
+	// ===================================================================================================
 	// Activate Variable Logging
 	// ===================================================================================================
 	$archiveHandlerList = IPS_GetInstanceListByModuleID ('{43192F0B-135B-4CE7-A0A7-1475603F3060}');
 	$archiveHandlerId = $archiveHandlerList[0];
 	foreach (IPSPowerControl_GetValueConfiguration() as $idx=>$data) {
-		$variableId = IPS_GetObjectIDByIdent(IPSPC_VAR_VALUEKWH.$idx, $categoryIdValues);
-		if (!AC_GetLoggingStatus($archiveHandlerId, $variableId)) {
+		$variableId = @IPS_GetObjectIDByIdent(IPSPC_VAR_VALUEKWH.$idx, $categoryIdValues);
+		if ($variableId!==false and !AC_GetLoggingStatus($archiveHandlerId, $variableId)) {
 			AC_SetLoggingStatus($archiveHandlerId, $variableId, true);
 			AC_SetAggregationType($archiveHandlerId, $variableId, 1);
 		}
-		$variableId = IPS_GetObjectIDByIdent(IPSPC_VAR_VALUEWATT.$idx, $categoryIdValues);
-		if (!AC_GetLoggingStatus($archiveHandlerId, $variableId)) {
+		$variableId = @IPS_GetObjectIDByIdent(IPSPC_VAR_VALUEWATT.$idx, $categoryIdValues);
+		if ($variableId!==false and !AC_GetLoggingStatus($archiveHandlerId, $variableId)) {
 			AC_SetLoggingStatus($archiveHandlerId, $variableId, true);
 			//AC_SetAggregationType($archiveHandlerId, $variableId, 1);
 		}
+		$variableId = @IPS_GetObjectIDByIdent(IPSPC_VAR_VALUEM3.$idx, $categoryIdValues);
+		if ($variableId!==false and !AC_GetLoggingStatus($archiveHandlerId, $variableId)) {
+			AC_SetLoggingStatus($archiveHandlerId, $variableId, true);
+			AC_SetAggregationType($archiveHandlerId, $variableId, 1);
+		}
 	}
 	IPS_ApplyChanges($archiveHandlerId);
-*/
+
 	// ----------------------------------------------------------------------------------------------------------------------------
 	// Webfront Installation
 	// ----------------------------------------------------------------------------------------------------------------------------
@@ -218,7 +221,17 @@
 		foreach (IPSPowerControl_GetValueConfiguration() as $idx=>$data) {
 			if ($data[IPSPC_PROPERTY_DISPLAY]) {
 				$variableIdSelectValue  = IPS_GetObjectIDByIdent(IPSPC_VAR_SELECTVALUE.$idx, $categoryIdCommon);
-				CreateLink($data[IPSPC_PROPERTY_NAME], $variableIdSelectValue, $instanceId, $idx);
+				$valueType = $data[IPSPC_PROPERTY_VALUETYPE];
+				switch($valueType) {
+					case IPSPC_VALUETYPE_GAS:
+						CreateLink($data[IPSPC_PROPERTY_NAME], $variableIdSelectValue, $categoryIdLeft, $idx);
+						break;
+					case IPSPC_VALUETYPE_WATER:
+						CreateLink($data[IPSPC_PROPERTY_NAME], $variableIdSelectValue, $categoryIdLeft, $idx);
+						break;
+					default:
+						CreateLink($data[IPSPC_PROPERTY_NAME], $variableIdSelectValue, $instanceId, $idx);
+				}
 			}
 		}
 
@@ -256,7 +269,17 @@
 		foreach (IPSPowerControl_GetValueConfiguration() as $idx=>$data) {
 			if ($data[IPSPC_PROPERTY_DISPLAY]) {
 				$variableIdSelectValue  = IPS_GetObjectIDByIdent(IPSPC_VAR_SELECTVALUE.$idx, $categoryIdCommon);
-				CreateLink($data[IPSPC_PROPERTY_NAME], $variableIdSelectValue, $instanceIdChart, $idx);
+				$valueType = $data[IPSPC_PROPERTY_VALUETYPE];
+				switch($valueType) {
+					case IPSPC_VALUETYPE_GAS:
+						CreateLink($data[IPSPC_PROPERTY_NAME], $variableIdSelectValue, $instanceIdChart, $idx);
+						break;
+					case IPSPC_VALUETYPE_WATER:
+						CreateLink($data[IPSPC_PROPERTY_NAME], $variableIdSelectValue, $instanceIdChart, $idx);
+						break;
+					default:
+						CreateLink($data[IPSPC_PROPERTY_NAME], $variableIdSelectValue, $instanceIdChart, $idx);
+				}
 			}
 		}
 	}
