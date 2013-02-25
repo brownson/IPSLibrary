@@ -34,6 +34,7 @@
 	IPSUtils_Include ("IPSLight_Constants.inc.php",         "IPSLibrary::app::modules::IPSLight");
 	IPSUtils_Include ("IPSLight_Configuration.inc.php",     "IPSLibrary::config::modules::IPSLight");
 	IPSUtils_Include ("IPSLight_Custom.inc.php",            "IPSLibrary::config::modules::IPSLight");
+	IPSUtils_Include ("IPSLight_Simulator.class.php",       "IPSLibrary::app::modules::IPSLight");
 	IPSUtils_Include ("IPSLight_Manager.class.php",         "IPSLibrary::app::modules::IPSLight");
 
 	/**
@@ -226,5 +227,34 @@
 		$lightManager->SetProgram($programId, $lightManager->GetValue($programId) + 1);
 	}
 
+	/**
+	 * Aktiviert oder deaktiviert den Simulations Mode
+	 *
+	 * @param boolean $value neuer Status für Simulations Mode (true=ein, false=aus)
+	 */
+	function IPSLight_SetSimulationState($value) {
+		$lightSimulator = new IPSLight_Simulator();
+		$lightSimulator->SetState($value);
+	}
+
+	/**
+	 * Setzt den Simulations Modus
+	 *
+	 * @param integer $value Modus für Simulation (0=eingestellte Tage zurück verwenden, 1=Datum 2000-01-01, 2=Datum 2001-01-02)
+	 */
+	function IPSLight_SetSimulationMode($value) {
+		$lightSimulator = new IPSLight_Simulator();
+		$lightSimulator->SetMode($value);
+	}
+
+	/**
+	 * Setzt den Offset von Tagen, der für die Simulation verwendet werden soll. 
+	 *
+	 * @param integer $value Tage zurück (zB 7 --> Simulation der Beleuchtung wie vor 7 Tagen)
+	 */
+	function IPSLight_SetSimulationDays($value) {
+		$lightSimulator = new IPSLight_Simulator();
+		$lightSimulator->SetDays($value);
+	}
     /** @}*/
 ?>

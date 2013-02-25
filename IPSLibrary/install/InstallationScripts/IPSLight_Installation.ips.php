@@ -74,7 +74,7 @@
 	IPSUtils_Include ("IPSLight_Constants.inc.php",      "IPSLibrary::app::modules::IPSLight");
 	IPSUtils_Include ("IPSLight_Configuration.inc.php",  "IPSLibrary::config::modules::IPSLight");
 
-	$WFC10_Enabled        = $moduleManager->GetConfigValue('Enabled', 'WFC10');
+	$WFC10_Enabled        = $moduleManager->GetConfigValueBool('Enabled', 'WFC10');
 	$WFC10_ConfigId       = $moduleManager->GetConfigValueIntDef('ID', 'WFC10', GetWFCIdDefault());
 	$WFC10_Path           = $moduleManager->GetConfigValue('Path', 'WFC10');
 	$WFC10_TabPaneItem    = $moduleManager->GetConfigValue('TabPaneItem', 'WFC10');
@@ -97,15 +97,31 @@
 	$CategoryIdData     = $moduleManager->GetModuleCategoryID('data');
 	$CategoryIdApp      = $moduleManager->GetModuleCategoryID('app');
 
-	$categoryIdSwitches = CreateCategory('Switches', $CategoryIdData, 10);
-	$categoryIdGroups   = CreateCategory('Groups',   $CategoryIdData, 20);
-	$categoryIdPrograms = CreateCategory('Programs', $CategoryIdData, 30);
+	$categoryIdSwitches   = CreateCategory('Switches',   $CategoryIdData, 10);
+	$categoryIdGroups     = CreateCategory('Groups',     $CategoryIdData, 20);
+	$categoryIdPrograms   = CreateCategory('Programs',   $CategoryIdData, 30);
+	$categoryIdSimulation = CreateCategory('Simulation', $CategoryIdData, 40);
 
 	// Add Scripts
 	$scriptIdActionScript  = IPS_GetScriptIDByName('IPSLight_ActionScript', $CategoryIdApp);
 
 	// Profiles
 	CreateProfile_Switch ("IPSLight_Light", 'Aus', 'An', $Icon="", -1, 0x00ff00, $IconOff="BulbOff", $IconOn="BulbOn");
+	CreateProfile_Count  ('IPSLight_SimulationDays', 1, 1, 31,   null, ' Tage',   null);
+	CreateProfile_Associations ('IPSLight_SimulationMode', array(IPSLIGHT_SIMULATION_MODEDAYS => 'Tage zurück', 
+	                                                             IPSLIGHT_SIMULATION_MODEUSR1 => 'Simulation 1',
+	                                                             IPSLIGHT_SIMULATION_MODEUSR2 => 'Simulation 2'));
+
+	$statusId = CreateVariable(IPSLIGHT_SIMULATION_VARSTATE, 0 /*Boolean*/, $categoryIdSimulation, 10, '~Switch', $scriptIdActionScript, false, 'Motion');
+	$statusId = CreateVariable(IPSLIGHT_SIMULATION_VARMODE,  1 /*Integer*/, $categoryIdSimulation, 20, 'IPSLight_SimulationMode', $scriptIdActionScript, 0, 'Gear');
+	$statusId = CreateVariable(IPSLIGHT_SIMULATION_VARDAYS,  1 /*Integer*/, $categoryIdSimulation, 30, 'IPSLight_SimulationDays', $scriptIdActionScript, 7, 'Clock');
+	$statusId = CreateVariable(IPSLIGHT_SIMULATION_VARDATE,  3 /*String*/,  $categoryIdSimulation, 40, '~String', null, '', '');
+	$statusId = CreateVariable(IPSLIGHT_SIMULATION_VARTIME,  3 /*String*/,  $categoryIdSimulation, 50, '~String', null, '', '');
+
+	$directory = IPS_GetKernelDir().'\\Simulation';
+	if (!file_exists($directory)) {
+		mkdir($directory, 0, true);
+	}
 
 	// ===================================================================================================
 	// Add Light Devices
