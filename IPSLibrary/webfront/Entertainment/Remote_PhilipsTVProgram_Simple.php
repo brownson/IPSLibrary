@@ -14,13 +14,15 @@
 		<div id="containerLeft">
 			<table  width=100%>
 				<tr>
-					<th id="rc_cmd_ProgramNext" rc_name="PhilipsTV" rc_button="ProgramNext"  class="rc_button33" colspan="2" rowspan="1">Programm +</th>
-					<th class="rc_button_template" ></th>
+					<th id="rc_cmd_ProgramNext" rc_name="PhilipsTV" rc_button="ProgramNext"  class="rc_button33" colspan="1" rowspan="1">Programm +</th>
+					<th id="rc_cmd_VolumePlus"  rc_name="PhilipsTV" rc_button="VolumePlus"   class="rc_button33" colspan="1" rowspan="1">Volume +</th>
 				</tr>
 				<tr>
-					<th id="rc_cmd_ProgramLast" rc_name="PhilipsTV" rc_button="ProgramLast"  class="rc_button33" colspan="2" rowspan="1">Programm -</th>
-					<th class="rc_button_template" ></th>
+					<th id="rc_cmd_ProgramLast" rc_name="PhilipsTV" rc_button="ProgramLast"  class="rc_button33" colspan="1" rowspan="1">Programm -</th>
+					<th id="rc_cmd_VolumeMinus" rc_name="PhilipsTV" rc_button="VolumeMinus"  class="rc_button33" colspan="1" rowspan="1">Volume -</th>
 				</tr>
+			</table>
+			<table  width=100%>
 				<tr>
 					<th class="rc_button_template" ></th>
 					<th class="rc_button_template" ></th>
