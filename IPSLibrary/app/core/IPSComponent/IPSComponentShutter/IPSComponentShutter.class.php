@@ -20,6 +20,8 @@
     * Version 2.50.1, 31.01.2012<br/>
     */
 
+	IPSUtils_Include ('IPSComponent.class.php', 'IPSLibrary::app::core::IPSComponent');
+
 	abstract class IPSComponentShutter extends IPSComponent {
 
 		/**
