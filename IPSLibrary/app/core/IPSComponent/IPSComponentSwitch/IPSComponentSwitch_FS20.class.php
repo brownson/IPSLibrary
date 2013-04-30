@@ -69,12 +69,13 @@
 		 * Zustand Setzen 
 		 *
 		 * @param boolean $value Wert für Schalter
+		 * @param integer $onTime Zeit in Sekunden nach der der Aktor automatisch ausschalten soll
 		 */
-		public function SetState($value,$duration=false) {
-		  if ( !$duration )
-			  FS20_SwitchMode($this->instanceId, $value);
+		public function SetState($value, $onTime=false) {
+			if (!$onTime or !$value)
+				FS20_SwitchMode($this->instanceId, $value);
 			else
-        FS20_SwitchDuration($this->instanceId, $value,$duration);   
+				FS20_SwitchDuration($this->instanceId, $value, $onTime);   
 		}
 
 		/**

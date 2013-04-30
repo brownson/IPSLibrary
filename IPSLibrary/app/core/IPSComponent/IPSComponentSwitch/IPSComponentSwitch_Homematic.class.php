@@ -69,8 +69,12 @@
 		 * Zustand Setzen 
 		 *
 		 * @param boolean $value Wert für Schalter
+		 * @param integer $onTime Zeit in Sekunden nach der der Aktor automatisch ausschalten soll
 		 */
-		public function SetState($value) {
+		public function SetState($value, $onTime=false) {
+			if ($onTime!==false and $value) 
+				HM_WriteValueFloat($this->instanceId, "ON_TIME", $onTime);  
+			
 			HM_WriteValueBoolean($this->instanceId, "STATE", $value);
 		}
 
