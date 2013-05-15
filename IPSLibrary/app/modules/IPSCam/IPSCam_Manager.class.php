@@ -430,7 +430,7 @@
 		 */
 		public function PictureRefresh($cameraIdx=null) {
 			$variableIdCamSelect = IPS_GetObjectIDByIdent(IPSCAM_VAR_CAMSELECT, $this->categoryIdCommon);
-			if ($cameraIdx==0) {
+			if ($cameraIdx===null) {
 				$cameraIdx = GetValue($variableIdCamSelect);
 			}
 			if (GetValue($variableIdCamSelect) <> $cameraIdx) {
