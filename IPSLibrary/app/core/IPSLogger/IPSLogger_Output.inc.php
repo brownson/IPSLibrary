@@ -50,6 +50,7 @@
 		IPSLogger_OutLog4IPS($LogLevel, $LogType, $Context, $Msg.$StackTxt);
 		IPSLogger_OutEcho($LogLevel, $LogType, $Context, $Msg.$StackTxt);
 		IPSLogger_OutProwl($LogLevel, $LogType, $Context, $Msg.$StackTxt, $Priority);
+		IPSLogger_OutSysLog($LogLevel, $LogType, $Context, $Msg.$StackTxt);
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
@@ -103,6 +104,43 @@
 
 			$File = 'IPSLogger_'.date('Ymd').'.'.c_Log4IPS_Extension;
 			IPSLogger_WriteFile(c_Log4IPS_Directory, $File, $Out, c_ID_Log4IPSOutEnabled);
+		}
+	}
+
+	// ---------------------------------------------------------------------------------------------------------------------------
+	function IPSLogger_OutSysLog($LogLevel, $LogType, $Context, $Msg) {
+		if (defined('c_SysLog_Enabled') and c_SysLog_Enabled) {
+			$logTypeEnabled = true;
+			if (isset($SysLog_LogTypes) and array_key_exists($LogLevel, $SysLog_LogTypes) and $SysLog_LogTypes[$LogLevel]==false) {
+				$logTypeEnabled = false;
+			}
+			if ($logTypeEnabled) {
+
+				// Sample Message
+				//<14>May 19 20:15:42 sbs2008.wps-computer.local IP-Symcon: ID 34690::SENDER Execute: My third PHP syslog message
+
+				$severityList = array(2 /*Critical*/, 3 /*Error*/, 4 /*Warning*/, 5 /*Notice*/, 6 /*Info*/, 7 /*Debug*/, 7 /*Debug*/, 7 /*Debug*/, 7 /*Debug*/);
+				$severity = $severityList[$LogLevel];
+				$facility = 1;
+				$priority    = "<".($facility*8 + $severity).">";
+
+				$timestamp     = date("M j H:i:s");
+				$host = '';
+				if (isset($_ENV["COMPUTERNAME"])) $host=$_ENV["COMPUTERNAME"];
+				$message = substr($priority.$timestamp.' '.$host.' IP-Symcon: '.$Msg, 0, 1024);
+				
+				if (c_SysLog_Instance != '') {
+					CSCK_SendText((int)c_SysLog_Instance, $message);
+				} else if (c_SysLog_Host != '') {
+					$handle = fsockopen("udp://".c_SysLog_Host, c_SysLog_Port, $errno, $errstr);
+					if ($handle) {
+						fwrite($handle, $message);
+						fclose($handle);
+					}
+				} else {
+					echo $message.PHP_EOL;
+				}
+			}
 		}
 	}
 
