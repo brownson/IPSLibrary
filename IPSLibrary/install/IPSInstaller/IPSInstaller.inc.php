@@ -464,6 +464,10 @@
 			IPS_SetName($ScriptId, $Name);
 			IPS_SetPosition($ScriptId, $Position);
  			IPS_SetScriptFile($ScriptId, $File);
+			$oldScriptFile=IPS_GetKernelDir().'scripts\\'.$ScriptId.'.ips.php';
+			if (file_exists($oldScriptFile)) {
+				unlink($oldScriptFile);
+			}
 			IPS_SetIdent($ScriptId, Get_IdentByName($Name));
 			Debug ('Created Script '.$Name.'='.$ScriptId."");
 		}
