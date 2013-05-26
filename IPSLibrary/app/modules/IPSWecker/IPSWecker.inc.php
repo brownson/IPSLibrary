@@ -46,21 +46,28 @@
 
  	// ----------------------------------------------------------------------------------------------------------------------------
 	function IPSWeckerChangeAktivCircle(){
+		IPS_LogMessage("DEBUG", "IPSWeckerChangeAktivCircle");
 		$WeckerConfig  = get_WeckerConfiguration();
 
 		$Ass=0;
 		foreach ($WeckerConfig as $WeckerName=>$WeckerData) {
-			$CircleId 		= get_CirclyIdByCircleIdent(c_WeckerCircle.($Ass+1), WECKER_ID_WECKZEITEN);
-			$ConfId 			= get_ControlId(c_Control_Optionen, $CircleId);
+			IPS_LogMessage("DEBUG", "Wecker: $WeckerName Nr.: $Ass");
+
+			$WeckerCf 		= get_CirclyIdByCircleIdent(c_WeckerCircle.($Ass+1), WECKER_ID_WECKZEITEN);
+			$ConfId 			= get_ControlId(c_Control_Optionen, $WeckerCf);
 			$objectIds 		= explode(',',GetValue($ConfId));
 
 			if ($WeckerData[c_Property_Schichtgruppe] <> '' and count($WeckerData[c_Property_Schichtzyklus]) > 0){
+				IPS_LogMessage("DEBUG", "Schichtgruppe: ".$WeckerData[c_Property_Schichtgruppe]);
 				if (in_array((int)date("W"), $WeckerData[c_Property_Schichtzyklus])){
 					$objectIds[10] = "1";
 				} else {
 					$objectIds[10] = "0";
 				}
+				IPS_LogMessage("DEBUG", "Schichtzyklus: ".$objectIds[10]);
 				SetValue($ConfId, implode(",", $objectIds));
+				set_Overview($parentId, $WeckerCf);
+				set_TimerEvents($parentId, $WeckerCf);
 			}
 
 			if ($objectIds[10]) {
@@ -71,15 +78,17 @@
 
 			$parentId = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSWecker');
 			if (get_ControlValue(c_Control_Name, $parentId) == $Ass){
-				set_Overview($parentId, $CircleId);
-				$wecker	=	AddConfiguration($CircleId);
+				IPS_LogMessage("DEBUG", "ControlValue: ".get_ControlValue(c_Control_Name, $parentId));
+				set_Overview($parentId, $WeckerCf);
+				$wecker	=	AddConfiguration($WeckerCf);
 				set_Control($wecker);
-				set_TimerEvents($parentId, $CircleId);
+				set_TimerEvents($parentId, $WeckerCf);
 			}
 			$Ass++;
 
 		}
 	}
+
 
  	// ----------------------------------------------------------------------------------------------------------------------------
 	function AddConfiguration($CircleId, $object=array()){

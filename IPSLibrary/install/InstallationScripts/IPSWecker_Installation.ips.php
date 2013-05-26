@@ -386,7 +386,7 @@
 
 		// Übersicht
 //		CreateWFCItemTabPane   ($WFC_ConfigId, $WFC_TabPaneItem,             	$WFC_TabPaneParent,           $WFC_TabPaneOrder, 	$WFC_TabPaneName, $WFC_TabPaneIcon);
-		CreateWFCItemSplitPane ($WFC_ConfigId, $WFC_TabPaneItem.'_OV',       	$WFC_TabPaneParent,          	10, 						'', 	$WFC_TabIcon1, 	0 /*Vertical*/, 50 /*Hight*/, 	0 /*Target=Pane1*/, 0/*UsePixel*/, 'true');
+		CreateWFCItemSplitPane ($WFC_ConfigId, $WFC_TabPaneItem.'_OV',       	$WFC_TabPaneParent,          	$WFC_TabPaneOrder, 						'', 	$WFC_TabIcon1, 	0 /*Vertical*/, 50 /*Hight*/, 	0 /*Target=Pane1*/, 0/*UsePixel*/, 'true');
 		CreateWFCItemSplitPane ($WFC_ConfigId, $WFC_TabPaneItem.'_OVTop',    	$WFC_TabPaneItem.'_OV',       10, 						'',			 		'', 					1 /*Vertical*/, 	50 /*Width*/, 	1 /*Target=Pane2*/, 0/*UsePixel*/, 'true');
 		CreateWFCItemSplitPane ($WFC_ConfigId, $WFC_TabPaneItem.'_OVBottom', 	$WFC_TabPaneItem.'_OV',       20, 						'', 					'', 					1 /*Vertical*/, 	50 /*Width*/,  1 /*Target=Pane2*/, 0/*UsePixel*/, 'true');
 
@@ -491,7 +491,7 @@
 	// Touch 7" Definition
 	// ----------------------------------------------------------------------------------------------------------------------------
 	if ($Touch_Enabled and $Touch_ConfigId <> '') {
-	
+		$TouchId               = CreateCategoryPath($Touch_Path, 10);
 		EmptyCategory($TouchId);
 		$TouchOverviewId       = CreateCategory(    'Overview',  $TouchId,    0);
 		$TouchOverviewWoche    = CreateCategory(    'Woche',     $TouchOverviewId,    10);
