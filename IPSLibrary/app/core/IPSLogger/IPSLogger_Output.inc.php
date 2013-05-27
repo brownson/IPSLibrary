@@ -127,7 +127,7 @@
 				$timestamp     = date("M j H:i:s");
 				$host = '';
 				if (isset($_ENV["COMPUTERNAME"])) $host=$_ENV["COMPUTERNAME"];
-				$message = substr($priority.$timestamp.' '.$host.' IP-Symcon: '.$Msg, 0, 1024);
+				$message = substr($priority.$timestamp.' '.$host.' IP-Symcon-'.$Context.': '.$Msg, 0, 1024);
 				
 				if (c_SysLog_Instance != '') {
 					CSCK_SendText((int)c_SysLog_Instance, $message);

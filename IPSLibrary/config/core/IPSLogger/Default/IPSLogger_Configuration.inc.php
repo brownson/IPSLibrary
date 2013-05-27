@@ -161,7 +161,7 @@
 	 *
 	 * Parameter kann jederzeit geändert werden.
 	 */
-	define ("c_SysLog_Enabled",    true);
+	define ("c_SysLog_Enabled",    false);
 
 	/** Konfigurations Parameter für SysLogTypes
 	 *
