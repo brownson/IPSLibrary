@@ -155,5 +155,23 @@
 	 */
   	define ("c_Key_ProwlService",    '');
 
+	/** Konfigurations Parameter für MySQL Output
+    *
+    * Serveradresse
+    * Port
+    * Database
+    * Tabellenname
+    * User
+    * Password
+    *
+    * Parameter koennen jederzeit geändert werden.
+    */
+	 define ("c_DB_MySQL_Server",    	"192.168.1.1" );
+   define ("c_DB_MySQL_Port",       "3306" );
+   define ("c_DB_MySQL_Database",   "IPSLogger" );
+   define ("c_DB_MySQL_Table",      "tbl_IPSLog" );
+   define ("c_DB_MySQL_User",       "xxxxxx" );
+   define ("c_DB_MySQL_Password",   "xxxxxx" );
+
 	/** @}*/
 ?>
