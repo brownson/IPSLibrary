@@ -464,10 +464,6 @@
 			IPS_SetName($ScriptId, $Name);
 			IPS_SetPosition($ScriptId, $Position);
  			IPS_SetScriptFile($ScriptId, $File);
-			$oldScriptFile=IPS_GetKernelDir().'scripts\\'.$ScriptId.'.ips.php';
-			if (file_exists($oldScriptFile)) {
-				unlink($oldScriptFile);
-			}
 			IPS_SetIdent($ScriptId, Get_IdentByName($Name));
 			Debug ('Created Script '.$Name.'='.$ScriptId."");
 		}
@@ -825,16 +821,18 @@
 	 * @param string $IconOn Dateiname des Icons das für TRUE verwendet werden soll
 	 *
 	 */
-	function CreateProfile_Switch ($Name, $DisplayFalse, $DisplayTrue, $Icon="", $ColorOff=-1, $ColorOn=0x00ff00, $IconOff="", $IconOn="") {
-		@IPS_CreateVariableProfile($Name, 1);
-		IPS_SetVariableProfileText($Name, "", "");
-		IPS_SetVariableProfileValues($Name, 0, 1, 1);
-		IPS_SetVariableProfileDigits($Name, 0);
-		IPS_SetVariableProfileIcon($Name, $Icon);
-		IPS_SetVariableProfileAssociation($Name, 0, $DisplayFalse, $IconOff, $ColorOff);
-		IPS_SetVariableProfileAssociation($Name, 1, $DisplayTrue,  $IconOn,  $ColorOn);
-	}
-
+   function CreateProfile_Switch ($Name, $DisplayFalse, $DisplayTrue, $Icon="", $ColorOff=-1, $ColorOn=0x00ff00, $IconOff="", $IconOn="", $DeleteProfile=true) {
+        if ($DeleteProfile) { 
+            @IPS_DeleteVariableProfile($Name);
+        }
+        @IPS_CreateVariableProfile($Name, 0);
+        IPS_SetVariableProfileText($Name, "", "");
+        IPS_SetVariableProfileValues($Name, 0, 1, 0);
+        IPS_SetVariableProfileDigits($Name, 0);
+        IPS_SetVariableProfileIcon($Name, $Icon);
+        IPS_SetVariableProfileAssociation($Name, 0, $DisplayFalse, $IconOff, $ColorOff);
+        IPS_SetVariableProfileAssociation($Name, 1, $DisplayTrue,  $IconOn,  $ColorOn); 
+  }
 	/** Anlegen eines Integer Profils
 	 *
 	 * Der Befehl legt ein Integer Profil an. Es kann ein Minimalwert, ein Maximalwert und eine Schrittweite
@@ -849,7 +847,11 @@
 	 * @param string $Icon Dateiname des Icons
 	 *
 	 */
-	function CreateProfile_Count ($Name, $Start=0, $Step=0, $Stop=0, $Prefix="", $Suffix="", $Icon="") {
+	function CreateProfile_Count ($Name, $Start=0, $Step=0, $Stop=0, $Prefix="", $Suffix="", $Icon="", $DeleteProfile=true) {
+	  if ($DeleteProfile) { 
+        @IPS_DeleteVariableProfile($Name);
+        }
+
 		@IPS_CreateVariableProfile($Name, 1);
 		IPS_SetVariableProfileText($Name, $Prefix, $Suffix);
 		IPS_SetVariableProfileValues($Name, $Start, $Stop, $Step);
