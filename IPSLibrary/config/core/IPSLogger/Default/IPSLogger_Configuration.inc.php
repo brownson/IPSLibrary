@@ -199,7 +199,41 @@
 	 */
 	define ("c_SysLog_Port",    '');
 
+	/** Konfigurations Parameter für MySQL Output
+	 *
+	 * Über diesen Parameter wird gesteuert, ob die Meldungen auch auf den MySQL Output geschrieben werden soll.
+	 *
+	 * Parameter kann jederzeit geändert werden.
+	 */
+	define ("c_DB_MySQL_Enabled",    false);
+
+	/** Konfigurations Parameter für MySQL
+	 *
+	 * Über diesen Parameter wird gesteuert, welche Meldungen auf den MySQL Output geschrieben werden
+	 *
+	 * Parameter kann jederzeit geändert werden.
+	 */
+	$DB_MySQL_LogTypes  = array(true/*Fat*/, true/*Err*/, true/*Wrn*/, true/*Not*/, true/*Inf*/, true/*Log*/, true/*Dbg*/, true/*Trc*/, false/*Tst*/);
 	
+	/** Konfigurations Parameter für MySQL Output
+	 *
+	 * Serveradresse
+	 * Port
+	 * Database
+	 * Tabellenname
+	 * User
+	 * Password
+	 *
+	 * Parameter koennen jederzeit geändert werden.
+	 */
+	define ("c_DB_MySQL_Server", "192.168.1.1" );
+	define ("c_DB_MySQL_Port", "3306" );
+	define ("c_DB_MySQL_Database", "IPSLogger" );
+	define ("c_DB_MySQL_Table", "tbl_IPSLog" );
+	define ("c_DB_MySQL_User", "xxxxxx" );
+	define ("c_DB_MySQL_Password", "xxxxxx" );
+
+/** @}*/	
 	
 	/** @}*/
 ?>
