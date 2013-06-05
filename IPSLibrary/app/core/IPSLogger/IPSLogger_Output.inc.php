@@ -50,6 +50,7 @@
 		IPSLogger_OutLog4IPS($LogLevel, $LogType, $Context, $Msg.$StackTxt);
 		IPSLogger_OutEcho($LogLevel, $LogType, $Context, $Msg.$StackTxt);
 		IPSLogger_OutProwl($LogLevel, $LogType, $Context, $Msg.$StackTxt, $Priority);
+		IPSLogger_OutMySQL($LogLevel, $LogType, $Context, $Msg);
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
@@ -299,5 +300,88 @@
 			}
 			SetValue($HtmlId, $TablePrefix.$MsgList.$Out.'</table>');
 	}
+	
+function IPSLogger_OutMySQL($LogLevel, $LogType, $Context, $Msg)
+	{
+	
+	if (!defined("c_DB_MySQL_Server")) return;
+	if (!defined("c_DB_MySQL_Port")) return;
+	if (!defined("c_DB_MySQL_Database")) return;
+	if (!defined("c_DB_MySQL_Table")) return;
+	if (!defined("c_DB_MySQL_User")) return;
+	if (!defined("c_DB_MySQL_Password")) return;
+	
+   // Testen ob Verbindung moeglich
+   ini_set('mysql.connect_timeout','10');
+   $server = @mysql_connect(c_DB_MySQL_Server.":".c_DB_MySQL_Port,c_DB_MySQL_User,c_DB_MySQL_Password);
+	if ( !$server )
+   	{
+      IPS_Logmessage(__FILE__,"MySQL-Server nicht bereit");
+      return false;
+      }
+
+	// Datenbank anlegen wenn nicht vorhanden
+   $db_exist = @mysql_select_db(c_DB_MySQL_Database, $server);
+   if (!$db_exist)
+   	{
+      IPS_Logmessage(__FILE__,"MySQL-Datenbank wird angelegt");
+      $mysqlstring = 'CREATE DATABASE ' . c_DB_MySQL_Database .";";
+      $db_exist = mysql_query($mysqlstring);
+      }
+	if ( !$db_exist )
+   	{
+      IPS_Logmessage(__FILE__,"MySQL-Datenbank nicht bereit");
+      return false;
+      }
+
+	// Tabelle erstellen wenn nicht vorhanden
+   $result = mysql_query("SHOW TABLES LIKE '".c_DB_MySQL_Table."'");
+   if (@mysql_num_rows($result) == 0)
+   	{
+      IPS_Logmessage(__FILE__,"MySQL-Tabelle nicht vorhanden wird erstellt");
+      $sql = "CREATE TABLE `" . c_DB_MySQL_Table . "` ";
+      $sql = $sql . "( `ID` INT( 10 ) NOT NULL AUTO_INCREMENT PRIMARY KEY , ";
+      $sql = $sql . "`TIMESTAMP` TIMESTAMP NOT NULL  ,";
+      $sql = $sql . "`LOGLEVEL` INT  ,";
+      $sql = $sql . "`LOGTYPE` VARCHAR( 150 ) ,";
+      $sql = $sql . "`CONTEXT` VARCHAR( 150 ),";
+      $sql = $sql . "`MESSAGE` VARCHAR( 1024 ),  ";
+      $sql = $sql . "INDEX (LOGLEVEL), ";
+      $sql = $sql . "INDEX (LOGTYPE), ";
+      $sql = $sql . "INDEX (CONTEXT), ";
+      $sql = $sql . "INDEX (MESSAGE) ";
+		$sql = $sql . " )  ENGINE = MYISAM ;";
+
+      $tab_exist = mysql_query($sql);
+      }
+   else
+      $tab_exist = true;
+
+   if ( !$tab_exist )
+   	{
+      IPS_Logmessage(__FILE__,"MySQL-Tabelle Fehler bei Tabellenerstellung");
+      return;
+      }
+
+   $Context = str_replace("'",'"',$Context);
+   $Msg = str_replace("'",'"',$Msg);
+
+   // Meldung eintragen
+   $sql = "";
+   $sql = $sql . "INSERT INTO ".c_DB_MySQL_Table." ";
+   $sql = $sql . "(`LOGLEVEL`,`LOGTYPE`,`CONTEXT`,`MESSAGE`) ";
+   $sql = $sql . "VALUES ('".$LogLevel."','".$LogType."','".$Context."','".$Msg."'); ";
+
+   @mysql_query($sql);
+   if ( mysql_error($server) )
+   	{
+      $error =  mysql_errno($server) . ": " . mysql_error($server) . "\n";
+      IPS_LogMessage(__FILE__,"MySQL Fehler :". $error);
+   	}
+
+	mysql_close($server);
+
+	}
+
    /** @}*/
 ?>
