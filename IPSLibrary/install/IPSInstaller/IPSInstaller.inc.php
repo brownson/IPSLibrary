@@ -819,8 +819,10 @@
 	 * @param integer $ColorOn Farbwert der für TRUE verwendet werden soll im HTML Farbcode (z.b. 0x0000FF für Blau). Sonderfall: -1 für Transparent
 	 * @param string $IconOff Dateiname des Icons das für FALSE verwendet werden soll
 	 * @param string $IconOn Dateiname des Icons das für TRUE verwendet werden soll
+	 * @param boolean $DeleteProfile Spezifiziert ob ein bestehendes Profil geöscht werden soll
 	 *
 	 */
+<<<<<<< HEAD
    function CreateProfile_Switch ($Name, $DisplayFalse, $DisplayTrue, $Icon="", $ColorOff=-1, $ColorOn=0x00ff00, $IconOff="", $IconOn="", $DeleteProfile=true) {
         if ($DeleteProfile) { 
             @IPS_DeleteVariableProfile($Name);
@@ -833,6 +835,21 @@
         IPS_SetVariableProfileAssociation($Name, 0, $DisplayFalse, $IconOff, $ColorOff);
         IPS_SetVariableProfileAssociation($Name, 1, $DisplayTrue,  $IconOn,  $ColorOn); 
   }
+=======
+	function CreateProfile_Switch ($Name, $DisplayFalse, $DisplayTrue, $Icon="", $ColorOff=-1, $ColorOn=0x00ff00, $IconOff="", $IconOn="", $DeleteProfile=true) {
+		if ($DeleteProfile) {
+			@IPS_DeleteVariableProfile($Name);
+		}
+		@IPS_CreateVariableProfile($Name, 0);
+		IPS_SetVariableProfileText($Name, "", "");
+		IPS_SetVariableProfileValues($Name, 0, 1, 0);
+		IPS_SetVariableProfileDigits($Name, 0);
+		IPS_SetVariableProfileIcon($Name, $Icon);
+		IPS_SetVariableProfileAssociation($Name, 0, $DisplayFalse, $IconOff, $ColorOff);
+		IPS_SetVariableProfileAssociation($Name, 1, $DisplayTrue, $IconOn, $ColorOn);
+	}
+
+>>>>>>> upstream/Development
 	/** Anlegen eines Integer Profils
 	 *
 	 * Der Befehl legt ein Integer Profil an. Es kann ein Minimalwert, ein Maximalwert und eine Schrittweite
@@ -845,13 +862,20 @@
 	 * @param string $Prefix Prefix für den Wert
 	 * @param string $Suffix Suffix für den Wert
 	 * @param string $Icon Dateiname des Icons
+	 * @param boolean $DeleteProfile Spezifiziert ob ein bestehendes Profil geöscht werden soll
 	 *
 	 */
 	function CreateProfile_Count ($Name, $Start=0, $Step=0, $Stop=0, $Prefix="", $Suffix="", $Icon="", $DeleteProfile=true) {
+<<<<<<< HEAD
 	  if ($DeleteProfile) { 
         @IPS_DeleteVariableProfile($Name);
         }
 
+=======
+		if ($DeleteProfile) {
+			@IPS_DeleteVariableProfile($Name);
+		}
+>>>>>>> upstream/Development
 		@IPS_CreateVariableProfile($Name, 1);
 		IPS_SetVariableProfileText($Name, $Prefix, $Suffix);
 		IPS_SetVariableProfileValues($Name, $Start, $Stop, $Step);
