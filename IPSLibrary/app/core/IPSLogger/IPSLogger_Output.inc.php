@@ -409,8 +409,11 @@
 			return;
 		}
 
-		$Context = str_replace("'",'"',$Context);
-		$Msg = str_replace("'",'"',$Msg);
+    $Context = str_replace("'",'"',$Context);
+    $Context = str_replace("\\","\\\\",$Context);
+    $Msg = str_replace("'",'"',$Msg);
+    $Msg = str_replace("\\",'\\\\',$Msg);
+
 
 		// Meldung eintragen
 		$sql = "";
