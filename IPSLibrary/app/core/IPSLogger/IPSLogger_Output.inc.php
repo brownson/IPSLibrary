@@ -414,6 +414,8 @@
     $Msg = str_replace("'",'"',$Msg);
     $Msg = str_replace("\\",'\\\\',$Msg);
 
+	  $Context = substr($Context,0,150);
+	  $Msg = substr($Msg,0,1024);
 
 		// Meldung eintragen
 		$sql = "";
