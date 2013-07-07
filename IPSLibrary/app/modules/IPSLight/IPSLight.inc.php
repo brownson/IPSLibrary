@@ -55,7 +55,7 @@
 	 */
 	function IPSLight_SetSwitch($switchId, $value) {
 		$lightManager = new IPSLight_Manager();
-		$lightManager->SetSwitch($switchId, $value);
+		$lightManager->SetValue($switchId, $value);
 	}
 
 	/**
@@ -65,7 +65,7 @@
 	 */
 	function IPSLight_ToggleSwitch($switchId) {
 		$lightManager = new IPSLight_Manager();
-		$lightManager->SetSwitch($switchId, !$lightManager->GetValue($switchId));
+		$lightManager->SetValue($switchId, !$lightManager->GetValue($switchId));
 	}
 
 	/**

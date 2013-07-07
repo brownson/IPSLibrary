@@ -255,7 +255,29 @@
 					IPSLIGHT_PROGRAMLEVEL	=> 	'',
 				),
 			),
-	   );
+			// ===== Wohnzimmer ==================================================================
+			'WohnenProgram'  	=>	array(
+				'Aus'  	=>	array(
+					IPSLIGHT_PROGRAMOFF		=> 	'Esstisch,Wohnzimmer,Ambiente,Wohnbereich,Kueche,Arbeitszimmer',
+					IPSLIGHT_PROGRAMLEVEL	=> 	'',
+				),
+				'Essen'  	=>	array(
+					IPSLIGHT_PROGRAMON		=> 	'Esstisch',
+					IPSLIGHT_PROGRAMOFF		=> 	'Wohnzimmer,Ambiente,Wohnbereich,Arbeitszimmer',
+					IPSLIGHT_PROGRAMLEVEL	=> 	'',
+				),
+				'TV'  	=>	array(
+					IPSLIGHT_PROGRAMON		=> 	'Wohnzimmer',
+					IPSLIGHT_PROGRAMOFF		=> 	'Esstisch,Ambiente,Wohnbereich,Kueche,Arbeitszimmer',
+					IPSLIGHT_PROGRAMRGB		=> 	'Ambiente,70,255,255,0',
+				),
+				'Relax'  	=>	array(
+					IPSLIGHT_PROGRAMON		=> 	'',
+					IPSLIGHT_PROGRAMOFF		=> 	'Esstisch,Wohnzimmer,Wohnbereich,Kueche,Arbeitszimmer',
+					IPSLIGHT_PROGRAMRGB		=> 	'Ambiente,100,255,255,0',
+				),
+			),
+		);
 	}
 
 	/**
