@@ -933,9 +933,13 @@
 		$ParentId = str_replace(' ','_',$ParentId);
 		//$ItemId   = str_replace('_','',$ItemId);
 		//$ParentId = str_replace('_','',$ParentId);
-		$Title    = utf8_encode($Title);
-		$ItemId   = utf8_encode($ItemId);
-		$ParentId = utf8_encode($ParentId);
+		$version = IPS_GetKernelVersion();
+		$versionArray = explode('.', $version);
+		if ($versionArray[0] < 3) {
+			$Title    = utf8_encode($Title);
+			$ItemId   = utf8_encode($ItemId);
+			$ParentId = utf8_encode($ParentId);
+		}
 	}
 
 	function CreateWFCItem ($WFCId, $ItemId, $ParentId, $Position, $Title, $Icon, $ClassName, $Configuration) {
