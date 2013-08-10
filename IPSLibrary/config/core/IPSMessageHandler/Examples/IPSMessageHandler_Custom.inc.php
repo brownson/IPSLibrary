@@ -16,6 +16,10 @@
 	 *
 	 * Callback Funktion, die vor dem behandeln eines Events aufgerufen wird
 	 *
+	 * @param integer $variable ID der auslösenden Variable
+	 * @param string $value Wert der Variable
+	 * @param string $component, Source Componente
+	 * @param string $module Destination Module
 	 * @return boolean Funktions Ergebnis, bei false wird das Event NICHT weitergereicht
 	 */
 	function IPSMessageHandler_BeforeHandleEvent($variable, $value, IPSComponent $component, IPSModule $module) {
@@ -47,16 +51,65 @@
 					return false;
 				}
 				break;
+			case 57607:
+				HM_WriteValueBoolean(40393, 'STATE', true);
+				HM_WriteValueBoolean(40393, 'STATE', false);
+				break;
+			case 20451:
+				HM_WriteValueBoolean(33866, 'STATE', true);
+				HM_WriteValueBoolean(33866, 'STATE', false);
+				break;
+			case 45699:
+				IPSUtils_Include ("IPSLight.inc.php",          "IPSLibrary::app::modules::IPSLight");
+				IPSUtils_Include ("Entertainment.inc.php",     "IPSLibrary::app::modules::Entertainment");
+				if (GetValue(17535)) {
+					IPSLight_SetSwitch(17535,false);
+					IPSLight_SetSwitch(23068,false);
+					IPSLight_SetSwitch(18489,false);
+					Entertainment_SetRoomPowerByRoomId(22483,false);
+				} else {
+					IPSLight_SetSwitch(17535,true);
+					Entertainment_SetRoomPowerByRoomId(22483,true);
+				}
+				return false;
 			default:
 				return true;
 		}
 		return true;
 	}
 
-	/*
+	/**
 	 *
+	 * Callback Funktion, die nach dem behandeln eines Events aufgerufen wird
+	 *
+	 * @param integer $variable ID der auslösenden Variable
+	 * @param string $value Wert der Variable
+	 * @param string $component, Source Componente
+	 * @param string $module Destination Module
 	 *
 	 */
-	 
+	function IPSMessageHandler_AfterHandleEvent($variable, $value, IPSComponent $component, IPSModule $module) {
+	}
+
+	/**
+	 *
+	 * Callback Funktion, die für das Behandeln von IPSLibary Events aufgerufen wird
+	 *
+	 * @param string $variable ID der auslösenden Variable
+	 * @param string $value Wert der Variable
+	 * @param string $module Name des auslösenden Modules
+	 * @param string $event Name des auslösenden Events
+	 *
+	 */
+	function IPSMessageHandler_HandleLibraryEvent($variable, $value, $component, $module) {
+		switch($variable) {
+			// Taster zur Ansteuerung der Markisen
+			case 33471: /*InpS2*/
+				HM_WriteValueBoolean(15191, 'STATE', $value);
+				break;
+			default:
+		}
+	}
+
 	/** @}*/
 ?>

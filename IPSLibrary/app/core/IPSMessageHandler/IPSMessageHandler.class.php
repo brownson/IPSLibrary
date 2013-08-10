@@ -32,6 +32,7 @@
 
 	IPSUtils_Include ('IPSLogger.inc.php',      'IPSLibrary::app::core::IPSLogger');
 	IPSUtils_Include ('IPSMessageHandler_Configuration.inc.php', 'IPSLibrary::config::core::IPSMessageHandler');
+	IPSUtils_Include ('IPSMessageHandler_Custom.inc.php',        'IPSLibrary::config::core::IPSMessageHandler');
 	IPSUtils_Include ('IPSComponent.class.php', 'IPSLibrary::app::core::IPSComponent');
 	IPSUtils_Include ('IPSModule.class.php',    'IPSLibrary::app::core::IPSComponent');
 
@@ -265,7 +266,7 @@
 		public static function RegisterOnUpdateEvent($variableId, $componentParams, $moduleParams) {
 			self::RegisterEvent($variableId, 'OnUpdate', $componentParams, $moduleParams);
 		}
-
+		
 		/**
 		 * @public
 		 *
@@ -366,7 +367,22 @@
 				}
 			}
 		}
+	}
 
+	/**
+	 * @public
+	 *
+	 * Methode um autretende Library Events zu processen
+	 *
+	 * @param string $variable ID der auslösenden Variable
+	 * @param string $value Wert der Variable
+	 * @param string $module Name des auslösenden Modules
+	 * @param string $event Name des auslösenden Events
+	 */
+	function IPSMessageHandler_HandleLibraryEvent($variable, $value, $module='', $event='') {
+		if (function_exists('IPSMessageHandler_HandleLibraryEvent')) {
+			IPSMessageHandler_AfterHandleLibraryEvent($variable, $value, $module, $event);
+		}
 	}
 
 	/** @}*/
