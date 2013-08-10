@@ -87,6 +87,8 @@
 	define ('IPSCAM_VAR_CAMSELECT',				'CamSelect');
 	define ('IPSCAM_VAR_CAMPOWER',				'CamPower');
 	define ('IPSCAM_VAR_CAMHTML',				'CamHtml');
+	define ('IPSCAM_VAR_HTML',					'Html');
+	define ('IPSCAM_VAR_IHTML',					'iHtml');
 	define ('IPSCAM_VAR_CAMPICT',				'CamPict');
 	define ('IPSCAM_VAR_CAMHIST',				'CamHist');
 	define ('IPSCAM_VAR_MODE',					'Mode');
