@@ -33,18 +33,17 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
 		<meta http-equiv="Pragma" content="no-cache">
 		<meta http-equiv="Expires" content="0">
-        <meta http-equiv="content-type" content="text/html; charset=utf-8">
 			
 		<style type="text/css">html, body { margin: 0; padding: 0; }</style>
 		<link href="/user/default.css" rel="stylesheet" type="text/css" />
 
 		<script type="text/javascript" src="jquery.min.js"></script>
 
-		<script type="text/javascript">
+		<script type="text/javascript" charset="ISO-8859-1" >
 			function trigger_button(action, module, info) {
 				var serverAddr = "<?echo $_SERVER["HTTP_HOST"];?>";
 				var id         = $(this).attr("id");
@@ -81,6 +80,7 @@
 
 				$.ajax({type: "POST",
 						url: location.protocol+"//"+serverAddr+"/user/IPSModuleManagerGUI/IPSModuleManagerGUI_Receiver.php",
+						contentType:"application/x-www-form-urlencoded; charset=ISO-8859-1",
 						data: encodeURIComponent("id="+id+"&action="+action+"&module="+module+"&info="+info
 						       +"&WFC10Enabled="+WFC10Enabled
 						       +"&WFC10TabPaneExclusive="+WFC10TabPaneExclusive
