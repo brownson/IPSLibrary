@@ -82,6 +82,7 @@
 			break;
 		case 'Execute':
 		case 'RunScript':
+		case 'WebInterface':
 			CalculateCurrentValues($categoryId_Values, $scriptId_Refresh);
 			GenerateGraphics($variableId_Display);
 			break;
