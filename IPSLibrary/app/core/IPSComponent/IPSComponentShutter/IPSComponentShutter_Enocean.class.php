@@ -35,12 +35,12 @@
 		 */
 		public function __construct($instanceId) {
 			$this->instanceId = IPSUtil_ObjectIDByPath($instanceId);
-			$this->isRunningId  = @IPS_GetObjectIDByIdent('isrunning', $this->instanceId);
+			$this->isRunningId  = @IPS_GetObjectIDByIdent('runningMode', $this->instanceId);
 			if($this->isRunningId===false) {
-				$this->isRunningId = IPS_CreateVariable(0 /*Boolean*/);
+				$this->isRunningId = IPS_CreateVariable(1 /*Integer*/);
 				IPS_SetParent($this->isRunningId, $this->instanceId);
-				IPS_SetName($this->isRunningId, 'IsRunning');
-				IPS_SetIdent($this->isRunningId, 'isrunning');
+				IPS_SetName($this->isRunningId, 'RunningMode');
+				IPS_SetIdent($this->isRunningId, 'runningMode');
 				IPS_SetInfo($this->isRunningId, "This Variable was created by Script IPSComponentShutter_Enocean");
 			}
 		}
@@ -81,7 +81,7 @@
 		public function MoveUp(){
 			if(!GetValue($this->isRunningId)) {
 				ENO_SwitchMode($this->instanceId, true);
-				SetValue($this->isRunningId, true);
+				SetValue($this->isRunningId, 1);
 			}
 		}
 
@@ -93,7 +93,7 @@
 		public function MoveDown(){
 			if(!GetValue($this->isRunningId)) {
 				ENO_SwitchMode($this->instanceId, false);
-				SetValue($this->isRunningId, true);
+				SetValue($this->isRunningId, 2);
 			}
 		}
 
@@ -103,13 +103,17 @@
 		 * Stop
 		 */
 		public function Stop() {
-			if(GetValue($this->isRunningId)) {
-				$value = GetValue(IPS_GetObjectIDByIdent("StatusVariable", $this->instanceId));
-				ENO_SwitchMode($this->instanceId, $value);
-				SetValue($this->isRunningId, false);
+			$running = GetValue($this->isRunningId);
+			if($running != 0) {
+				if ($running == 1) {
+					ENO_SwitchMode($this->instanceId, true);
+				} else if ($running == 2) {
+					ENO_SwitchMode($this->instanceId, false);
+				} else {
+				}
+				SetValue($this->isRunningId, 0);
 			}
 		}
-
 	}
 
 	/** @}*/
