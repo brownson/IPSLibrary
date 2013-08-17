@@ -86,61 +86,67 @@
 			throw new IPSComponentException('Event Handling NOT supported for Variable '.$variable.'('.$name.')');
 		}
 
-		/**
-		 * @public
-		 *
-		 * Liefert URL des Kamera Live Streams 
-		 *
-		 * @param integer $size Größe des Streams, mögliche Werte:
-		 *                      IPSCOMPONENTCAM_SIZE_SMALL, IPSCOMPONENTCAM_SIZE_MIDDLE oder IPSCOMPONENTCAM_SIZE_LARGE
-		 * @return string URL des Streams
-		 */
-		public function Get_URLLiveStream($size=IPSCOMPONENTCAM_SIZE_MIDDLE) {
-			$url = 'http://'.$this->username.':'.$this->password.'@'.$this->ipAddress.'/video.mjpg';
-			switch ($size) {
-				case  IPSCOMPONENTCAM_SIZE_SMALL:
-					$url .= '?streamid=0';
-					break;
-				case  IPSCOMPONENTCAM_SIZE_MIDDLE:
-					$url .= '?streamid=1';
-					break;
-				case  IPSCOMPONENTCAM_SIZE_LARGE:
-					$url .= '?streamid=2';
-					break;
-				default:
-					trigger_error('Unknown Size '.$size);
-			}
-			return $url;
-		}
+        /**
+         * @public
+         *
+         * Liefert URL des Kamera Live Streams 
+         *
+         * @param integer $size Größe des Streams, mögliche Werte:
+         *                      IPSCOMPONENTCAM_SIZE_SMALL, IPSCOMPONENTCAM_SIZE_MIDDLE oder IPSCOMPONENTCAM_SIZE_LARGE
+         * @return string URL des Streams
+         */
+        public function Get_URLLiveStream($size=IPSCOMPONENTCAM_SIZE_MIDDLE) {
+            $url = 'http://'.$this->username.':'.$this->password.'@'.$this->ipAddress.'/video';
+            switch ($size)
+            {
+                case  IPSCOMPONENTCAM_SIZE_SMALL:
+                    $url .= '3';
+                    break;
+                case  IPSCOMPONENTCAM_SIZE_MIDDLE:
+                    $url .= '2';
+                    break;
+                case  IPSCOMPONENTCAM_SIZE_LARGE:
+                    $url .= '';
+                    break;
+                default:
+                    trigger_error('Unknown Size '.$size);
+            }
+            
+            $url .= '.mjpg';
+            
+            return $url;
+        }  
 
-		/**
-		 * @public
-		 *
-		 * Liefert URL des Kamera Bildes 
-		 *
-		 * @param integer $size Größe des Bildes, mögliche Werte:
-		 *                      IPSCOMPONENTCAM_SIZE_SMALL, IPSCOMPONENTCAM_SIZE_MIDDLE oder IPSCOMPONENTCAM_SIZE_LARGE 
-		 * @return string URL des Bildes
-		 */
-		public function Get_URLPicture($size=IPSCOMPONENTCAM_SIZE_MIDDLE) {
-			$url = 'http://'.$this->username.':'.$this->password.'@'.$this->ipAddress.'/cgi-bin/viewer/video.jpg';
+        /**
+         * @public
+         *
+         * Liefert URL des Kamera Bildes 
+         *
+         * @param integer $size Größe des Bildes, mögliche Werte:
+         *                      IPSCOMPONENTCAM_SIZE_SMALL, IPSCOMPONENTCAM_SIZE_MIDDLE oder IPSCOMPONENTCAM_SIZE_LARGE 
+         * @return string URL des Bildes
+         */
+        public function Get_URLPicture($size=IPSCOMPONENTCAM_SIZE_MIDDLE) {
+            $url = 'http://'.$this->username.':'.$this->password.'@'.$this->ipAddress.'/cgi-bin/viewer/video.jpg?resolution=';
 
-			switch ($size) {
-				case  IPSCOMPONENTCAM_SIZE_SMALL:
-					$url .= '?streamid=1';
-					break;
-				case  IPSCOMPONENTCAM_SIZE_MIDDLE:
-					$url .= '?streamid=0';
-					break;
-				case  IPSCOMPONENTCAM_SIZE_LARGE:
-					$url .= '?streamid=2';
-					break;
-				default:
-					trigger_error('Unknown Size '.$size);
-			}
-			return $url;
-		}
+            switch ($size)
+            {
+                case  IPSCOMPONENTCAM_SIZE_SMALL:
+                    $url .= (int)(1280*(IPSCAM_HEIGHT_SMALL/720)).'x'.IPSCAM_HEIGHT_SMALL;
+                    break;
+                case  IPSCOMPONENTCAM_SIZE_MIDDLE:
+                    $url .= (int)(1280*(IPSCAM_HEIGHT_MIDDLE/720)).'x'.IPSCAM_HEIGHT_MIDDLE;
+                    break;
+                case  IPSCOMPONENTCAM_SIZE_LARGE:
+                    $url .= (int)(1280*(IPSCAM_HEIGHT_LARGE/720)).'x'.IPSCAM_HEIGHT_LARGE;
+                    break;
+                default:
+                    trigger_error('Unknown Size '.$size);
+            }
 
+            return $url;
+        }  
+		
 		/**
 		 * @public
 		 *
