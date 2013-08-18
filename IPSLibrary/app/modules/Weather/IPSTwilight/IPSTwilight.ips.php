@@ -82,9 +82,12 @@
 			break;
 		case 'Execute':
 		case 'RunScript':
-		default:
+		case 'WebInterface':
 			CalculateCurrentValues($categoryId_Values, $scriptId_Refresh);
 			GenerateGraphics($variableId_Display);
+			break;
+		default:
+			IPSLogger_Err(__file__, 'Unknown Sender '.$_IPS['SENDER']);
 			break;
 	}
 

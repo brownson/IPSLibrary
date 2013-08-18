@@ -19,43 +19,46 @@
 	 /**@addtogroup ipscomponent
 	 * @{
 	 *
-	 * @file          IPSComponentCam_Vivotek.class.php
+	 * @file          IPSComponentCam_YCam.class.php
 	 * @author        Andreas Brauneis
 	 *
 	 */
 
 	/**
-    * @class IPSComponentCam_Vivotek
+    * @class IPSComponentCam_YCam
     *
     * Definiert ein IPSComponentCam Object, das die Funktionen einer Cam Componente für eine 
-    * Vivotek Kamera implementiert
+    * YCam Kamera implementiert
     *
     * @author Andreas Brauneis
     * @version
-    *   Version 2.50.1, 26.08.2012<br/>
+    *   Version 2.50.1, 01.06.2013<br/>
     */
 
 	IPSUtils_Include ('IPSComponentCam.class.php', 'IPSLibrary::app::core::IPSComponent::IPSComponentCam');
 
-	class IPSComponentCam_Vivotek extends IPSComponentCam {
+	class IPSComponentCam_YCam extends IPSComponentCam {
 
 		private $ipAddress;
+		private $port;
 		private $username;
 		private $password;
 
 		/**
 		 * @public
 		 *
-		 * Initialisierung eines IPSComponentCam_Vivotek Objektes
+		 * Initialisierung eines IPSComponentCam_YCam Objektes
 		 *
 		 * @param string $ipAddress IP Adresse der Kamera
 		 * @param string $username Username für Kamera Zugriff
 		 * @param string $password Passwort für Kamera Zugriff
+		 * @param string $port Port für Kamera Zugriff
 		 */
-		public function __construct($ipAddress, $username, $password) {
+		public function __construct($ipAddress, $username, $password, $port=8150) {
 			$this->ipAddress  = $ipAddress;
 			$this->username   = $username;
 			$this->password   = $password;
+			$this->port       = $port;
 		}
 
 			/**
@@ -86,67 +89,62 @@
 			throw new IPSComponentException('Event Handling NOT supported for Variable '.$variable.'('.$name.')');
 		}
 
-        /**
-         * @public
-         *
-         * Liefert URL des Kamera Live Streams 
-         *
-         * @param integer $size Größe des Streams, mögliche Werte:
-         *                      IPSCOMPONENTCAM_SIZE_SMALL, IPSCOMPONENTCAM_SIZE_MIDDLE oder IPSCOMPONENTCAM_SIZE_LARGE
-         * @return string URL des Streams
-         */
-        public function Get_URLLiveStream($size=IPSCOMPONENTCAM_SIZE_MIDDLE) {
-            $url = 'http://'.$this->username.':'.$this->password.'@'.$this->ipAddress.'/video';
-            switch ($size)
-            {
-                case  IPSCOMPONENTCAM_SIZE_SMALL:
-                    $url .= '3';
-                    break;
-                case  IPSCOMPONENTCAM_SIZE_MIDDLE:
-                    $url .= '2';
-                    break;
-                case  IPSCOMPONENTCAM_SIZE_LARGE:
-                    $url .= '';
-                    break;
-                default:
-                    trigger_error('Unknown Size '.$size);
-            }
-            
-            $url .= '.mjpg';
-            
-            return $url;
-        }  
+		/**
+		 * @public
+		 *
+		 * Liefert URL des Kamera Live Streams 
+		 *
+		 * @param integer $size Größe des Streams, mögliche Werte:
+		 *                      IPSCOMPONENTCAM_SIZE_SMALL, IPSCOMPONENTCAM_SIZE_MIDDLE oder IPSCOMPONENTCAM_SIZE_LARGE
+		 * @return string URL des Streams
+		 */
+		public function Get_URLLiveStream($size=IPSCOMPONENTCAM_SIZE_MIDDLE) {
+			$url = 'http://'.$this->username.':'.$this->password.'@'.$this->ipAddress.':'.$this->port.'/stream';
+			switch ($size) {
+				case  IPSCOMPONENTCAM_SIZE_SMALL:
+					$url .= '1';
+					break;
+				case  IPSCOMPONENTCAM_SIZE_MIDDLE:
+					$url .= '';
+					break;
+				case  IPSCOMPONENTCAM_SIZE_LARGE:
+					$url .= '';
+					break;
+				default:
+					trigger_error('Unknown Size '.$size);
+			}
+			$url .= '.jpg';
+			
+			return $url;
+		}
 
-        /**
-         * @public
-         *
-         * Liefert URL des Kamera Bildes 
-         *
-         * @param integer $size Größe des Bildes, mögliche Werte:
-         *                      IPSCOMPONENTCAM_SIZE_SMALL, IPSCOMPONENTCAM_SIZE_MIDDLE oder IPSCOMPONENTCAM_SIZE_LARGE 
-         * @return string URL des Bildes
-         */
-        public function Get_URLPicture($size=IPSCOMPONENTCAM_SIZE_MIDDLE) {
-            $url = 'http://'.$this->username.':'.$this->password.'@'.$this->ipAddress.'/cgi-bin/viewer/video.jpg?resolution=';
+		/**
+		 * @public
+		 *
+		 * Liefert URL des Kamera Bildes 
+		 *
+		 * @param integer $size Größe des Bildes, mögliche Werte:
+		 *                      IPSCOMPONENTCAM_SIZE_SMALL, IPSCOMPONENTCAM_SIZE_MIDDLE oder IPSCOMPONENTCAM_SIZE_LARGE 
+		 * @return string URL des Bildes
+		 */
+		public function Get_URLPicture($size=IPSCOMPONENTCAM_SIZE_MIDDLE) {
+			$url = 'http://'.$this->username.':'.$this->password.'@'.$this->ipAddress.':'.$this->port.'/snapshot.jpg';
+			switch ($size) {
+				case  IPSCOMPONENTCAM_SIZE_SMALL:
+					$url .= '';
+					break;
+				case  IPSCOMPONENTCAM_SIZE_MIDDLE:
+					$url .= '';
+					break;
+				case  IPSCOMPONENTCAM_SIZE_LARGE:
+					$url .= '';
+					break;
+				default:
+					trigger_error('Unknown Size '.$size);
+			}
+			return $url;
+		}
 
-            switch ($size)
-            {
-                case  IPSCOMPONENTCAM_SIZE_SMALL:
-                    $url .= (int)(1280*(IPSCAM_HEIGHT_SMALL/720)).'x'.IPSCAM_HEIGHT_SMALL;
-                    break;
-                case  IPSCOMPONENTCAM_SIZE_MIDDLE:
-                    $url .= (int)(1280*(IPSCAM_HEIGHT_MIDDLE/720)).'x'.IPSCAM_HEIGHT_MIDDLE;
-                    break;
-                case  IPSCOMPONENTCAM_SIZE_LARGE:
-                    $url .= (int)(1280*(IPSCAM_HEIGHT_LARGE/720)).'x'.IPSCAM_HEIGHT_LARGE;
-                    break;
-                default:
-                    trigger_error('Unknown Size '.$size);
-            }
-
-            return $url;
-        }  
-		
 		/**
 		 * @public
 		 *
@@ -165,7 +163,7 @@
 		                                           IPSCOMPONENTCAM_URL_PREDEFPOS5
 		 */
 		public function Get_URL($urlType) {
-			trigger_error('Diese Funktion ist für eine Vivotek Kamera noch NICHT implementiert !!!');
+			trigger_error('Diese Funktion ist für eine YCam Kamera noch NICHT implementiert !!!');
 		}
 
 		/**
@@ -209,7 +207,7 @@
 					$return = 240;
 					break;
 				case  IPSCOMPONENTCAM_SIZE_MIDDLE:
-					$return = 400;
+					$return = 480;
 					break;
 				case  IPSCOMPONENTCAM_SIZE_LARGE:
 					$return = 768;

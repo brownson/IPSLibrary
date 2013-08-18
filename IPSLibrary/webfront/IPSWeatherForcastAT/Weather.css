@@ -1,4 +1,4 @@
-﻿html, body{margin:0; padding:10px; height:100%; font:normal 14px verdana; color:#fff; overflow:hidden;}
+﻿html, body{margin:0; padding:10px; height:100%; font:normal 14px verdana; overflow:hidden;}
 body{-moz-user-select: none; -khtml-user-select: none; user-select: none;}
 
 #containerToday{position:absolute; left:10px; top:10px; width:42%; height:98%; border:1px solid #9ab3ca; float:left; }

@@ -91,8 +91,9 @@
 		 * Zustand Setzen
 		 *
 		 * @param boolean $value Wert für Schalter
+		 * @param integer $onTime Zeit in Sekunden nach der der Aktor automatisch ausschalten soll (nicht unterstützt)
 		 */
-		public function SetState($value) {
+		public function SetState($value, $onTime=false) {
 			// Ein Binary Switch
 			if ($this->b_class_switch and ($this->channel == 0))
 				ZW_SwitchMode((int)$this->instanceId, $value);

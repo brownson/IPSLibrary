@@ -3,40 +3,37 @@
 	 * @{
 	 *
  	 *
-	 * @file          IPSComponentSwitch_1WireD2408.class.php
-	 * @author        Andreas Brauneis
+	 * @file          IPSComponentSwitch_ALLNET.class.php
+	 * @author        Juergen Gerharz      
 	 *
 	 *
 	 */
 
    /**
-    * @class IPSComponentSwitch_1WireD2408
+    * @class IPSComponentSwitch_ALLNET
     *
-    * Definiert ein IPSComponentSwitch_1WireD2408 Object, das ein IPSComponentSwitch Object für 1WireD2408 implementiert.
+    * Definiert ein IPSComponentSwitch_ALLNET Object, das ein IPSComponentSwitch Object für ALLNET implementiert.
     *
-    * @author Andreas Brauneis
+    * @author Juergen Gerharz
     * @version
-    * Version 2.50.1, 31.01.2012<br/>
+    * Version 2.50.1, 06.02.2013<br/>
     */
 
 	IPSUtils_Include ('IPSComponentSwitch.class.php', 'IPSLibrary::app::core::IPSComponent::IPSComponentSwitch');
 
-	class IPSComponentSwitch_1WireD2408 extends IPSComponentSwitch {
+	class IPSComponentSwitch_ALLNET extends IPSComponentSwitch {
 
 		private $instanceId;
-		private $channelId;
 	
 		/**
 		 * @public
 		 *
-		 * Initialisierung eines IPSComponentSwitch_1WireD2408 Objektes
+		 * Initialisierung eines IPSComponentSwitch_ALLNET Objektes
 		 *
-		 * @param integer $instanceId InstanceId des 1WireD2408 Devices
-		 * @param integer $channelId Kanal des 1WireD2408 Devices
+		 * @param integer $instanceId InstanceId des ALLNET Devices
 		 */
-		public function __construct($instanceId, $channelId) {
+		public function __construct($instanceId) {
 			$this->instanceId = IPSUtil_ObjectIDByPath($instanceId);
-			$this->channelId  = (int)$channelId;
 		}
 
 		/**
@@ -49,7 +46,7 @@
 		 * @return string Parameter String des IPSComponent Object
 		 */
 		public function GetComponentParams() {
-			return get_class($this).','.$this->instanceId.','.$this->channelId;
+			return get_class($this).','.$this->instanceId;
 		}
 
 		/**
@@ -72,10 +69,9 @@
 		 * Zustand Setzen 
 		 *
 		 * @param boolean $value Wert für Schalter
-		 * @param integer $onTime Zeit in Sekunden nach der der Aktor automatisch ausschalten soll (nicht unterstützt)
 		 */
-		public function SetState($value, $onTime=false) {
-			TMEX_F29_SetPin($this->instanceId, $this->channelId, $value); 
+		public function SetState($value) {
+			ALL_SwitchMode($this->instanceId, $value);
 		}
 
 		/**
@@ -86,7 +82,8 @@
 		 * @return boolean aktueller Schaltzustand  
 		 */
 		public function GetState() {
-			return null;
+		  $value = GetValueBoolean(IPS_GetObjectIDByIdent("StatusVariable",$this->instanceId)); 
+			return $value;
 		}
 
 	}

@@ -69,8 +69,9 @@
 		 * Zustand Setzen 
 		 *
 		 * @param boolean $value Wert für Schalter
+		 * @param integer $onTime Zeit in Sekunden nach der der Aktor automatisch ausschalten soll (nicht unterstützt)
 		 */
-		public function SetState($value) {
+		public function SetState($value, $onTime=false) {
 			EIB_Switch($this->instanceId, $value);
 		}
 

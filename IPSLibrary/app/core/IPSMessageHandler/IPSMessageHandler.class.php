@@ -381,7 +381,7 @@
 	 */
 	function IPSMessageHandler_HandleLibraryEvent($variable, $value, $module='', $event='') {
 		if (function_exists('IPSMessageHandler_HandleLibraryEvent')) {
-			IPSMessageHandler_HandleLibraryEvent($variable, $value, $component, $module);
+			IPSMessageHandler_AfterHandleLibraryEvent($variable, $value, $module, $event);
 		}
 	}
 

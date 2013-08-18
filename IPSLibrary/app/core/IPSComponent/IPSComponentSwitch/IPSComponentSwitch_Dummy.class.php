@@ -68,9 +68,13 @@
 		 * Zustand Setzen 
 		 *
 		 * @param boolean $value Wert für Schalter
+		 * @param integer $onTime Zeit in Sekunden nach der der Aktor automatisch ausschalten soll (nicht unterstützt)
 		 */
-		public function SetState($value) {
-			IPSLogger_Trc(__file__, 'Activate Dummy-Switch "'.$this->instanceId.'", Value='.($value?'On':'Off'));
+		public function SetState($value, $onTime=false) {
+			if ($onTime!==false and $value) 
+				IPSLogger_Trc(__file__, 'Activate Dummy-Switch "'.$this->instanceId.'", Value='.($value?'On':'Off').', OnTime='.$onTime);
+			else
+				IPSLogger_Trc(__file__, 'Activate Dummy-Switch "'.$this->instanceId.'", Value='.($value?'On':'Off'));
 		}
 
 		/**

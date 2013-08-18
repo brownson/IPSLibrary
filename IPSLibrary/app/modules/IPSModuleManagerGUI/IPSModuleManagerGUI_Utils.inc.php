@@ -66,7 +66,7 @@
 					}
 					if (array_key_exists($section.$property, $data)) {
 						$value = $data[$section.$property];
-						$value = html_entity_decode($value, ENT_COMPAT, 'UTF-8');
+						$value = html_entity_decode($value, ENT_COMPAT, 'ISO-8859-1');
 					}
 					$fileContent .= $property.'="'.$value.'"'.PHP_EOL;
 				}

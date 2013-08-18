@@ -131,30 +131,35 @@
 
 		$names = array('TodayDay', 'TomorrowDay', 'Tomorrow1Day', 'Tomorrow2Day');
 		foreach($api->xpath('//yweather:forecast/@day') as $idx=>$weather) {
-			IPSWeatherFAT_SetValueXML($names[$idx],$weather, '', '', array($DaySourceArray, $DayDisplayArray));
+			if ($idx <= 3)
+				IPSWeatherFAT_SetValueXML($names[$idx],$weather, '', '', array($DaySourceArray, $DayDisplayArray));
 		}
 
 		// Wettervorhersage heute, morgen, in zwei und in drei Tagen ($wetter[1] bis $wetter[4])
 		$names = array('TodayForecastShort', 'TomorrowForecastShort', 'Tomorrow1ForecastShort', 'Tomorrow2ForecastShort');
 		foreach($api->xpath('//yweather:forecast/@text') as $idx=>$weather) {
-			IPSWeatherFAT_SetValueXML($names[$idx],$weather);
+			if ($idx <= 3)
+				IPSWeatherFAT_SetValueXML($names[$idx],$weather);
 		}
 
 		$names = array('TodayTempMin','TomorrowTempMin', 'Tomorrow1TempMin', 'Tomorrow2TempMin');
 		foreach($api->xpath('//yweather:forecast/@low') as $idx=>$weather) {
-			IPSWeatherFAT_SetValueXML($names[$idx],$weather);
+			if ($idx <= 3)
+   			IPSWeatherFAT_SetValueXML($names[$idx],$weather);
 		}
 		$names = array('TodayTempMax','TomorrowTempMax', 'Tomorrow1TempMax', 'Tomorrow2TempMax');
 		foreach($api->xpath('//yweather:forecast/@high') as $idx=>$weather) {
-			IPSWeatherFAT_SetValueXML($names[$idx],$weather);
+			if ($idx <= 3)
+				IPSWeatherFAT_SetValueXML($names[$idx],$weather);
 		}
 
 		$names = array('TodayIcon', 'TomorrowIcon', 'Tomorrow1Icon', 'Tomorrow2Icon');
 		foreach($api->xpath('//yweather:forecast/@text') as $idx=>$weather) {
 			if ($idx==0) {
 				IPSWeatherFAT_SetValueXML($names[$idx],strtolower($weather[0]), IPSWEATHERFAT_ICONS_LARGE, '.png', $icon_array);
-			} else {
+			} elseif ($idx <= 3) {
 				IPSWeatherFAT_SetValueXML($names[$idx],strtolower($weather[0]), IPSWEATHERFAT_ICONS_SMALL, '.png', $icon_array);
+			} else {
 			}
 		}
 	}
