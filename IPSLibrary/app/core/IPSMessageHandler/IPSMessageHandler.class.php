@@ -380,7 +380,7 @@
 	 * @param string $event Name des auslösenden Events
 	 */
 	function IPSMessageHandler_HandleLibraryEvent($variable, $value, $module='', $event='') {
-		if (function_exists('IPSMessageHandler_HandleLibraryEvent')) {
+		if (function_exists('IPSMessageHandler_AfterHandleLibraryEvent')) {
 			IPSMessageHandler_AfterHandleLibraryEvent($variable, $value, $module, $event);
 		}
 	}

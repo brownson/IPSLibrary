@@ -49,7 +49,7 @@
 	 * @param string $event Name des auslösenden Events
 	 *
 	 */
-	function IPSMessageHandler_HandleLibraryEvent($variable, $value, $component, $module) {
+	function IPSMessageHandler_AfterHandleLibraryEvent($variable, $value, $component, $module) {
 	}
 
 	/** @}*/
