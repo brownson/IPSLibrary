@@ -677,7 +677,7 @@
 				$filenameFull = $directory.$filename;
 				$fileDate = substr($filename, 0, 8);
 				IPSLogger_Trc(__file__, 'Found File: '.$file.', FileDate='.$fileDate.', RefDate='.$refDate);
-				if ($fileDate < $refDate) {
+				if (($fileDate < $refDate) && (@IPS_GetMediaIDByFile(str_replace(IPS_GetKernelDir()."\\","",$filenameFull))== 0) ) {
 					IPSLogger_Dbg(__file__, 'Delete Camera File: '.$filenameFull);
 					unlink($filenameFull);
 				}
