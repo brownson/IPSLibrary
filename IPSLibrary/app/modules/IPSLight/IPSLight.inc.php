@@ -142,7 +142,7 @@
 	function IPSLight_SetSwitchByName($lightName, $value) {
 		$lightManager = new IPSLight_Manager();
 		$switchId = $lightManager->GetSwitchIdByName($lightName);
-		$lightManager->SetSwitch($switchId, $value);
+		$lightManager->SetValue($switchId, $value);
 	}
 
 	/**
@@ -153,7 +153,7 @@
 	function IPSLight_ToggleSwitchByName($lightName) {
 		$lightManager = new IPSLight_Manager();
 		$switchId = $lightManager->GetSwitchIdByName($lightName);
-		$lightManager->SetSwitch($switchId, !$lightManager->GetValue($switchId));
+		$lightManager->SetValue($switchId, !$lightManager->GetValue($switchId));
 	}
 
 	/**
