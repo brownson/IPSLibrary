@@ -73,7 +73,10 @@
 					break;
 
 				case 'IPSLight_SetSwitchByName':
-					IPSLight_SetSwitchByName($this->lightObject, $this->lightValue);
+				   if ($this->lightValue == 'true')
+						IPSLight_SetSwitchByName($this->lightObject, true);
+					else
+						IPSLight_SetSwitchByName($this->lightObject, false);
 					break;
 				case 'IPSLight_ToggleSwitchByName':
 					IPSLight_ToggleSwitchByName($this->lightObject);
