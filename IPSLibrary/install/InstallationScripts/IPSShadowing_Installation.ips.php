@@ -370,6 +370,47 @@
 		$profile   = new IPSShadowing_ProfileTemp($profileId);
 		$profile->Display($CategoryIdProfileTempDisplay);
 	}
+
+	 /**@defgroup ipsshadowing_install IPSShadowing Installation
+	 * update 			Windlevel with Beaufort level functions
+	 * @author        Günter Strassnigg
+	 */
+	//++Migration v2.50.9 --> 2.50.10
+	CreateProfile_Associations ('IPSShadowing_WindBeaufort',   array(
+						0 => 'Windstille (0 km/h)',
+						1 => 'leiser Zug (2 km/h)',
+						2 => 'leichte Brise (6 km/h)',
+						3 => 'schwache Brise (12 km/h)',
+						4 => 'mäßige Brise (20 km/h)',
+						5 => 'frischer Wind (29 km/h)',
+						6 => 'starker Wind (39 km/h)',
+						7 => 'steifer Wind (50 km/h)',
+						8 => 'stürmischer Wind (62 km/h)',
+						9 => 'Sturm (75 km/h)',
+						10 => 'schwerer Sturm (89 km/h)',
+						11 => 'orkanartiger Sturm (103 km/h)',
+						12 => 'Orkan (117 km/h)'
+						 ));
+
+	$profiles=IPS_GetChildrenIDs($CategoryIdProfilesWeather);
+	foreach ($profiles as $profileId) {
+		$windlevelID=IPS_GetObjectIDByIdent("WindLevel", $profileId);
+		$variableinfo=IPS_GetVariable($windlevelID);
+		$customprofile=$variableinfo['VariableCustomProfile'];
+		$value=GetValue($windlevelID);
+		if (IPSSHADOWING_WINDLEVEL_CLASSIFICATION) {
+			if ($customprofile=="IPSShadowing_Wind") {
+				IPS_SetVariableCustomProfile ($windlevelID,'IPSShadowing_WindBeaufort');
+				SetValue($windlevelID,intval($value/3.6));
+			}
+		} else {
+			if ($customprofile=="IPSShadowing_WindBeaufort") {
+				IPS_SetVariableCustomProfile ($windlevelID,'IPSShadowing_Wind');
+				SetValue($windlevelID,round($value*3.6,-1));
+			}
+		}
+	}
+
 	//--Migration v2.50.2 --> 2.50.3
 
 	$profileManager = new IPSShadowing_ProfileManager();
