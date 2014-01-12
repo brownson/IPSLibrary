@@ -1124,30 +1124,41 @@
 		return $currentVal;
 	}
 
-	// ------------------------------------------------------------------------
-	// ReadAndAddToLoggedData
-	//    IN: siehe Parameter
-	//    OUT: Vervollständigte Logged Data
-	// ------------------------------------------------------------------------
-	function ReadAndAddToLoggedData($loggedData, $id_AH, $variableId, $aggType, $startTime, $endTime, $aggValueName, $serie)
-	{
-		$cfg['Ips']['Debug']['Modules'] = true;
+    // ------------------------------------------------------------------------
+    // ReadAndAddToLoggedData
+    //    IN: siehe Parameter
+    //    OUT: Vervollständigte Logged Data
+    // ------------------------------------------------------------------------
+    function ReadAndAddToLoggedData($loggedData, $id_AH, $variableId, $aggType, $startTime, $endTime, $aggValueName, $serie)
+    {
+        $cfg['Ips']['Debug']['Modules'] = true;
 
-		if ($aggType >= 0)
-			$tempData = @AC_GetAggregatedValues($id_AH, $variableId, $aggType, $startTime, $endTime, 0);
-		else
-			$tempData = @AC_GetLoggedValues($id_AH, $variableId, $startTime, $endTime, 0 );
+        if ($aggType >= 0)
+            $tempData = @AC_GetAggregatedValues($id_AH, $variableId, $aggType, $startTime, $endTime, 0);
+        else
+            //$tempData = @AC_GetLoggedValues($id_AH, $variableId, $startTime, $endTime, 0 );
+            $tempData = @AC_GetLoggedValuesCompatibility($id_AH, $variableId, $startTime, $endTime, 0 );
 
-	   foreach ($tempData as $item)
-	   {
-			$loggedData[] = CreateDataItem($item['TimeStamp'], $item[$aggValueName], $serie);
-	   }
+       foreach ($tempData as $item)
+       {
+            $loggedData[] = CreateDataItem($item['TimeStamp'], $item[$aggValueName], $serie);
+       }
 
-	   unset ($tempData);
+       unset ($tempData);
 
-		return $loggedData;
-	}
+        return $loggedData;
+    }
 
+    //Hilfsfunktion, die die Funktionsweise von IP-Symcon 2.x nachbildet
+    function AC_GetLoggedValuesCompatibility($instanceID, $variableID, $startTime, $endTime, $limit) {
+        $values = AC_GetLoggedValues($instanceID, $variableID, $startTime, $endTime, $limit );
+        if((sizeof($values) == 0) || (end($values)['TimeStamp'] > $startTime)) {
+            $previousRow = AC_GetLoggedValues($instanceID, $variableID, 0, $startTime - 1, 1 );
+            $values = array_merge($values, $previousRow);
+        }
+        return $values;
+    }
+	
 	function CreateDataItem($dt, $val, $serie)
 	{
 		// Wert anpassen (Round, Scale)
