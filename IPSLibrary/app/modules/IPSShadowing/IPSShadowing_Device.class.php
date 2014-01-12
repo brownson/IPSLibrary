@@ -137,7 +137,7 @@
 						$component->MoveDown();
 						break;
 					case c_MovementId_Stop:
-						$component->Stop();
+							$component->Stop();
 						break;
 					default: 
 				}
