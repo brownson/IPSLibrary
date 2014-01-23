@@ -42,6 +42,7 @@
 			// Devices
 			// -----------------------------------------------------------------------------------------------------
 			case c_Control_Movement:
+			   IPSLogger_Inf(__file__, 'Value='.$value);
 				$deviceId = IPS_GetParent($controlId);
 				$device = new IPSShadowing_Device($deviceId);
 				$device->MoveByControl($value);
