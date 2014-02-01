@@ -137,7 +137,7 @@
 						$component->MoveDown();
 						break;
 					case c_MovementId_Stop:
-						$component->Stop();
+							$component->Stop();
 						break;
 					default: 
 				}
@@ -616,15 +616,15 @@
 				$programInfo = 'Wetterprogramm';
 				$this->MoveByProgram($programWeather, 'Wetterprogramm');
 
+			// Custom
+			} elseif (IPSShadowing_ProgramCustom($this->deviceId, $isDay, $programInfo)) {
+				if ($programInfo=='') {$programInfo = 'CustomProgram';}
+				// Action done in Custom Procedure
+
 			// Manual Change ...
 			} elseif ($changeByUser) {
 				$programInfo = 'Manuelle Änderung';
-
-			// Custom
-			} elseif (IPSShadowing_ProgramCustom($this->deviceId, $isDay)) {
-				$programInfo = 'CustomProgram';
-				// Action done in Custom Procedure
-
+        
 			// Present ...
 			} elseif ($profileManager->GetPresent() and $programPresent==c_ProgramId_OpenedDay and $isDay) {
 				$programInfo = 'Anwesenheit (Tag)';
