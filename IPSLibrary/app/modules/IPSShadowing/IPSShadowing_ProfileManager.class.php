@@ -218,7 +218,7 @@
 		public function IsDay($profileIdBgnOfDay, $profileIdEndOfDay) {
 			$profileBgnOfDay = $this->profilesBgnOfDay[$profileIdBgnOfDay];
 			$profileEndOfDay = $this->profilesEndOfDay[$profileIdEndOfDay];
-			return  (time() > $profileBgnOfDay->GetTime() and  time() < $profileEndOfDay->GetTime());
+			return  (time() >= $profileBgnOfDay->GetTime() and  time() < $profileEndOfDay->GetTime());
 		}
 
 		public function IsNight($profileIdBgnOfDay, $profileIdEndOfDay) {
