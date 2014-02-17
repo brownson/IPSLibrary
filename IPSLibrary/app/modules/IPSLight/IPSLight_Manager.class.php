@@ -243,7 +243,7 @@
 				if (GetValue($levelId) < 0)   { $value = 0; }
 			} else {
 			   if ($value and $levelValue==0) {
-			      SetValue($levelId, 10);
+			      SetValue($levelId, 15);
 			   }
 			}
 			SetValue($variableId, $value);
