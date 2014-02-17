@@ -38,12 +38,12 @@
 	$LangOptions                  = GetHighChartsLangOptions($CfgDaten);;
 
 	// --------------------------------------------------------------------------------------------------------------
-	function AddChartSerie($variableID, $fillColor, $strokeColor, $timeOffset, $unit, $type) {
+	function AddChartSerie($variableID, $title, $fillColor, $strokeColor, $timeOffset, $unit, $type) {
 		Global $CfgDaten;
 
 		Debug('Add Chart Serie for VariableID='.$variableID.' with Color='.$fillColor);
 		$serie = array();
-		$serie['name']          = IPS_GetName($variableID);
+		$serie['name']          = $title;
 		$serie['Id']            = $variableID;
 		$serie['Unit']          = $unit;
 		$serie['ReplaceValues'] = false;
@@ -103,7 +103,7 @@
 		$CfgDaten['subtitle']['text'] = "Zeitraum: %STARTTIME% - %ENDTIME%";
 		$CfgDaten['subtitle']['Ips']['DateTimeFormat'] = "(D) d.m.Y H:i";
 
-		$CfgDaten['yAxis'][0]['title']['text']             = IPS_GetName($chartID);;
+		$CfgDaten['yAxis'][0]['title']['text']             = IPS_GetName($chartID);
 		$CfgDaten['yAxis'][0]['stackLabels']['enabled']    = true;
 		$CfgDaten['yAxis'][0]['stackLabels']['formatter']  = "@function() { return this.total.toFixed(1) }@";
 		$CfgDaten['yAxis'][0]['labels']['enabled'] = true;
@@ -118,7 +118,12 @@
 		// Analyze Datasets
 		$datasets = $chart->datasets;
 		foreach ($datasets as $idx=>$dataset) {
+			$title       = IPS_GetName($dataset->variableID);
+			if (isset($dataset->title)) {
+				$title       = $dataset->title;
+			}
 			AddChartSerie($dataset->variableID, 
+						  $title,
 			              $dataset->fillColor, 
 			              $dataset->strokeColor, 
 			              $dataset->timeOffset, 
