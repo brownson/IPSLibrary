@@ -1100,16 +1100,32 @@
 
 		// aktuellen Wert der Variable noch in Array aufnehmen
 		if ($ReadCurrentValue
-			&& $Serie['EndTime'] >= time()    			// nicht wenn Endzeitpunkt vor NOW ist
+			//&& $Serie['EndTime'] >= time()    			// nicht wenn Endzeitpunkt vor NOW ist
 			&& !$Serie['Ips']['IsCounter'])				// nicht bei Zählervariablen
 			{
-				$curValue = ReadCurrentValue($VariableId);
+//                $curValue = ReadCurrentValue($VariableId);
+                $curValue    = ReadLoggedValue($Id_AH, $VariableId, $Serie['EndTime']);
 				$dataArray[] = CreateDataItem($curValue['TimeStamp'], $curValue['Value'], $Serie);
 			}
 
 
 		return $dataArray ;
 	}
+
+    // ------------------------------------------------------------------------
+    // ReadLoggedValue
+    //    IN: $instanceID, $VariableId, $time
+    //    OUT: Aktueller Wert
+    // ------------------------------------------------------------------------
+    function ReadLoggedValue($instanceID, $variableId, $time)
+    {
+        if ($time > time()) $time = time();
+        $values = AC_GetLoggedValues($instanceID, $variableId, 0, $time+1, 1);
+        $currentVal['Value']= $values[0]['Value'];
+        $currentVal['TimeStamp'] = $time;
+
+        return $currentVal;
+    }  
 
 	// ------------------------------------------------------------------------
 	// ReadCurrentValue
