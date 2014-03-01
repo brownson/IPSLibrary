@@ -162,7 +162,8 @@
 			if ($this->GetVariableValue(c_Control_StepsToDo)=="") {
 				IPSLogger_Inf(__file__, "Sync State=".$status." from Shutter '".IPS_GetName($this->deviceId));
 				$this->SetVariableValue(c_Control_Movement, $status);
-			}
+				$this->SetVariableValue(c_Control_ManualChange, true);
+ 			}
 			$this->SetStatus();
 		}
 
