@@ -47,5 +47,7 @@
 	define ('HM_CONTROL_MESSAGES',				'Messages');
 	define ('HM_CONTROL_PRIORITY',				'Priority');
 
+	define ('HM_TIMEOUT_REFRESH',				10);
+
 	/** @}*/
 ?>

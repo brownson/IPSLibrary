@@ -56,11 +56,13 @@
 				$variableId = @IPS_GetVariableIDByName('RSSI_DEVICE', $instanceId);
 				if ($variableId!==false) {
 					usleep(100000);
+					set_time_limit(HM_TIMEOUT_REFRESH);
 					HM_RequestStatus($instanceId, 'RSSI_DEVICE');
 				}
 				$variableId = @IPS_GetVariableIDByName('RSSI_PEER', $instanceId);
 				if ($variableId!==false) {
 					usleep(100000);
+					set_time_limit(HM_TIMEOUT_REFRESH);
 					HM_RequestStatus($instanceId, 'RSSI_PEER');
 				}
 			}
@@ -153,6 +155,7 @@
 			foreach ($instanceIdList as $instanceId) {
 				$variableId = @IPS_GetVariableIDByName('STATE', $instanceId);
 				if ($variableId!==false) {
+					set_time_limit(HM_TIMEOUT_REFRESH);
 					HM_RequestStatus($instanceId, 'STATE');
 				}
 				//$variableId = @IPS_GetVariableIDByName('LEVEL', $instanceId);
