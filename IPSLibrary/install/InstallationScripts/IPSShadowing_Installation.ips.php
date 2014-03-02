@@ -372,64 +372,6 @@
 		$profile->Display($CategoryIdProfileTempDisplay);
 	}
 
-	 /**@defgroup ipsshadowing_install IPSShadowing Installation
-	 * update 			IPSShadowing_Custom.inc.php
-	 * 					function IPSShadowing_ProgramCustom() - new parameter (PassByReference)
-	 * 					in IPSShadowing_Custom.inc.php	 
-	 * update 			IPSShadowing_Configuration.inc.php
-	 * 					neue Konstante IPSSHADOWING_WINDLEVEL_CLASSIFICATION
-	 * 					in IPSShadowing_Configuration.inc.php	 
-	 * update 			Windlevel with Beaufort level functions
-	 * @author        Günter Strassnigg
-	 */
-	//++Migration v2.50.9 --> 2.50.10
-	$fileNameFull = IPS_GetKernelDir().'scripts\\IPSLibrary\\config\\modules\\IPSShadowing\\IPSShadowing_Custom.inc.php';
-	if (!file_exists($fileNameFull)) {
-		   throw new Exception('IPSShadowing_Custom.inc.php could NOT be found!');
-	}
-	$needle='function IPSShadowing_ProgramCustom';
-	$fileContent = file_get_contents($fileNameFull, true);
-	$pos1= strpos($fileContent, $needle)+1;
-	$pos1= strpos($fileContent, $needle,$pos1)+1;
-	if ($pos1<2) {
-		   throw new Exception('function IPSShadowing_ProgramCustom() in IPSShadowing_Custom.inc.php could NOT be found!');
-	}
-	$pos2= strpos($fileContent,'(',$pos1)+1;
-	$pos3= strpos($fileContent,')',$pos2);
-	$functionParameterString='$DeviceId,$isDay,&$programInfo';
-	$fileContentBefore = substr($fileContent, 0, $pos2);
-	$fileContentAfter = substr($fileContent, $pos3);
-	file_put_contents($fileNameFull, $fileContentBefore.$functionParameterString.$fileContentAfter);
-
-	$fileNameFull = IPS_GetKernelDir().'scripts\\IPSLibrary\\config\\modules\\IPSShadowing\\IPSShadowing_Configuration.inc.php';
-	if (!file_exists($fileNameFull)) {
-		  // throw new Exception('IPSShadowing_Configuration.inc.php could NOT be found!');
-	}
-	$fileContent = file_get_contents($fileNameFull, true);
-	if (!(defined('IPSSHADOWING_WINDLEVEL_CLASSIFICATION'))) {
-		define ('IPSSHADOWING_WINDLEVEL_CLASSIFICATION',false);
-		$needle1='("IPSSHADOWING_WINDSENSOR",';
-		$needle2=');';
-		$pos1= strpos($fileContent, $needle1)+1;
-		$pos2= strpos($fileContent, $needle2,$pos1)+3;
-		$pos3= strpos($fileContent,'	/** Anwesenheits Flag',$pos2)-1;
-		$functionParameterString='
-	/** Profil Wetterdefinition / Klassifiktation
-	 *
-	 * Definition/Masseinheit des Windlevels.
-	 * Einstellung:   false       Vergleich der Windgeschwindigkeit mit dem Windlevel in km/h
-	 *                true        Vergleich der Windgeschwindigkeit mit dem Windlevel in Beaufort
-	 *
-	 * Dieser Parameter kann jederzeit geändert werden.
-	 * Für die Übernahme der Änderung ist eine erneute Installation über den ModuleManager oder ModuleManagerGUI notwendig.
-	 */
-	define ("IPSSHADOWING_WINDLEVEL_CLASSIFICATION",		false);
-';
-		$fileContentBefore = substr($fileContent, 0, $pos2);
-		$fileContentAfter = substr($fileContent, $pos3);
-		file_put_contents($fileNameFull, $fileContentBefore.$functionParameterString.$fileContentAfter);
-	}
-
 	CreateProfile_Associations ('IPSShadowing_WindBeaufort',   array(
 						0 => 'Windstille (0 km/h)',
 						1 => 'leiser Zug (2 km/h)',
@@ -446,16 +388,13 @@
 						12 => 'Orkan (117 km/h)'
 						 ));
 
-	if (!(defined('IPSSHADOWING_WINDLEVEL_CLASSIFICATION'))) {
-		define ('IPSSHADOWING_WINDLEVEL_CLASSIFICATION',true);
-	}
 	$profiles=IPS_GetChildrenIDs($CategoryIdProfilesWeather);
 	foreach ($profiles as $profileId) {
 		$windlevelID=IPS_GetObjectIDByIdent("WindLevel", $profileId);
 		$variableinfo=IPS_GetVariable($windlevelID);
 		$customprofile=$variableinfo['VariableCustomProfile'];
 		$value=GetValue($windlevelID);
-		if (IPSSHADOWING_WINDLEVEL_CLASSIFICATION) {
+		if (defined('IPSSHADOWING_WINDLEVEL_CLASSIFICATION') and IPSSHADOWING_WINDLEVEL_CLASSIFICATION) {
 			if ($customprofile=="IPSShadowing_Wind") {
 				IPS_SetVariableCustomProfile ($windlevelID,'IPSShadowing_WindBeaufort');
 				SetValue($windlevelID,intval($value/3.6));
@@ -467,8 +406,6 @@
 			}
 		}
 	}
-
-	//--Migration v2.50.2 --> 2.50.3
 
 	$profileManager = new IPSShadowing_ProfileManager();
 	$profileManager->AssignAllProfileAssociations();

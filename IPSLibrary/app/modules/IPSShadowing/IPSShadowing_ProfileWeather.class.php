@@ -85,10 +85,10 @@
 			$activationByWeather = false;
 			if (IPSSHADOWING_WINDSENSOR <> '') {
 				$this->windSensor = GetValue(IPSUtil_ObjectIDByPath(IPSSHADOWING_WINDSENSOR));
-				if (IPSSHADOWING_WINDLEVEL_CLASSIFICATION==false) {
-					$activationByWeather = ($activationByWeather or ($this->windSensor >= $this->windLevel));
-				} else {
+				if (defined('IPSSHADOWING_WINDLEVEL_CLASSIFICATION') and IPSSHADOWING_WINDLEVEL_CLASSIFICATION) {
 					$activationByWeather = ($activationByWeather or ($this->ConvertKMHtoBeaufort($this->windSensor) >= $this->windLevel));
+				} else {
+					$activationByWeather = ($activationByWeather or ($this->windSensor >= $this->windLevel));
 				}
 			}
 
@@ -157,7 +157,7 @@
 			IPS_SetIdent($profileId, (string)$profileId);
 			CreateVariable(c_Control_ProfileName,       3 /*String*/,   $profileId, 0,  '~String',            $ScriptIdChangeSettings, $profileName,  'Title');
 			CreateVariable(c_Control_RainCheck,         0 /*Boolean*/,  $profileId, 10, '~Switch',            $ScriptIdChangeSettings, $rainCheck,    'Drops');
-			if (IPSSHADOWING_WINDLEVEL_CLASSIFICATION) {
+			if (defined('IPSSHADOWING_WINDLEVEL_CLASSIFICATION') and IPSSHADOWING_WINDLEVEL_CLASSIFICATION) {
 				$windLevel=intval($windLevel/3.6);
 				CreateVariable(c_Control_WindLevel,         1 /*Integer*/,  $profileId, 20, 'IPSShadowing_WindBeaufort',  $ScriptIdChangeSettings, $windLevel,    'WindSpeed');
 			} else {

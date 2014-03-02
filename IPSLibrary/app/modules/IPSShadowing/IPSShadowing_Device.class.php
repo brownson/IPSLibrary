@@ -589,6 +589,7 @@
 			$shadowingByTemp     = $profileManager->ShadowingByTemp($profileIdSun, $profileIdTemp, $tempIndoorPath);
 			$openByTemp          = $profileManager->OpenByTemp($profileIdSun, $profileIdTemp, $tempIndoorPath);
 			$activationByWeather = $profileManager->ActivationByWeather($profileIdWeather);
+			$programInfo         = '';
 
 
 			// Reset Manual Change Flag
@@ -605,6 +606,9 @@
 
 			$changeByTemp      = GetValue(IPS_GetObjectIDByIdent(c_Control_TempChange, $this->deviceId));
 			$changeByUser      = GetValue(IPS_GetObjectIDByIdent(c_Control_ManualChange, $this->deviceId));
+			
+			$func_reflection = new ReflectionFunction('IPSShadowing_ProgramCustom');
+			$paramCountCustom = $func_reflection->getNumberOfParameters();
 
 			// Check all Programs
 			// --------------------------------------------------------------------------------
@@ -618,7 +622,8 @@
 				$this->MoveByProgram($programWeather, 'Wetterprogramm');
 
 			// Custom
-			} elseif (IPSShadowing_ProgramCustom($this->deviceId, $isDay, $programInfo)) {
+			} elseif (    ($paramCountCustom == 3 and IPSShadowing_ProgramCustom($this->deviceId, $isDay, $programInfo))
+			           or ($paramCountCustom == 2 and IPSShadowing_ProgramCustom($this->deviceId, $isDay))) {
 				if ($programInfo=='') {$programInfo = 'CustomProgram';}
 				// Action done in Custom Procedure
 
