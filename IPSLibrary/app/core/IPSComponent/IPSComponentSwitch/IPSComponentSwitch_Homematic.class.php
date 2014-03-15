@@ -24,6 +24,7 @@
 	class IPSComponentSwitch_Homematic extends IPSComponentSwitch {
 
 		private $instanceId;
+		private $supportsOnTime;
 	
 		/**
 		 * @public
@@ -31,9 +32,11 @@
 		 * Initialisierung eines IPSComponentSwitch_Homematic Objektes
 		 *
 		 * @param integer $instanceId InstanceId des Homematic Devices
+		 * @param integer $supportsOnTime spezifiziert ob das Homematic Device eine ONTIME unterstützt
 		 */
-		public function __construct($instanceId) {
-			$this->instanceId = IPSUtil_ObjectIDByPath($instanceId);
+		public function __construct($instanceId, $supportsOnTime=true) {
+			$this->instanceId     = IPSUtil_ObjectIDByPath($instanceId);
+			$this->supportsOnTime = $supportsOnTime;
 		}
 
 		/**
@@ -72,7 +75,7 @@
 		 * @param integer $onTime Zeit in Sekunden nach der der Aktor automatisch ausschalten soll
 		 */
 		public function SetState($value, $onTime=false) {
-			if ($onTime!==false and $value) 
+			if ($onTime!==false and $value and $this->supportsOnTime===true) 
 				HM_WriteValueFloat($this->instanceId, "ON_TIME", $onTime);  
 			
 			HM_WriteValueBoolean($this->instanceId, "STATE", $value);
