@@ -197,7 +197,7 @@
 		        }
 		        $id = HM_GetInstanceIDFromHMAddress($msg['Address']);
 		        if(IPS_InstanceExists($id)) {
-		            $name = IPS_GetName($id);
+					$name = IPS_GetLocation($id);
 		        } else {
 		            $name = "Gerät nicht in IP-Symcon eingerichtet";
 		        }
