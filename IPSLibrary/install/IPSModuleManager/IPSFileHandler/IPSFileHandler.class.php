@@ -151,6 +151,7 @@
 				curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 10);
 				curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER,true);
 				curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
+				curl_setopt($curl_handle, CURLOPT_FOLLOWLOCATION, true);
 				curl_setopt($curl_handle, CURLOPT_FAILONERROR, true);
 				$fileContent = curl_exec($curl_handle);
 				//$fileContent = html_entity_decode($fileContent, ENT_COMPAT, 'ISO-8859-1');
