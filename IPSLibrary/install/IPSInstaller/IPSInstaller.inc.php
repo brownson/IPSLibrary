@@ -87,6 +87,7 @@
 				IPS_DeleteVariable($ObjectId);
 				break;
 			case 3: // Script
+				EmptyCategory($ObjectId);
 				IPS_DeleteScript($ObjectId, false);
 				break;
 			case 4: // Event
