@@ -95,44 +95,50 @@
         *  @return Returns the result of the JSON command
         *  
         */
-        private function hue_SendLampCommand($type, $request, $cmd = null) {
-			
-			switch ($type) {
-
-			case 'Lights':
-			    $json_url = 'http://'.$this->bridgeIP.'/api/'.$this->hueKey.'/lights/'.$this->lampNr.'/state';
-				break;
-
-			case 'Bridge':
-				$json_url = 'http://'.$this->bridgeIP.'/api/'.$this->hueKey;
-				break;
-				
-			case 'api':
-			//For further development
-				break;
-
-			default:
-				break;
-			}
-			
-			
-			$json_string = '{'.$cmd.'}';
-            
-			// Configuring curl 
-            $ch = curl_init($json_url);
-            $options = array(
-                           CURLOPT_RETURNTRANSFER => true,
-                           CURLOPT_CUSTOMREQUEST => $request, 
-                           CURLOPT_HTTPHEADER => array('Content-type: application/json') ,
-                           CURLOPT_POSTFIELDS => $json_string
-                           );
-            curl_setopt_array($ch, $options);
-            IPSLogger_Inf(__file__, 'Send PhilipsHUE: JsonURL='.$json_url.', Command='.$json_string);
-
+        public function hue_SendLampCommand($type, $request, $cmd = null) {
+	
             // Execute
             if ($this->bridgeIP <> '') {
-                $json_result = curl_exec($ch);
-				return json_decode($json_result);
+				if (Sys_Ping($this->bridgeIP, 1000)) {
+			
+					switch ($type) {
+
+					case 'Lights':
+						$json_url = 'http://'.$this->bridgeIP.'/api/'.$this->hueKey.'/lights/'.$this->lampNr.'/state';
+						break;
+
+					case 'Bridge':
+						$json_url = 'http://'.$this->bridgeIP.'/api/'.$this->hueKey;
+						break;
+						
+					case 'api':
+					//For further development
+						break;
+
+					default:
+						break;
+					}
+					
+					$json_string = '{'.$cmd.'}';
+					
+					// Configuring curl 
+					$ch = curl_init($json_url);
+					$options = array(
+								   CURLOPT_RETURNTRANSFER => true,
+								   CURLOPT_CUSTOMREQUEST => $request, 
+								   CURLOPT_HTTPHEADER => array('Content-type: application/json') ,
+								   CURLOPT_POSTFIELDS => $json_string
+								   );
+					curl_setopt_array($ch, $options);
+					IPSLogger_Inf(__file__, 'Send PhilipsHUE: JsonURL='.$json_url.', Command='.$json_string);
+
+					$json_result = curl_exec($ch);
+					return json_decode($json_result);
+				}
+				else {
+					IPSLogger_Err(__file__, 'Send PhilipsHUE: Bridge nicht erreichbar, Befehl nicht gesendet!');
+				}
+
             }
         }
         
@@ -288,7 +294,10 @@
 				$cx = $closestPoint->x;
 				$cy = $closestPoint->y;
 			}
-			return new cgpoint($cx, $cy);
+			
+			$cx4 = number_format($cx,4);
+			$cy4 = number_format($cy,4);
+			return new cgpoint($cx4, $cy4);
 		}
 		
         /**
