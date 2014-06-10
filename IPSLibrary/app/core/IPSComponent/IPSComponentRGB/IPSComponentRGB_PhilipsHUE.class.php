@@ -20,7 +20,7 @@
 	*
     * @author Andreas Brauneis
     * @version
-    * Version 2.50.1, 28.01.2014<br/>
+    * Version 2.50.45, 28.01.2014<br/>
     */
 
     IPSUtils_Include ('IPSComponentRGB.class.php', 'IPSLibrary::app::core::IPSComponent::IPSComponentRGB');
@@ -95,44 +95,50 @@
         *  @return Returns the result of the JSON command
         *  
         */
-        private function hue_SendLampCommand($type, $request, $cmd = null) {
-			
-			switch ($type) {
-
-			case 'Lights':
-			    $json_url = 'http://'.$this->bridgeIP.'/api/'.$this->hueKey.'/lights/'.$this->lampNr.'/state';
-				break;
-
-			case 'Bridge':
-				$json_url = 'http://'.$this->bridgeIP.'/api/'.$this->hueKey;
-				break;
-				
-			case 'api':
-			//For further development
-				break;
-
-			default:
-				break;
-			}
-			
-			
-			$json_string = '{'.$cmd.'}';
-            
-			// Configuring curl 
-            $ch = curl_init($json_url);
-            $options = array(
-                           CURLOPT_RETURNTRANSFER => true,
-                           CURLOPT_CUSTOMREQUEST => $request, 
-                           CURLOPT_HTTPHEADER => array('Content-type: application/json') ,
-                           CURLOPT_POSTFIELDS => $json_string
-                           );
-            curl_setopt_array($ch, $options);
-            IPSLogger_Inf(__file__, 'Send PhilipsHUE: JsonURL='.$json_url.', Command='.$json_string);
-
+        public function hue_SendLampCommand($type, $request, $cmd = null) {
+	
             // Execute
             if ($this->bridgeIP <> '') {
-                $json_result = curl_exec($ch);
-				return json_decode($json_result);
+				if (Sys_Ping($this->bridgeIP, 1000)) {
+			
+					switch ($type) {
+
+					case 'Lights':
+						$json_url = 'http://'.$this->bridgeIP.'/api/'.$this->hueKey.'/lights/'.$this->lampNr.'/state';
+						break;
+
+					case 'Bridge':
+						$json_url = 'http://'.$this->bridgeIP.'/api/'.$this->hueKey;
+						break;
+						
+					case 'api':
+					//For further development
+						break;
+
+					default:
+						break;
+					}
+					
+					$json_string = '{'.$cmd.'}';
+					
+					// Configuring curl 
+					$ch = curl_init($json_url);
+					$options = array(
+								   CURLOPT_RETURNTRANSFER => true,
+								   CURLOPT_CUSTOMREQUEST => $request, 
+								   CURLOPT_HTTPHEADER => array('Content-type: application/json') ,
+								   CURLOPT_POSTFIELDS => $json_string
+								   );
+					curl_setopt_array($ch, $options);
+					IPSLogger_Com(__file__, 'Send PhilipsHUE: JsonURL='.$json_url.', Command='.$json_string);
+
+					$json_result = curl_exec($ch);
+					return json_decode($json_result);
+				}
+				else {
+					IPSLogger_Err(__file__, 'Send PhilipsHUE: Bridge nicht erreichbar, Befehl nicht gesendet!');
+				}
+
             }
         }
         
@@ -162,11 +168,21 @@
 			   $values = $this->calculateXY($color_array, $modelID);
 			  
 			   //IPSLight is using percentage in variable Level, Hue is using [0..255] 
-			   $level = round($level * 2,55);		   
-			   $cmd 	= '"bri":'.$level.', "xy":['.$values->x.','.$values->y.'], "on":true'; 
+			   $level = round($level * 2,55);
 			   
+			   // Build command
+			  			   
+			   $this->QueryHUE();
+			   if ($this->Status == true){
+					$cmd 	= '"bri":'.$level.', "xy":['.$values->x.','.$values->y.']'; 
+			   }
+			   else {
+					 $cmd 	= '"bri":'.$level.', "xy":['.$values->x.','.$values->y.'], "on":true'; 
+			   }
+			
             }
 			
+
 			$type	 = 'Lights'; //Type of Command
 			$request = 'PUT';	 //Type of Request
             
@@ -189,23 +205,23 @@
 			//Send command to Hue lamp
 			$result = $this->hue_SendLampCommand($type, $request);
 			
- 			$id = 1;
+			if ($result) {
+			
+				$id = 1;
+				foreach ($result->lights as $light) {
 
-			foreach ($result->lights as $light) {
+					if ($id == $this->lampNr) {
+					
+							$this->Status 		= $light->state->on;
+							$this->Hue			= $light->state->hue;
+							$this->ModelID		= $light->modelid;
+							$this->XY			= $light->state->xy;
+							$this->Level		= $light->state->bri;
+							$this->Saturation 	= $light->state->sat;
 
-				if ($id == $this->lampNr) {
-				
-						$this->Status 		= $light->state->on;
-						$this->Hue			= $light->state->hue;
-						$this->ModelID		= $light->modelid;
-						$this->XY			= $light->state->xy;
-						$this->Level		= $light->state->bri;
-						$this->Saturation 	= $light->state->sat;
-
+					}
+					$id=$id+1;					
 				}
-				
-				$id=$id+1;
-				
 			}
 		}
 
@@ -288,7 +304,10 @@
 				$cx = $closestPoint->x;
 				$cy = $closestPoint->y;
 			}
-			return new cgpoint($cx, $cy);
+			
+			$cx4 = number_format($cx,4);
+			$cy4 = number_format($cy,4);
+			return new cgpoint($cx4, $cy4);
 		}
 		
         /**
