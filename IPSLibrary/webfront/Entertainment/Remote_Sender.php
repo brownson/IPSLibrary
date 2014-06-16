@@ -1,6 +1,28 @@
-	<script type="text/javascript" src="jquery.min.js"></script>
-	<script type="text/javascript">
+	<style type="text/css">
+		<?
+			$agent = $_SERVER['HTTP_USER_AGENT'];
+			if (strpos($agent, 'Macintosh') > 0) {
+				$background = 'background:#e4e4e4;';
+				$foreground = 'color:#000000;';
+			} else if (strpos($agent, 'iPad') > 0 or strpos($agent, 'iPhone') > 0) {
+				$background = 'background:#252525;';
+				$foreground = 'color:#ffffff;';
+			} else {
+				$background = 'background:#252525;';
+				$foreground = 'color:#ffffff;';
+			}
+			echo 'html, body { '.$background.$foreground.' }';
+		?>
+	</style>
 
+	<?
+		//IPSUtils_Include ("IPSLogger.inc.php",              "IPSLibrary::app::core::IPSLogger");
+		//IPSLogger_Inf(__file__, $_SERVER['HTTP_USER_AGENT']); 
+	?>
+
+	<script type="text/javascript" src="jquery.min.js"></script>
+
+	<script type="text/javascript">
 		function refresh_program(data, obj_id, program_selected) {
 			$(".rc_button33").each( 
 				function() 

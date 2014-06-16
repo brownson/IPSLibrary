@@ -235,15 +235,33 @@
 
 		
 		private function RefreshDisplay($cameraIdx) {
-			$mode = GetValue(IPS_GetObjectIDByIdent(IPSCAM_VAR_MODE, $this->categoryIdCommon));
+			$mode            = GetValue(IPS_GetObjectIDByIdent(IPSCAM_VAR_MODE, $this->categoryIdCommon));
+			$variableIdHtml  = IPS_GetObjectIDByIdent(IPSCAM_VAR_HTML, $this->categoryIdCommon);
+			$variableIdHtml2 = IPS_GetObjectIDByIdent(IPSCAM_VAR_IHTML, $this->categoryIdCommon);
+
+			$urlStream  = $this->GetURL($cameraIdx, IPSCAM_URL_LIVE);
+			$urlImage   = $this->GetURL($cameraIdx, IPSCAM_URL_PICTURE);
+			
+			
+			$styleImage     = 'text-align:center; border:3px solid rgba(255,255,255,0.5);';
+			$styleContainer = 'text-align:center; width:100%; display:block; cursor:default;';
+			$styleImage2     = 'text-align:center; width:95%; border:3px solid rgba(255,255,255,0.5);';
+			$styleContainer2 = 'text-align:center; display:block; cursor:default;';
+
 			switch ($mode) {
 				case IPSCAM_MODE_LIVE:
 					$variableIdCam = IPS_GetObjectIDByIdent(IPSCAM_VAR_CAMHTML, $this->categoryIdCommon);
-					SetValue($variableIdCam, '<iframe frameborder="0" width="100%" height="'.$this->GetStreamHeight($cameraIdx).'px"  src="../user/IPSCam/IPSCam_Camera.php"</iframe>');
+					SetValue($variableIdCam,  '<iframe frameborder="0" width="100%" height="'.$this->GetStreamHeight($cameraIdx).'px"  src="../user/IPSCam/IPSCam_Camera.php"</iframe>');
+					SetValue($variableIdHtml, '<div style="'.$styleContainer.'"><img style="'.$styleImage.'" src="'.$urlStream.'"></div>');
+					SetValue($variableIdHtml2,'<div style="'.$styleContainer2.'"><img style="'.$styleImage2.'" src="'.$urlStream.'"></div>');
 					break;
 				case IPSCAM_MODE_PICTURE:
+					SetValue($variableIdHtml, '<div style="'.$styleContainer.'"><img style="'.$styleImage.'" src="/user/IPSCam/ImageCurrent.jpg" timestamp="'.date('His').'"></div>');
+					SetValue($variableIdHtml2,'<div style="'.$styleContainer2.'"><img style="'.$styleImage2.'" src="/user/IPSCam/ImageCurrent.jpg" timestamp="'.date('His').'"></div>');
 					break;
 				case IPSCAM_MODE_HISTORY:
+					SetValue($variableIdHtml, '<div style="'.$styleContainer.'"><img style="'.$styleImage.'" src="/user/IPSCam/ImageHistory.jpg" timestamp="'.date('His').'"></div>');
+					SetValue($variableIdHtml2,'<div style="'.$styleContainer2.'"><img style="'.$styleImage2.'" src="/user/IPSCam/ImageHistory.jpg" timestamp="'.date('His').'"></div>');
 					break;
 				case IPSCAM_MODE_SETTINGS:
 					break;
@@ -430,22 +448,31 @@
 		 */
 		public function PictureRefresh($cameraIdx=null) {
 			$variableIdCamSelect = IPS_GetObjectIDByIdent(IPSCAM_VAR_CAMSELECT, $this->categoryIdCommon);
-			if ($cameraIdx==0) {
+			// If CameraIndex is NULL use selected
+			if ($cameraIdx===null) {
 				$cameraIdx = GetValue($variableIdCamSelect);
 			}
+			// if Camera is NOT selected - Set Selected
 			if (GetValue($variableIdCamSelect) <> $cameraIdx) {
 				$this->SetCamera($cameraIdx);
 			}
+			// Switch to Image Mode
 			$variableIdMode      = IPS_GetObjectIDByIdent(IPSCAM_VAR_MODE, $this->categoryIdCommon);
 			if (GetValue($variableIdMode) == IPSCAM_MODE_PICTURE) {
 				$size = GetValue(IPS_GetObjectIDByIdent(IPSCAM_VAR_SIZE, $this->categoryIdCommon));
 				$this->StorePicture($cameraIdx, 'Picture', $size, 'Current', 'Common');
 			}
 
+			// Set Media File for Common View
 			$variableIdMedia = IPS_GetObjectIDByIdent(IPSCAM_VAR_CAMPICT, $this->categoryIdCommon);
 			IPS_SetMediaFile($variableIdMedia, IPS_GetKernelDir().'\\Cams\\'.$cameraIdx.'\\Picture\\CommonDummy.jpg', false);
 			IPS_SetMediaFile($variableIdMedia, IPS_GetKernelDir().'\\Cams\\'.$cameraIdx.'\\Picture\\Common.jpg', false);
 
+			// Copy Image to webfront
+			Copy (IPS_GetKernelDir().'\\Cams\\'.$cameraIdx.'\\Picture\\Common.jpg',
+			      IPS_GetKernelDir().'\\webfront\\user\\IPSCam\\ImageCurrent.jpg');
+
+			// Set Media File for Camera View
 			$categoryIdCam   = IPS_GetObjectIDByIdent($cameraIdx, $this->categoryIdCams);
 			$variableIdMedia = IPS_GetObjectIDByIdent(IPSCAM_VAR_CAMPICT, $categoryIdCam);
 			IPS_SetMediaFile($variableIdMedia, IPS_GetKernelDir().'\\Cams\\'.$cameraIdx.'\\Picture\\CurrentDummy.jpg', false);
@@ -606,11 +633,13 @@
 				SetValue($variableIdNavFile, $navFile);
 				$navTime = mktime(substr($navFile,9,2),  substr($navFile,11,2), substr($navFile,13,2), substr($navFile,4,2), substr($navFile,6,2), substr($navFile,0,4));
 				SetValue($variableIdNavTime, date(IPSCAM_NAV_DATEFORMATDISP, $navTime));
-			}
 
-			$variableIdMedia   = IPS_GetObjectIDByIdent(IPSCAM_VAR_CAMHIST, $this->categoryIdCommon);
-			$fileName          = IPS_GetKernelDir().'\\Cams\\'.$cameraIdx.'\\History\\'.$navFile.'.jpg';
-			IPS_SetMediaFile($variableIdMedia, $fileName, false);
+			   $variableIdMedia   = IPS_GetObjectIDByIdent(IPSCAM_VAR_CAMHIST, $this->categoryIdCommon);
+			   $mediaFileName     = IPS_GetKernelDir().'\\Cams\\'.$cameraIdx.'\\History\\'.$navFile.'.jpg';
+			   $userFileName      = IPS_GetKernelDir().'\\WebFront\\User\\IPSCam\\ImageHistory.jpg';
+			   IPS_SetMediaFile($variableIdMedia, $mediaFileName, false);
+			   copy ($mediaFileName, $userFileName);
+			}
 
 			$this->RefreshDisplay($cameraIdx);
 		}
@@ -640,17 +669,20 @@
 			$refDate = date(IPSCAM_NAV_DATEFORMATFILE, $refDate);
 			$refDate = substr($refDate, 0 ,8);
 
-			IPSLogger_Trc(__file__, 'Purge Files in Directory: '.$directory.',  RefDate='.$refDate);
+			IPSLogger_Dbg(__file__, 'Purge Files with RefDate='.substr($refDate,0,4).'-'.substr($refDate,4,2).'-'.substr($refDate,6,2)
+			                        .', Days='.str_pad("$days",3,' ').', Directory='.$directory);
 			$fileList = scandir($directory, 0);
 			$fileList = array_diff($fileList, Array('.','..'));
 			foreach($fileList as $idx=>$file) {
 				$filename = basename($file);
+        	   $fileExt  = pathinfo($file, PATHINFO_EXTENSION);
 				$filenameFull = $directory.$filename;
 				$fileDate = substr($filename, 0, 8);
-				IPSLogger_Trc(__file__, 'Found File: '.$file.', FileDate='.$fileDate.', RefDate='.$refDate);
-				if ($fileDate < $refDate) {
-					IPSLogger_Dbg(__file__, 'Delete Camera File: '.$filenameFull);
-					unlink($filenameFull);
+            if ($fileExt=='jpg') {
+					if (($fileDate < $refDate) && (@IPS_GetMediaIDByFile(str_replace(IPS_GetKernelDir()."\\","",$filenameFull))== 0) ) {
+						IPSLogger_Trc(__file__, 'Delete Camera File: '.$filenameFull);
+						unlink($filenameFull);
+					}
 				}
 			}
 		}
@@ -662,6 +694,9 @@
 		 *
 		 */
 		public function PurgeFiles() {
+			set_time_limit(600); // Set PHP Time Limit of 10 Minutes for Purging of Files
+			IPSLogger_Inf(__file__, 'Purge History and MotionCapture Camera Files');
+
 			foreach ($this->config as $cameraIdx=>$data) {
 				$categoryIdCam      = IPS_GetObjectIDByIdent($cameraIdx, $this->categoryIdCams);
 				$directoryHist      = IPS_GetKernelDir().'\\Cams\\'.$cameraIdx.'\\History\\';
@@ -688,7 +723,7 @@
 		 *    IPSCAM_URL_PICTURE   ... URL des aktuellen Bildes
 		 */
 		public function GetURL($cameraIdx, $urlType) {
-			if ($cameraIdx==0) {
+			if ($cameraIdx===null) {
 				$variableIdCamSelect = IPS_GetObjectIDByIdent(IPSCAM_VAR_CAMSELECT, $this->categoryIdCommon);
 				$cameraIdx = GetValue($variableIdCamSelect);
 			}

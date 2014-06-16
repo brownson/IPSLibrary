@@ -242,9 +242,13 @@
 			$versionInstalled = $this->VersionToArray($versionInstalled);
 			$versionRequired  = $this->VersionToArray($moduleVersion);
 			
-			if ($versionRequired[0] > $versionInstalled[0] or
-				$versionRequired[1] > $versionInstalled[1] or
-				$versionRequired[2] > $versionInstalled[2]) {
+			if (   (    $versionRequired[0] >  $versionInstalled[0]) 
+			    or (    $versionRequired[0] == $versionInstalled[0]
+			        and $versionRequired[1] >  $versionInstalled[1])
+			    or (    $versionRequired[0] == $versionInstalled[0]
+			        and $versionRequired[1] == $versionInstalled[1]
+			        and $versionRequired[2] >  $versionInstalled[2])
+			        ) {
 				throw new IPSVersionHandlerException('Versions Fehler:'.PHP_EOL
 				                                    .'========================================================================'.PHP_EOL
 				                                    .'=== Modul '.$moduleName.' ist veraltet und benötigt ein Update'.PHP_EOL
@@ -277,12 +281,12 @@
 			$versionInstalled = $this->VersionToArray($versionInstalled);
 			$versionRequired  = $this->VersionToArray($moduleVersion);
 			
-			return (    ($versionRequired[0] > $versionInstalled[0]) 
-			         or (    $versionRequired[0] = $versionInstalled[0]
-			             and $versionRequired[1] > $versionInstalled[1])
-			         or (    $versionRequired[0] = $versionInstalled[0]
-			             and $versionRequired[1] = $versionInstalled[1]
-			             and $versionRequired[2] > $versionInstalled[2])
+			return (    (    $versionRequired[0] >  $versionInstalled[0]) 
+			         or (    $versionRequired[0] == $versionInstalled[0]
+			             and $versionRequired[1] >  $versionInstalled[1])
+			         or (    $versionRequired[0] == $versionInstalled[0]
+			             and $versionRequired[1] == $versionInstalled[1]
+			             and $versionRequired[2] >  $versionInstalled[2])
 			        );
 		}
 
@@ -299,12 +303,12 @@
 			$moduleVersion1 = $this->VersionToArray($moduleVersion1);
 			$moduleVersion2 = $this->VersionToArray($moduleVersion2);
 			
-			return (    (    $moduleVersion2[0] > $moduleVersion1[0]) 
+			return (    (    $moduleVersion2[0] >  $moduleVersion1[0]) 
 			         or (    $moduleVersion2[0] == $moduleVersion1[0]
-			             and $moduleVersion2[1] > $moduleVersion1[1])
+			             and $moduleVersion2[1] >  $moduleVersion1[1])
 			         or (    $moduleVersion2[0] == $moduleVersion1[0]
 			             and $moduleVersion2[1] == $moduleVersion1[1]
-			             and $moduleVersion2[2] > $moduleVersion1[2])
+			             and $moduleVersion2[2] >  $moduleVersion1[2])
 			        );
 		}
 

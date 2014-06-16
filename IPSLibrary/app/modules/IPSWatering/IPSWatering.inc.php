@@ -66,8 +66,11 @@
 			return false;
 		}
 
+		$DurationMin      = GetValue(get_ControlId(c_Control_Duration, $CycleId));
+		$DurationSec      = 60*$DurationMin+5;
+ 
 		$component = IPSComponent::CreateObjectByParams($ComponentParams);
-		$component->SetState($Value);
+		$component->SetState($Value, $DurationSec);
 
 		IPSWatering_AfterActivateWatering($CycleId, $Value, $Mode);
 

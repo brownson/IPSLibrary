@@ -94,13 +94,16 @@
 		}
 
 		 function refresh_trackdata() {
-			var serverAddr = "<?echo $_SERVER["HTTP_HOST"];?>";
-			$.get("http://"+serverAddr+"/user/NetPlayer/NetPlayer_Receiver.php?rc_action=rc_other&id=rc_mp_length", refresh_totaltime);
-			$.get("http://"+serverAddr+"/user/NetPlayer/NetPlayer_Receiver.php?rc_action=rc_other&id=rc_mp_current", refresh_currenttime);
-			$("#rc_mp_interpret").load("http://"+serverAddr+"/user/NetPlayer/NetPlayer_Receiver.php",{id: "rc_mp_interpret", rc_action: "rc_other"});
-			$("#rc_mp_album").load("http://"+serverAddr+"/user/NetPlayer/NetPlayer_Receiver.php",{id: "rc_mp_album", rc_action: "rc_other"});
-			$("#rc_mp_titel").load("http://"+serverAddr+"/user/NetPlayer/NetPlayer_Receiver.php",{id: "rc_mp_titel", rc_action: "rc_other"});
-			$.get("http://"+serverAddr+"/user/NetPlayer/NetPlayer_Receiver.php?rc_action=rc_other&id=rc_mp_status", refresh_playerstatus);
+			var serverAddr;
+			if (window.location.protocol == "https:") { serverAddr = "https://<?echo $_SERVER["HTTP_HOST"];?>"; }
+			else{ serverAddr = "http://<?echo $_SERVER["HTTP_HOST"];?>"; }
+			
+			$.get(serverAddr+"/user/NetPlayer/NetPlayer_Receiver.php?rc_action=rc_other&id=rc_mp_length", refresh_totaltime);
+			$.get(serverAddr+"/user/NetPlayer/NetPlayer_Receiver.php?rc_action=rc_other&id=rc_mp_current", refresh_currenttime);
+			$("#rc_mp_interpret").load(serverAddr+"/user/NetPlayer/NetPlayer_Receiver.php",{id: "rc_mp_interpret", rc_action: "rc_other"});
+			$("#rc_mp_album").load(serverAddr+"/user/NetPlayer/NetPlayer_Receiver.php",{id: "rc_mp_album", rc_action: "rc_other"});
+			$("#rc_mp_titel").load(serverAddr+"/user/NetPlayer/NetPlayer_Receiver.php",{id: "rc_mp_titel", rc_action: "rc_other"});
+			$.get(serverAddr+"/user/NetPlayer/NetPlayer_Receiver.php?rc_action=rc_other&id=rc_mp_status", refresh_playerstatus);
 		}
 
 		function refresh_player() {
@@ -130,8 +133,10 @@
 		}
  
 		function refresh_radiodata() {
-			var serverAddr = "<?echo $_SERVER["HTTP_HOST"];?>";
-			$.get("http://"+serverAddr+"/user/NetPlayer/NetPlayer_Receiver.php?rc_action=other&id=rc_mp_status", refresh_radiostatus);
+			var serverAddr;
+			if (window.location.protocol == "https:") { serverAddr = "https://<?echo $_SERVER["HTTP_HOST"];?>"; }
+			else{ serverAddr = "http://<?echo $_SERVER["HTTP_HOST"];?>"; }
+			$.get(serverAddr+"/user/NetPlayer/NetPlayer_Receiver.php?rc_action=other&id=rc_mp_status", refresh_radiostatus);
 		}
 
 		function refresh_radio() {

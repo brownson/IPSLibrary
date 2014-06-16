@@ -201,7 +201,6 @@
 		NetPlayer_RefreshCDListValue();
 	}
 
-
 	function NetPlayer_NavigateRadioForward($count=NP_COUNT_RADIODEFAULT) {
 		IPSLogger_Trc(__file__, "Navigate Forward Radio, Count=$count");
 		NetPlayer_NavigateRadio($count-1);
@@ -240,6 +239,20 @@
 		$player->AddPlaylist($radiourl);
 		$player->Play();
 	}
+
+	function NetPlayer_RadioByIndex($radioIdx=0) {
+		$radioName = GetValue(NP_ID_RADIONAME);
+		$radioList = NetPlayer_GetRadioList();
+		$radioKeys = array_keys($radioList);
+		if (!array_key_exists($radioIdx, $radioKeys))  {
+			IPSLogger_Err(__file__, "Unbekannter Sender in der Radioliste ->  $radioIdx");
+		} else {
+			$radioName  = $radioKeys[$radioIdx];
+			$radioUrl   = $radioList[$radioKeys[$radioIdx]];
+			NetPlayer_PlayRadio($radioUrl, $radioName);
+			NetPlayer_RefreshRemoteControl();
+		}
+	}  
 
 	function NetPlayer_NextRadio($next=1) {
 		$radioName = GetValue(NP_ID_RADIONAME);

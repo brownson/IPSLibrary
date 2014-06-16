@@ -39,10 +39,10 @@
 	define ("c_Movement_Space",					" ");
 	define ("c_Movement_Opened",				"Offen");
 	define ("c_Movement_MovedIn",				"Eingefahren");
-	define ("c_Movement_25",					"25%");
-	define ("c_Movement_50",					"50%");
-	define ("c_Movement_75",					"75%");
-	define ("c_Movement_90",					"90%");
+	define ("c_Movement_25",					"25%%");
+	define ("c_Movement_50",					"50%%");
+	define ("c_Movement_75",					"75%%");
+	define ("c_Movement_90",					"90%%");
 	define ("c_Movement_Shadowing",				"Beschattung");
 	define ("c_Movement_Dimout",				"Abdunkelung");
 	define ("c_Movement_Closed",				"Geschlossen");

@@ -43,12 +43,22 @@
 
 		<?
 			$agent  = $_SERVER['HTTP_USER_AGENT'];
-			$mobile = preg_match("@ipod@i", $agent) || preg_match("@ipad@i", $agent) || preg_match("@iphone@i",$agent);
+			$mobile = preg_match("@ipod@i", $agent) || preg_match("@iphone@i",$agent);
 			if ($mobile) {
 				echo '<link rel="stylesheet" type="text/css" href="/user/IPSWeatherForcastAT/iWeather.css" />';
 			} else {
 				echo '<link rel="stylesheet" type="text/css" href="/user/IPSWeatherForcastAT/Weather.css" />';
 			}
+			$background  = '';
+			$textcolor   = 'color:#fff;';
+			if (isset($_GET['foreground'])) {
+					$textcolor = 'color:#'.$_GET['foreground'].';';
+			}
+			if (isset($_GET['background'])) {
+					$background = 'background:#'.$_GET['background'].';';
+					if ($_GET['background'] == 'e4e4e4' and $textcolor='') $textcolor='color:#000000;';
+			}
+			$style = 'style="'.$background.$textcolor.'"';
 		?>
 
 		<script type="text/JavaScript">
@@ -59,13 +69,14 @@
 			//   -->
 		</script>
 	</head>
-	<body onload="JavaScript:timedRefresh(1000*60*5);">
+	<body onload="JavaScript:timedRefresh(1000*60*5);" <?php echo $style?>>
 		<?php
 			IPSUtils_Include ("IPSWeatherForcastAT_Constants.inc.php",     "IPSLibrary::app::modules::Weather::IPSWeatherForcastAT");
 			IPSUtils_Include ("IPSWeatherForcastAT_Configuration.inc.php", "IPSLibrary::config::modules::Weather::IPSWeatherForcastAT");
 			IPSUtils_Include ("IPSWeatherForcastAT_Utils.inc.php",         "IPSLibrary::app::modules::Weather::IPSWeatherForcastAT");
 			IPSUtils_Include ("IPSLogger.inc.php",                         "IPSLibrary::app::core::IPSLogger");
 
+			//IPSLogger_Inf(__file__, $_SERVER['HTTP_USER_AGENT']);
 			if(IPSWEATHERFAT_COUNT_DETAILS == 1) $berichtGesamt = IPSWeatherFAT_GetValue('TomorrowForecastLong');
 			if(IPSWEATHERFAT_COUNT_DETAILS == 2) $berichtGesamt = IPSWeatherFAT_GetValue('TomorrowForecastLong') . IPSWeatherFAT_GetValue('Tomorrow1ForecastLong');
 			if(IPSWEATHERFAT_COUNT_DETAILS == 3) $berichtGesamt = IPSWeatherFAT_GetValue('TomorrowForecastLong') . IPSWeatherFAT_GetValue('Tomorrow1ForecastLong') . IPSWeatherFAT_GetValue('Tomorrow2ForecastLong');

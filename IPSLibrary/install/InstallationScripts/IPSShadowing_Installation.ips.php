@@ -55,6 +55,7 @@
 	 *
 	 * @file          IPSShadowing_Installation.ips.php
 	 * @author        Andreas Brauneis
+	 *
 	 * @version
 	 *  Version 2.50.1, 19.03.2012<br/>
 	 *
@@ -370,7 +371,41 @@
 		$profile   = new IPSShadowing_ProfileTemp($profileId);
 		$profile->Display($CategoryIdProfileTempDisplay);
 	}
-	//--Migration v2.50.2 --> 2.50.3
+
+	CreateProfile_Associations ('IPSShadowing_WindBeaufort',   array(
+						0 => 'Windstille (0 km/h)',
+						1 => 'leiser Zug (2 km/h)',
+						2 => 'leichte Brise (6 km/h)',
+						3 => 'schwache Brise (12 km/h)',
+						4 => 'mäßige Brise (20 km/h)',
+						5 => 'frischer Wind (29 km/h)',
+						6 => 'starker Wind (39 km/h)',
+						7 => 'steifer Wind (50 km/h)',
+						8 => 'stürmischer Wind (62 km/h)',
+						9 => 'Sturm (75 km/h)',
+						10 => 'schwerer Sturm (89 km/h)',
+						11 => 'orkanartiger Sturm (103 km/h)',
+						12 => 'Orkan (117 km/h)'
+						 ));
+
+	$profiles=IPS_GetChildrenIDs($CategoryIdProfilesWeather);
+	foreach ($profiles as $profileId) {
+		$windlevelID=IPS_GetObjectIDByIdent("WindLevel", $profileId);
+		$variableinfo=IPS_GetVariable($windlevelID);
+		$customprofile=$variableinfo['VariableCustomProfile'];
+		$value=GetValue($windlevelID);
+		if (defined('IPSSHADOWING_WINDLEVEL_CLASSIFICATION') and IPSSHADOWING_WINDLEVEL_CLASSIFICATION) {
+			if ($customprofile=="IPSShadowing_Wind") {
+				IPS_SetVariableCustomProfile ($windlevelID,'IPSShadowing_WindBeaufort');
+				SetValue($windlevelID,intval($value/3.6));
+			}
+		} else {
+			if ($customprofile=="IPSShadowing_WindBeaufort") {
+				IPS_SetVariableCustomProfile ($windlevelID,'IPSShadowing_Wind');
+				SetValue($windlevelID,round($value*3.6,-1));
+			}
+		}
+	}
 
 	$profileManager = new IPSShadowing_ProfileManager();
 	$profileManager->AssignAllProfileAssociations();
@@ -386,6 +421,7 @@
 	$Profiles = IPS_GetChildrenIDs($CategoryIdProfilesWeather);
 	if (count($Profiles)==0) {
 		$profileManager->CreateWeather('Standard');
+	} else {
 	}
 	$Profiles = IPS_GetChildrenIDs($CategoryIdProfilesBgnOfDay);
 	if (count($Profiles)==0) {
@@ -683,7 +719,7 @@
 		$WebFrontScenariosIdTopL  = CreateCategory(  'TopLeft',  $WebFrontScenariosId, 10);
 		$WebFrontScenariosIdTopR  = CreateCategory(  'TopRight', $WebFrontScenariosId, 20);
 		$WebFrontScenariosIdBot   = CreateCategory(  'Bottom',   $WebFrontScenariosId, 30);
-		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Scenarios",    $WFC10_TabPaneItem, 30, 'Szenarien', 'Script', 0 /*Horizontal*/, 106 /*Hight*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
+		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Scenarios",    $WFC10_TabPaneItem, 30, 'Szenarien', 'Script', 0 /*Horizontal*/, 108 /*Hight*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_ScenariosTop", $WFC10_TabPaneItem."_Scenarios",    10, '', '', 1 /*Vertical*/, 300/*Width*/, 1 /*Target=Pane2*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_ScenariosBot", $WFC10_TabPaneItem."_Scenarios",    20, '', '', $CategoryIdScenarioDisplay /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_ScenariosTopL",$WFC10_TabPaneItem."_ScenariosTop", 10, '', '', $WebFrontScenariosIdTopL /*BaseId*/, 'false' /*BarBottomVisible*/);
@@ -716,29 +752,29 @@
 		$WebFrontProfilesId5BotR  = CreateCategory(    'BottomRight',   $WebFrontProfilesId5, 30);
 		CreateWFCItemTabPane   ($WFC10_ConfigId, $WFC10_TabPaneItem.'_Profiles', $WFC10_TabPaneItem, 40, 'Profile', 'Clock');
 
-		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles1",    $WFC10_TabPaneItem.'_Profiles',     10, 'Temperatur', 'Temperature', 0 /*Horizontal*/, 106 /*Hight*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
+		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles1",    $WFC10_TabPaneItem.'_Profiles',     10, 'Temperatur', 'Temperature', 0 /*Horizontal*/, 108 /*Hight*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles1Top", $WFC10_TabPaneItem."_Profiles1",    10, '', '', 1 /*Vertical*/, 300/*Width*/, 1 /*Target=Pane2*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles1Bot", $WFC10_TabPaneItem."_Profiles1",    20, '', '', $CategoryIdProfileTempDisplay /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles1TopL",$WFC10_TabPaneItem."_Profiles1Top", 10, '', '', $WebFrontProfilesId1TopL /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles1TopR",$WFC10_TabPaneItem."_Profiles1Top", 20, '', '', $WebFrontProfilesId1TopR /*BaseId*/, 'false' /*BarBottomVisible*/);
-		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles2",    $WFC10_TabPaneItem.'_Profiles',     20, 'Sonnenstand', 'Sun', 0 /*Horizontal*/, 106 /*Hight*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
+		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles2",    $WFC10_TabPaneItem.'_Profiles',     20, 'Sonnenstand', 'Sun', 0 /*Horizontal*/, 108 /*Hight*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles2Top", $WFC10_TabPaneItem."_Profiles2",    10, '', '', 1 /*Vertical*/, 300/*Width*/, 1 /*Target=Pane2*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles2Bot", $WFC10_TabPaneItem."_Profiles2",    20, '', '', 1 /*Vertical*/, 420/*Width*/, 1 /*Target=Pane2*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles2BotL",$WFC10_TabPaneItem."_Profiles2Bot", 10, '', '', $CategoryIdProfileSunDisplay /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles2BotR",$WFC10_TabPaneItem."_Profiles2Bot", 20, '', '', $CategoryIdProfileSunGraphs /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles2TopL",$WFC10_TabPaneItem."_Profiles2Top", 10, '', '', $WebFrontProfilesId2TopL /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles2TopR",$WFC10_TabPaneItem."_Profiles2Top", 20, '', '', $WebFrontProfilesId2TopR /*BaseId*/, 'false' /*BarBottomVisible*/);
-		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles3",    $WFC10_TabPaneItem.'_Profiles',     20, 'Wetter', 'Drops', 0 /*Horizontal*/, 106 /*Hight*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
+		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles3",    $WFC10_TabPaneItem.'_Profiles',     20, 'Wetter', 'Drops', 0 /*Horizontal*/, 108 /*Hight*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles3Top", $WFC10_TabPaneItem."_Profiles3",    10, '', '', 1 /*Vertical*/, 300/*Width*/, 1 /*Target=Pane2*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles3Bot", $WFC10_TabPaneItem."_Profiles3",    20, '', '', $CategoryIdProfileWeatherDisplay /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles3TopL",$WFC10_TabPaneItem."_Profiles3Top", 10, '', '', $WebFrontProfilesId3TopL /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles3TopR",$WFC10_TabPaneItem."_Profiles3Top", 20, '', '', $WebFrontProfilesId3TopR /*BaseId*/, 'false' /*BarBottomVisible*/);
-		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles4",    $WFC10_TabPaneItem.'_Profiles',     20, 'Tagesbeginn', 'Clock', 0 /*Horizontal*/, 106 /*Hight*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
+		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles4",    $WFC10_TabPaneItem.'_Profiles',     20, 'Tagesbeginn', 'Clock', 0 /*Horizontal*/, 108 /*Hight*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles4Top", $WFC10_TabPaneItem."_Profiles4",    10, '', '', 1 /*Vertical*/, 300/*Width*/, 1 /*Target=Pane2*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles4Bot", $WFC10_TabPaneItem."_Profiles4",    20, '', '', $CategoryIdProfileBgnOfDayDisplay /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles4TopL",$WFC10_TabPaneItem."_Profiles4Top", 10, '', '', $WebFrontProfilesId4TopL /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles4TopR",$WFC10_TabPaneItem."_Profiles4Top", 20, '', '', $WebFrontProfilesId4TopR /*BaseId*/, 'false' /*BarBottomVisible*/);
-		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles5",    $WFC10_TabPaneItem.'_Profiles',     30, 'Tagesende', 'Clock', 0 /*Horizontal*/, 106 /*Hight*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
+		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles5",    $WFC10_TabPaneItem.'_Profiles',     30, 'Tagesende', 'Clock', 0 /*Horizontal*/, 108 /*Hight*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemSplitPane ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles5Top", $WFC10_TabPaneItem."_Profiles5",    10, '', '', 1 /*Vertical*/, 300/*Width*/, 1 /*Target=Pane2*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles5Bot", $WFC10_TabPaneItem."_Profiles5",    20, '', '', $CategoryIdProfileEndOfDayDisplay /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles5TopL",$WFC10_TabPaneItem."_Profiles5Top", 10, '', '', $WebFrontProfilesId5TopL /*BaseId*/, 'false' /*BarBottomVisible*/);

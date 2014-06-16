@@ -135,7 +135,7 @@
 			CreateVariable(c_Control_AzimuthEnd,        1 /*Integer*/,  $profileId, 20, 'IPSShadowing_AzimuthEnd',        $ScriptIdChangeSettings, $azimuthEnd,        'HollowLargeArrowRight');
 			CreateVariable(c_Control_Elevation,         1 /*Integer*/,  $profileId, 30, 'IPSShadowing_Elevation',         $ScriptIdChangeSettings, $elevation,         'HollowLargeArrowUp');
 			CreateVariable(c_Control_Date,              1 /*Integer*/,  $profileId, 40, 'IPSShadowing_Date',              $ScriptIdChangeSettings, 1,                  'Calendar');
-			CreateVariable(c_Control_Simulation,        1 /*Integer*/,  $profileId, 50, '~Switch',                        $ScriptIdChangeSettings, false,              'Repeat');
+			CreateVariable(c_Control_Simulation,        0 /*Boolean*/,  $profileId, 50, '~Switch',                        $ScriptIdChangeSettings, false,              'Repeat');
 			CreateVariable(c_Control_Orientation,       0 /*Boolean*/,  $profileId, 60, '~Switch',                        $ScriptIdChangeSettings, false,              'WindDirection');
 			CreateVariable(c_Control_ProfileInfo,       3 /*String*/,   $profileId, 70, '~String',                        null,                    '',                 'Information');
 

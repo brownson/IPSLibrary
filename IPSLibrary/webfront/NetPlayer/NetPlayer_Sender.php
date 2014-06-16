@@ -22,10 +22,31 @@
 
 	?>
 
+	<style type="text/css">
+		<?
+			$agent = $_SERVER['HTTP_USER_AGENT'];
+			if (strpos($agent, 'Macintosh') > 0) {
+				$background = 'background:#e4e4e4;';
+				$foreground = 'color:#000000;';
+			} else if (strpos($agent, 'iPad') > 0 or strpos($agent, 'iPhone') > 0) {
+				$background = 'background:#252525;';
+				$foreground = 'color:#ffffff;';
+			} else {
+				$background = 'background:#252525;';
+				$foreground = 'color:#ffffff;';
+			}
+			echo 'html, body { '.$background.$foreground.' }';
+		?>
+		
+	</style>
+
 	<script type="text/javascript" src="jquery.min.js"></script>
+
 	<script type="text/javascript">
 		function trigger_button() {
-			var serverAddr = "<?echo $_SERVER["HTTP_HOST"];?>";
+			var serverAddr;
+			if (window.location.protocol == "https:") { serverAddr = "https://<?echo $_SERVER["HTTP_HOST"];?>"; }
+			else{ serverAddr = "http://<?echo $_SERVER["HTTP_HOST"];?>"; }
 			var obj_id = $(this).attr("id");
 			$('#'+obj_id).addClass("containerControlButtonSelected");
 
@@ -35,37 +56,37 @@
 		   // Select Mediaplayer CD
 		   if ($('#'+obj_id).attr('cd_name') !== undefined) {
 			  var cd_name = $('#'+obj_id).attr('cd_name');
-			  $.get('http://'+serverAddr+'/user/NetPlayer/NetPlayer_Receiver.php?rc_action=rc_netcd&cd_path='+encodeURIComponent(cd_name)+"&id="+obj_id, function(data) { <?if ($mobile) echo 'location.reload();'; ?>});
+			  $.get(serverAddr+'/user/NetPlayer/NetPlayer_Receiver.php?rc_action=rc_netcd&cd_path='+encodeURIComponent(cd_name)+"&id="+obj_id, function(data) { <?if ($mobile) echo 'location.reload();'; ?>});
 					 
 		   // Select Category
 		   } else if ($('#'+obj_id).attr('cd_cat') !== undefined) {
 			  var cd_cat = $('#'+obj_id).attr('cd_cat');
-			  $.get('http://'+serverAddr+'/user/NetPlayer/NetPlayer_Receiver.php?rc_action=rc_netcat&cd_cat='+encodeURIComponent(cd_cat)+"&id="+obj_id, function(data) { <?if ($mobile) echo 'location.reload();'; ?>});
+			  $.get(serverAddr+'/user/NetPlayer/NetPlayer_Receiver.php?rc_action=rc_netcat&cd_cat='+encodeURIComponent(cd_cat)+"&id="+obj_id, function(data) { <?if ($mobile) echo 'location.reload();'; ?>});
 
 		   // Select Track
 		   } else if ($('#'+obj_id).attr('track') !== undefined) {
 			  var track = $('#'+obj_id).attr('track');
-			  $.get('http://'+serverAddr+'/user/NetPlayer/NetPlayer_Receiver.php?rc_action=rc_netcat&track='+encodeURIComponent(track)+"&id="+obj_id, function(data) { <?if ($mobile) echo 'location.reload();'; ?>});
+			  $.get(serverAddr+'/user/NetPlayer/NetPlayer_Receiver.php?rc_action=rc_netcat&track='+encodeURIComponent(track)+"&id="+obj_id, function(data) { <?if ($mobile) echo 'location.reload();'; ?>});
 
 		   // MediaPlayer WebRadio
 		   } else if ($('#'+obj_id).attr('radiourl') !== undefined) {
 			  var radiotitel = $('#'+obj_id).html();
 			  var radiourl = $('#'+obj_id).attr('radiourl');
-			  $.get('http://'+serverAddr+'/user/NetPlayer/NetPlayer_Receiver.php?rc_action=rc_netradio&id='+obj_id+'&radiotitel='+radiotitel+'&radiourl='+radiourl, function(data) { <?if ($mobile) echo 'location.reload();'; ?>});
+			  $.get(serverAddr+'/user/NetPlayer/NetPlayer_Receiver.php?rc_action=rc_netradio&id='+obj_id+'&radiotitel='+radiotitel+'&radiourl='+radiourl, function(data) { <?if ($mobile) echo 'location.reload();'; ?>});
 			  $('#rc_mp_radiotitel').html(radiotitel);
 
 			} else if (obj_id=='rc_mp_radio' || obj_id=='rc_mp_select' || obj_id=='rc_mp_player') {
-				$.get('http://'+serverAddr+'/user/NetPlayer/NetPlayer_Receiver.php?rc_action=rc_other&id='+obj_id, function(data) { <?if ($mobile) echo 'location.reload();'; ?>});
+				$.get(serverAddr+'/user/NetPlayer/NetPlayer_Receiver.php?rc_action=rc_other&id='+obj_id, function(data) { <?if ($mobile) echo 'location.reload();'; ?>});
 		   				
 			} else if (obj_id=='rc_mp_cdselectprev' || obj_id=='rc_mp_cdselectnext' || obj_id=='rc_mp_cdselectback'  || obj_id=='rc_mp_cdselectroot' ) {
-				$.get('http://'+serverAddr+'/user/NetPlayer/NetPlayer_Receiver.php?rc_action=rc_other&id='+obj_id, function(data) { <?if ($mobile) echo 'location.reload();'; ?>});
+				$.get(serverAddr+'/user/NetPlayer/NetPlayer_Receiver.php?rc_action=rc_other&id='+obj_id, function(data) { <?if ($mobile) echo 'location.reload();'; ?>});
 		   				
 		   // -----------------------------------------------------------------------------------------------------
 		   // Other Buttons
 		   // -----------------------------------------------------------------------------------------------------
 		   } else {
 			  $.ajax({ type: "POST",
-					   url: "http://"+serverAddr+"/user/NetPlayer/NetPlayer_Receiver.php",
+					   url: serverAddr+"/user/NetPlayer/NetPlayer_Receiver.php",
 					   data: "rc_action=rc_other&id="+obj_id });
 		   }
 

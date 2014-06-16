@@ -1,5 +1,5 @@
 <?
-	$remoteRepository = 'https://raw.github.com/brownson/IPSLibrary/NewFeatures/';
+	$remoteRepository = 'https://raw.githubusercontent.com/brownson/IPSLibrary/Development/';
 	if (isset($repository)) {
 		$remoteRepository = $repository;
 	}
@@ -50,6 +50,7 @@
 			curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT,10);
 			curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER,true);
 			curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
+			curl_setopt($curl_handle, CURLOPT_FOLLOWLOCATION, true);
 			curl_setopt($curl_handle, CURLOPT_FAILONERROR, true);
 			$fileContent = curl_exec($curl_handle);
 

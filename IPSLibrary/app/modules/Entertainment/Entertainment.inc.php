@@ -18,6 +18,7 @@
     */
 
 	IPSUtils_Include ("IPSLogger.inc.php",                   "IPSLibrary::app::core::IPSLogger");
+	IPSUtils_Include ('IPSMessageHandler.class.php',         'IPSLibrary::app::core::IPSMessageHandler');
 	include_once "Entertainment_Constants.inc.php";
 	IPSUtils_Include ("Entertainment_IDs.inc.php",           "IPSLibrary::app::modules::Entertainment");
 	IPSUtils_Include ("Entertainment_Configuration.inc.php", "IPSLibrary::config::modules::Entertainment");

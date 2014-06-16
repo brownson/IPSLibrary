@@ -173,7 +173,7 @@
 		DeleteWFCItems($WFC10_ConfigId, 'WeatherTPSunrise');
 		DeleteWFCItems($WFC10_ConfigId, $tabItem);
 		CreateWFCItemTabPane   ($WFC10_ConfigId, $WFC10_TabPaneItem, $WFC10_TabPaneParent,  $WFC10_TabPaneOrder, $WFC10_TabPaneName, $WFC10_TabPaneIcon);
-		CreateWFCItemSplitPane ($WFC10_ConfigId, $tabItem,           $WFC10_TabPaneItem,    $WFC10_TabOrder,     $WFC10_TabName,     $WFC10_TabIcon, 1 /*Vertical*/, 300 /*Width*/, 1 /*Target=Pane2*/, 1/*UsePixel*/, 'true');
+		CreateWFCItemSplitPane ($WFC10_ConfigId, $tabItem,           $WFC10_TabPaneItem,    $WFC10_TabOrder,     $WFC10_TabName,     $WFC10_TabIcon, 1 /*Vertical*/, 310 /*Width*/, 1 /*Target=Pane2*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemSplitPane ($WFC10_ConfigId,   $tabItem.'_Left',              $tabItem,         10, '', '', 0 /*Horicontal*/, 205 /*Height*/, 0 /*Target=Pane1*/, 1 /*UsePixel*/, 'true');
 		CreateWFCItemCategory  ($WFC10_ConfigId,   $tabItem.'_Right'.$UId,        $tabItem,         20, '', '', $categoryId_WebFrontRight    /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemSplitPane ($WFC10_ConfigId,     $tabItem.'_Top',             $tabItem.'_Left', 10, '', '', 1 /*Vertical*/, 50 /*Width*/, 0 /*Target=Pane1*/, 0 /*UsePercentage*/, 'true');

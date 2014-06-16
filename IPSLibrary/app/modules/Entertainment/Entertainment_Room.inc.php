@@ -38,15 +38,16 @@
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function Entertainment_SetRoomPower($PowerId, $Value, $PowerOnDevices=true) {
-	   if (GetValue($PowerId) <> $Value) {
-	      IPSLogger_Inf(__file__, 'Set Power for Room "'.IPS_GetName(IPS_GetParent($PowerId)).'" '.bool2OnOff($Value));
+		if (GetValue($PowerId) <> $Value) {
+			IPSLogger_Inf(__file__, 'Set Power for Room "'.IPS_GetName(IPS_GetParent($PowerId)).'" '.bool2OnOff($Value));
 			SetValue($PowerId, $Value);
-	      Entertainment_SetRoomVisible($PowerId, $Value);
+			IPSMessageHandler_HandleLibraryEvent($PowerId, $Value, 'Entertainment', 'Power'); 
+			Entertainment_SetRoomVisible($PowerId, $Value);
 			if ($PowerOnDevices) {
-	      	Entertainment_SetDevicePowerByRoomId(IPS_GetParent($PowerId), $Value);
+				Entertainment_SetDevicePowerByRoomId(IPS_GetParent($PowerId), $Value);
 			}
-	      Entertainment_SyncRoomControls(IPS_GetParent($PowerId));
-	   }
+			Entertainment_SyncRoomControls(IPS_GetParent($PowerId));
+		}
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------

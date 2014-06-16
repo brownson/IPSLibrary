@@ -192,7 +192,9 @@
 	// ===================================================================================================
 	$variableIdCamSelect = CreateVariable(IPSCAM_VAR_CAMSELECT,1 /*Integer*/, $categoryIdCommon, 10, 'IPSCam_Cam',     $scriptIdActionScript, 0, 'Power');
 	$variableIdCamHtml   = CreateVariable(IPSCAM_VAR_CAMHTML,  3 /*String*/,  $categoryIdCommon,100, '~HTMLBox',       $scriptIdActionScript, '<iframe frameborder="0" width="100%" height="530px"  src="../user/IPSCam/IPSCam_CameraHtml.php"</iframe>', 'Window');
-	$variableIdCamPict   = CreateMedia (IPSCAM_VAR_CAMPICT, $categoryIdCommon, IPS_GetKernelDir().'\\Cams\\0\\Picture\\Common.jpg', false, 1 /*Image*/, 'Image', 110); 
+	$variableIdHtml      = CreateVariable(IPSCAM_VAR_HTML,     3 /*String*/,  $categoryIdCommon,110, '~HTMLBox',       $scriptIdActionScript, '', 'Window');
+	$variableIdiHtml     = CreateVariable(IPSCAM_VAR_IHTML,    3 /*String*/,  $categoryIdCommon,120, '~HTMLBox',       $scriptIdActionScript, '', 'Window');
+	$variableIdCamPict   = CreateMedia (IPSCAM_VAR_CAMPICT, $categoryIdCommon, IPS_GetKernelDir().'\\Cams\\0\\Picture\\Common.jpg', false, 1 /*Image*/, 'Image', 110);
 	$variableIdCamHist   = CreateMedia (IPSCAM_VAR_CAMHIST, $categoryIdCommon, IPS_GetKernelDir().'\\Cams\\0\\History\\20120101.jpg', false, 1 /*Image*/, 'Clock', 110); 
 	$variableIdMode      = CreateVariable(IPSCAM_VAR_MODE,     1 /*Integer*/, $categoryIdCommon, 20, 'IPSCam_Mode',    $scriptIdActionScript, 0, 'Gear');
 	$variableIdModeLive  = CreateVariable(IPSCAM_VAR_MODELIVE, 0 /*Boolean*/, $categoryIdCommon, 30, '~Switch',        $scriptIdActionScript, false, 'Window');
@@ -277,7 +279,7 @@
 		$tabItem = $WFC10_TabPaneItem.$WFC10_TabItem;
 		DeleteWFCItems($WFC10_ConfigId, $tabItem);
 		CreateWFCItemTabPane   ($WFC10_ConfigId, $WFC10_TabPaneItem, $WFC10_TabPaneParent,  $WFC10_TabPaneOrder, $WFC10_TabPaneName, $WFC10_TabPaneIcon);
-		CreateWFCItemSplitPane ($WFC10_ConfigId, $tabItem,           $WFC10_TabPaneItem,    $WFC10_TabOrder,     $WFC10_TabName,     $WFC10_TabIcon, 1 /*Vertical*/, 300 /*Width*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
+		CreateWFCItemSplitPane ($WFC10_ConfigId, $tabItem,           $WFC10_TabPaneItem,    $WFC10_TabOrder,     $WFC10_TabName,     $WFC10_TabIcon, 1 /*Vertical*/, 330 /*Width*/, 0 /*Target=Pane1*/, 1/*UsePixel*/, 'true');
 		CreateWFCItemCategory  ($WFC10_ConfigId, $tabItem.'_Left',   $tabItem,   10, '', '', $categoryIdNavPanel   /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $tabItem.'_Right',  $tabItem,   20, '', '', $categoryIdCamPanel   /*BaseId*/, 'false' /*BarBottomVisible*/);
 

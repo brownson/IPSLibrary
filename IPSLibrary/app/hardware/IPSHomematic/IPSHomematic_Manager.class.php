@@ -56,11 +56,13 @@
 				$variableId = @IPS_GetVariableIDByName('RSSI_DEVICE', $instanceId);
 				if ($variableId!==false) {
 					usleep(100000);
+					set_time_limit(HM_TIMEOUT_REFRESH);
 					HM_RequestStatus($instanceId, 'RSSI_DEVICE');
 				}
 				$variableId = @IPS_GetVariableIDByName('RSSI_PEER', $instanceId);
 				if ($variableId!==false) {
 					usleep(100000);
+					set_time_limit(HM_TIMEOUT_REFRESH);
 					HM_RequestStatus($instanceId, 'RSSI_PEER');
 				}
 			}
@@ -153,6 +155,7 @@
 			foreach ($instanceIdList as $instanceId) {
 				$variableId = @IPS_GetVariableIDByName('STATE', $instanceId);
 				if ($variableId!==false) {
+					set_time_limit(HM_TIMEOUT_REFRESH);
 					HM_RequestStatus($instanceId, 'STATE');
 				}
 				//$variableId = @IPS_GetVariableIDByName('LEVEL', $instanceId);
@@ -168,49 +171,52 @@
 		 * Refresh der Homematic Service Messages
 		 */
 		public function RefreshServiceMessages() {
-			$texte = Array("CONFIG_PENDING"  =>"Konfigurationsdaten stehen zur Übertragung an",
-						   "LOWBAT"          =>"Batterieladezustand gering",
-						   "STICKY_UNREACH"  =>"Gerätekommunikation war gestört",
-						   "UNREACH"         =>"Gerätekommunikation aktuell gestört");
-	 
-			$str = "<table width='90%' align='center'>"; // Farbe anpassen oder style entfernen
-			$str .= "<tr><td><b>Gerätname</b></td><td><b>GeräteID</b></td><td><b>Meldung</b></td></tr>";
-	 
-			$ids = IPS_GetInstanceListByModuleID("{A151ECE9-D733-4FB9-AA15-7F7DD10C58AF}");
-			if(sizeof($ids) == 0) die("Keine HomeMatic Socket Instanz gefunden!");
-	 
-			$msgs = HM_ReadServiceMessages($ids[0]);
-			if($msgs === false) die("Verbindung zur CCU fehlgeschlagen");
-	 
-			if(sizeof($msgs) == 0) $str .= "<tr><td colspan=3><br/>Keine Servicemeldungen!</td></tr>";
-	 
-			foreach($msgs as $msg) {
-				if(array_key_exists($msg['Message'], $texte)) {
-					$text = $texte[$msg['Message']];
-				} else {
-					$text = $msg['Message'];
-				}
-				$id = HM_GetInstanceIDFromHMAddress($msg['Address']);
-				if(IPS_InstanceExists($id)) {
-					$name = IPS_GetName($id);
-				} else {
-					$name = "Gerät nicht in IP-Symcon eingerichtet";
-				}
-	 
-				$str .= "<tr><td>".$name."</td><td>".$msg['Address']."</td><td>".$text."</td></tr>";
-			}
-			$str .= "</table>";
+		    $texte = Array("CONFIG_PENDING"  =>"Konfigurationsdaten stehen zur Übertragung an",
+		                   "LOWBAT"          =>"Batterieladezustand gering",
+		                   "STICKY_UNREACH"  =>"Gerätekommunikation war gestört",
+		                   "UNREACH"         =>"Gerätekommunikation aktuell gestört");
 
-			$categoryIdHtml       = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.hardware.IPSHomematic.StatusMessages');
-			$categoryIdSettings   = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.hardware.IPSHomematic.Settings');
-			$variableIdMessages   = IPS_GetObjectIDByIdent(HM_CONTROL_MESSAGES, $categoryIdHtml);
-			$variableIdPriority   = IPS_GetObjectIDByIdent(HM_CONTROL_PRIORITY, $categoryIdSettings);
-			if (GetValue($variableIdMessages) <> $str) {
-				SetValue($variableIdMessages, $str);
-				IPSLogger_Not(__file__, 'New Homematic Service Messages:'.PHP_EOL.$str, GetValue($variableIdPriority));
-			}
+		    $str = "<table width='90%' align='center'>"; // Farbe anpassen oder style entfernen
+		    $str .= "<tr><td><b>Gerätname</b></td><td><b>GeräteID</b></td><td><b>Meldung</b></td></tr>";
+		    $str_log = "";
+		    $ids = IPS_GetInstanceListByModuleID("{A151ECE9-D733-4FB9-AA15-7F7DD10C58AF}");
+		    if(sizeof($ids) == 0) die("Keine HomeMatic Socket Instanz gefunden!");
+
+		    $msgs = HM_ReadServiceMessages($ids[0]);
+		    if($msgs === false) die("Verbindung zur CCU fehlgeschlagen");
+
+		    if(sizeof($msgs) == 0) {
+		        $str .= "<tr><td colspan=3><br/>Keine Servicemeldungen!</td></tr>";
+		        $str_log .= "Keine Servicemeldungen!";
+		    }
+		    foreach($msgs as $msg) {
+		       if(array_key_exists($msg['Message'], $texte)) {
+		            $text = $texte[$msg['Message']];
+		        } else {
+		            $text = $msg['Message'];
+		        }
+		        $id = HM_GetInstanceIDFromHMAddress($msg['Address']);
+		        if(IPS_InstanceExists($id)) {
+					$name = IPS_GetLocation($id);
+		        } else {
+		            $name = "Gerät nicht in IP-Symcon eingerichtet";
+		        }
+
+		        $str .= "<tr><td>".$name."</td><td>".$msg['Address']."</td><td>".$text."</td></tr>";
+		        $str_log .= $name." - ".$msg['Address']." - ".$text."\n";
+		    }
+		    $str .= "</table>";
+
+		    $categoryIdHtml       = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.hardware.IPSHomematic.StatusMessages');
+		    $categoryIdSettings   = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.hardware.IPSHomematic.Settings');
+		    $variableIdMessages   = IPS_GetObjectIDByIdent(HM_CONTROL_MESSAGES, $categoryIdHtml);
+		    $variableIdPriority   = IPS_GetObjectIDByIdent(HM_CONTROL_PRIORITY, $categoryIdSettings);
+		    if (GetValue($variableIdMessages) <> $str) {
+		        SetValue($variableIdMessages, $str);
+		        IPSLogger_Not(__file__, 'New Homematic Service Messages:'.PHP_EOL.$str_log, GetValue($variableIdPriority));
+		    }
 		}
-		
+
 		/** 
 		 * @public
 		 *
