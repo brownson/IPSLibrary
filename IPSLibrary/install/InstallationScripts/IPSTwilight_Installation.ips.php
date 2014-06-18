@@ -105,12 +105,12 @@
 	$timerId_Refresh   = CreateTimer_OnceADay ('Refresh', $scriptId_Refresh, 0, 15) ;
 
 	// Graphics
-	$YearMediaId          = CreateMedia ('IPSTwilight_Year',          $categoryId_DataGraphics, IPS_GetKernelDir().'media\\IPSTwilight_Year.gif',          false,1,'Sun');
-	$YearLimitedMediaId   = CreateMedia ('IPSTwilight_YearLimited',   $categoryId_DataGraphics, IPS_GetKernelDir().'media\\IPSTwilight_YearLimited.gif',   false,1,'Sun');
-	$YearUnlimitedMediaId = CreateMedia ('IPSTwilight_YearUnlimited', $categoryId_DataGraphics, IPS_GetKernelDir().'media\\IPSTwilight_YearUnlimited.gif', false,1,'Sun');
-	$DayMediaId           = CreateMedia ('IPSTwilight_Day',           $categoryId_DataGraphics, IPS_GetKernelDir().'media\\IPSTwilight_Day.gif',           false,1,'Sun');
-	$DayLimitedMediaId    = CreateMedia ('IPSTwilight_DayLimited',    $categoryId_DataGraphics, IPS_GetKernelDir().'media\\IPSTwilight_DayLimited.gif',    false,1,'Sun');
-	$DayUnlimitedMediaId  = CreateMedia ('IPSTwilight_DayUnlimited',  $categoryId_DataGraphics, IPS_GetKernelDir().'media\\IPSTwilight_DayUnlimited.gif',  false,1,'Sun');
+	$YearMediaId          = CreateMedia ('IPSTwilight_Year',          $categoryId_DataGraphics, IPS_GetKernelDir().'media/IPSTwilight_Year.gif',          false,1,'Sun');
+	$YearLimitedMediaId   = CreateMedia ('IPSTwilight_YearLimited',   $categoryId_DataGraphics, IPS_GetKernelDir().'media/IPSTwilight_YearLimited.gif',   false,1,'Sun');
+	$YearUnlimitedMediaId = CreateMedia ('IPSTwilight_YearUnlimited', $categoryId_DataGraphics, IPS_GetKernelDir().'media/IPSTwilight_YearUnlimited.gif', false,1,'Sun');
+	$DayMediaId           = CreateMedia ('IPSTwilight_Day',           $categoryId_DataGraphics, IPS_GetKernelDir().'media/IPSTwilight_Day.gif',           false,1,'Sun');
+	$DayLimitedMediaId    = CreateMedia ('IPSTwilight_DayLimited',    $categoryId_DataGraphics, IPS_GetKernelDir().'media/IPSTwilight_DayLimited.gif',    false,1,'Sun');
+	$DayUnlimitedMediaId  = CreateMedia ('IPSTwilight_DayUnlimited',  $categoryId_DataGraphics, IPS_GetKernelDir().'media/IPSTwilight_DayUnlimited.gif',  false,1,'Sun');
 
 	//Data
 	$DisplaySwitchId   = CreateVariable('Display' ,     0 /*Boolean*/, $categoryId_DataValues, 10, '~Switch',$scriptId_Refresh, false,   'Information');

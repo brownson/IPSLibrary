@@ -68,7 +68,7 @@
 			$filePathDefault = pathinfo($defaultFile, PATHINFO_DIRNAME);
 				
 			$filePath = pathinfo($filePathDefault, PATHINFO_DIRNAME);
-			$file = $filePath.'\\'.$fileName;
+			$file = $filePath.'/'.$fileName;
 				
 			return $file;
 		}
@@ -131,7 +131,9 @@
 													E_USER_ERROR);
 				}
 			}
-
+			
+			$destinationFile = str_replace('\\','/', $destinationFile);
+			$destinationFile = str_replace('//','/', $destinationFile);
 			if (strpos($sourceFile, 'https')===0) {
 				$sourceFile = str_replace('\\','/', $sourceFile);
 				$sourceFile = str_replace('//','/', $sourceFile);
@@ -186,10 +188,11 @@
 			} else {
 				$this->logHandler->Log("Copy $sourceFile --> $destinationFile");
 				$result = @copy ($sourceFile, $destinationFile);
-				if ($result===false and $raiseError) {
+				//ToDo - Check Errorhandling ...
+				/*if ($result===false and $raiseError) {
 					throw new IPSFileHandlerException('Error while copy File '.$sourceFile.' to '.$destinationFile,
 					                                  E_USER_ERROR);
-				}
+				}*/
 			}
 			return $result;
 		}
@@ -273,8 +276,8 @@
 		 */
 		public function CreateFileFromExample($exampleFile, $configFile, $namespace='') {
 		   if ($namespace <> '') {
-		      $exampleFile = IPS_GetKernelDir().'\\scripts\\'.str_replace('::','\\',$namespace).'\\examples\\'.$exampleFile;
-		      $configFile  = IPS_GetKernelDir().'\\scripts\\'.str_replace('::','\\',$namespace).'\\'.$configFile;
+		      $exampleFile = IPS_GetKernelDir().'scripts/'.str_replace('::','/',$namespace).'/examples/'.$exampleFile;
+		      $configFile  = IPS_GetKernelDir().'scripts/'.str_replace('::','/',$namespace).'/'.$configFile;
 			}
 
 			$this->CopyFile($exampleFile, $configFile);

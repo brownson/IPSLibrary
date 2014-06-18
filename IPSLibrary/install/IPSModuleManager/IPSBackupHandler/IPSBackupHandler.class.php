@@ -40,7 +40,7 @@
 												E_USER_ERROR);
 			}
 			$this->backupBaseDirectory = $backupBaseDirectory;
-			$this->backupDirectory     = $backupBaseDirectory.'IPSLibrary_'.date("Y-m-d_Hi").'\\';
+			$this->backupDirectory     = $backupBaseDirectory.'IPSLibrary_'.date("Y-m-d_Hi").'/';
 			$this->logHandler          = IPSLogHandler::GetLogger(get_class($this));
 		}
 	

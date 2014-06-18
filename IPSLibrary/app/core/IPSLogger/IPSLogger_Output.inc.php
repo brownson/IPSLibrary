@@ -7,26 +7,20 @@
 	 * @version
 	 * Version 2.50.1, 31.01.2012<br/>
 	 *
-	 * Dieses Script enthält die Funktionen, die die Messages zu den diversen Outputs schicken.
+	 * Dieses Script enthï¿½lt die Funktionen, die die Messages zu den diversen Outputs schicken.
 	 *
 	 */
 	include_once "IPSLogger_Constants.inc.php";
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function IPSLogger_Out($LogLevel, $LogType, $Context, $Msg, $Priority=0) {
-		if (strrpos($Context, '\\') !== false) {
-			if (strpos($Context, '.') !== false) {
-				$Context = substr($Context, strrpos($Context, '\\')+1, strpos($Context, '.')-strrpos($Context, '\\')-1);
-			}
-		}
-	   
 		$StackTxt   = '';
 		$StackHtml  = '';
 		if ($LogType==c_LogType_Error) {
 			$DebugTrace = debug_backtrace();
 			foreach ($DebugTrace as $Idx=>$Stack) {
 				if (array_key_exists('line', $Stack) and array_key_exists('function', $Stack) and array_key_exists('file', $Stack)) {
-					$File     = str_replace('scripts\\', '', str_replace(IPS_GetKernelDir(), '', $Stack['file']));
+					$File     = str_replace('scripts/', '', str_replace(IPS_GetKernelDir(), '', $Stack['file']));
 					$Function = $Stack['function'];
 					$Line     = str_pad($Stack['line'],3,' ', STR_PAD_LEFT);
 					$StackTxt  .= c_lf."  $Line in $File (call $Function)";
@@ -37,27 +31,18 @@
 				}
 			}
 		}
-
+        $Context = IPSLogger_normalizeContext($Context);
 		if (!IPS_VariableExists(c_ID_HtmlOutEnabled)) {
 			echo $Context.'-'.$LogType.'-'.$Msg;
 			return;
 		}
-		IPSLogger_OutSingle($LogLevel, $LogType, $Context, $Msg);
-		IPSLogger_OutHtml($LogLevel, $LogType, $Context, $Msg.$StackTxt);
-		IPSLogger_OutIPS($LogLevel, $LogType, $Context, $Msg.$StackTxt);
-		IPSLogger_OutEMail($LogLevel, $LogType, $Context, $Msg.$StackTxt, $Priority);
-		IPSLogger_OutFile($LogLevel, $LogType, $Context, $Msg.$StackTxt);
-		IPSLogger_OutLog4IPS($LogLevel, $LogType, $Context, $Msg.$StackTxt);
-		IPSLogger_OutEcho($LogLevel, $LogType, $Context, $Msg.$StackTxt);
-		IPSLogger_OutProwl($LogLevel, $LogType, $Context, $Msg.$StackTxt, $Priority);
-		@IPSLogger_OutSysLog($LogLevel, $LogType, $Context, $Msg.$StackTxt);
-		@IPSLogger_OutMySQL($LogLevel, $LogType, $Context, $Msg.$StackTxt);
+        IPSLogger_invokeLoggers($LogLevel, $LogType, $Context, $Msg, $StackTxt, $Priority);
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function IPSLogger_WriteFile($Directory, $File, $Text, $ID_OutEnabled) {
 		if ($Directory == "") {
-			$Directory = IPS_GetKernelDir().'logs\\';
+			$Directory = IPS_GetKernelDir().'logs/';
 		}
 		if(($FileHandle = fopen($Directory.$File, "a")) === false) {
 			SetValue($ID_OutEnabled, false);
@@ -69,7 +54,6 @@
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function IPSLogger_OutFile($LogLevel, $LogType, $Context, $Msg) {
-		if (GetValue(c_ID_FileOutEnabled) and GetValue(c_ID_FileOutLevel) >= $LogLevel) {
 			switch ($LogType) {
 				case c_LogType_Test:          $prefix='        '; break;
 				case c_LogType_Trace:         $prefix='      '; break;
@@ -89,11 +73,9 @@
 			$File = 'IPSLogger_'.date('Ymd').'.'.c_File_Extension;
 			IPSLogger_WriteFile(c_File_Directory, $File, $Out, c_ID_FileOutEnabled);
 		}
-	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function IPSLogger_OutLog4IPS($LogLevel, $LogType, $Context, $Msg) {
-		if (GetValue(c_ID_Log4IPSOutEnabled) and GetValue(c_ID_Log4IPSOutLevel) >= $LogLevel) {
 			$Out  = '<event';
 			$Out .=   ' logger="'.$Context.'"';
 			$Out .=   ' timestamp="'.date('Y-m-d\TH:i:s.u').'+01:00"';
@@ -106,7 +88,6 @@
 			$File = 'IPSLogger_'.date('Ymd').'.'.c_Log4IPS_Extension;
 			IPSLogger_WriteFile(c_Log4IPS_Directory, $File, $Out, c_ID_Log4IPSOutEnabled);
 		}
-	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function IPSLogger_OutSysLog($LogLevel, $LogType, $Context, $Msg) {
@@ -147,9 +128,6 @@
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function IPSLogger_OutEMail($LogLevel, $LogType, $Context, $Msg, $Priority) {
-		if (GetValue(c_ID_EMailOutEnabled) and
-			GetValue(c_ID_EMailOutLevel) >= $LogLevel and
-			GetValue(c_ID_EMailOutPriority) >= $Priority) {
 			$Out  =    'IPS-'.IPSLogger_LogTypeShort($LogType).'-'.substr($Context,0,c_Format_LogOutContextLen);
 			$Out .=    '  '.date(c_Format_LogOutDate).substr(microtime(),1,c_Format_LogOutMicroLen);
 			$Out .=    '  '.$Msg.c_lf;
@@ -165,29 +143,21 @@
 				}
 			}
 		}
-	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function IPSLogger_OutIPS($LogLevel, $LogType, $Context, $Msg) {
-		if (GetValue(c_ID_IPSOutEnabled) and GetValue(c_ID_IPSOutLevel) >= $LogLevel) {
 			$Out = $LogType.': '.$Msg;
 			IPS_LogMessage($Context, $Out);
 		}
-	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function IPSLogger_OutSingle($LogLevel, $LogType, $Context, $Msg) {
-		if (GetValue(c_ID_SingleOutEnabled) and GetValue(c_ID_SingleOutLevel) >= $LogLevel) {
 			$Out = '<div style="'.IPSLogger_LogTypeStyle($LogType).'">'.$LogType.': '.$Msg.'</div>';
 			SetValue(c_ID_SingleOutMsg, $Out);
 		}
-	}
-
-
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function IPSLogger_OutHtml($LogLevel, $LogType, $Context, $Msg) {
-		if (GetValue(c_ID_HtmlOutEnabled) and GetValue(c_ID_HtmlOutLevel) >= $LogLevel) {
 			$Msg  = htmlentities($Msg, ENT_COMPAT, 'ISO-8859-1');
 			$Msg  = str_replace("\n", "<BR> ", $Msg);
 			switch ($LogType) {
@@ -212,7 +182,7 @@
 			$Out =  '<tr id="'.$CurrentMsgId.'" style="'.IPSLogger_LogTypeStyle($LogType).'">';
 			$Out .=    '<td>IPS</td>';
 			$Out .=    '<td>-'.IPSLogger_LogTypeShort($LogType).'-</td>';
-			$Out .=    '<td>'.IPSLogger_HtmlEncode(substr($Context,0,c_Format_LogOutContextLen)).'</td>';
+			$Out .=    '<td title="'.$Context.'">'.IPSLogger_HtmlEncode(substr($Context,0,c_Format_LogOutContextLen)).'</td>';
 			$Out .=    '<td>'.date(c_Format_LogOutDate).substr(microtime(),1,c_Format_LogOutMicroLen).'</td>';
 			$Out .=    '<td>'.$Msg.'</td>';
 			$Out .= '</tr>';
@@ -250,11 +220,9 @@
 			}
 			SetValue(c_ID_HtmlOutMsgId, $CurrentMsgId);
 		}
-	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function IPSLogger_OutEcho($LogLevel, $LogType, $Context, $Msg) {
-		if (GetValue(c_ID_EchoOutEnabled) and GetValue(c_ID_EchoOutLevel) >= $LogLevel) {
 			switch ($LogType) {
 				case c_LogType_Test:          $prefix='        '; break;
 				case c_LogType_Trace:         $prefix='      '; break;
@@ -274,7 +242,6 @@
 
 			echo $Out;
 		}
-	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function IPSLogger_SetOutEcho($OutEnabled, $LogLevel=null) {
@@ -286,9 +253,6 @@
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function IPSLogger_OutProwl($LogLevel, $LogType, $Context, $Msg, $Priority) {
-		if (GetValue(c_ID_ProwlOutEnabled) and
-			GetValue(c_ID_ProwlOutLevel) >= $LogLevel and
-			 GetValue(c_ID_ProwlOutPriority) >= $Priority) {
 			include_once('ProwlPHP.php');
 
 			$prowl = new Prowl(c_Key_ProwlService); 
@@ -297,7 +261,6 @@
 										'description'	=> utf8_encode($Msg),
 										'priority'		=> 0));
 		}
-	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function IPSLogger_SendProwlMessage($Event, $Description, $Priority) {
@@ -413,9 +376,9 @@
 		}
 
     $Context = str_replace("'",'"',$Context);
-    $Context = str_replace("\\","\\\\",$Context);
+    $Context = str_replace("/","//",$Context);
     $Msg = str_replace("'",'"',$Msg);
-    $Msg = str_replace("\\",'\\\\',$Msg);
+    $Msg = str_replace("/",'//',$Msg);
 
 	  $Context = substr($Context,0,150);
 	  $Msg = substr($Msg,0,1024);
@@ -436,6 +399,110 @@
 		mysql_close($server);
 
 	}
+	
+    $IPSLogger_contextLoggingLevel = array();
+    
+    function IPSLogger_SetContextLoggingLevel($Context, $LogLevel) {
+        global $IPSLogger_contextLoggingLevel;
+        
+        $Context = IPSLogger_normalizeContext($Context);
+        $IPSLogger_contextLoggingLevel[$Context] = $LogLevel;
+    }
+    
+    function IPSLogger_HasContextCustomLogLevel($Context) {
+        global $IPSLogger_contextLoggingLevel;
+        
+        return isset($IPSLogger_contextLoggingLevel[$Context]);
+    }
+    
+    function IPSLogger_ShouldLogContext($Context, $LogLevel) {
+        global $IPSLogger_contextLoggingLevel;
+        
+        if(!IPSLogger_HasContextCustomLogLevel($Context)) {
+            return true;
+        }
+        
+        return $LogLevel <= $IPSLogger_contextLoggingLevel[$Context];
+    }
+    
+    function IPSLogger_invokeLoggers($LogLevel, $LogType, $Context, $Msg, $StackTxt, $Priority) {
+        $loggers = array(
+            "Single"    => array(
+                "enabled"   => c_ID_SingleOutEnabled,
+                "level"     => c_ID_SingleOutLevel,
+                "appendStack"   => false
+            ),
+            "Html"      => array(
+                "enabled"   => c_ID_HtmlOutEnabled,
+                "level"     => c_ID_HtmlOutLevel,
+            ),
+            "IPS"      => array(
+                "enabled"   => c_ID_IPSOutEnabled,
+                "level"     => c_ID_IPSOutLevel,
+            ),
+            "EMail"      => array(
+                "enabled"   => c_ID_EMailOutEnabled,
+                "level"     => c_ID_EMailOutLevel,
+                "priority"  => c_ID_EMailOutPriority
+            ),
+            "File"      => array(
+                "enabled"   => c_ID_FileOutEnabled,
+                "level"     => c_ID_FileOutLevel,
+            ),
+            "Log4IPS"      => array(
+                "enabled"   => c_ID_Log4IPSOutEnabled,
+                "level"     => c_ID_Log4IPSOutLevel,
+            ),
+            "Echo"      => array(
+                "enabled"   => c_ID_EchoOutEnabled,
+                "level"     => c_ID_EchoOutLevel,
+            ),
+            "Prowl"      => array(
+                "enabled"   => c_ID_ProwlOutEnabled,
+                "level"     => c_ID_ProwlOutLevel,
+                "priority"  => c_ID_ProwlOutPriority
+            ),
+        );
+        
+        foreach($loggers as $name => $logger) {
+            // check if logger is enabled at all
+            $shouldLog = GetValue($logger["enabled"]);
+            if(!$shouldLog) {
+                continue;
+            }
+            
+            // evaluate log level. If no custom level is defined, use the global log level.
+            if(IPSLogger_HasContextCustomLogLevel($Context)) {
+                $shouldLog &= IPSLogger_ShouldLogContext($Context, $LogLevel);
+            } else {
+                $shouldLog &= GetValue($logger["level"]) >= $LogLevel;
+            }
+            
+            $appendStack = !isset($logger["appendStack"]) || (isset($logger["appendStack"]) && $logger["appendStack"] === true);
+            
+            $hasPriority = isset($logger["priority"]);
+            $shouldLog &= !$hasPriority || ($hasPriority && GetValue($logger["priority"]) >= $Priority);
+            
+            if($shouldLog) {
+                $parameters = array($LogLevel, $LogType, $Context);
+                $parameters[] = $Msg.($appendStack ? $StackTxt : "");
+                if($hasPriority) $parameters[] = $Priority;
+                
+                call_user_func_array("IPSLogger_Out".$name, $parameters);
+            }
+        }
+		@IPSLogger_OutSysLog($LogLevel, $LogType, $Context, $Msg.$StackTxt);
+		@IPSLogger_OutMySQL($LogLevel, $LogType, $Context, $Msg.$StackTxt);
+    }
+    
+    function IPSLogger_normalizeContext($Context) {
+        if (strrpos($Context, '/') !== false) {
+            if (strpos($Context, '.') !== false) {
+                $Context = substr($Context, strrpos($Context, '/')+1, strpos($Context, '.')-strrpos($Context, '/')-1);
+            }
+        }
+        return $Context;
+    }
 
 	/** @}*/
 ?>

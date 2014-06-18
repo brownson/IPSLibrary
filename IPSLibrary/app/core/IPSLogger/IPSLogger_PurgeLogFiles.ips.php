@@ -25,7 +25,7 @@
 			$Days = GetValue($ID_OutDays);
 			$ReferenceDate=Date('Ymd', strtotime("-".$Days." days"));
 		   if ($Directory == "") {
-				$Directory = IPS_GetKernelDir().'logs\\';
+				$Directory = IPS_GetKernelDir().'logs/';
 		   }
 
 			if (($handle=opendir($Directory))===false) {

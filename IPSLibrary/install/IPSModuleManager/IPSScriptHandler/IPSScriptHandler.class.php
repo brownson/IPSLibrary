@@ -46,7 +46,7 @@
 		 */
 		public function GetScriptPathByFileName($file) {
 			$scriptPath = pathinfo($file, PATHINFO_DIRNAME);
-			$scriptPath = str_replace(IPS_GetKernelDir().'scripts\\', '', $scriptPath);
+			$scriptPath = str_replace(IPS_GetKernelDir().'scripts/', '', $scriptPath);
 			$scriptPath = str_replace('\\', '.', $scriptPath);
 			$scriptPath = str_replace('/', '.', $scriptPath);
 			if ($this->libraryBasePath<>'') {
@@ -106,7 +106,7 @@
 		public function RegisterScriptByFilename($file) {
 			$scriptPath = $this->GetScriptPathByFileName($file);
 			$scriptName = $this->GetScriptNameByFileName($file);
-			if (strpos($file, IPS_GetKernelDir().'scripts\\')===0) {
+			if (strpos($file, IPS_GetKernelDir().'scripts/')===0) {
 				$this->logHandler->Debug("Register Script $scriptName in $scriptPath (File=$file)");
 				$categoryId = CreateCategoryPath($scriptPath);
 				CreateScript($scriptName, $file, $categoryId);

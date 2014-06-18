@@ -344,7 +344,7 @@
 	$CategoryIdProfileBgnOfDayDisplay = CreateCategory('DisplayBgnOfDay', $CategoryIdProfileManager, 130);
 	$CategoryIdProfileEndOfDayDisplay = CreateCategory('DisplayEndOfDay', $CategoryIdProfileManager, 140);
 	$CategoryIdProfileSunGraphs       = CreateCategory('GraphsSun', $CategoryIdProfileManager, 200);
-	$MediaIdAzimuth                   = CreateMedia ('Sonnenstand', $CategoryIdProfileSunGraphs, IPS_GetKernelDir().'media\\IPSShadowing_Azimuth.gif', false, 1, 'Sun');
+	$MediaIdAzimuth                   = CreateMedia ('Sonnenstand', $CategoryIdProfileSunGraphs, IPS_GetKernelDir().'media/IPSShadowing_Azimuth.gif', false, 1, 'Sun');
 
 	//++Migration v2.50.2 --> 2.50.3
 	$categoryIdTempProfiles      = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSShadowing.Profiles.Temp');

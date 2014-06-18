@@ -165,7 +165,7 @@
 			$configString .= PHP_EOL.chr(9).chr(9).chr(9).');'.PHP_EOL.PHP_EOL.chr(9).chr(9);
 
 			// Write to File
-			$fileNameFull = IPS_GetKernelDir().'scripts\\IPSLibrary\\config\\core\\IPSMessageHandler\\IPSMessageHandler_Configuration.inc.php';
+			$fileNameFull = IPS_GetKernelDir().'scripts/IPSLibrary/config/core/IPSMessageHandler/IPSMessageHandler_Configuration.inc.php';
 			if (!file_exists($fileNameFull)) {
 				throw new IPSMessageHandlerException($fileNameFull.' could NOT be found!', E_USER_ERROR);
 			}

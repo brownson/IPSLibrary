@@ -105,6 +105,7 @@
 	 * Version 2.50.1, 31.01.2012<br/>
 	 *
 	 */
+	global $_IPS;
 	if (!array_key_exists('ABORT_ON_ERROR',$_IPS)) {
 		$_IPS['ABORT_ON_ERROR'] = false;
 	}
@@ -203,5 +204,15 @@
    function IPSLogger_Trc($LogContext, $LogMessage) {
       IPSLogger_Out(c_LogLevel_Trace, c_LogType_Trace, $LogContext, $LogMessage);
    }
+   
+   // ---------------------------------------------------------------------------------------------------------------------------
+    /** Procedure to set a custom trace level for a specific logcontext
+     *
+     * @param $LogContext - Context of Logging (Identifier or Filename).
+     * @param $LogLevel - the level at which logging should start
+     */
+    function IPSLogger_SetLoggingLevel($LogContext, $LogLevel) {
+        IPSLogger_SetContextLoggingLevel($LogContext, $LogLevel);
+    }
    /** @}*/
 ?>
