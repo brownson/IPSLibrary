@@ -137,7 +137,7 @@
 						$component->MoveDown();
 						break;
 					case c_MovementId_Stop:
-						$component->Stop();
+							$component->Stop();
 						break;
 					default: 
 				}
@@ -158,20 +158,72 @@
 		}
 
 		// ----------------------------------------------------------------------------------------------------------------------------
+		public function SyncStatus($status) {
+			if ($this->GetVariableValue(c_Control_StepsToDo)=="") {
+				IPSLogger_Inf(__file__, "Sync State=".$status." from Shutter '".IPS_GetName($this->deviceId));
+				$this->SetVariableValue(c_Control_Movement, $status);
+				$this->SetVariableValue(c_Control_ManualChange, true);
+ 			}
+			$this->SetStatus();
+		}
+
+		// ----------------------------------------------------------------------------------------------------------------------------
 		public function MoveByEvent($Level) {
 			IPSLogger_Dbg(__file__, "Received StateChange from Shutter '".IPS_GetName($this->deviceId)."', NewLevel=".round($Level).", CurrentLevel=".$this->GetVariableValue(c_Control_Position));
 			if ($this->GetVariableValue(c_Control_Position) <> $Level and
 			    $this->GetVariableValue(c_Control_StepsToDo)=="") {
 				IPSLogger_Inf(__file__, "Apply StateChange from Shutter '".IPS_GetName($this->deviceId)."', Level=".round($Level));
-				$this->SetVariableValue(c_Control_Movement, c_MovementId_Stop);
+				$shadowingType = $this->GetPropertyValue(c_Property_ShadowingType);
+				if ($Level <= 5) {
+					switch($shadowingType) {
+						case c_ShadowingType_Marquees: 
+							$this->SetVariableValue(c_Control_Movement, c_MovementId_MovedIn); break;
+						default:
+							$this->SetVariableValue(c_Control_Movement, c_MovementId_Opened); break;
+					}
+				} else if ($Level >= 95) {
+					switch($shadowingType) {
+						case c_ShadowingType_Marquees: 
+							$this->SetVariableValue(c_Control_Movement, c_MovementId_MovedOut); break;
+						case c_ShadowingType_Shutter: 
+							$this->SetVariableValue(c_Control_Movement, c_MovementId_Closed); break;
+						default:
+							$this->SetVariableValue(c_Control_Movement, c_MovementId_Shadowing); break;
+					}
+				} else if ($Level > 45 and $Level < 55) {
+					switch($shadowingType) {
+						case c_ShadowingType_Marquees: 
+						case c_ShadowingType_Shutter: 
+							$this->SetVariableValue(c_Control_Movement, c_MovementId_50); break;
+						default:
+							$this->SetVariableValue(c_Control_Movement, c_MovementId_Stop); break;
+					}
+				} else if ($Level > 70 and $Level < 80) {
+					switch($shadowingType) {
+						case c_ShadowingType_Marquees: 
+						case c_ShadowingType_Shutter: 
+							$this->SetVariableValue(c_Control_Movement, c_MovementId_75); break;
+						default:
+							$this->SetVariableValue(c_Control_Movement, c_MovementId_Stop); break;
+					}
+				} else if ($Level > 85 and $Level < 95) {
+					switch($shadowingType) {
+						case c_ShadowingType_Shutter: 
+							$this->SetVariableValue(c_Control_Movement, c_MovementId_90); break;
+						default:
+							$this->SetVariableValue(c_Control_Movement, c_MovementId_Stop); break;
+					}
+				} else {
+					$this->SetVariableValue(c_Control_Movement, c_MovementId_Stop);
+				}
 				$this->SetVariableValue(c_Control_Position, $Level);
 				if (!$this->GetVariableValue(c_Control_ManualChange) and
 				    $this->GetVariableValue(c_Control_Automatic)) {
 					$this->SetVariableValue(c_Control_ManualChange, true);
 				}
-			$this->SetStatus();
+				$this->SetStatus();
+			}
 		}
-	}
 
 		// ----------------------------------------------------------------------------------------------------------------------------
 		public function MoveByProgram($ProgramId, $logMessage, $DimoutOption=null, $TriggeredByTemp=false) {
@@ -537,6 +589,7 @@
 			$shadowingByTemp     = $profileManager->ShadowingByTemp($profileIdSun, $profileIdTemp, $tempIndoorPath);
 			$openByTemp          = $profileManager->OpenByTemp($profileIdSun, $profileIdTemp, $tempIndoorPath);
 			$activationByWeather = $profileManager->ActivationByWeather($profileIdWeather);
+			$programInfo         = '';
 
 
 			// Reset Manual Change Flag
@@ -553,6 +606,9 @@
 
 			$changeByTemp      = GetValue(IPS_GetObjectIDByIdent(c_Control_TempChange, $this->deviceId));
 			$changeByUser      = GetValue(IPS_GetObjectIDByIdent(c_Control_ManualChange, $this->deviceId));
+			
+			$func_reflection = new ReflectionFunction('IPSShadowing_ProgramCustom');
+			$paramCountCustom = $func_reflection->getNumberOfParameters();
 
 			// Check all Programs
 			// --------------------------------------------------------------------------------
@@ -565,15 +621,16 @@
 				$programInfo = 'Wetterprogramm';
 				$this->MoveByProgram($programWeather, 'Wetterprogramm');
 
+			// Custom
+			} elseif (    ($paramCountCustom == 3 and IPSShadowing_ProgramCustom($this->deviceId, $isDay, $programInfo))
+			           or ($paramCountCustom == 2 and IPSShadowing_ProgramCustom($this->deviceId, $isDay))) {
+				if ($programInfo=='') {$programInfo = 'CustomProgram';}
+				// Action done in Custom Procedure
+
 			// Manual Change ...
 			} elseif ($changeByUser) {
 				$programInfo = 'Manuelle Änderung';
-
-			// Custom
-			} elseif (IPSShadowing_ProgramCustom($this->deviceId, $isDay)) {
-				$programInfo = 'CustomProgram';
-				// Action done in Custom Procedure
-
+        
 			// Present ...
 			} elseif ($profileManager->GetPresent() and $programPresent==c_ProgramId_OpenedDay and $isDay) {
 				$programInfo = 'Anwesenheit (Tag)';

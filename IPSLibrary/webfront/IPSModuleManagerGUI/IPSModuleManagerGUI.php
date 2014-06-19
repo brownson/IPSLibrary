@@ -37,9 +37,8 @@
 		<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
 		<meta http-equiv="Pragma" content="no-cache">
 		<meta http-equiv="Expires" content="0">
-			
-		<style type="text/css">html, body { margin: 0; padding: 0; }</style>
-		<link href="/user/default.css" rel="stylesheet" type="text/css" />
+
+		<link rel="stylesheet" type="text/css" href="/user/IPSModuleManagerGUI/IPSModuleManagerGUI.css" />'
 
 		<script type="text/javascript" src="jquery.min.js"></script>
 

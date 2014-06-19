@@ -33,6 +33,12 @@
     * @version
     *   Version 2.50.1, 29.04.2012<br/>
     */
+
+	 /**@defgroup IPSShadowing_ProfileWeather 
+	 * update 			Windlevel with Beaufort level functions
+	 * @author        Günter Strassnigg
+	 */
+
 	class IPSShadowing_ProfileWeather {
 
 		/**
@@ -79,12 +85,18 @@
 			$activationByWeather = false;
 			if (IPSSHADOWING_WINDSENSOR <> '') {
 				$this->windSensor = GetValue(IPSUtil_ObjectIDByPath(IPSSHADOWING_WINDSENSOR));
-				$activationByWeather = ($activationByWeather or ($this->windSensor >= $this->windLevel));
+				if (defined('IPSSHADOWING_WINDLEVEL_CLASSIFICATION') and IPSSHADOWING_WINDLEVEL_CLASSIFICATION) {
+					$activationByWeather = ($activationByWeather or ($this->ConvertKMHtoBeaufort($this->windSensor) >= $this->windLevel));
+				} else {
+					$activationByWeather = ($activationByWeather or ($this->windSensor >= $this->windLevel));
+				}
 			}
 
 			if (IPSSHADOWING_RAINSENSOR <> '') {
 				$this->rainSensor = GetValue(IPSUtil_ObjectIDByPath(IPSSHADOWING_RAINSENSOR));
-				$activationByWeather = ($activationByWeather or ($this->rainSensor and $this->rainCheck));
+				if ($this->rainCheck) {
+					$activationByWeather = ($activationByWeather and ($this->rainSensor and $this->rainCheck));
+				}
 			}
 
 			$this->activationByWeather = $activationByWeather;
@@ -135,7 +147,8 @@
 		 * @param integer $windLevel Level für Wind Aktivierung
 		 */
 		public static function Create($profileName, $rainCheck=true, $windLevel=40) {
-			IPSUtils_Include ('IPSInstaller.inc.php', 'IPSLibrary::install::IPSInstaller');
+    			IPSUtils_Include ("IPSShadowing_Configuration.inc.php",     "IPSLibrary::config::modules::IPSShadowing");
+	 			IPSUtils_Include ('IPSInstaller.inc.php', 'IPSLibrary::install::IPSInstaller');
 			
 			$ScriptIdChangeSettings  = IPSUtil_ObjectIDByPath('Program.IPSLibrary.app.modules.IPSShadowing.IPSShadowing_ChangeSettings');
 			$categoryIdprofiles      = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSShadowing.Profiles.Weather');
@@ -144,7 +157,12 @@
 			IPS_SetIdent($profileId, (string)$profileId);
 			CreateVariable(c_Control_ProfileName,       3 /*String*/,   $profileId, 0,  '~String',            $ScriptIdChangeSettings, $profileName,  'Title');
 			CreateVariable(c_Control_RainCheck,         0 /*Boolean*/,  $profileId, 10, '~Switch',            $ScriptIdChangeSettings, $rainCheck,    'Drops');
-			CreateVariable(c_Control_WindLevel,         1 /*Integer*/,  $profileId, 20, 'IPSShadowing_Wind',  $ScriptIdChangeSettings, $windLevel,    'WindSpeed');
+			if (defined('IPSSHADOWING_WINDLEVEL_CLASSIFICATION') and IPSSHADOWING_WINDLEVEL_CLASSIFICATION) {
+				$windLevel=intval($windLevel/3.6);
+				CreateVariable(c_Control_WindLevel,         1 /*Integer*/,  $profileId, 20, 'IPSShadowing_WindBeaufort',  $ScriptIdChangeSettings, $windLevel,    'WindSpeed');
+			} else {
+				CreateVariable(c_Control_WindLevel,         1 /*Integer*/,  $profileId, 20, 'IPSShadowing_Wind',  $ScriptIdChangeSettings, $windLevel,    'WindSpeed');
+			}
 			CreateVariable(c_Control_ProfileInfo,       3 /*String*/,   $profileId, 30, '~String',            null,                    '',            'Information');
 
 			IPS_SetVariableProfileAssociation('IPSShadowing_ProfileWeather', $profileId, $profileName, "", -1);
@@ -209,6 +227,23 @@
 			IPSShadowing_LogChange($this->instanceId, $value, $controlId);
 			$this->Init();
 			$this->UpdateProfileInfo();
+		}
+		
+
+		/**
+		 * @private
+		 *
+		 * Umrechnung der Windgeschwindigkeit in Beaufort
+		 *
+		 * @param variant $value    Windgeschwindigkeit (in km/h)
+		 * @param variant $beaufort Windgeschwindigkeit (lt Beaufortskala) 
+		 */
+		private function ConvertKMHtoBeaufort($value) {
+			$beauforttable=explode(';','0;0.3;1.6;3.4;5.5;8;10.8;13.9;17.2;20.8;24.8;28.5;32.7');
+			for ($beaufort=count($beauforttable)-1;$beaufort>0;$beaufort--) {
+				if (($value/3.6)>=$beauforttable[$beaufort]) {break;}
+			}
+			return $beaufort;
 		}
 		
 	}

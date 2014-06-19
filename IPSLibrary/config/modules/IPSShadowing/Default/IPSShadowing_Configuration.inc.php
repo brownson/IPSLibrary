@@ -81,6 +81,17 @@
 	 * Dieser Parameter kann jederzeit geändert werden, keine Installation erforderlich.
 	 */
 	define ("IPSSHADOWING_WINDSENSOR",		"");
+     
+	/** Profil Wetterdefinition / Klassifiktation
+	 *
+	 * Definition/Masseinheit des Windlevels.
+	 * Einstellung:   false       Vergleich der Windgeschwindigkeit mit dem Windlevel in km/h
+	 *                true        Vergleich der Windgeschwindigkeit mit dem Windlevel in Beaufort
+	 *
+	 * Dieser Parameter kann jederzeit geändert werden.
+	 * Eine erstmalige Installation über den ModuleManager oder ModuleManagerGUI ist notwendig.
+	 */
+	define ("IPSSHADOWING_WINDLEVEL_CLASSIFICATION",		false);
 
 	/** Anwesenheits Flag
 	 *

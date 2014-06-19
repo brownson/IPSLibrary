@@ -669,17 +669,20 @@
 			$refDate = date(IPSCAM_NAV_DATEFORMATFILE, $refDate);
 			$refDate = substr($refDate, 0 ,8);
 
-			IPSLogger_Trc(__file__, 'Purge Files in Directory: '.$directory.',  RefDate='.$refDate);
+			IPSLogger_Dbg(__file__, 'Purge Files with RefDate='.substr($refDate,0,4).'-'.substr($refDate,4,2).'-'.substr($refDate,6,2)
+			                        .', Days='.str_pad("$days",3,' ').', Directory='.$directory);
 			$fileList = scandir($directory, 0);
 			$fileList = array_diff($fileList, Array('.','..'));
 			foreach($fileList as $idx=>$file) {
 				$filename = basename($file);
+        	   $fileExt  = pathinfo($file, PATHINFO_EXTENSION);
 				$filenameFull = $directory.$filename;
 				$fileDate = substr($filename, 0, 8);
-				IPSLogger_Trc(__file__, 'Found File: '.$file.', FileDate='.$fileDate.', RefDate='.$refDate);
-				if ($fileDate < $refDate) {
-					IPSLogger_Dbg(__file__, 'Delete Camera File: '.$filenameFull);
-					unlink($filenameFull);
+            if ($fileExt=='jpg') {
+					if (($fileDate < $refDate) && (@IPS_GetMediaIDByFile(str_replace(IPS_GetKernelDir()."\\","",$filenameFull))== 0) ) {
+						IPSLogger_Trc(__file__, 'Delete Camera File: '.$filenameFull);
+						unlink($filenameFull);
+					}
 				}
 			}
 		}
@@ -691,6 +694,9 @@
 		 *
 		 */
 		public function PurgeFiles() {
+			set_time_limit(600); // Set PHP Time Limit of 10 Minutes for Purging of Files
+			IPSLogger_Inf(__file__, 'Purge History and MotionCapture Camera Files');
+
 			foreach ($this->config as $cameraIdx=>$data) {
 				$categoryIdCam      = IPS_GetObjectIDByIdent($cameraIdx, $this->categoryIdCams);
 				$directoryHist      = IPS_GetKernelDir().'\\Cams\\'.$cameraIdx.'\\History\\';

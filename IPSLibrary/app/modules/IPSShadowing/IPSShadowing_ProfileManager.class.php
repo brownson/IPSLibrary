@@ -218,7 +218,7 @@
 		public function IsDay($profileIdBgnOfDay, $profileIdEndOfDay) {
 			$profileBgnOfDay = $this->profilesBgnOfDay[$profileIdBgnOfDay];
 			$profileEndOfDay = $this->profilesEndOfDay[$profileIdEndOfDay];
-			return  (time() > $profileBgnOfDay->GetTime() and  time() < $profileEndOfDay->GetTime());
+			return  (time() >= $profileBgnOfDay->GetTime() and  time() < $profileEndOfDay->GetTime());
 		}
 
 		public function IsNight($profileIdBgnOfDay, $profileIdEndOfDay) {
@@ -231,8 +231,12 @@
 			$timeCurrent = time();
 			$timeLast    = time()-300;
 
-			return (($timeCurrent > $profileBgnOfDay->GetTime() and  $timeLast < $profileBgnOfDay->GetTime()) or 
-			        ($timeCurrent > $profileEndOfDay->GetTime() and  $timeLast < $profileEndOfDay->GetTime()));
+			// Examples
+			//   BgnOfDay=07:00, timeCurrent=06:55, timeLast=06:50 ==> FALSE
+			//   BgnOfDay=07:00, timeCurrent=07:00, timeLast=06:55 ==> TRUE
+			//   BgnOfDay=07:00, timeCurrent=07:05, timeLast=07:00 ==> FALSE
+			return (($timeCurrent >= $profileBgnOfDay->GetTime() and  $timeLast < $profileBgnOfDay->GetTime()) or 
+			        ($timeCurrent >= $profileEndOfDay->GetTime() and  $timeLast < $profileEndOfDay->GetTime()));
 		}
 
 		public function GetPresent() {

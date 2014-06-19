@@ -201,9 +201,29 @@
 			$instanceId = IPSUtil_ObjectIDByPath($componentParams[1]);
 			$variableId = @IPS_GetObjectIDByIdent('Value', $instanceId);
 			if ($variableId===false) {
-				$moduleManager->LogHandler()->Log('Variable with Name Value could NOT be found for EIB Instance='.$instanceId);
+				$moduleManager->LogHandler()->Log('Variable with Ident Value could NOT be found for EIB Instance='.$instanceId);
 			} else {
 				$moduleManager->LogHandler()->Log('Register OnChangeEvent vor EIB Instance='.$instanceId);
+				$messageHandler->RegisterOnChangeEvent($variableId, $component, 'IPSModuleSwitch_IPSLight,');
+			}
+		// LCN
+		} elseif ($componentClass=='IPSComponentSwitch_LCN') {
+			$instanceId = IPSUtil_ObjectIDByPath($componentParams[1]);
+			$variableId = @IPS_GetObjectIDByIdent('Status', $instanceId);
+			if ($variableId===false) {
+				$moduleManager->LogHandler()->Log('Variable with Ident Status could NOT be found for LCN Instance='.$instanceId);
+			} else {
+				$moduleManager->LogHandler()->Log('Register OnChangeEvent vor LCN Instance='.$instanceId);
+				$messageHandler->RegisterOnChangeEvent($variableId, $component, 'IPSModuleSwitch_IPSLight,');
+			}
+		// LCNa
+		} elseif ($componentClass=='IPSComponentSwitch_LCNa') {
+			$instanceId = IPSUtil_ObjectIDByPath($componentParams[1]);
+			$variableId = @IPS_GetObjectIDByIdent('Intensity', $instanceId);
+			if ($variableId===false) {
+				$moduleManager->LogHandler()->Log('Variable with Ident Intensity could NOT be found for LCN Instance='.$instanceId);
+			} else {
+				$moduleManager->LogHandler()->Log('Register OnChangeEvent vor LCN Instance='.$instanceId);
 				$messageHandler->RegisterOnChangeEvent($variableId, $component, 'IPSModuleSwitch_IPSLight,');
 			}
 		} else {

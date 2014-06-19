@@ -94,8 +94,8 @@
 	 *
 	 */
 
-	function IPSShadowing_ProgramCustom($DeviceId, $isDay) {
-	
+   function IPSShadowing_ProgramCustom($DeviceId,$isDay,&$programInfo) {
+ 	
 		return false;
 	}
 	

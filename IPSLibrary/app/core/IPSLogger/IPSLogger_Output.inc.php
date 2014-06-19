@@ -202,7 +202,10 @@
 			$MsgList      = GetValue(c_ID_HtmlOutMsgList);
 			$MsgCount     = GetValue(c_ID_HtmlOutMsgCount);
 
-			$TablePrefix   = '<table width="100%" style="'.c_Style_HtmlOutTable.'">';
+			$TablePrefix   = '<style>.row-highlight tr:hover {
+                             background-color: rgba(255, 255, 255, 0.1) !important;
+                             color:#808080 !important;}</style>
+                        <table width="100%" class="row-highlight" style="'.c_Style_HtmlOutTable.'">';
 			$TablePrefix  .= c_Style_HtmlOutColGroup;
 
 			//IPSymcon-Inf-WinLIRC 2010-12-03 22:09:13.000 Msg ...

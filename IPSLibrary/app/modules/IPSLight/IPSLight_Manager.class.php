@@ -235,17 +235,28 @@
 			$switchId     = IPS_GetVariableIDByName($configName, $this->switchCategoryId);
 			$switchValue  = GetValue($switchId);
 			$levelId      = IPS_GetVariableIDByName($configName.IPSLIGHT_DEVICE_LEVEL, $this->switchCategoryId);
+			$levelValue   = GetValue($levelId);
 
 			$componentParams = $configLights[$configName][IPSLIGHT_COMPONENT];
 			$component       = IPSComponent::CreateObjectByParams($componentParams);
 
-			if (!$switchValue and $variableId==$levelId) {
-				SetValue($switchId, true);
-				$switchValue = true;
-				if (GetValue($levelId) > 100) { $value = 100; }
+			if ($variableId==$levelId) {
+			   if (!$switchValue and $value>0) {
+				   SetValue($switchId, true);
+			   } else if ($switchValue and $value==0) {
+				   SetValue($switchId, false);
+			   } else {
+			   }
+			   if (GetValue($levelId) > 100) { $value = 100; }
 				if (GetValue($levelId) < 0)   { $value = 0; }
+			} else {
+			   if ($value and $levelValue==0) {
+			      SetValue($levelId, 15);
+			   }
 			}
 			SetValue($variableId, $value);
+
+			$switchValue  = GetValue($switchId);
 			IPSLogger_Inf(__file__, 'Turn Light '.$configName.' '.($switchValue?'On, Level='.GetValue($levelId):'Off'));
 
 			if (IPSLight_BeforeSwitch($switchId, $switchValue)) {
