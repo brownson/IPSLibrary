@@ -243,6 +243,10 @@
 				SetValue(get_ControlId(c_Control_ToBeDone, $CircleId),
 				         GetValue(get_ControlId(c_Control_NextDisplay, $CircleId)).", $TimeDiffMinutes von $Duration Min ($TimeDiffSeconds Sek)");
 
+				if (function_exists('IPSWatering_AfterRefresh')) {
+					IPSWatering_AfterRefresh($CircleId, $Duration, $TimeDiffMinutes, $TimeDiffSeconds);
+				}
+
 				if ($TimeDiffMinutes >= $Duration) {
 					IPSWatering_SetActive(get_ControlId(c_Control_Active, $CircleId),
 												 false,
