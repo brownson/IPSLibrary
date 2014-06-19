@@ -42,10 +42,15 @@
 			// Devices
 			// -----------------------------------------------------------------------------------------------------
 			case c_Control_Movement:
-			   IPSLogger_Inf(__file__, 'Value='.$value);
 				$deviceId = IPS_GetParent($controlId);
 				$device = new IPSShadowing_Device($deviceId);
 				$device->MoveByControl($value);
+				break;
+
+			case c_Control_Position:
+				$deviceId = IPS_GetParent($controlId);
+				$device = new IPSShadowing_Device($deviceId);
+				$device->MoveByLevel($value);
 				break;
 
 			case c_Control_ProgramNight:
@@ -116,7 +121,8 @@
 			case c_Control_TempLevelInShadow:
 			case c_Control_TempLevelInClose:
 			case c_Control_TempLevelInOpen:
-			case c_Control_Brightness:
+			case c_Control_BrightnessLow:
+			case c_Control_BrightnessHigh:
 			case c_Control_AzimuthBgn:
 			case c_Control_AzimuthEnd:
 			case c_Control_Elevation:

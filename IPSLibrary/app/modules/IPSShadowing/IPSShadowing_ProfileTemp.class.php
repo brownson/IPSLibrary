@@ -35,18 +35,11 @@
     */
 	class IPSShadowing_ProfileTemp {
 
-		/**
-		 * @private
-		 * ID des Zeit Profiles
-		 */
 		private $instanceId;
-		
-		/**
-		 * @private
-		 * Aktivierung durch Helligkeit aktiv
-		 */
+		private $profileWasActive;
 		private $activationByBrigthness;
-		private $brightnessLevel;
+		private $brightnessLevelHigh;
+		private $brightnessLevelLow;
 		private $brightnessValue;
 		private $tempOutdoor;
 		private $tempIndoor;
@@ -76,7 +69,9 @@
 		 *
 		 */
 		private function Init() {
-			$this->brightnessLevel        = GetValue(IPS_GetObjectIDByIdent(c_Control_Brightness, $this->instanceId));
+			$this->profileWasActive       = strpos(GetValue(IPS_GetObjectIDByIdent(c_Control_ProfileInfo, $this->instanceId)), 'Profil aktiv') === 0;
+			$this->brightnessLevelHigh    = GetValue(IPS_GetObjectIDByIdent(c_Control_BrightnessHigh, $this->instanceId));
+			$this->brightnessLevelLow     = GetValue(IPS_GetObjectIDByIdent(c_Control_BrightnessLow, $this->instanceId));
 			$this->brightnessValue        = null;
 			$this->tempLevelOutShadow     = GetValue(IPS_GetObjectIDByIdent(c_Control_TempLevelOutShadow, $this->instanceId));
 			$this->tempLevelOutClose      = GetValue(IPS_GetObjectIDByIdent(c_Control_TempLevelOutClose, $this->instanceId));
@@ -95,7 +90,11 @@
 			}
 			if (IPSSHADOWING_BRIGHTNESSSENSOR <> '') {
 				$this->brightnessValue  = round(GetValue(IPSUtil_ObjectIDByPath(IPSSHADOWING_BRIGHTNESSSENSOR)),1);
-				$this->activationByBrigthness = ($this->brightnessValue>=$this->brightnessLevel);
+				if ($this->profileWasActive) {
+					$this->activationByBrigthness = ($this->brightnessValue >= $this->brightnessLevelLow);
+				} else {
+					$this->activationByBrigthness = ($this->brightnessValue >= $this->brightnessLevelHigh);
+				}
 			}
 		}
 		
@@ -198,7 +197,7 @@
 		 */
 		public static function Create($profileName, $tempLevelOutShadow=c_TempLevel_Ignore, $tempLevelOutClose=c_TempLevel_Ignore, 
 		                              $tempLevelOutOpen=c_TempLevel_Ignore, $tempLevelInShadow=c_TempLevel_Ignore, $tempLevelInClose=c_TempLevel_Ignore, 
-		                              $tempLevelInOpen=c_TempLevel_Ignore, $brightness=0) {
+		                              $tempLevelInOpen=c_TempLevel_Ignore, $brightnessLow=0, $brightnessHigh=0) {
 			IPSUtils_Include ('IPSInstaller.inc.php', 'IPSLibrary::install::IPSInstaller');
 			
 			$ScriptIdChangeSettings  = IPSUtil_ObjectIDByPath('Program.IPSLibrary.app.modules.IPSShadowing.IPSShadowing_ChangeSettings');
@@ -213,7 +212,8 @@
 			CreateVariable(c_Control_TempLevelInClose,   1 /*Integer*/,  $profileId, 40, 'IPSShadowing_TempLevelInClose',   $ScriptIdChangeSettings, $tempLevelInClose,   'Temperature');
 			CreateVariable(c_Control_TempLevelOutOpen,   1 /*Integer*/,  $profileId, 50, 'IPSShadowing_TempLevelOutOpen',   $ScriptIdChangeSettings, $tempLevelOutOpen,   'Temperature');
 			CreateVariable(c_Control_TempLevelInOpen,    1 /*Integer*/,  $profileId, 60, 'IPSShadowing_TempLevelInOpen',    $ScriptIdChangeSettings, $tempLevelInOpen,    'Temperature');
-			CreateVariable(c_Control_Brightness,         1 /*Integer*/,  $profileId, 70, 'IPSShadowing_Brightness',         $ScriptIdChangeSettings, $brightness,         'Sun');
+			CreateVariable(c_Control_BrightnessLow,      1 /*Integer*/,  $profileId, 70, 'IPSShadowing_Brightness',         $ScriptIdChangeSettings, $brightnessLow,      'Sun');
+			CreateVariable(c_Control_BrightnessHigh,     1 /*Integer*/,  $profileId, 75, 'IPSShadowing_Brightness',         $ScriptIdChangeSettings, $brightnessHigh,     'Sun');
 			CreateVariable(c_Control_ProfileInfo,        3 /*String*/,   $profileId, 80, '~String',                         null,                    '',                  'Information');
 
 			IPS_SetVariableProfileAssociation('IPSShadowing_ProfileTemp', $profileId, $profileName, "", -1);
@@ -243,8 +243,10 @@
 				EmptyCategory($id);
 				IPS_DeleteInstance($id);
 			}
-			$instanceId = CreateDummyInstance("Helligkeits Grenze", $categoryId, 30);
-			CreateLink('Helligkeit',   IPS_GetObjectIDByIdent(c_Control_Brightness, $this->instanceId), $instanceId, 10);
+			$instanceId = CreateDummyInstance("Helligkeit", $categoryId, 30);
+			CreateLink('Untere Grenzwert',   IPS_GetObjectIDByIdent(c_Control_BrightnessLow,  $this->instanceId), $instanceId, 10);
+			CreateLink('Oberer Grenzwert',   IPS_GetObjectIDByIdent(c_Control_BrightnessHigh, $this->instanceId), $instanceId, 20);
+
 			CreateLink('Profil Info',  IPS_GetObjectIDByIdent(c_Control_ProfileInfo, $this->instanceId), $categoryId, 40);
 		}
 
