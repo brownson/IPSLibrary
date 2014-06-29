@@ -489,6 +489,7 @@
 		 * @param integer $cameraIdx Index der Kamera
 		 */
 		public function PictureStore($cameraIdx=null) {
+			$result = false;
 			$variableIdCamSelect = IPS_GetObjectIDByIdent(IPSCAM_VAR_CAMSELECT, $this->categoryIdCommon);
 			if ($cameraIdx==null) {
 				$cameraIdx = GetValue($variableIdCamSelect);
@@ -499,9 +500,10 @@
 			$categoryIdCam = IPS_GetObjectIDByIdent($cameraIdx, $this->categoryIdCams);
 			$size          = GetValue(IPS_GetObjectIDByIdent(IPSCAM_VAR_PICTSIZE, $categoryIdCam));
 			if (IPSCam_BeforeStorePicture($cameraIdx)) {
-				$this->StorePicture($cameraIdx, 'History', $size);
+				$result = $this->StorePicture($cameraIdx, 'History', $size);
 				IPSCam_AfterStorePicture($cameraIdx);
 			}
+			return $result;
 		}
 
 		private function IsCameraAvailable($cameraIdx=null) {
@@ -549,7 +551,7 @@
 
 		private function StorePicture($cameraIdx, $directoryName, $size, $fileName=null, $fileName2=null) {
 			if (!$this->IsCameraAvailable($cameraIdx)) {
-				return;
+				return false;
 			}
 			$componentParams = $this->config[$cameraIdx][IPSCAM_PROPERTY_COMPONENT];
 			$component       = IPSComponent::CreateObjectByParams($componentParams);
@@ -570,7 +572,7 @@
 			$fileContent = curl_exec($curl_handle);
 			if ($fileContent===false) {
 				IPSLogger_Dbg (__file__, 'File '.$urlPicture.' could NOT be found on the Server !!!');
-				return;
+				return false;
 			}
 			curl_close($curl_handle);
 
@@ -584,6 +586,7 @@
 					trigger_error('Error writing File Content to '.$localFile2);
 				}
 			}
+			return $localFile;
 		}
 
 		private function NavigatePictures($direction, $count) {
