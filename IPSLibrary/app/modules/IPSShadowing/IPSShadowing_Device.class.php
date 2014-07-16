@@ -387,7 +387,14 @@
 		public function MoveByLevel($level) {
 			$movement = $this->GetMovementByPosition($level);
 		
-			if ($this->GetVariableValue(c_Control_Movement)==$movement) {
+			if ($this->GetVariableValue(c_Control_StepsToDo)<>"") {
+				if (!$this->GetVariableValue(c_Control_ManualChange)) {
+					$this->SetVariableValue(c_Control_ManualChange, true);
+				}
+				$this->SetVariableValue(c_Control_Movement, c_MovementId_Stop);
+				$this->MoveByStatus();
+				IPSShadowing_LogMoveByControl($this->deviceId);
+			} else if ($this->GetVariableValue(c_Control_Movement)==$movement) {
 				$this->SetVariableValue(c_Control_Position, $this->GetVariableValue(c_Control_Position));
 				return;
 			} else {
