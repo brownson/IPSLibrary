@@ -294,31 +294,31 @@
 			$shadowingType = $this->GetPropertyValue(c_Property_ShadowingType);
 			if ($Level <= 5) {
 				switch($shadowingType) {
-					case c_ShadowingType_Marquees:  $result = c_MovementId_MovedIn;
-					default:                        $result = c_MovementId_Opened;
+					case c_ShadowingType_Marquees:  $result = c_MovementId_MovedIn; break;
+					default:                        $result = c_MovementId_Opened;  break;
 				}
 			} else if ($Level > 5 and $Level <= 55) {
 				switch($shadowingType) {
 					case c_ShadowingType_Marquees: 
-					case c_ShadowingType_Shutter:   $result = c_MovementId_50;
-					default:                        $result = c_MovementId_Opened;
+					case c_ShadowingType_Shutter:   $result = c_MovementId_50;      break;
+					default:                        $result = c_MovementId_Opened;  break;
 				}
 			} else if ($Level > 55 and $Level <= 80) {
 				switch($shadowingType) {
 					case c_ShadowingType_Marquees: 
-					case c_ShadowingType_Shutter:   $result = c_MovementId_75;
-					default:                        $result = c_MovementId_Stop;
+					case c_ShadowingType_Shutter:   $result = c_MovementId_75;      break;
+					default:                        $result = c_MovementId_Stop;    break;
 				}
 			} else if ($Level > 80 and $Level <= 95) {
 				switch($shadowingType) {
-					case c_ShadowingType_Marquees:  $result = c_MovementId_MovedOut;
-					case c_ShadowingType_Shutter:   $result = c_MovementId_90;
+					case c_ShadowingType_Marquees:  $result = c_MovementId_MovedOut;break; 
+					case c_ShadowingType_Shutter:   $result = c_MovementId_90;      break;
 					default:                        $result = c_MovementId_Shadowing;
 				}
 			} else if ($Level >= 95) {
 				switch($shadowingType) {
-					case c_ShadowingType_Marquees:  $result = c_MovementId_MovedOut;
-					case c_ShadowingType_Shutter:   $result = c_MovementId_Closed;
+					case c_ShadowingType_Marquees:  $result = c_MovementId_MovedOut;break; 
+					case c_ShadowingType_Shutter:   $result = c_MovementId_Closed;  break;
 					default:                        $result = c_MovementId_Dimout;
 				}
 			} else {
@@ -335,30 +335,30 @@
 			$shadowingType = $this->GetPropertyValue(c_Property_ShadowingType);
 			if ($Level <= 5) {
 				switch($shadowingType) {
-					case c_ShadowingType_Marquees:  $result = c_MovementId_MovedIn;
+					case c_ShadowingType_Marquees:  $result = c_MovementId_MovedIn;   break;
 					default:                        $result = c_MovementId_Opened;
 				}
 			} else if ($Level >= 95) {
 				switch($shadowingType) {
-					case c_ShadowingType_Marquees:  $result = c_MovementId_MovedOut;
-					case c_ShadowingType_Shutter:   $result = c_MovementId_Closed;
+					case c_ShadowingType_Marquees:  $result = c_MovementId_MovedOut;  break;
+					case c_ShadowingType_Shutter:   $result = c_MovementId_Closed;    break;
 					default:                        $result = c_MovementId_Shadowing;
 				}
 			} else if ($Level > 45 and $Level < 55) {
 				switch($shadowingType) {
 					case c_ShadowingType_Marquees: 
-					case c_ShadowingType_Shutter:   $result = c_MovementId_50;
+					case c_ShadowingType_Shutter:   $result = c_MovementId_50;        break;
 					default:                        $result = c_MovementId_Stop;
 				}
 			} else if ($Level > 70 and $Level < 80) {
 				switch($shadowingType) {
 					case c_ShadowingType_Marquees: 
-					case c_ShadowingType_Shutter:   $result = c_MovementId_75;
+					case c_ShadowingType_Shutter:   $result = c_MovementId_75;        break;
 					default:                        $result = c_MovementId_Stop;
 				}
 			} else if ($Level > 85 and $Level < 95) {
 				switch($shadowingType) {
-					case c_ShadowingType_Shutter:   $result = c_MovementId_90;
+					case c_ShadowingType_Shutter:   $result = c_MovementId_90;        break;
 					default:                        $result = c_MovementId_Stop;
 				}
 			} else {
