@@ -77,5 +77,21 @@
 
 	}
 
+	// ----------------------------------------------------------------------------------------------------------------------------
+	//
+	// Function will be called when Refresh of Display Data is taking Place
+	//
+	// Parameters:
+	//   $CycleId         - ID of current Watering Device (means Program.IPSWatering.WaterCircles.MyCurrentCycle)
+	//   $Duration        - Total Duration in Minutes
+	//   $TimeDiffMinutes - Minutes aktually to be done 
+	//   $TimeDiffSeconds - Seconds altually to be done
+	//
+	// ----------------------------------------------------------------------------------------------------------------------------
+
+	function IPSWatering_AfterRefresh($circleId, $duration, $timeDiffMinutes, $timeDiffSeconds) {
+		IPSLogger_Dbg(__file__, "Refresh for CircleID=$circleId, Duration=$duration, Mintues=$timeDiffMinutes, Seconds=$timeDiffSeconds");
+	}
+
 	/** @}*/
 ?>
