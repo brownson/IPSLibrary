@@ -101,6 +101,22 @@
 		return false;
 	}
 	
+	/** 
+	 *
+	 * Function will be called by the Shadowing Device when a refresh of data is done
+	 *
+	 * Parameters:
+	 *   @param integer $deviceId  ID of current Shadowing Device (means Program.IPSLibrary.data.modules.IPSShadowing.Devices.MyCurrentDevice)
+	 *   @param integer $stepCount Total Steps for Shadowing 
+	 *   @param integer $step      Current Step for Shadowing 
+	 *   @param integer $command   Current Movement Command 
+	 *   @param integer $secsToDo  Total Amount of Seconds in current Step 
+	 *   @param integer $stepCount Seconds already done in current Step
+	 *
+	 */
+	function IPSShadowing_Refresh($deviceId, $stepCount, $step, $command, $secsToDo, $secsDone) {
+	}
+
 	/** @}*/
 
 ?>

@@ -32,6 +32,16 @@
 	IPSUtils_Include ("IPSShadowing_Constants.inc.php",      "IPSLibrary::app::modules::IPSShadowing");
 	IPSUtils_Include ("IPSTwilight_Configuration.inc.php", "IPSLibrary::config::modules::Weather::IPSTwilight");
 
+	/** Programm Verzögerung (in Minuten)
+	 *
+	 * Definition der Programm Verzögerung, ein Programm kann sich innerhalb dieser vorgegebenen Zeit in Minuten 
+	 * nicht ändern.
+	 * Dadurch kann man zB verhindern, dass durch kleinere Temperaturschwankungen sich die Beschattung dauernd ändert.
+	 *
+	 * Dieser Parameter kann jederzeit geändert werden, keine Installation erforderlich.
+	 */
+	define ("IPSSHADOWING_PROGRAM_DELAY",		30);
+
 	/** Temperatursensor Innen
 	 *
 	 * Definition des Innentemperatur Sensors, die Konstante muß auf eine Variable verweisen, die die aktuelle Innentemperatur
