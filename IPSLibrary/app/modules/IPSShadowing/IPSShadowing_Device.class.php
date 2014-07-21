@@ -184,7 +184,7 @@
 				$shadowingType = $this->GetPropertyValue(c_Property_ShadowingType);
 
 				// Set Movement Value
-				$this->SetVariableValue(c_Control_Movement, $this->GetMovementByPositionSync($level)); 
+				$this->SetVariableValue(c_Control_Movement, $this->GetMovementByPositionSync($Level)); 
 
 				// Set manual Change Flag
 				$this->SetVariableValue(c_Control_Position, $Level);
