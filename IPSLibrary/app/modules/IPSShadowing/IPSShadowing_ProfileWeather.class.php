@@ -95,7 +95,7 @@
 			if (IPSSHADOWING_RAINSENSOR <> '') {
 				$this->rainSensor = GetValue(IPSUtil_ObjectIDByPath(IPSSHADOWING_RAINSENSOR));
 				if ($this->rainCheck) {
-					$activationByWeather = ($activationByWeather and ($this->rainSensor and $this->rainCheck));
+					$activationByWeather = ($activationByWeather or ($this->rainSensor and $this->rainCheck));
 				}
 			}
 
