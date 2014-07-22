@@ -36,7 +36,7 @@
 	{
 		$ConfigScript=IPS_GetScript($iScriptId);      // Id des Config Scripts
 	
-		include_once(IPS_GetKernelDir() . "scripts\\" .$ConfigScript['ScriptFile']);
+		include_once(IPS_GetKernelDir() . "scripts/" .$ConfigScript['ScriptFile']);
 		global $sConfig;
 		//$sConfig = IPS_RunScriptWait($iScriptId);
 		$s = utf8_encode($sConfig);	
