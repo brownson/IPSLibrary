@@ -198,7 +198,7 @@
 		imagestring($image,2,$imageWidth/2+10,$imageHeight-30, 'Azimuth aktuell: '.$azimuth,$buildingColor);
 
 		// Write File
-		imagegif ($image, IPS_GetKernelDir().'media\\IPSShadowing_Azimuth.gif', 90);
+		imagegif ($image, IPS_GetKernelDir().'media/IPSShadowing_Azimuth.gif', 90);
 		imagedestroy($image);
 	}
 
@@ -342,7 +342,7 @@
 		imagestring($image,2,$imageWidth/2+10,$imageHeight-30, 'Azimuth aktuell: '.$azimuth,$buildingColor);
 
 		// Write File
-		imagegif ($image, IPS_GetKernelDir().'media\\IPSShadowing_Azimuth.gif', 90);
+		imagegif ($image, IPS_GetKernelDir().'media/IPSShadowing_Azimuth.gif', 90);
 		imagedestroy($image);
 	}
 
