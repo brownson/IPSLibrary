@@ -19,20 +19,20 @@
 			$cover_jpg = "";
 			$cover_front = "";
 			if (strtolower($extension)=='jpg') {
-				$cover_jpg = $path."\\".$file;
+				$cover_jpg = $path."/".$file;
 				if (strpos(strtolower($filename),'front')!==false) {
-					$cover_front = $path."\\".$file; 
+					$cover_front = $path."/".$file; 
 				}
 			}
 		}
 
-		$FileOutput = IPS_GetKernelDir()."\\webfront\\user\\NetPlayer\\NetPlayer_Cover.jpg";
+		$FileOutput = IPS_GetKernelDir()."/webfront/user/NetPlayer/NetPlayer_Cover.jpg";
 		if ($cover_front != "") {
 			$FileInput = $cover_front;
 		} else if ($cover_jpg != "") {
 			$FileInput = $cover_jpg;
 		} else {
-			$FileInput = IPS_GetKernelDir()."\\webfront\\user\\NetPlayer\\NetPlayer_CoverNotFound.jpg";
+			$FileInput = IPS_GetKernelDir()."/webfront/user/NetPlayer/NetPlayer_CoverNotFound.jpg";
 		}
 		IPSLogger_Dbg(__file__, "Copy Cover File '$FileInput' to '$FileOutput'");
 		copy ($FileInput, $FileOutput);
@@ -47,7 +47,7 @@
 		$allowed = Array("mp3", "wma");
 
 		foreach($maindata as $d)  {
-			$actpath = $path . "\\" . $d;
+			$actpath = $path . "/" . $d;
 			if (is_dir($actpath)) {
 			} else {
 				$ext = pathinfo($actpath, PATHINFO_EXTENSION);
