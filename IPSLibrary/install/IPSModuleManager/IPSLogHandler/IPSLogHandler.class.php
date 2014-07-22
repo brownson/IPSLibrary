@@ -117,7 +117,7 @@
 
 			$file = self::$logDirectory.self::$logFile;
 			if(($fileHandle = fopen($file, "a")) === false) {
-				die('File "" could NOT be opened!');
+				die('File "'.$file.'" could NOT be opened!');
 			}
 			fwrite($fileHandle, $out.PHP_EOL);
 			fclose($fileHandle);
