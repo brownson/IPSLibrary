@@ -79,6 +79,7 @@
 				break;
 		}
 
+		global $_IPS;
 		if (array_key_exists('ERROR_COUNT', $_IPS)) {
 			$errorCount=$_IPS['ERROR_COUNT'] + 1;
 		} else {

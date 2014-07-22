@@ -27,7 +27,7 @@
 
 	// ------------------------------------------------------------------------------------------------
 	function Unregister_PhpErrorHandler($moduleManager) {
-		$file = IPS_GetKernelDir().'scripts\\__autoload.php';
+		$file = IPS_GetKernelDir().'scripts/__autoload.php';
 
 		if (!file_exists($file)) {
 			return;

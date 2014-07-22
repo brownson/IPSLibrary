@@ -11,7 +11,7 @@
 	 *
 	 */
 
-  include_once "\..\..\..\config\core\IPSLogger\IPSLogger_Configuration.inc.php";
+  IPSUtils_Include ("IPSLogger_Configuration.inc.php", "IPSLibrary::config::core::IPSLogger");
   include_once 'IPSLogger_IDs.inc.php';
   
   define ("c_LogLevel_Fatal",          0);

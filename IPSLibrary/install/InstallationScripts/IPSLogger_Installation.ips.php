@@ -297,7 +297,7 @@
 
 	// ------------------------------------------------------------------------------------------------
 	function Register_PhpErrorHandler($moduleManager) {
-		$file = IPS_GetKernelDir().'scripts\\__autoload.php';
+		$file = IPS_GetKernelDir().'scripts/__autoload.php';
 
 		if (!file_exists($file)) {
 			throw new Exception($file.' could NOT be found!', E_USER_ERROR);
@@ -324,8 +324,8 @@
 			if (!IPS_SetEventCyclic($TimerId, 2 /**Daily*/, 1,0,0,0,0)) {
 				echo "IPS_SetEventCyclic failed !!!\n";
 			}
-			if (!IPS_SetEventCyclicTimeBounds($TimerId, mktime($Hour, 0, 0), 0)) {
-				echo "IPS_SetEventCyclicTimeBounds failed !!!\n";
+			if (!IPS_SetEventCyclicTimeFrom($TimerId, $Hour, 0, 0)) {
+				echo "IPS_SetEventCyclicTimeFrom failed !!!\n";
 			}
    		IPS_SetEventActive($TimerId, true);
 			echo 'Created Timer '.$Name.'='.$TimerId."\n";
