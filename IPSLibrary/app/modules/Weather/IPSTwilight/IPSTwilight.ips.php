@@ -94,17 +94,17 @@
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function CopyGraphics($variableId_Display) {
 		if (GetValue($variableId_Display)) {
-			$SourceYear = IPS_GetKernelDir().'media\\IPSTwilight_YearLimited.gif';
-			$SourceDay  = IPS_GetKernelDir().'media\\IPSTwilight_DayLimited.gif';
+			$SourceYear = IPS_GetKernelDir().'media/IPSTwilight_YearLimited.gif';
+			$SourceDay  = IPS_GetKernelDir().'media/IPSTwilight_DayLimited.gif';
 		} else {
-			$SourceYear = IPS_GetKernelDir().'media\\IPSTwilight_YearUnlimited.gif';
-			$SourceDay  = IPS_GetKernelDir().'media\\IPSTwilight_DayUnlimited.gif';
+			$SourceYear = IPS_GetKernelDir().'media/IPSTwilight_YearUnlimited.gif';
+			$SourceDay  = IPS_GetKernelDir().'media/IPSTwilight_DayUnlimited.gif';
 		}
 	   
-		if (!copy($SourceYear, IPS_GetKernelDir().'media\\IPSTwilight_Year.gif')) {
+		if (!copy($SourceYear, IPS_GetKernelDir().'media/IPSTwilight_Year.gif')) {
 			IPSLogger_Err(__file__, "Error while coping $SourceYear to Destination File 'IPSTwilight_Year.gif'");
 		}
-		if (!copy($SourceDay,  IPS_GetKernelDir().'media\\IPSTwilight_Day.gif')) {
+		if (!copy($SourceDay,  IPS_GetKernelDir().'media/IPSTwilight_Day.gif')) {
 			IPSLogger_Err(__file__, "Error while coping $SourceDay to Destination File 'IPSTwilight_Day.gif'");
 		}
 	}
@@ -341,7 +341,7 @@
 
 		imagestring($image,1,10,$imageHeight-7,"Generated at ".date('d-M-Y H:i:s')."",$textColor);
 
-		imagegif ($image, IPS_GetKernelDir().'media\\'.$fileName.'.gif', 90);
+		imagegif ($image, IPS_GetKernelDir().'media/'.$fileName.'.gif', 90);
 		imagedestroy($image);
 	}
 
@@ -453,7 +453,7 @@
 
 		//imagestring($image,3,$imageWidth/2-100,15,"Tag- und Nachtstunden in Korneuburg",$textColor);
 		imagestring($image,1,10,$marginTop+$dayHeight+$marginBottom-7,"Generated at ".date('d-M-Y H:i:s')." by Brownson",$textColor);
-		imagegif ($image, IPS_GetKernelDir().'media\\'.$fileName.'.gif', 90);
+		imagegif ($image, IPS_GetKernelDir().'media/'.$fileName.'.gif', 90);
 		imagedestroy($image);
 	}
 
