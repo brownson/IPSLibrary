@@ -266,7 +266,7 @@
 	CreateProfile_Associations ('IPSShadowing_MovementSht', $IPSShadowing_MovementSht, "", $IPSShadowing_MovementCol, true);
 	CreateProfile_Associations ('IPSShadowing_MovementMar', $IPSShadowing_MovementMar, "", $IPSShadowing_MovementCol, true);
 
-	CreateProfile_Count        ('IPSShadowing_Step',       1, 1,   4,     null, "",    null);
+	CreateProfile_Count        ('IPSShadowing_Step',      -5, 1,   100,   null, "",    null);
 	CreateProfile_Count        ('IPSShadowing_Priority',   1, 1,   10,    null, "",    null);
 	CreateProfile_Count        ('IPSShadowing_TempDelta',  1, 1,   5,     null, " °C", null);
 	CreateProfile_Count        ('IPSShadowing_Position',   0, 1,   100,   null, "%",   null);

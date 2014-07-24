@@ -88,7 +88,11 @@
 			if ($variableId === false) {
 				throw new Exception('Variable '.$variableIdent.' could NOT be found for DeviceId='.$this->deviceId);
 			}
-			SetValue($variableId, $value);
+			if ($variableIdent==c_Control_Movement) {
+				SetValueInteger($variableId, (int)$value);
+			} else {
+				SetValue($variableId, $value);
+			}
 		}
 		
 		// ----------------------------------------------------------------------------------------------------------------------------
