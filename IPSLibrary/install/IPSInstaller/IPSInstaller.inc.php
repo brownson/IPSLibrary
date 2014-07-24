@@ -1065,6 +1065,7 @@
 	function DeleteWFCItem($WFCId, $ItemId) {
 		Debug ("Delete WFC Item='$ItemId'");
 		WFC_DeleteItem($WFCId, $ItemId);
+		IPS_ApplyChanges($WFCId);
 	}
 
 	function Debug($msg) {
