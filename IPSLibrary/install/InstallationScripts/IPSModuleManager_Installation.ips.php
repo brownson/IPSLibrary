@@ -214,6 +214,7 @@
 	// Search for Last Repositories
 	// ---------------------------------------------------------------------------------------------
 	function SearchLastRepositories() {
+		global $_IPS;
 		IPSUtils_Include ("IPSModuleManager.class.php", "IPSLibrary::install::IPSModuleManager");
 		$moduleManager = $_IPS['MODULEMANAGER'];
 		$infos    = $moduleManager->GetModuleInfos();
@@ -221,8 +222,8 @@
 
 		//print_r($modules);
 		foreach ($modules as $module=>$data) {
-			$downloadFile = IPS_GetKernelDir().'scripts\\IPSLibrary\\install\\DownloadListFiles\\'.$module.'_FileList.ini';
-			$configFile   = IPS_GetKernelDir().'scripts\\IPSLibrary\\install\\InitializationFiles\\'.$module.'.ini';
+			$downloadFile = IPS_GetKernelDir().'scripts/IPSLibrary/install/DownloadListFiles/'.$module.'_FileList.ini';
+			$configFile   = IPS_GetKernelDir().'scripts/IPSLibrary/install/InitializationFiles/'.$module.'.ini';
 			if (!file_exists($downloadFile) or !file_exists($configFile)) {
 				$moduleManager->LogHandler()->Debug('Remove Module "'.$module.'" from InstalledModules (No Ini Files found)');
 				$versionHandler = new IPSFileVersionHandler($module);
@@ -234,13 +235,13 @@
 
 				// Search current Repository
 				if ($repository=='') {
-					$files = scandir(IPS_GetKernelDir().'\\logs\\', 1);
+					$files = scandir(IPS_GetKernelDir().'logs/', 1);
 					foreach ($files as $file) {
 						// Found LogFile
 						if ($repository<>'') {
 							break;
 						} elseif (strpos($file,'IPSModuleManager_')!==false) {
-							$fileContent = file_get_contents(IPS_GetKernelDir().'\\logs\\'.$file);
+							$fileContent = file_get_contents(IPS_GetKernelDir().'logs/'.$file);
 							$lines = explode(PHP_EOL, $fileContent);
 							$line1 = '';
 							$line2 = '';
@@ -260,7 +261,7 @@
 								foreach ($lines as $idx=>$line) {
 
 									// Found Repository
-									if (strpos($line,' --> '.IPS_GetKernelDir().'scripts\\IPSLibrary\\install\\DownloadListFiles\\'.$module.'_FileList.ini')!==false) {
+									if (strpos($line,' --> '.IPS_GetKernelDir().'scripts/IPSLibrary/install/DownloadListFiles/'.$module.'_FileList.ini')!==false) {
 										$start = strpos($line,'Copy ')+5;
 										$end   = strpos($line,'IPSLibrary',strpos($line,'IPSLibrary')+1);
 										$repository = substr($line, $start, $end-$start);
@@ -280,12 +281,13 @@
 
 	// ------------------------------------------------------------------------------------------------
 	function RemoveBlanksBeforePHPTags ($file, $namespace) {
+		global $_IPS;
 		$moduleManager = $_IPS['MODULEMANAGER'];
 
 		if ($namespace<>'') {
-			$namespace = str_replace('::','\\',$namespace).'\\';
+			$namespace = str_replace('::','/',$namespace).'/';
 		}
-		$fileNameFull = IPS_GetKernelDir().'scripts\\'.$namespace.$file;
+		$fileNameFull = IPS_GetKernelDir().'scripts/'.$namespace.$file;
 		if (!file_exists($fileNameFull)) {
 			echo 'File '.$file.' not exists (Namespace='.$namespace.')'.PHP_EOL;
 			return;

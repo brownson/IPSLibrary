@@ -35,9 +35,9 @@
 	IPSUtils_Include ("IPSModuleManager.class.php", "IPSLibrary::install::IPSModuleManager");
 	$html = '<h2>Installation von Modul '.$module.'</h2>';
 
-	$file      = IPS_GetKernelDir().'scripts\\IPSLibrary\\install\\InitializationFiles\\'.$module.'.ini';
+	$file      = IPS_GetKernelDir().'scripts/IPSLibrary/install/InitializationFiles/'.$module.'.ini';
 	$configUsr = parse_ini_file($file, true);
-	$file      = IPS_GetKernelDir().'scripts\\IPSLibrary\\install\\InitializationFiles\\Default\\'.$module.'.ini';
+	$file      = IPS_GetKernelDir().'scripts/IPSLibrary/install/InitializationFiles/Default/'.$module.'.ini';
 	$configDef = parse_ini_file($file, true);
 
 		$html2  = '';

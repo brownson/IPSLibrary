@@ -77,6 +77,7 @@
 	define ("c_Control_StepsToDo",				"StepsToDo");
 	define ("c_Control_Step",					"Step");
 	define ("c_Control_StartTime",				"StartTime");
+	define ("c_Control_ProgramTime",			"ProgramTime");
 	define ("c_Control_Automatic",				"Automatic");
 	define ("c_Control_ManualChange",			"ManualChange");
 	define ("c_Control_TempChange",				"TemperatureChange");
@@ -95,7 +96,8 @@
 	define ("c_Control_TempLevelInShadow",		"TempLevelInShadow");
 	define ("c_Control_TempLevelInClose",		"TempLevelInClose");
 	define ("c_Control_TempLevelInOpen",		"TempLevelInOpen");
-	define ("c_Control_Brightness",				"Brightness");
+	define ("c_Control_BrightnessHigh",			"Brightness");
+	define ("c_Control_BrightnessLow",			"BrightnessLow");
 	define ("c_Control_AzimuthBgn",				"AzimuthBgn");
 	define ("c_Control_AzimuthEnd",				"AzimuthEnd");
 	define ("c_Control_Elevation",				"Elevation");

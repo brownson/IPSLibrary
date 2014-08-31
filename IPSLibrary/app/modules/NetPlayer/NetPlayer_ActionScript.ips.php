@@ -72,8 +72,8 @@
 				$directory     = NetPlayer_GetNameFromProfile($value,'NetPlayer_CDAlbumList');
 				$basePath      = NETPLAYER_DIRECTORY;
 				$categoryPath  = GetValue(NP_ID_CDCATEGORYNAME);
-				if ($categoryPath<>"") $basePath = $basePath."\\".$categoryPath;
-				$directory = $basePath . "\\" . $directory;
+				if ($categoryPath<>"") $basePath = $basePath."/".$categoryPath;
+				$directory = $basePath . "/" . $directory;
 				NetPlayer_PlayDirectory($directory);
 				break;
 		   case NP_ID_RADIONAV:

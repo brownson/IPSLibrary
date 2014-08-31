@@ -47,9 +47,9 @@
 	}
 
 	function IPSModuleManagerGUI_StoreParameters($module, $data) {
-		$fileUsr   = IPS_GetKernelDir().'scripts\\IPSLibrary\\install\\InitializationFiles\\'.$module.'.ini';
+		$fileUsr   = IPS_GetKernelDir().'scripts/IPSLibrary/install/InitializationFiles/'.$module.'.ini';
 		$configUsr = parse_ini_file($fileUsr, true);
-		$fileDef   = IPS_GetKernelDir().'scripts\\IPSLibrary\\install\\InitializationFiles\\Default\\'.$module.'.ini';
+		$fileDef   = IPS_GetKernelDir().'scripts/IPSLibrary/install/InitializationFiles/Default/'.$module.'.ini';
 		$configDef = parse_ini_file($fileDef, true);
 		if (array_key_exists('WFC10', $configDef)) {
 			if (!array_key_exists('ID', $configDef['WFC10'])) {

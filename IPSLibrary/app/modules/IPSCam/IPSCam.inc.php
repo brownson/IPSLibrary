@@ -81,10 +81,11 @@
 	 * wird das aktuell gewählte Kamera Bild gespeichert
 	 *
 	 * @param int $cameraIdx Index der Kamera
+	 * @return string Name des gespeicherten Bildes bzw. false wenn die Kamera nicht in Betrieb ist.
 	 */
 	function IPSCam_StorePicture($cameraIdx=null) {
 		$camManager = new IPSCam_Manager();
-		$camManager->PictureStore($cameraIdx);
+		return $camManager->PictureStore($cameraIdx);
 	}
 
 

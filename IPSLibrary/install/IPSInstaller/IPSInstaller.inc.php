@@ -456,8 +456,8 @@
 		$ScriptId = @IPS_GetObjectIDByIdent(Get_IdentByName($Name), $ParentId);
 		if ($ScriptId === false) $ScriptId = @IPS_GetScriptIDByName($Name, $ParentId);
 		if ($ScriptId === false) {
-			$File = str_replace(IPS_GetKernelDir().'scripts\\', '', $File);
-			if (!file_exists(IPS_GetKernelDir().'scripts\\'.$File)) {
+			$File = str_replace(IPS_GetKernelDir().'scripts/', '', $File);
+			if (!file_exists(IPS_GetKernelDir().'scripts/'.$File)) {
 				Error ("Script File $File could NOT be found !!!");
 			}
 			$ScriptId = IPS_CreateScript(0);
@@ -465,7 +465,7 @@
 			IPS_SetName($ScriptId, $Name);
 			IPS_SetPosition($ScriptId, $Position);
  			IPS_SetScriptFile($ScriptId, $File);
-			$oldScriptFile=IPS_GetKernelDir().'scripts\\'.$ScriptId.'.ips.php';
+			$oldScriptFile=IPS_GetKernelDir().'scripts/'.$ScriptId.'.ips.php';
 			if (file_exists($oldScriptFile)) {
 				unlink($oldScriptFile);
 			}
@@ -644,10 +644,10 @@
 	 *
 	 */
 	function SetVariableConstant ($Name, $ID, $FileName, $Namespace='') {
-		if ($Namespace<>'') {
-		   $Namespace = str_replace('::','\\',$Namespace).'\\';
+		if ($Namespace <> '') {
+		   $Namespace = str_replace('::','/',$Namespace).'/';
 		}
-		$FileNameFull = IPS_GetKernelDir().'scripts\\'.$Namespace.$FileName;
+		$FileNameFull = IPS_GetKernelDir().'scripts/'.$Namespace.$FileName;
 		if (!file_exists($FileNameFull)) {
 			throw new Exception($FileNameFull.' could NOT be found!', E_USER_ERROR);
 		}
@@ -659,7 +659,7 @@
 		}
 		$pos = $pos + strlen($Name);
 		while (substr($FileContent, $pos, 1) < "0" or substr($FileContent, $pos, 1) > "9") {
-			$pos = $pos+1;
+			$pos = $pos + 1;
 		}
 		$FileContentNew = substr($FileContent, 0, $pos).$ID.substr($FileContent, $pos+5);
 
@@ -677,7 +677,7 @@
 	 * @return integer ID des Timers
 	 *
 	 */
-	function CreateTimer_OnceADay ($Name, $ParentId, $Hour, $Minute=0) {
+	function CreateTimer_OnceADay ($Name, $ParentId, $Hour, $Minute = 0) {
 		$TimerId = @IPS_GetObjectIDByIdent(Get_IdentByName($Name), $ParentId);
 		if ($TimerId === false) $TimerId = @IPS_GetEventIDByName($Name, $ParentId);
 		if ($TimerId === false) {
@@ -688,8 +688,8 @@
 			if (!IPS_SetEventCyclic($TimerId, 2 /**Daily*/, 1,0,0,0,0)) {
 				Error ("IPS_SetEventCyclic failed !!!");
 			}
-			if (!IPS_SetEventCyclicTimeBounds($TimerId, mktime($Hour, $Minute, 0), 0)) {
-				Error ("IPS_SetEventCyclicTimeBounds failed !!!");
+			if (!IPS_SetEventCyclicTimeFrom($TimerId, $Hour, $Minute, 0)) {
+				Error ("IPS_SetEventCyclicTimeFrom failed !!!");
 			}
 			IPS_SetEventActive($TimerId, true);
 			Debug ('Created Timer '.$Name.'='.$TimerId."");
@@ -866,47 +866,28 @@
 		IPS_SetVariableProfileIcon($Name, $Icon);
 	}
 
-	/** Liefert die ID des ersten gefundenen WebFront Konfigurators
-	 *
-	 * Die Funktion durchsucht den Konfigurations Baum von IP-Symcon und liefert die ID des erst besten
-	 * WebFront Konfigurators zurück.
-	 *
+	/**
+	 * Lädt alle WebFronts neu
 	 */
 	function ReloadAllWebFronts() {
-		$childrenIds = IPS_GetChildrenIDs(0);
-		foreach ($childrenIds as $childrenId) {
-		   $object     = IPS_GetObject($childrenId);
-		   $objectType = $object['ObjectType'];
-		   if ($objectType==1 /*Instance*/) {
-		      $instance= IPS_GetInstance($childrenId);
-		      if ($instance['ModuleInfo']['ModuleID'] == '{3565B1F2-8F7B-4311-A4B6-1BF1D868F39E}') {
-		         WFC_Reload($childrenId);
-		      }
-		   }
+		$wfIds = IPS_GetInstanceListByModuleID('{3565B1F2-8F7B-4311-A4B6-1BF1D868F39E}');
+		foreach ($wfIds as $wfId) {
+		    WFC_Reload($wfId);
 		}
 	}
 
-	/** Liefert die ID des ersten gefundenen WebFront Konfigurators
+	/** 
+	 * Liefert die ID des ersten gefundenen WebFront Konfigurators
 	 *
-	 * Die Funktion durchsucht den Konfigurations Baum von IP-Symcon und liefert die ID des erst besten
-	 * WebFront Konfigurators zurück.
+	 * Die Funktion gibt die ID des ersten WebFront Konfigurators zurück. Wenn keiner existiert, wird 'false' zurückgegeben.
 	 *
 	 */
 	function GetWFCIdDefault() {
-	   $wfcId=false;
-		$childrenIds = IPS_GetChildrenIDs(0);
-		foreach ($childrenIds as $childrenId) {
-		   $object     = IPS_GetObject($childrenId);
-		   $objectType = $object['ObjectType'];
-		   if ($objectType==1 /*Instance*/) {
-		      $instance= IPS_GetInstance($childrenId);
-		      if ($instance['ModuleInfo']['ModuleID'] == '{3565B1F2-8F7B-4311-A4B6-1BF1D868F39E}') {
-		         $wfcId = $childrenId;
-		         return $wfcId;
-		      }
-		   }
+	    $wfIds = IPS_GetInstanceListByModuleID('{3565B1F2-8F7B-4311-A4B6-1BF1D868F39E}');
+		foreach ($wfIds as $wfId) {
+		    return $wfId;
 		}
-	   return $wfcId;
+		return false;
 	}
 
 	/** Existenz eines WebFront Konfigurator Items überprüfen
@@ -1084,9 +1065,11 @@
 	function DeleteWFCItem($WFCId, $ItemId) {
 		Debug ("Delete WFC Item='$ItemId'");
 		WFC_DeleteItem($WFCId, $ItemId);
+		IPS_ApplyChanges($WFCId);
 	}
 
 	function Debug($msg) {
+		global $_IPS;
 		if (isset($_IPS['MODULEMANAGER'])) {
 			$moduleManager = $_IPS['MODULEMANAGER'];
 			$moduleManager->LogHandler()->Debug($msg);
@@ -1097,6 +1080,7 @@
 	}
 
 	function Error($msg) {
+		global $_IPS;
 		if (isset($_IPS['MODULEMANAGER'])) {
 			$moduleManager = $_IPS['MODULEMANAGER'];
 			$moduleManager->LogHandler()->Error($msg);

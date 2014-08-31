@@ -1,9 +1,9 @@
 <?
-	$remoteRepository = 'https://raw.githubusercontent.com/brownson/IPSLibrary/Development/';
+	$remoteRepository = 'https://raw.githubusercontent.com/brownson/IPSLibrary/Mac/';
 	if (isset($repository)) {
 		$remoteRepository = $repository;
 	}
-	$localRepository = IPS_GetKernelDir().'scripts\\';
+	$localRepository = IPS_GetKernelDir().'scripts/';
 
 	$fileList = array(
 		'IPSLibrary\\install\\IPSInstaller\\IPSInstaller.inc.php',
@@ -34,7 +34,7 @@
 
 	// Installation of ModuleManager
 	echo 'Installation of ModuleManager'.PHP_EOL;
-	include_once IPS_GetKernelDir().'scripts\\IPSLibrary\\app\\core\\IPSUtils\\IPSUtils.inc.php';
+	include_once IPS_GetKernelDir().'scripts/IPSLibrary/app/core/IPSUtils/IPSUtils.inc.php';
 	IPSUtils_Include ('IPSModuleManager.class.php', 'IPSLibrary::install::IPSModuleManager');
 	$moduleManager = new IPSModuleManager('IPSModuleManager');
 	$moduleManager->LoadModule($remoteRepository, true);
@@ -42,8 +42,8 @@
 
 	// -------------------------------------------------------------------------------
 	function LoadFile($sourceFile, $destinationFile) {
+		$sourceFile = str_replace('\\','/',$sourceFile);
 		if (strpos($sourceFile, 'https')===0) {
-      	$sourceFile = str_replace('\\','/',$sourceFile);
 			echo 'Load File '.$sourceFile."\n";
 			$curl_handle=curl_init();
 			curl_setopt($curl_handle, CURLOPT_URL,$sourceFile);
@@ -65,14 +65,14 @@
 		   $fileContent = file_get_contents($sourceFile);
 		}
 
-		$destinationFile = str_replace('/','\\',$destinationFile);
+		$destinationFile = str_replace('\\','/',$destinationFile);
 		$destinationFilePath = pathinfo($destinationFile, PATHINFO_DIRNAME);
 		if (!file_exists($destinationFilePath)) {
 			if (!mkdir($destinationFilePath, 0, true)) {
 				throw new Exception('Create Directory '.$destinationFilePath.' failed!');
 			}
 		}
-		$destinationFile = str_replace('\\InitializationFiles\\Default\\','\\InitializationFiles\\',$destinationFile);
+		$destinationFile = str_replace('/InitializationFiles/Default/','/InitializationFiles/',$destinationFile);
 		if (!file_put_contents($destinationFile, $fileContent)) {
 			sleep(1);
 			echo 'Create File '.$destinationFile.' failed --> Retry ...';
@@ -84,7 +84,7 @@
 
 	// ------------------------------------------------------------------------------------------------
 	function Register_IPSUtils() {
-		$file = IPS_GetKernelDir().'scripts\\__autoload.php';
+		$file = IPS_GetKernelDir().'scripts/__autoload.php';
 
 		if (!file_exists($file)) {
 			echo 'Create File __autoload.php';
@@ -96,7 +96,7 @@
 
 		if ($pos === false) {
 			echo 'Register IPSUtils.inc.php in File __autoload.php';
-			$includeCommand = '    include_once IPS_GetKernelDir()."\scripts\IPSLibrary\app\core\IPSUtils\IPSUtils.inc.php";';
+			$includeCommand = '    include_once IPS_GetKernelDir()."scripts/IPSLibrary/app/core/IPSUtils/IPSUtils.inc.php";';
 			$FileContent = str_replace('?>', $includeCommand.PHP_EOL.'?>', $FileContent);
 			file_put_contents($file, $FileContent);
 		}

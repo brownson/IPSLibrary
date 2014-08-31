@@ -18,7 +18,7 @@
 		$directoryList = array_diff($directoryList, Array(".",".."));
 		$idx = 1;
 		foreach($directoryList as $directory) {
-			$fullDirName = $basePath . "\\" . $directory;
+			$fullDirName = $basePath . "/" . $directory;
 			if (is_dir($fullDirName) and strpos($directory, '_')===0) {
 				$categoryList[] = $directory;
 			}
@@ -30,14 +30,14 @@
 	function NetPlayer_GetDirectoryList () {
 		$basePath      = NETPLAYER_DIRECTORY;
 		$categoryPath  = GetValue(NP_ID_CDCATEGORYNAME);
-		if ($categoryPath<>"") $basePath = $basePath."\\".$categoryPath;
+		if ($categoryPath<>"") $basePath = $basePath."/".$categoryPath;
 
 		$resultList    = array();
 		$directoryList = scandir($basePath);
 		$directoryList = array_diff($directoryList, Array(".",".."));
 
 		foreach($directoryList as $directory) {
-			$fullDirName = $basePath . "\\" . $directory;
+			$fullDirName = $basePath . "/" . $directory;
 			if (strpos($directory, '_')===0) {
 				continue;
 			} elseif (is_dir($fullDirName)) {
@@ -69,9 +69,9 @@
 		$directoryList = NetPlayer_FilterDirectoryList($directoryList, $count);
 		$basePath      = NETPLAYER_DIRECTORY;
 		$categoryPath  = GetValue(NP_ID_CDCATEGORYNAME);
-		if ($categoryPath<>"") $basePath = $basePath."\\".$categoryPath;
+		if ($categoryPath<>"") $basePath = $basePath."/".$categoryPath;
 		foreach ($directoryList as $idx=>$directory) {
-			$fullDirNameList[] = $basePath."\\".$directory;
+			$fullDirNameList[] = $basePath."/".$directory;
 			$interpretList[]   = substr($directory, 0, strpos($directory, "["));
 			$albumList[]       = substr($directory, strpos($directory, "["));
 	   }

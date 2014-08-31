@@ -194,8 +194,8 @@
 	$variableIdCamHtml   = CreateVariable(IPSCAM_VAR_CAMHTML,  3 /*String*/,  $categoryIdCommon,100, '~HTMLBox',       $scriptIdActionScript, '<iframe frameborder="0" width="100%" height="530px"  src="../user/IPSCam/IPSCam_CameraHtml.php"</iframe>', 'Window');
 	$variableIdHtml      = CreateVariable(IPSCAM_VAR_HTML,     3 /*String*/,  $categoryIdCommon,110, '~HTMLBox',       $scriptIdActionScript, '', 'Window');
 	$variableIdiHtml     = CreateVariable(IPSCAM_VAR_IHTML,    3 /*String*/,  $categoryIdCommon,120, '~HTMLBox',       $scriptIdActionScript, '', 'Window');
-	$variableIdCamPict   = CreateMedia (IPSCAM_VAR_CAMPICT, $categoryIdCommon, IPS_GetKernelDir().'\\Cams\\0\\Picture\\Common.jpg', false, 1 /*Image*/, 'Image', 110);
-	$variableIdCamHist   = CreateMedia (IPSCAM_VAR_CAMHIST, $categoryIdCommon, IPS_GetKernelDir().'\\Cams\\0\\History\\20120101.jpg', false, 1 /*Image*/, 'Clock', 110); 
+	$variableIdCamPict   = CreateMedia (IPSCAM_VAR_CAMPICT, $categoryIdCommon, IPS_GetKernelDir().'Cams/0/Picture/Common.jpg', false, 1 /*Image*/, 'Image', 110);
+	$variableIdCamHist   = CreateMedia (IPSCAM_VAR_CAMHIST, $categoryIdCommon, IPS_GetKernelDir().'Cams/0/History/20120101.jpg', false, 1 /*Image*/, 'Clock', 110); 
 	$variableIdMode      = CreateVariable(IPSCAM_VAR_MODE,     1 /*Integer*/, $categoryIdCommon, 20, 'IPSCam_Mode',    $scriptIdActionScript, 0, 'Gear');
 	$variableIdModeLive  = CreateVariable(IPSCAM_VAR_MODELIVE, 0 /*Boolean*/, $categoryIdCommon, 30, '~Switch',        $scriptIdActionScript, false, 'Window');
 	$variableIdModePict  = CreateVariable(IPSCAM_VAR_MODEPICT, 0 /*Boolean*/, $categoryIdCommon, 40, '~Switch',        $scriptIdActionScript, false, 'Image');
@@ -212,7 +212,7 @@
 		$categoryIdCamX      = CreateCategory($idx, $categoryIdCams, $idx);
 		$variableIdCamPowerX = CreateVariable(IPSCAM_VAR_CAMPOWER,   0 /*Boolean*/,  $categoryIdCamX, 10, '~Switch',             $scriptIdActionScript, false, 'Power');
 		$variableIdCamHtmlX  = CreateVariable(IPSCAM_VAR_CAMHTML,    3 /*String*/,   $categoryIdCamX, 20, '~HTMLBox',            $scriptIdActionScript, '<iframe frameborder="0" width="100%" height="530px"  src="../user/IPSCam/IPSCam_Camera'.$idx.'.php"</iframe>', 'Window');
-		$variableIdCamPictX  = CreateMedia (IPSCAM_VAR_CAMPICT, $categoryIdCamX, IPS_GetKernelDir().'\\Cams\\'.$idx.'\\Picture\\Current.jpg', false, 1 /*Image*/, 'Image', 30); 
+		$variableIdCamPictX  = CreateMedia (IPSCAM_VAR_CAMPICT, $categoryIdCamX, IPS_GetKernelDir().'Cams/'.$idx.'/Picture/Current.jpg', false, 1 /*Image*/, 'Image', 30); 
 
 		$variableIdMotMode   = CreateVariable(IPSCAM_VAR_MOTMODE,    1 /*Integer*/,  $categoryIdCamX, 100, 'IPSCam_MotMode',     $scriptIdActionScript, IPSCAM_VAL_DISABLED, 'Motion');
 		$variableIdMotTime   = CreateVariable(IPSCAM_VAR_MOTTIME,    3 /*String*/,   $categoryIdCamX, 110, '~String',            $scriptIdActionScript, '13:00', 'Clock');
@@ -224,9 +224,9 @@
 		$variableIdPictHist  = CreateVariable(IPSCAM_VAR_PICTHIST,   1 /*Integer*/,  $categoryIdCamX, 230, 'IPSCam_PictHist',    $scriptIdActionScript, 14, 'Image');
 		$variableIdPictSize  = CreateVariable(IPSCAM_VAR_PICTSIZE,   1 /*Integer*/,  $categoryIdCamX, 240, 'IPSCam_Size',        $scriptIdActionScript, 1, 'Distance');
 		
-		IPSCAM_CreateDirectory(IPS_GetKernelDir().'\\Cams\\'.$idx.'\\History\\');
-		IPSCAM_CreateDirectory(IPS_GetKernelDir().'\\Cams\\'.$idx.'\\Picture\\');
-		IPSCAM_CreateDirectory(IPS_GetKernelDir().'\\Cams\\'.$idx.'\\MotionCapture\\');
+		IPSCAM_CreateDirectory(IPS_GetKernelDir().'Cams/'.$idx.'/History/');
+		IPSCAM_CreateDirectory(IPS_GetKernelDir().'Cams/'.$idx.'/Picture/');
+		IPSCAM_CreateDirectory(IPS_GetKernelDir().'Cams/'.$idx.'/MotionCapture/');
 
 	}
 

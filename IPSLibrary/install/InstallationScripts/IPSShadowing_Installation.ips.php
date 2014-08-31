@@ -266,7 +266,7 @@
 	CreateProfile_Associations ('IPSShadowing_MovementSht', $IPSShadowing_MovementSht, "", $IPSShadowing_MovementCol, true);
 	CreateProfile_Associations ('IPSShadowing_MovementMar', $IPSShadowing_MovementMar, "", $IPSShadowing_MovementCol, true);
 
-	CreateProfile_Count        ('IPSShadowing_Step',       1, 1,   4,     null, "",    null);
+	CreateProfile_Count        ('IPSShadowing_Step',      -5, 1,   100,   null, "",    null);
 	CreateProfile_Count        ('IPSShadowing_Priority',   1, 1,   10,    null, "",    null);
 	CreateProfile_Count        ('IPSShadowing_TempDelta',  1, 1,   5,     null, " °C", null);
 	CreateProfile_Count        ('IPSShadowing_Position',   0, 1,   100,   null, "%",   null);
@@ -277,7 +277,7 @@
 	CreateProfile_Associations ('IPSShadowing_TempLevelInClose',   array(22=>'Innen >= 22°C',  23=>'>= 23°C', 24=>'>= 24°C', 25=>'>= 25°C', 26=>'>= 26°C', c_TempLevel_Ignore=>'Ignorieren'));
 	CreateProfile_Associations ('IPSShadowing_TempLevelOutOpen',   array(22=>'Aussen <= 22°C', 23=>'<= 23°C', 24=>'<= 24°C', 25=>'<= 25°C', 26=>'<= 26°C', c_TempLevel_Ignore=>'Ignorieren'));
 	CreateProfile_Associations ('IPSShadowing_TempLevelInOpen',    array(22=>'Innen <= 22°C',  23=>'<= 23°C', 24=>'<= 24°C', 25=>'<= 25°C', 26=>'<= 26°C', c_TempLevel_Ignore=>'Ignorieren'));
-	CreateProfile_Count        ('IPSShadowing_Brightness', 0, 500, 50000, null, " Lux",    null);
+	CreateProfile_Count        ('IPSShadowing_Brightness', 0, 2000, 100000, null, " Lux",    null);
 
 	CreateProfile_Count        ('IPSShadowing_AzimuthBgn', 0, 5,   360,   null, " °",  null);
 	CreateProfile_Count        ('IPSShadowing_AzimuthEnd', 0, 5,   360,   null, " °",  null);
@@ -344,7 +344,7 @@
 	$CategoryIdProfileBgnOfDayDisplay = CreateCategory('DisplayBgnOfDay', $CategoryIdProfileManager, 130);
 	$CategoryIdProfileEndOfDayDisplay = CreateCategory('DisplayEndOfDay', $CategoryIdProfileManager, 140);
 	$CategoryIdProfileSunGraphs       = CreateCategory('GraphsSun', $CategoryIdProfileManager, 200);
-	$MediaIdAzimuth                   = CreateMedia ('Sonnenstand', $CategoryIdProfileSunGraphs, IPS_GetKernelDir().'media\\IPSShadowing_Azimuth.gif', false, 1, 'Sun');
+	$MediaIdAzimuth                   = CreateMedia ('Sonnenstand', $CategoryIdProfileSunGraphs, IPS_GetKernelDir().'media/IPSShadowing_Azimuth.gif', false, 1, 'Sun');
 
 	//++Migration v2.50.2 --> 2.50.3
 	$categoryIdTempProfiles      = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSShadowing.Profiles.Temp');
@@ -359,6 +359,9 @@
 		$variableId = @IPS_GetObjectIDByName('TempDiffClosing',   $categoryIdTempProfile);  if ($variableId!==false) { IPS_DeleteVariable($variableId); }
 		$variableId = @IPS_GetObjectIDByName('TempDiffShadowing', $categoryIdTempProfile);  if ($variableId!==false) { IPS_DeleteVariable($variableId); }
 		$variableId = @IPS_GetObjectIDByName('TempDiffOpening',   $categoryIdTempProfile);  if ($variableId!==false) { IPS_DeleteVariable($variableId); }
+
+		//++Migration v2.50.15 --> 2.50.16
+		CreateVariable(c_Control_BrightnessLow,      1 /*Integer*/,  $categoryIdTempProfile, 65, 'IPSShadowing_Brightness',         $ScriptIdChangeSettings, 0,         'Sun');
 	}
 	$linkId = @IPS_GetObjectIDByName('Differenz Beschattung', $CategoryIdProfileTempDisplay); if ($linkId!==false) { IPS_DeleteLink($linkId); }
 	$linkId = @IPS_GetObjectIDByName('Differenz Abdunkelung', $CategoryIdProfileTempDisplay); if ($linkId!==false) { IPS_DeleteLink($linkId); }
@@ -366,6 +369,13 @@
 	@IPS_DeleteVariableProfile('IPSShadowing_TempDiffShadowing');
 	@IPS_DeleteVariableProfile('IPSShadowing_TempDiffClosing');
 	@IPS_DeleteVariableProfile('IPSShadowing_TempDiffOpening');
+
+	//++Migration v2.50.15 --> 2.50.16
+	$id = @IPS_GetObjectIdByName("Helligkeits Grenze", $CategoryIdProfileTempDisplay);
+	if ($id!==false) {
+		EmptyCategory($id);
+		IPS_DeleteInstance($id);
+	}
 	$profileId = GetValue($ControlIdProfileTempSelect);
 	if ($profileId<>0) {
 		$profile   = new IPSShadowing_ProfileTemp($profileId);
@@ -466,9 +476,9 @@
 
 	// Logging
 	// ====================================================================================================================================
-	$CategoryIdLog	    = CreateCategory('Log', $CategoryIdData, 40);
-	$ControlIdLog      = CreateVariable('LogMessages',  3 /*String*/,  $CategoryIdLog, 10, '~HTMLBox', null, "");
-	$ControlIdLogId    = CreateVariable('LogId',        1 /*Integer*/, $CategoryIdLog, 20, '',         null, 0);
+	$CategoryIdLog	       = CreateCategory('Log', $CategoryIdData, 40);
+	$ControlIdLog          = CreateVariable('LogMessages',  3 /*String*/,  $CategoryIdLog, 10, '~HTMLBox', null, "");
+	$ControlIdLogId        = CreateVariable('LogId',        1 /*Integer*/, $CategoryIdLog, 20, '',         null, 0);
 
 	// Shadowing Devices
 	// ====================================================================================================================================
@@ -482,7 +492,8 @@
 		$ControlIdStepsToDo        = CreateVariable(c_Control_StepsToDo,      3 /*String*/,  $DeviceId,  60, '~String',                      null,                    '');
 		$ControlIdStep             = CreateVariable(c_Control_Step,           1 /*Integer*/, $DeviceId,  70, 'IPSShadowing_Step',            null,                    -1);
 		$ControlIdStartTime        = CreateVariable(c_Control_StartTime,      1 /*Integer*/, $DeviceId,  80, '~UnixTimestamp',               null,                    -1);
-		$ControlIdPosition         = CreateVariable(c_Control_Position,       1 /*Integer*/, $DeviceId,  90, 'IPSShadowing_Position',        null,                    0,       'Intensity');
+		$ControlIdProgramTime      = CreateVariable(c_Control_ProgramTime,    1 /*Integer*/, $DeviceId,  85, '~UnixTimestamp',               null,                    -1);
+		$ControlIdPosition         = CreateVariable(c_Control_Position,       1 /*Integer*/, $DeviceId,  90, 'IPSShadowing_Position',        $ScriptIdChangeSettings, 0,       'Intensity');
 		$ControlIdManualChange     = CreateVariable(c_Control_ManualChange,   0 /*Boolean*/, $DeviceId, 110, '~Switch',                      $ScriptIdChangeSettings, false,   'Warning');
 		$ControlIdTempChange       = CreateVariable(c_Control_TempChange,     0 /*Boolean*/, $DeviceId, 120, '~Switch',                      null                   , false,   'Warning');
 		$ControlIdTempLastPos      = CreateVariable(c_Control_TempLastPos,    1 /*Integer*/, $DeviceId, 125, '',                             null                   , false,   'Information');

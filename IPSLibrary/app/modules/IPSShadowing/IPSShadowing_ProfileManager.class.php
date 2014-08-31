@@ -204,7 +204,7 @@
 		public function OpenByTemp($profileIdSun, $profileIdTemp, $tempIndoorPath='') {
 			$profileTemp = $this->profilesTemp[$profileIdTemp];
 			$profileSun  = $this->profilesSun[$profileIdSun];
-			return ($profileTemp->OpenByTemp($tempIndoorPath));
+			return ($profileTemp->OpenByTemp($tempIndoorPath) or !$profileSun->ActivationBySun());
 		}
 
 		public function ActivationByWeather($profileIdWeather) {
