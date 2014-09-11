@@ -518,6 +518,7 @@
 			}
 		}
 
+		// ----------------------------------------------------------------------------------------------------------------------------
 		public function SynchronizeSwitch($switchName, $deviceState) {
 			IPSLogger_Trc(__file__, "Received StateChange from Light '$switchName'=$deviceState");
 			$switchId    = IPS_GetVariableIDByName($switchName, $this->switchCategoryId);
@@ -537,6 +538,7 @@
 		}
 
 
+		// ----------------------------------------------------------------------------------------------------------------------------
 		public function SynchronizeDimmer($switchName, $deviceState, $deviceLevel) {
 			IPSLogger_Trc(__file__, 'Received StateChange from Light '.$switchName.', State='.$deviceState.', Level='.$deviceLevel);
 			$switchId    = IPS_GetVariableIDByName($switchName, $this->switchCategoryId);
@@ -557,6 +559,30 @@
 			IPSLight_AfterSynchronizeSwitch($switchId, $deviceState);
 		}
 		
+		// ----------------------------------------------------------------------------------------------------------------------------
+		public function SynchronizeRGB($switchName, $deviceState, $deviceLevel, $deviceRGB) {
+			IPSLogger_Trc(__file__, 'Received StateChange from Light '.$switchName.', State='.$deviceState.', Level='.$deviceLevel.', RGB='.$deviceRGB);
+			$switchId    = IPS_GetVariableIDByName($switchName, $this->switchCategoryId);
+			$levelId     = IPS_GetVariableIDByName($switchName.IPSLIGHT_DEVICE_LEVEL, $this->switchCategoryId);
+			$rgbId       = IPS_GetVariableIDByName($switchName.IPSLIGHT_DEVICE_COLOR, $this->switchCategoryId);
+
+			$lightConfig = IPSLight_GetLightConfiguration();
+			$deviceType  = $lightConfig[$switchName][IPSLIGHT_TYPE];
+
+			if (IPSLight_BeforeSynchronizeSwitch($switchId, $deviceState)) {
+				if (GetValue($switchId)<>$deviceState or GetValue($levelId)<>$deviceLevel or GetValue($rgbId)<>$deviceRGB) {
+					IPSLogger_Inf(__file__, 'Synchronize StateChange from Light '.$switchName.', State='.($deviceState?'On':'Off').', Level='.$deviceLevel.', RGB='.$deviceRGB);
+					SetValue($switchId, $deviceState);
+					SetValue($levelId,  $deviceLevel);
+					SetValue($rgbId,    $deviceRGB);
+					$this->SynchronizeGroupsBySwitch($switchId);
+					$this->SynchronizeProgramsBySwitch($switchId);
+				}
+			}
+			IPSLight_AfterSynchronizeSwitch($switchId, $deviceState);
+		}
+
+		// ----------------------------------------------------------------------------------------------------------------------------
 		public function GetPowerConsumption($powerCircle) {
 			$powerConsumption = 0;
 			$lightConfig      = IPSLight_GetLightConfiguration();
