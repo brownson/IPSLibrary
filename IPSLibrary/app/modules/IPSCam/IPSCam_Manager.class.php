@@ -553,46 +553,53 @@
 			if (!$this->IsCameraAvailable($cameraIdx)) {
 				return false;
 			}
-			$componentParams = $this->config[$cameraIdx][IPSCAM_PROPERTY_COMPONENT];
-			$component       = IPSComponent::CreateObjectByParams($componentParams);
-			$urlPicture      = $component->Get_URLPicture($size);
-			if ($fileName == null) {
-				$fileName = date(IPSCAM_NAV_DATEFORMATFILE);
-			}
-			$localFile        = IPS_GetKernelDir().'Cams/'.$cameraIdx.'/'.$directoryName.'/'.$fileName.'.jpg';
-			$localFile2       = IPS_GetKernelDir().'Cams/'.$cameraIdx.'/'.$directoryName.'/'.$fileName2.'.jpg';
-			IPSLogger_Trc(__file__, "Copy $urlPicture --> $localFile");
 
-			$curl_handle=curl_init();
-			curl_setopt($curl_handle, CURLOPT_URL, $urlPicture);
-			curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 2);
-			curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER,true);
-			curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
-			curl_setopt($curl_handle, CURLOPT_FAILONERROR, true);
-			$fileContent = curl_exec($curl_handle);
-			if ($fileContent===false) {
-				IPSLogger_Dbg (__file__, 'File '.$urlPicture.' could NOT be found on the Server !!!');
-				return false;
-			}
-			curl_close($curl_handle);
-
-			$result = file_put_contents($localFile, $fileContent);
-			if ($result===false) {
-				trigger_error('Error writing File Content to '.$localFile);
-			}
-			if ($fileName2!==null) {
-				$result = file_put_contents($localFile2, $fileContent);
-				if ($result===false) {
-					trigger_error('Error writing File Content to '.$localFile2);
+			$result = IPS_SemaphoreEnter('IPSCam_'.$cameraIdx, 5000);
+			if ($result) {
+				$componentParams = $this->config[$cameraIdx][IPSCAM_PROPERTY_COMPONENT];
+				$component       = IPSComponent::CreateObjectByParams($componentParams);
+				$urlPicture      = $component->Get_URLPicture($size);
+				if ($fileName == null) {
+					$fileName = date(IPSCAM_NAV_DATEFORMATFILE);
 				}
+				$localFile        = IPS_GetKernelDir().'Cams/'.$cameraIdx.'/'.$directoryName.'/'.$fileName.'.jpg';
+				$localFile2       = IPS_GetKernelDir().'Cams/'.$cameraIdx.'/'.$directoryName.'/'.$fileName2.'.jpg';
+				IPSLogger_Trc(__file__, "Copy $urlPicture --> $localFile");
+
+				$curl_handle=curl_init();
+				curl_setopt($curl_handle, CURLOPT_URL, $urlPicture);
+				curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 2);
+				curl_setopt($curl_handle, CURLOPT_TIMEOUT, 3);  
+				curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER,true);
+				curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
+				curl_setopt($curl_handle, CURLOPT_FAILONERROR, true);
+				$fileContent = curl_exec($curl_handle);
+				if ($fileContent===false) {
+					IPSLogger_Dbg (__file__, 'File '.$urlPicture.' could NOT be found on the Server !!!');
+					return false;
+				}
+				curl_close($curl_handle);
+
+				$result = file_put_contents($localFile, $fileContent);
+				if ($result===false) {
+					trigger_error('Error writing File Content to '.$localFile);
+				}
+				if ($fileName2!==null) {
+					$result = file_put_contents($localFile2, $fileContent);
+					if ($result===false) {
+						trigger_error('Error writing File Content to '.$localFile2);
+					}
+				}
+				IPS_SemaphoreLeave('IPSCam_'.$cameraIdx);
+				return $localFile;
 			}
-			return $localFile;
+			return false;
 		}
 
 		private function NavigatePictures($direction, $count) {
 			$variableIdCamSelect = IPS_GetObjectIDByIdent(IPSCAM_VAR_CAMSELECT, $this->categoryIdCommon);
 			$cameraIdx  = GetValue($variableIdCamSelect);
-			$directory  = IPS_GetKernelDir().'Cams/'.$cameraIdx.'/History/';
+			$directory  = IPS_GetKernelDir().'/Cams/'.$cameraIdx.'/History/';
 			
 			$variableIdNavFile = IPS_GetObjectIDByIdent(IPSCAM_VAR_NAVFILE, $this->categoryIdCommon);
 			$variableIdNavTime = IPS_GetObjectIDByIdent(IPSCAM_VAR_NAVTIME, $this->categoryIdCommon);
