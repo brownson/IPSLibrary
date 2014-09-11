@@ -1,5 +1,5 @@
 <?
-	$remoteRepository = 'https://raw.githubusercontent.com/brownson/IPSLibrary/Mac/';
+    $repository = 'https://raw.githubusercontent.com/brownson/IPSLibrary/Development/';
 	if (isset($repository)) {
 		$remoteRepository = $repository;
 	}
