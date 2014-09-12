@@ -91,6 +91,7 @@
 	define ('IPSCAM_VAR_IHTML',					'iHtml');
 	define ('IPSCAM_VAR_CAMPICT',				'CamPict');
 	define ('IPSCAM_VAR_CAMHIST',				'CamHist');
+	define ('IPSCAM_VAR_CAMSTREAM',				'CamStream');
 	define ('IPSCAM_VAR_MODE',					'Mode');
 	define ('IPSCAM_VAR_MODELIVE',				'ModeLive');
 	define ('IPSCAM_VAR_MODEPICT',				'ModePicture');

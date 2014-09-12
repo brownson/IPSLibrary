@@ -213,6 +213,10 @@
 		$variableIdCamPowerX = CreateVariable(IPSCAM_VAR_CAMPOWER,   0 /*Boolean*/,  $categoryIdCamX, 10, '~Switch',             $scriptIdActionScript, false, 'Power');
 		$variableIdCamHtmlX  = CreateVariable(IPSCAM_VAR_CAMHTML,    3 /*String*/,   $categoryIdCamX, 20, '~HTMLBox',            $scriptIdActionScript, '<iframe frameborder="0" width="100%" height="530px"  src="../user/IPSCam/IPSCam_Camera'.$idx.'.php"</iframe>', 'Window');
 		$variableIdCamPictX  = CreateMedia (IPSCAM_VAR_CAMPICT, $categoryIdCamX, IPS_GetKernelDir().'Cams/'.$idx.'/Picture/Current.jpg', false, 1 /*Image*/, 'Image', 30); 
+		$componentParams     = $data[IPSCAM_PROPERTY_COMPONENT];
+		$component           = IPSComponent::CreateObjectByParams($componentParams);
+		$urlStream           = $component->Get_URLLiveStream();
+		$variableIdCamStreamX= CreateMediaStream (IPSCAM_VAR_CAMSTREAM, $categoryIdCamX, $urlStream,'Image', 40); 
 
 		$variableIdMotMode   = CreateVariable(IPSCAM_VAR_MOTMODE,    1 /*Integer*/,  $categoryIdCamX, 100, 'IPSCam_MotMode',     $scriptIdActionScript, IPSCAM_VAL_DISABLED, 'Motion');
 		$variableIdMotTime   = CreateVariable(IPSCAM_VAR_MOTTIME,    3 /*String*/,   $categoryIdCamX, 110, '~String',            $scriptIdActionScript, '13:00', 'Clock');
