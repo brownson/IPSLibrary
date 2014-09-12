@@ -30,6 +30,11 @@
 	define ('AM_CONFIG_ROOM_COUNT',				4);
 
 	/**
+	 * Definition der Anzahl der Räume
+	 */
+	define ('AM_CONFIG_DEVICE_TYPE',			AM_DEVICE_406);
+
+	/**
 	 * Definition des Namens für den Eingang 1 des AudioMax Servers
 	 */
 	define ('AM_CONFIG_INPUTNAME1',				'NetPlayer');

@@ -42,6 +42,9 @@
 	 *
 	 *
 	 */
+	define ('AM_DEVICE_404',					'404');
+	define ('AM_DEVICE_406',					'406');
+
 	define ('AM_COM_SEPARATOR',					';');
 	define ('AM_COM_TERMINATOR',				chr(13));
 	define ('AM_COM_KEEPALIVE',					60);

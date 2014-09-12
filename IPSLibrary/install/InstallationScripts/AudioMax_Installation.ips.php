@@ -166,9 +166,28 @@
 	/* AudioMax Installation                                                  */
 	/* ---------------------------------------------------------------------- */
 
+	function GetAudioMaxDeviceType() {
+		if (defined('AM_CONFIG_DEVICE_TYPE')) {
+			return AM_CONFIG_DEVICE_TYPE;
+		}
+		return AM_DEVICE_404;
+	}
+	
+	function GetAudioMaxRoomCount() {
+		if (GetAudioMaxDeviceType()==AM_DEVICE_404) {
+			return 4;
+		} else {
+			return 6;
+		}
+	}
+	
 	$CategoryIdData     = $moduleManager->GetModuleCategoryID('data');
 	$CategoryIdApp      = $moduleManager->GetModuleCategoryID('app');
 	$CategoryIdHardware = CreateCategoryPath('Hardware.AudioMax');
+	$roomCount          = GetAudioMaxRoomCount();
+	$roomNames          = array(1=>AM_CONFIG_ROOMNAME1, 2=>AM_CONFIG_ROOMNAME2, 3=>AM_CONFIG_ROOMNAME3, 4=>AM_CONFIG_ROOMNAME4);
+	if ($roomCount > 4)
+	   $roomNames       = array(1=>AM_CONFIG_ROOMNAME1, 2=>AM_CONFIG_ROOMNAME2, 3=>AM_CONFIG_ROOMNAME3, 4=>AM_CONFIG_ROOMNAME4, 5=>AM_CONFIG_ROOMNAME5, 6=>AM_CONFIG_ROOMNAME6);
 
 	$id_ScriptReceive         = IPS_GetScriptIDByName('AudioMax_Receive',        $CategoryIdApp);
 	$id_ScriptSettings        = IPS_GetScriptIDByName('AudioMax_ChangeSettings', $CategoryIdApp);
@@ -218,7 +237,7 @@
 	
 	if ($AudioMaxRoomInstallation) {
 		$RoomIds = array();
-		for ($RoomId=1;$RoomId<=AM_CONFIG_ROOM_COUNT;$RoomId++) {
+		for ($RoomId=1;$RoomId<=$roomCount;$RoomId++) {
 			$RoomInstanceId = CreateDummyInstance("AudioMax_Room".$RoomId, $CategoryIdData, 100+$RoomId);
 			$RoomIds[]      = $RoomInstanceId;
 
@@ -234,7 +253,7 @@
 		}
 
 		SetValue($id_RoomIds, implode(',',$RoomIds));
-		SetValue($id_RoomCount, AM_CONFIG_ROOM_COUNT);
+		SetValue($id_RoomCount, $roomCount);
 		if (AM_CONFIG_COM_PORT<>'') {
 			SetValue($id_Port,      $id_IOComPort);
 		}
@@ -263,8 +282,7 @@
 		CreateLink('PowerRequest Modus',   $id_ModePowerRequest, $instanceIdServer, 120);
 
 		if ($AudioMaxRoomInstallation) {
-			$roomNames = array(1=>AM_CONFIG_ROOMNAME1, 2=>AM_CONFIG_ROOMNAME2, 3=>AM_CONFIG_ROOMNAME3, 4=>AM_CONFIG_ROOMNAME4);
-			for ($roomId=1;$roomId<=4;$roomId++) {
+			for ($roomId=1;$roomId<=$roomCount;$roomId++) {
 				$roomCategoryId = CreateCategory('AudioMax'.$roomId, $categoryIdWebFrontRight, 10*$roomId);
 				$roomInstanceId = IPS_GetObjectIdByIdent("AudioMax_Room".$roomId, $CategoryIdData);
 
@@ -331,8 +349,7 @@
 
 		CreateLink('AudioMax Server',   $id_Power,            $mobileId, 0);
 		if ($AudioMaxRoomInstallation) {
-			$roomNames = array(1=>AM_CONFIG_ROOMNAME1, 2=>AM_CONFIG_ROOMNAME2, 3=>AM_CONFIG_ROOMNAME3, 4=>AM_CONFIG_ROOMNAME4);
-			for ($roomId=1;$roomId<=4;$roomId++) {
+			for ($roomId=1;$roomId<=$roomCount;$roomId++) {
 				$roomCategoryId = CreateCategory('AudioMax'.$roomId. ' ('.$roomNames[$roomId].')', $mobileId, 10*$roomId);
 				$roomInstanceId = IPS_GetObjectIdByIdent("AudioMax_Room".$roomId, $CategoryIdData);
 
