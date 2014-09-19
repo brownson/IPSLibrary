@@ -283,6 +283,35 @@
 		return $MediaId;
 	}
 
+	/** Anlegen einer "MediaStream" Instanz.
+	 *
+	 * Die Funktion legt eine "Media" Instanz vom Type "Stream" an und liefert die ID des generierten
+	 * Objekts als Return Wert zurück
+	 *
+	 * @param string $Name Name der Media Instance
+	 * @param integer $ParentId ID des übergeordneten Objekts im logischen Objektbaum
+	 * @param string $URL der Camera.
+	 * @param string $Icon Dateiname des Icons ohne Pfad/Erweiterung
+	 * @param integer $Position Positionswert des Objekts
+	 * @return integer ID der Instanz
+	 *
+	 */
+	function CreateMediaStream ($Name, $ParentId, $URL, $Icon="", $Position=0) {
+		$MediaId = @IPS_GetObjectIDByIdent(Get_IdentByName($Name), $ParentId);
+		if ($MediaId === false) $MediaId = @IPS_GetMediaIDByName($Name, $ParentId);
+		if ($MediaId === false) {
+			$MediaId	= IPS_CreateMedia(3);
+			IPS_SetParent($MediaId, $ParentId);
+			IPS_SetName($MediaId, $Name);
+			IPS_SetIdent($MediaId, Get_IdentByName($Name));
+			IPS_SetPosition($MediaId, $Position);
+			Debug ("Created MediaStream $Name=$MediaId, URL=$URL");
+		}
+		IPS_SetMediaFile($MediaId, $URL, false);
+		UpdateObjectData($MediaId, $Position, $Icon);
+		return $MediaId;
+	}
+
 	/** Anlegen einer Instanz.
 	 *
 	 * Die Funktion legt eine "Dummy" Instanz an und liefert die ID des generierten Objects als Return Wert zurück
