@@ -39,25 +39,25 @@
 			return false;
 		}
 
-		$forcast = ExtractData($lHTML, '<div class="fulltextWrapper" role="article">', '<div class="webcamLinks', true, false);
+		$forcast = ExtractData($lHTML, '<div class="fulltextWrapper" role="article">', '<div class="storyMeta">', true, false);
 		$forcastToday = '<h2>'.ExtractData($forcast, '<h2>', '</h2>').'</h2>';
-		$forcast = ExtractData($forcast, '</h2>', '<div class="webcamLinks', true, false);
+		$forcast = ExtractData($forcast, '</h2>', '<div class="storyMeta', true, false);
 		$forcastToday .= ExtractData($forcast, '<p>', '<h2>', false, true);
 
-		$forcast = ExtractData($forcast, '<h2>', '<div class="webcamLinks', false, false);
+		$forcast = ExtractData($forcast, '<h2>', '<div class="storyMeta', false, false);
 		$forcastTomorrow  = '<h2>'.ExtractData($forcast, '<h2>', '</h2>').'</h2>';
-		$forcast = ExtractData($forcast, '</h2>', '<div class="webcamLinks', true, false);
+		$forcast = ExtractData($forcast, '</h2>', '<div class="storyMeta', true, false);
 		$forcastTomorrow  .= ExtractData($forcast, '<p>', '<h2>', false, true);
 
-		$forcast = ExtractData($forcast, '<h2>', '<div class="webcamLinks', false, false);
+		$forcast = ExtractData($forcast, '<h2>', '<div class="storyMeta', false, false);
 		$forcastTomorrow1 = '<h2>'.ExtractData($forcast, '<h2>', '</h2>').'</h2>';
-		$forcast = ExtractData($forcast, '</h2>', '<div class="webcamLinks', true, false);
+		$forcast = ExtractData($forcast, '</h2>', '<div class="storyMeta', true, false);
 		$forcastTomorrow1 .= ExtractData($forcast, '<p>', '<h2>', false, true);
 
-		$forcast = ExtractData($forcast, '<h2>', '<div class="webcamLinks', false, false);
+		$forcast = ExtractData($forcast, '<h2>', '<div class="storyMeta', false, false);
 		$forcastTomorrow2 = '<h2>'.ExtractData($forcast, '<h2>', '</h2>').'</h2>';
-		$forcast = ExtractData($forcast, '<h2>', '<div class="webcamLinks', true, false);
-		$forcastTomorrow2 .= ExtractData($forcast, '<p>',  '<div class="webcamLinks', false, true);
+		$forcast = ExtractData($forcast, '<h2>', '<div class="storyMeta', true, false);
+		$forcastTomorrow2 .= ExtractData($forcast, '<p>',  '<div class="storyMeta', false, true);
 
 		//echo 'Heute    = '.$forcastToday.PHP_EOL;
 		//echo 'Morgen   = '.$forcastTomorrow.PHP_EOL;
