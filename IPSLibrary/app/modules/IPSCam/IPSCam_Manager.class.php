@@ -463,22 +463,27 @@
 				$this->StorePicture($cameraIdx, 'Picture', $size, 'Current', 'Common');
 			}
 
-			// Set Media File for Common View
-			$variableIdMedia = IPS_GetObjectIDByIdent(IPSCAM_VAR_CAMPICT, $this->categoryIdCommon);
-			IPS_SetMediaFile($variableIdMedia, IPS_GetKernelDir().'Cams/'.$cameraIdx.'/Picture/CommonDummy.jpg', false);
-			IPS_SetMediaFile($variableIdMedia, IPS_GetKernelDir().'Cams/'.$cameraIdx.'/Picture/Common.jpg', false);
+			$result = IPS_SemaphoreEnter('IPSCam_'.$cameraIdx, 5000);
+            if ($result) {
+                // Set Media File for Common View
+                $variableIdMedia = IPS_GetObjectIDByIdent(IPSCAM_VAR_CAMPICT, $this->categoryIdCommon);
+                IPS_SetMediaFile($variableIdMedia, IPS_GetKernelDir().'Cams/'.$cameraIdx.'/Picture/CommonDummy.jpg', false);
+                IPS_SetMediaFile($variableIdMedia, IPS_GetKernelDir().'Cams/'.$cameraIdx.'/Picture/Common.jpg', false);
 
-			// Copy Image to webfront
-			Copy (IPS_GetKernelDir().'Cams/'.$cameraIdx.'/Picture/Common.jpg',
-			      IPS_GetKernelDir().'webfront/user/IPSCam/ImageCurrent.jpg');
+                // Copy Image to webfront
+                Copy (IPS_GetKernelDir().'Cams/'.$cameraIdx.'/Picture/Common.jpg',
+                      IPS_GetKernelDir().'webfront/user/IPSCam/ImageCurrent.jpg');
 
-			// Set Media File for Camera View
-			$categoryIdCam   = IPS_GetObjectIDByIdent($cameraIdx, $this->categoryIdCams);
-			$variableIdMedia = IPS_GetObjectIDByIdent(IPSCAM_VAR_CAMPICT, $categoryIdCam);
-			IPS_SetMediaFile($variableIdMedia, IPS_GetKernelDir().'Cams/'.$cameraIdx.'/Picture/CurrentDummy.jpg', false);
-			IPS_SetMediaFile($variableIdMedia, IPS_GetKernelDir().'Cams/'.$cameraIdx.'/Picture/Current.jpg', false);
+                // Set Media File for Camera View
+                $categoryIdCam   = IPS_GetObjectIDByIdent($cameraIdx, $this->categoryIdCams);
+                $variableIdMedia = IPS_GetObjectIDByIdent(IPSCAM_VAR_CAMPICT, $categoryIdCam);
+                IPS_SetMediaFile($variableIdMedia, IPS_GetKernelDir().'Cams/'.$cameraIdx.'/Picture/CurrentDummy.jpg', false);
+                IPS_SetMediaFile($variableIdMedia, IPS_GetKernelDir().'Cams/'.$cameraIdx.'/Picture/Current.jpg', false);
 
-			$this->RefreshDisplay($cameraIdx);
+                $this->RefreshDisplay($cameraIdx);
+
+                IPS_SemaphoreLeave('IPSCam_'.$cameraIdx);
+            }
 		}
 
 		/**
@@ -685,11 +690,12 @@
 			$fileList = array_diff($fileList, Array('.','..'));
 			foreach($fileList as $idx=>$file) {
 				$filename = basename($file);
-        	   $fileExt  = pathinfo($file, PATHINFO_EXTENSION);
+				$fileExt  = pathinfo($file, PATHINFO_EXTENSION);
 				$filenameFull = $directory.$filename;
 				$fileDate = substr($filename, 0, 8);
-            if ($fileExt=='jpg') {
-					if (($fileDate < $refDate) && (@IPS_GetMediaIDByFile(str_replace(IPS_GetKernelDir()."/","",$filenameFull))== 0) ) {
+				if ($fileExt=='jpg') {
+					$MediaFileName = str_replace(IPS_GetKernelDir(),"",str_replace('/', '\\', $filenameFull));
+					if (($fileDate < $refDate) && (@IPS_GetMediaIDByFile($MediaFileName)== 0) ) {
 						IPSLogger_Trc(__file__, 'Delete Camera File: '.$filenameFull);
 						unlink($filenameFull);
 					}
