@@ -139,7 +139,7 @@
 	 */
 	function IPSPowerControl_GetValueConfiguration() {
 		return array(
-			1    => array(IPSPC_PROPERTY_NAME        => 'L1',
+			0    => array(IPSPC_PROPERTY_NAME        => 'L1',
 			              IPSPC_PROPERTY_DISPLAY     => true,
 			              IPSPC_PROPERTY_VALUETYPE   => IPSPC_VALUETYPE_OTHER,
 			              ),
