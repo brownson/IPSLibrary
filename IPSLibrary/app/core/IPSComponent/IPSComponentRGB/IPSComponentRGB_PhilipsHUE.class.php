@@ -162,7 +162,7 @@
 			   $values = $this->calculateXY($color_array, $modelID);
 			  
 			   //IPSLight is using percentage in variable Level, Hue is using [0..255] 
-			   $level = round($level * 2,55);		   
+			   $level = round($level * 2.55);
 			   $cmd 	= '"bri":'.$level.', "xy":['.$values->x.','.$values->y.'], "on":true'; 
 			   
             }
