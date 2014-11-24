@@ -229,7 +229,7 @@
 				$versionHandler = new IPSFileVersionHandler($module);
 				$versionHandler->DeleteModule();
 			} else {
-				$moduleManager  = new IPSModuleManager($module, '', sys_get_temp_dir(), true);
+				$moduleManager  = new IPSModuleManager($module, '', sys_get_temp_dir().'/', true);
 				$versionHandler = $moduleManager->VersionHandler();
 				$repository     = $versionHandler->GetModuleRepository();
 
