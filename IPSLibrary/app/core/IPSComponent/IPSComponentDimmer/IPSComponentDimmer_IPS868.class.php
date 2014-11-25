@@ -71,10 +71,14 @@
 		 * @param integer $level Wert für Dimmer Einstellung (Wertebereich 0-100)
 		 */
 		public function SetState($power, $level) {
+			$color  = GetValue(IPS_GetVariableIDByName('Color', $this->instanceId));
+			$red    = floor($color/256/256);
+			$green  = floor(($color-$red*256*256)/256);
+			$blue   = floor(($color-$red*256*256-$green*256));
 			if (!$power) {
-				@PJ_DimRGBW ($this->instanceId, 0, 2, 0, 2, 0, 2, 0, 2);
+				@PJ_DimRGBW ($this->instanceId, $red, 0, $green, 0, $blue, 0, 0, 2);
 			} else {
-				@PJ_DimRGBW ($this->instanceId, 0, 2, 0, 2, 0, 2, $level*255/100, 2);
+				@PJ_DimRGBW ($this->instanceId, $red, 0, $green, 0, $blue, 0, $level*255/100, 2);
 			}
 		}
 

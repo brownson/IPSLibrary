@@ -73,7 +73,7 @@
 		 */
 		public function SetState($power, $color, $level) {
 			if (!$power) {
-				@PJ_DimRGBW ($this->instanceId, 0, 2, 0, 2, 0, 2, 0, 2);
+				@PJ_DimRGBW ($this->instanceId, 0, 2, 0, 2, 0, 2, GetValue(IPS_GetVariableIDByName('White', $this->instanceId)), 0);
 			} else {
 				$red    = floor($color/256/256);
 				$green  = floor(($color-$red*256*256)/256);
@@ -82,7 +82,7 @@
 				$green  = floor($green*$level/100);
 				$blue   = floor($blue*$level/100);
 
-				@PJ_DimRGBW ($this->instanceId, $red, 2, $green, 2, $blue, 2, 0, 2);
+				@PJ_DimRGBW ($this->instanceId, $red, 2, $green, 2, $blue, 2, GetValue(IPS_GetVariableIDByName('White', $this->instanceId)), 0);
 			}
 		}
 
