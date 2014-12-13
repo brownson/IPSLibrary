@@ -235,13 +235,16 @@
 
 				// Search current Repository
 				if ($repository=='') {
-					$files = scandir(IPS_GetKernelDir().'logs/', 1);
+					$logDir = IPS_GetKernelDir().'logs/';
+					if (function_exists('IPS_GetLogDir'))
+						$logDir = IPS_GetLogDir();
+					$files = scandir($logDir, 1);
 					foreach ($files as $file) {
 						// Found LogFile
 						if ($repository<>'') {
 							break;
 						} elseif (strpos($file,'IPSModuleManager_')!==false) {
-							$fileContent = file_get_contents(IPS_GetKernelDir().'logs/'.$file);
+							$fileContent = file_get_contents($logDir.$file);
 							$lines = explode(PHP_EOL, $fileContent);
 							$line1 = '';
 							$line2 = '';

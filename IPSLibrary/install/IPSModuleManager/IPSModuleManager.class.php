@@ -82,7 +82,11 @@
 
 			// Create Log Handler
 			if ($logDirectory=='') {
-				$logDirectory = $this->managerConfigHandler->GetValueDef(IPSConfigHandler::LOGDIRECTORY, '', IPS_GetKernelDir().'logs/');
+				if (function_exists('IPS_GetLogDir')) {
+					$logDirectory = $this->managerConfigHandler->GetValueDef(IPSConfigHandler::LOGDIRECTORY, '', IPS_GetLogDir());
+				} else {
+					$logDirectory = $this->managerConfigHandler->GetValueDef(IPSConfigHandler::LOGDIRECTORY, '', IPS_GetKernelDir().'logs/');
+				}
 			}
 			$this->logHandler = new IPSLogHandler(get_class($this), $logDirectory, $moduleName, true, $silentMode);
 		   
