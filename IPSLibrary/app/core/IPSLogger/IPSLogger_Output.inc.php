@@ -43,6 +43,8 @@
 	function IPSLogger_WriteFile($Directory, $File, $Text, $ID_OutEnabled) {
 		if ($Directory == "") {
 			$Directory = IPS_GetKernelDir().'logs/';
+			if (function_exists('IPS_GetLogDir'))
+				$Directory = IPS_GetLogDir();
 		}
 		if(($FileHandle = fopen($Directory.$File, "a")) === false) {
 			SetValue($ID_OutEnabled, false);

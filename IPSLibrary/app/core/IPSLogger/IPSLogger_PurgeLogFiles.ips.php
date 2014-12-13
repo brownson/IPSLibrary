@@ -24,9 +24,11 @@
 			IPSLogger_Dbg(c_LogId, 'Purging *.'.$Extension.' LogFiles in Directory '.$Directory);
 			$Days = GetValue($ID_OutDays);
 			$ReferenceDate=Date('Ymd', strtotime("-".$Days." days"));
-		   if ($Directory == "") {
+		    if ($Directory == "") {
 				$Directory = IPS_GetKernelDir().'logs/';
-		   }
+				if (function_exists('IPS_GetLogDir'))
+					$Directory = IPS_GetLogDir();
+		    }
 
 			if (($handle=opendir($Directory))===false) {
 			   IPSLogger_Err(c_LogId, 'Error Opening Directory '.$Directory);
