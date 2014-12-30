@@ -31,7 +31,7 @@
 	include_once "IPSCam.inc.php";
 
 	$camManager = new IPSCam_Manager();
-	$camManager->PictureStore(3);
+	$camManager->PictureStore(2);
 
     /** @}*/
 ?>

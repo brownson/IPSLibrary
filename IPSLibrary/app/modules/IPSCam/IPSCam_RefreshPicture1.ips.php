@@ -31,7 +31,7 @@
 	include_once "IPSCam.inc.php";
 
 	$camManager = new IPSCam_Manager();
-	$camManager->PictureRefresh(1);
+	$camManager->PictureRefresh(0);
 
 
     /** @}*/
