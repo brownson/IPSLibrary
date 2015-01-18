@@ -32,7 +32,7 @@
 
 	IPSUtils_Include ("IPSModuleManager.class.php", "IPSLibrary::install::IPSModuleManager");
 
-	$moduleManager = new IPSModuleManager('', '', sys_get_temp_dir(), true);
+	$moduleManager = new IPSModuleManager('', '', sys_get_temp_dir().'/', true);
 	$versionHandler = $moduleManager->VersionHandler();
 	$versionHandler->BuildKnownModules();
 
