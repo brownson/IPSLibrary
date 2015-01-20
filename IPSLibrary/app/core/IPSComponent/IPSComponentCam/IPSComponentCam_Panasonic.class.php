@@ -35,7 +35,7 @@
 	* Version 2.50.1, 15.12.2014<br/>
 	*/
 
-	IPSUtils_Include ('IPSComponentCam.class.php', 'IPSLibrary::app::core::IPSComponent::IPSComponent Cam');
+	IPSUtils_Include ('IPSComponentCam.class.php', 'IPSLibrary::app::core::IPSComponent::IPSComponentCam');
 
 	class IPSComponentCam_Panasonic extends IPSComponentCam {
 
@@ -95,7 +95,7 @@
 		* IPSCOMPONENTCAM_SIZE_SMALL, IPSCOMPONENTCAM_SIZE_MIDDLE oder IPSCOMPONENTCAM_SIZE_LARGE
 		* @return string URL des Streams
 		*/
-		public function Get_URLLiveStream($size=IPSCOMPONENTCAM_SIZE_MIDDL E) {
+		public function Get_URLLiveStream($size=IPSCOMPONENTCAM_SIZE_MIDDLE) {
 			$url = 'http://'.$this->username.':'.$this->password.'@'.$this->ipAddress.'/nphMotionJpeg?Resolution=';
 			switch ($size)
 			{
@@ -221,4 +221,4 @@
 	}
 
 /** @}*/
-?> 
+?>
