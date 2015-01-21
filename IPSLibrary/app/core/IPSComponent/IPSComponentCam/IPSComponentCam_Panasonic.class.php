@@ -131,13 +131,13 @@
 
 			switch ($size) {
 				case IPSCOMPONENTCAM_SIZE_SMALL:
-					$url .= '?Resolution=192x144&Quality=Clarity&View=Normal&C ount=-1609817911';
+					$url .= '?Resolution=192x144&Quality=Clarity&View=Normal&Count=-1609817911';
 					break;
 				case IPSCOMPONENTCAM_SIZE_MIDDLE:
-					$url .= '?Resolution=320x240&Quality=Clarity&View=Normal&C ount=-1609817911';
+					$url .= '?Resolution=320x240&Quality=Clarity&View=Normal&Count=-1609817911';
 					break;
 				case IPSCOMPONENTCAM_SIZE_LARGE:
-					$url .= '?Resolution=640x480&Quality=Clarity&View=Normal&C ount=-1609817911';
+					$url .= '?Resolution=640x480&Quality=Clarity&View=Normal&Count=-1609817911';
 					break;
 				default:
 					trigger_error('Unknown Size '.$size);
