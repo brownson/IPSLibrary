@@ -44,16 +44,14 @@
 
 		<script type="text/javascript" charset="ISO-8859-1" >
 			function trigger_button(action, module, info) {
-				var serverAddr = "<?echo $_SERVER["HTTP_HOST"];?>";
 				var id         = $(this).attr("id");
 
 				$.ajax({type: "POST",
-						url: location.protocol+"//"+serverAddr+"/user/IPSModuleManagerGUI/IPSModuleManagerGUI_Receiver.php",
+						url: "/user/IPSModuleManagerGUI/IPSModuleManagerGUI_Receiver.php",
 						data: "id="+id+"&action="+action+"&module="+module+"&info="+info});
 			}
 
 			function trigger_button2(action, module, info) {
-				var serverAddr = "<?echo $_SERVER["HTTP_HOST"];?>";
 				var id                    = $(this).attr("id");
 				var WFC10Enabled          = $("#WFC10Enabled").is(':checked');
 				var WFC10TabPaneExclusive = $("#WFC10TabPaneExclusive").is(':checked');
@@ -78,7 +76,7 @@
 				var MobileOrder           = $("#MobileOrder").val();
 
 				$.ajax({type: "POST",
-						url: location.protocol+"//"+serverAddr+"/user/IPSModuleManagerGUI/IPSModuleManagerGUI_Receiver.php",
+						url: "/user/IPSModuleManagerGUI/IPSModuleManagerGUI_Receiver.php",
 						contentType:"application/x-www-form-urlencoded; charset=ISO-8859-1",
 						data: encodeURIComponent("id="+id+"&action="+action+"&module="+module+"&info="+info
 						       +"&WFC10Enabled="+WFC10Enabled

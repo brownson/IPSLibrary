@@ -14,10 +14,10 @@
 	IPSUtils_Include ("IPSModuleManagerGUI.inc.php", "IPSLibrary::app::modules::IPSModuleManagerGUI");
 	IPSUtils_Include ("IPSModuleManager.class.php", "IPSLibrary::install::IPSModuleManager");
 
-	$id       = $_GET['id'];
-	$action   = $_GET['action'];
-	$module   = $_GET['module'];
-	$info     = $_GET['info'];
+	$id       = $_POST['id'];
+	$action   = $_POST['action'];
+	$module   = $_POST['module'];
+	$info     = $_POST['info'];
 
 	$moduleManager = new IPSModuleManager('', '', sys_get_temp_dir(), true);
 	$repository = '';
@@ -28,7 +28,7 @@
 	
 	switch ($action) {
 		case IPSMMG_ACTION_STOREANDINSTALL:
-			IPSModuleManagerGUI_StoreParameters($module, $_GET);
+			IPSModuleManagerGUI_StoreParameters($module, $_POST);
 			if (IPSModuleManagerGUI_GetLock($action, true)) {
 				IPSLogger_Inf(__file__, 'IPSModuleManagerGUI - Installation of Module '.$module);
 				$moduleManager = new IPSModuleManager($module);
@@ -37,7 +37,7 @@
 			IPSModuleManagerGUI_SetPage(IPSMMG_ACTION_MODULE, $module);
 			break;
 		case IPSMMG_ACTION_STORE:
-			IPSModuleManagerGUI_StoreParameters($module, $_GET);
+			IPSModuleManagerGUI_StoreParameters($module, $_POST);
 			IPSModuleManagerGUI_SetPage(IPSMMG_ACTION_MODULE, $module);
 			break;
 		case 'Refresh':
