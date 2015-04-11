@@ -701,7 +701,7 @@
 			CreateLink('Programm Nacht',      IPS_GetObjectIDByIdent(c_Control_ProgramNight,    $DeviceId),  $ProgramDeviceId, 10);
 			CreateLink('Programm Tag',        IPS_GetObjectIDByIdent(c_Control_ProgramDay,      $DeviceId),  $ProgramDeviceId, 20);
 			CreateLink('Programm Temperatur', IPS_GetObjectIDByIdent(c_Control_ProgramTemp,     $DeviceId),  $ProgramDeviceId, 30);
-			CreateLink('Programm Anwesenend', IPS_GetObjectIDByIdent(c_Control_ProgramPresent,  $DeviceId),  $ProgramDeviceId, 40);
+			CreateLink('Programm Anwesend',   IPS_GetObjectIDByIdent(c_Control_ProgramPresent,  $DeviceId),  $ProgramDeviceId, 40);
 			$controlIdProgramWeather = @IPS_GetObjectIDByIdent(c_Control_ProgramWeather, $DeviceId);
 			if ($controlIdProgramWeather!==false) {
 				CreateLink('Programm Wetter', $controlIdProgramWeather,  $ProgramDeviceId, 35);
@@ -850,7 +850,7 @@
 			CreateLink('Nacht',      IPS_GetObjectIDByIdent(c_Control_ProgramNight,    $DeviceId),  $ProgramDeviceId, 10);
 			CreateLink('Tag',        IPS_GetObjectIDByIdent(c_Control_ProgramDay,      $DeviceId),  $ProgramDeviceId, 20);
 			CreateLink('Temperatur', IPS_GetObjectIDByIdent(c_Control_ProgramTemp,     $DeviceId),  $ProgramDeviceId, 30);
-			CreateLink('Anwesenend', IPS_GetObjectIDByIdent(c_Control_ProgramPresent,  $DeviceId),  $ProgramDeviceId, 40);
+			CreateLink('Anwesend',   IPS_GetObjectIDByIdent(c_Control_ProgramPresent,  $DeviceId),  $ProgramDeviceId, 40);
 			$controlIdProgramWeather = @IPS_GetObjectIDByIdent(c_Control_ProgramWeather, $DeviceId);
 			if ($controlIdProgramWeather!==false) {
 				CreateLink('Programm Wetter', $controlIdProgramWeather,  $ProgramDeviceId, 35);
