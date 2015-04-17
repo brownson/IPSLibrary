@@ -626,7 +626,7 @@
 			$Object = IPS_GetObject ($ObjectId);
 			if ($Object['ObjectType']==6 /*Link*/) {
 				$Link = IPS_GetLink($ObjectId);
-				if ($Link['LinkChildID']==$LinkChildId) {
+				if ($Link['TargetID']==$LinkChildId) {
 					$LinkId = $ObjectId;
 					break;
 				}
