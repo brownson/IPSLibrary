@@ -55,13 +55,16 @@
 	// ----------------------------------------------------------------------------------------------------------------------------
 	// Settings for Twilight Calculation
 	// ----------------------------------------------------------------------------------------------------------------------------
-	$categoryId_Twilight = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.Weather.IPSTwilight');
+	$categoryId_Twilight  = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.Weather.IPSTwilight');
 	$categoryId_Scripts   = IPSUtil_ObjectIDByPath('Program.IPSLibrary.app.modules.Weather.IPSTwilight');
 	$categoryId_Values    = IPS_GetObjectIDByIdent('Values',$categoryId_Twilight);
 	$categoryId_Graphics  = IPS_GetObjectIDByIdent('Graphics',$categoryId_Twilight);
 	$variableId_Display   = IPS_GetObjectIDByIdent('Display',$categoryId_Values);
 	$scriptId_Refresh     = IPS_GetObjectIDByIdent('IPSTwilight',$categoryId_Scripts);
 
+	if(!isset($_IPS))
+		global $_IPS;
+	
 	switch ($_IPS['SENDER']) {
 		case 'WebFront':
 			SetValue($_IPS['VARIABLE'], $_IPS['VALUE']);
