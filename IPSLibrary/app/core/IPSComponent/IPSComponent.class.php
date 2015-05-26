@@ -70,10 +70,16 @@
 				case 5:
 					$object = new $params[0]($params[1],$params[2],$params[3],$params[4]);
 					break;
+				case 6:
+					$object = new $params[0]($params[1],$params[2],$params[3],$params[4],$params[5]);
+					break;
+				case 7:
+					$object = new $params[0]($params[1],$params[2],$params[3],$params[4],$params[5],$params[6]);
+					break;
 				case 0:
 					throw new IPSComponentException('Empty Array, at least a Class Name is needed to create an Object');
 				default:
-					throw new IPSComponentException('Too many Parameters, Currently a maximum of 4 Parameters is allowed for an Object Constructor');
+					throw new IPSComponentException('Too many Parameters, Currently a maximum of 7 Parameters is allowed for an Object Constructor');
 			}
 			return $object;
 		}

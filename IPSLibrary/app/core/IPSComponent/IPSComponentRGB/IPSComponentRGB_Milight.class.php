@@ -1,4 +1,4 @@
- <?
+<?
     /**@addtogroup ipscomponent
      * @{
      *
@@ -27,7 +27,7 @@
 
     class IPSComponentRGB_Milight extends IPSComponentRGB {
 
-        private $bridgeIP;
+        private $bridge;
         private $groupnr;
         
     
@@ -36,14 +36,14 @@
          *
          * Initialisierung eines IPSComponentRGB_Milight Objektes
          *
-         * @param string $bridgeIP IP Addresse der HUE Lampe
+         * @param string $bridge Object ID der UDP Instanz
          * @param string $groupnr Nummer der Lampe
     
          *
          */
-        public function __construct($bridgeIP, $groupnr) {
+        public function __construct($bridge, $groupnr) {
            
-            $this->bridgeIP = intval ($bridgeIP);
+            $this->bridge = intval ($bridge);
             $this->groupnr   = $groupnr;
         
         }
@@ -71,7 +71,7 @@
          * @return string Parameter String des IPSComponent Object
          */
         public function GetComponentParams() {
-            return get_class($this).','.$this->bridgeIP.','.$this->lampNr;
+		   return get_class($this).','.$this->bridge.','.$this->groupnr;
         }
 
         /**
@@ -84,16 +84,17 @@
         *  
         */
         private function mil_SendLampCommand($power, $brightness = null, $color = null) {
-             IPS_LogMessage("Power", $power);
+			
+			 IPS_LogMessage("Power", $power);
              IPS_LogMessage("Brightness", $brightness);
              IPS_LogMessage("Color", $color);
              IPS_LogMessage("Group", $this->groupnr );
-             IPS_LogMessage("Bridge", "#".$this->bridgeIP."#" );
+             IPS_LogMessage("Bridge", $this->bridge );
              $cmd = "";
              $cmd2 = "";
              $cmd3 = "";
              $cmd4 = "";
-             
+            
             if ($power == false) {
                 if ($this->groupnr == "GROUP1") $cmd = "\x46\x00\x55";
                 if ($this->groupnr == "GROUP2") $cmd = "\x48\x00\x55";
@@ -101,14 +102,16 @@
                 if ($this->groupnr == "GROUP4") $cmd = "\x4C\x00\x55";
                 
                 //UDP RGB Socket öffnen
-                CSCK_SetOpen(52928, true);
-                IPS_ApplyChanges(52928);
+				IPS_SetProperty($this->bridge, "Open", true);
+                //CSCK_SetOpen($this->bridge, true);
+                IPS_ApplyChanges($this->bridge);
 
-                USCK_SendText(52928, $cmd);
+                USCK_SendText($this->bridge, $cmd);
 
                 //UDP RGP Socket wieder schließen
-                CSCK_SetOpen(52928, false);
-                IPS_ApplyChanges(52928);
+                //CSCK_SetOpen($this->bridge, false);
+				IPS_SetProperty($this->bridge, "Open", false);
+                IPS_ApplyChanges($this->bridge);
             }else{
                 if ($this->groupnr == "GROUP1"){
                     $cmd = "\x45\x00\x55";
@@ -131,27 +134,28 @@
                 $cmd3 = "\x4e".chr ($brightness)."\x55";
 
                 //UDP RGB Socket öffnen
-                CSCK_SetOpen($this->bridgeIP, true);
-                IPS_ApplyChanges($this->bridgeIP);
+				IPS_SetProperty($this->bridge, "Open", true);
+                //CSCK_SetOpen($this->bridge, true);
+                IPS_ApplyChanges($this->bridge);
 
-                USCK_SendText($this->bridgeIP, $cmd);
+                USCK_SendText($this->bridge, $cmd); 
                 usleep(100000);
                 if ($color == -1) {
-                    USCK_SendText($this->bridgeIP, $cmd4);
+                    USCK_SendText($this->bridge, $cmd4);
                 }else{
-                    USCK_SendText($this->bridgeIP, $cmd2);
+                    USCK_SendText($this->bridge, $cmd2);
                 }
                 usleep(100000);
-                USCK_SendText($this->bridgeIP, $cmd);                
+                USCK_SendText($this->bridge, $cmd);                
                 usleep(100000);
-                USCK_SendText($this->bridgeIP, $cmd3);
+                USCK_SendText($this->bridge, $cmd3);
                 usleep(100000);
 
                 //UDP RGP Socket wieder schließen
-                CSCK_SetOpen($this->bridgeIP, false);
-                IPS_ApplyChanges($this->bridgeIP);
+                IPS_SetProperty($this->bridge, "Open", false);
+				//CSCK_SetOpen($this->bridge, false);
+                IPS_ApplyChanges($this->bridge);
             }
-            
         }
         
         
@@ -195,7 +199,7 @@
                 'green' => $color[1],
                 'blue' => $color[2]
             );
-            IPS_LogMessage("red", $color[0]);
+            //IPS_LogMessage("red", $color[0]);
             $rgbMin = min($rgb);
             $rgbMax = max($rgb);
 
@@ -220,7 +224,7 @@
 
                 // Calculate saturation
                 $hsv['sat'] = $rgbMax - $rgbMin;
-                IPS_LogMessage("sat", $hsv['sat']);
+                //IPS_LogMessage("sat", $hsv['sat']);
                 if ($hsv['sat'] == 0) {
                   $hsv['hue'] = 0;
                 }else{
@@ -236,20 +240,20 @@
                     if ($rgbMax == $rgb['red']) {
                         $hsv['hue'] = 0.0 + 60 * ($rgb['green'] - $rgb['blue']);
                       if ($hsv['hue'] < 0) {
-                          IPS_LogMessage("huelogic", 2);
+                          //IPS_LogMessage("huelogic", 2);
                         $hsv['hue'] += 360;
                       }
                     } else if ($rgbMax == $rgb['green']) {
-                        IPS_LogMessage("huelogic", 3);
+                        //IPS_LogMessage("huelogic", 3);
                       $hsv['hue'] = 120 + (60 * ($rgb['blue'] - $rgb['red']));
                     } else {
-                        IPS_LogMessage("huelogic", 4);
+                        //IPS_LogMessage("huelogic", 4);
                       $hsv['hue'] = 240 + (60 * ($rgb['red'] - $rgb['green']));
                     }
                 }
             }
             $hue = $hsv['hue'];
-            IPS_LogMessage("hue", $hue);
+            //IPS_LogMessage("hue", $hue);
 
             $milightColorNo = (256 + 176 - intval ($hue / 360.0 * 255.0)) % 256;
             IPS_LogMessage("milightColorNo", $milightColorNo);
@@ -260,4 +264,4 @@
         
         
     } 
-?> 
+?>
