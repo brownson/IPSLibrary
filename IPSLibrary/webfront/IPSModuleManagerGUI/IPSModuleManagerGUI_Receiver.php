@@ -14,6 +14,11 @@
 	IPSUtils_Include ("IPSModuleManagerGUI.inc.php", "IPSLibrary::app::modules::IPSModuleManagerGUI");
 	IPSUtils_Include ("IPSModuleManager.class.php", "IPSLibrary::install::IPSModuleManager");
 
+	//IPSLogger_Inf(__file__, "Post Parameters: ");
+	//foreach ($_POST as $key=>$value) {
+	//	IPSLogger_Inf(__file__, "Post $key = $value");
+	//}
+	
 	$id       = $_POST['id'];
 	$action   = $_POST['action'];
 	$module   = $_POST['module'];
