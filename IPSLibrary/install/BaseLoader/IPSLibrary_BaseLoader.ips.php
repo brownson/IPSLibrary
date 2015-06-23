@@ -68,7 +68,7 @@
 		$destinationFile = str_replace('\\','/',$destinationFile);
 		$destinationFilePath = pathinfo($destinationFile, PATHINFO_DIRNAME);
 		if (!file_exists($destinationFilePath)) {
-			if (!mkdir($destinationFilePath, 0, true)) {
+			if (!mkdir($destinationFilePath, 0755, true)) {
 				throw new Exception('Create Directory '.$destinationFilePath.' failed!');
 			}
 		}

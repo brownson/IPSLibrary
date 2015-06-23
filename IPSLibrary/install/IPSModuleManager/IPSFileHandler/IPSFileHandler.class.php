@@ -126,7 +126,7 @@
 			$destinationFilePath = pathinfo($destinationFile, PATHINFO_DIRNAME);
 			if (!file_exists($destinationFilePath)) {
 				$this->logHandler->Log("Create Directory $destinationFilePath");
-				if (!mkdir($destinationFilePath, 0, true)) {
+				if (!mkdir($destinationFilePath, 0755, true)) {
 					throw new IPSFileHandlerException('Create Directory '.$destinationFilePath.' failed !',
 													E_USER_ERROR);
 				}
@@ -189,10 +189,10 @@
 				$this->logHandler->Log("Copy $sourceFile --> $destinationFile");
 				$result = @copy ($sourceFile, $destinationFile);
 				//ToDo - Check Errorhandling ...
-				/*if ($result===false and $raiseError) {
+				if ($result===false and $raiseError) {
 					throw new IPSFileHandlerException('Error while copy File '.$sourceFile.' to '.$destinationFile,
 					                                  E_USER_ERROR);
-				}*/
+				}
 			}
 			return $result;
 		}
