@@ -1,10 +1,11 @@
 <?
-	/**@ingroup audiomax_configuration
+	/**@defgroup audiomax_configuration AudioMax Konfiguration
+	 * @ingroup audiomax
 	 * @{
 	 *
 	 * AudioMax Server Konfiguration
 	 *
-	 * @file          AudioMax_DemoConfiguration.inc.php
+	 * @file          AudioMax_Configuration.inc.php
 	 * @author        Andreas Brauneis
 	 * @version
 	 * Version 2.50.1, 20.02.2012<br/>
@@ -26,7 +27,12 @@
 	/**
 	 * Definition der Anzahl der Räume
 	 */
-	define ('AM_CONFIG_ROOM_COUNT',				3);
+	define ('AM_CONFIG_ROOM_COUNT',				4);
+
+	/**
+	 * Definition der Anzahl der Räume
+	 */
+	define ('AM_CONFIG_DEVICE_TYPE',			AM_DEVICE_404);
 
 	/**
 	 * Definition des Namens für den Eingang 1 des AudioMax Servers
@@ -61,12 +67,22 @@
 	/**
 	 * Definition des Namens für den Raum 3 des AudioMax Servers
 	 */
-	define ('AM_CONFIG_ROOMNAME3',				'Arbeitszimmer');
+	define ('AM_CONFIG_ROOMNAME3',				'Werkstatt');
 
 	/**
 	 * Definition des Namens für den Raum 4 des AudioMax Servers
 	 */
-	define ('AM_CONFIG_ROOMNAME4',				'');
+	define ('AM_CONFIG_ROOMNAME4',				'Raum 4');
+
+	/**
+	 * Definition des Namens für den Raum 4 des AudioMax Servers
+	 */
+	define ('AM_CONFIG_ROOMNAME5',				'Raum 5');
+
+	/**
+	 * Definition des Namens für den Raum 4 des AudioMax Servers
+	 */
+	define ('AM_CONFIG_ROOMNAME6',				'Raum 6');
 
 	/** @}*/
 ?>
