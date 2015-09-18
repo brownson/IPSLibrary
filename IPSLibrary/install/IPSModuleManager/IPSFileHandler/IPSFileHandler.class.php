@@ -276,7 +276,7 @@
 		 */
 		public function CreateFileFromExample($exampleFile, $configFile, $namespace='') {
 		   if ($namespace <> '') {
-		      $exampleFile = IPS_GetKernelDir().'scripts/'.str_replace('::','/',$namespace).'/examples/'.$exampleFile;
+		      $exampleFile = IPS_GetKernelDir().'scripts/'.str_replace('::','/',$namespace).'/Examples/'.$exampleFile;
 		      $configFile  = IPS_GetKernelDir().'scripts/'.str_replace('::','/',$namespace).'/'.$configFile;
 			}
 
