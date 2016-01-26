@@ -9,7 +9,7 @@
 	 *  Version 2.50.0, 01.06.2012 khc: Initiale Version 2.02 im Forums Thread<br/>
 	 *  Version 2.50.1, 05.10.2012  ab: Integration IPSLibrary<br/>
 	 *
-	 * IPSHighcharts, ermöglich Darstellung von Charts im Webfront mit Hilfe von "Highcharts" (www.highcharts.com)
+	 * IPSHighcharts, ermÃ¶glich Darstellung von Charts im Webfront mit Hilfe von "Highcharts" (www.highcharts.com)
 	 *
 	 */
 
@@ -17,39 +17,39 @@
 
 	//ToDo:
 	// FEATURE: Plotbands. Timestamp in From und To
-	// Fehlerquelle: AggType ist "Größer" als der angezeigte Zeitraum
+	// Fehlerquelle: AggType ist "GrÃ¶ÃŸer" als der angezeigte Zeitraum
 	// vielleicht alles als cfg direkt json_encoden und nicht jedes Teil einzeln
 	//--------------------------------------------------------------------------------------------------------------------------------
-	// Für die Darstellung der Graphen wird das HTML5/JS Framework "Highcharts" der Fa. Highslide Software verwendet (www.highcharts.com)
+	// FÃ¼r die Darstellung der Graphen wird das HTML5/JS Framework "Highcharts" der Fa. Highslide Software verwendet (www.highcharts.com)
 	// Alle Rechte dieses Frameworks liegen bei Highslide Software.
 	// 'Highcharts' kann unter folgenden Bedinungen kostenlos eingesetzt werden:
-	//  * Namensnennung — Sie müssen den Namen des Autors/Rechteinhabers in der von ihm festgelegten Weise nennen.
-	//  * Keine kommerzielle Nutzung — Dieses Werk bzw. dieser Inhalt darf nicht für kommerzielle Zwecke verwendet werden.
-	// Download: wwww.highcharts.com/download/ ... und die Dateien einfach in das Webfront (Es sollte ein V 2.2 oder höher verwendet werden.
+	//  * Namensnennung - Sie mÃ¼ssen den Namen des Autors/Rechteinhabers in der von ihm festgelegten Weise nennen.
+	//  * Keine kommerzielle Nutzung - Dieses Werk bzw. dieser Inhalt darf nicht fÃ¼r kommerzielle Zwecke verwendet werden.
+	// Download: wwww.highcharts.com/download/ ... und die Dateien einfach in das Webfront (Es sollte ein V 2.2 oder hÃ¶her verwendet werden.
 	// Demos: http://www.highcharts.com/demo/
 	// API: http://www.highcharts.com/ref/
 	//--------------------------------------------------------------------------------------------------------------------------------
 	// Changelog:
 	// --- V2.00 ---------------------------------------------------------------------------------------------------------------------
 	// 10/2012     AB    NEU      Integration IPSLibrary
-	// 04/2012     KHC   REFACT   Umfangreiches Überarbeiten der Highchart-Script Funktionen.
+	// 04/2012     KHC   REFACT   Umfangreiches Ãœberarbeiten der Highchart-Script Funktionen.
 	// bis                        Integration der meisten Original-Highcharts-Options als PHP-Array (siehe http://www.highcharts.com/ref)
 	// 05/2012                    Highcharts-Options "lang" aus IPS_Template.php in Highcharts-Script verschoben
 	//	--- V2.01 ---------------------------------------------------------------------------------------------------------------------
 	// 07.05.2012  KHC   NEU      Test mit Integration Highstock. Neuer Parameter ['Ips']['ChartType'] = 'Highcharts' oder 'Highstock'
-	// 07.05.2012  KHC   NEU      IPS_Template.php auf jquery 1.7.2 geändert
+	// 07.05.2012  KHC   NEU      IPS_Template.php auf jquery 1.7.2 geÃ¤ndert
 	// 07.05.2012  KHC   FIX      krsort durch array_reverse getauscht, da krsort Probleme beim json_encode macht
 	// 08.05.2012  KHC   REFACT   intern noch mehr auf Arrays umgestellt und etwas umstrukturiert
-	// 09.05.2012  KHC   NEU      über 'CreateConfigFileByPathAndFilename($stringForCfgFile, $path, $filename)' kann eine Tmp_datei mit bel. Namen geschrieben werden
+	// 09.05.2012  KHC   NEU      Ã¼ber 'CreateConfigFileByPathAndFilename($stringForCfgFile, $path, $filename)' kann eine Tmp_datei mit bel. Namen geschrieben werden
 	// 10.05.2012  KHC   FIX      Fehler beim Auswerten der AggregatedValues behoben (ReadDataFromDBAndCreateDataArray)
-	// 12.05.2012  KHC   FIX      Tooltip für "ReplaceValues" korrigiert
+	// 12.05.2012  KHC   FIX      Tooltip fÃ¼r "ReplaceValues" korrigiert
 	// 12.05.2012  KHC   CHANGE   Start- und Endzeitpunkt der X-Achse wurde automatisch um 5 Minuten korrigiert -> dies wurde entfernt
 	// 12.05.2012  KHC   NEU      mit ['xAxis']['min']=false und ['xAxis']['min']=false kann festeglegt werden dass Min oder Max nicht autom. festgelegt werden
 	//	--- V2.02 ---------------------------------------------------------------------------------------------------------------------
-	// 13.05.2012  KHC   FIX      RunType=file: Wenn Highstock vorgewählt wurde wurde das tmp File nicht in die Highstock-Verzeichnis geschrieben
+	// 13.05.2012  KHC   FIX      RunType=file: Wenn Highstock vorgewÃ¤hlt wurde wurde das tmp File nicht in die Highstock-Verzeichnis geschrieben
 	// 16.05.2012  KHC   NEU      Integration Highstock: ['Navigator'], ['rangeSelector'] und ['scrollbar']
-	// 18.05.2012  KHC   FIX      Integration Highstock: Zusätzliche series.type 'candlestick' und 'ohlc' erlauben
-	// 19.05.2012  KHC   NEU      Neue Parameter ['Ips']['Dashboard'] für die Darstellung im Dashboard
+	// 18.05.2012  KHC   FIX      Integration Highstock: ZusÃ¤tzliche series.type 'candlestick' und 'ohlc' erlauben
+	// 19.05.2012  KHC   NEU      Neue Parameter ['Ips']['Dashboard'] fÃ¼r die Darstellung im Dashboard
 
 	//--------------------------------------------------------------------------------------------------------------------------------
 
@@ -57,7 +57,7 @@
 	// WriteContentWithFilename
 	//    Mit dieser Funktion wird der Content-String geschrieben.
 	//    IN: $cfg = ..
-	//    IN: $tmpFilename = Der Dateiname welche die Config Daten enthält
+	//    IN: $tmpFilename = Der Dateiname welche die Config Daten enthÃ¤lt
 	// ------------------------------------------------------------------------
 	function WriteContentWithFilename($cfg, $tmpFilename)
 	{
@@ -76,7 +76,7 @@
 	// WriteContentWithScriptId
 	//    Mit dieser Funktion wird der Content-String geschrieben.
 	//    IN: $cfg = ..
-	//    IN: $scriptId = Die Script Id welche den ConfigString enthält.
+	//    IN: $scriptId = Die Script Id welche den ConfigString enthÃ¤lt.
 	// ------------------------------------------------------------------------
 	function WriteContentWithScriptId($cfg, $scriptId)
 	{
@@ -105,12 +105,12 @@
 		if (isset($cfg['Ips']['Dashboard']['Ip']) && isset($cfg['Ips']['Dashboard']['Port']))
 		{
 			$s = "http://" . $cfg['Ips']['Dashboard']['Ip'] . ":" . $cfg['Ips']['Dashboard']['Port'] .
-				"/User/IPSHighcharts/IPSTemplates/$chartType.php?$callBy="	. $callIdent . " " .
+				"/user/IPSHighcharts/IPSTemplates/$chartType.php?$callBy="	. $callIdent . " " .
 				"width='100%' height='". $height ."' frameborder='1' scrolling='no'";
 		}
 		else
 		{
-			$s = "<iframe src='./User/IPSHighcharts/IPSTemplates/$chartType.php?$callBy="	. $callIdent . "' " .
+			$s = "<iframe src='./user/IPSHighcharts/IPSTemplates/$chartType.php?$callBy="	. $callIdent . "' " .
 				"width='100%' height='". $height ."' frameborder='0' scrolling='no'></iframe>";
 		}
 		return $s;
@@ -170,9 +170,9 @@
 		IfNotIssetSetValue($cfg['Ips']['ChartType'], 'Highcharts');
 
    	if ($cfg['Ips']['ChartType'] != 'Highcharts' && $cfg['Ips']['ChartType'] != 'Highstock')
-		   die ("Abbruch! Es sind nur 'Highcharts' oder 'Highstock' als ChartType zulässig");
+		   die ("Abbruch! Es sind nur 'Highcharts' oder 'Highstock' als ChartType zulÃ¤ssig");
 
-		// über WebInterface kommt der Aufruf wenn die Content-Variable aktualisiert wird
+		// Ã¼ber WebInterface kommt der Aufruf wenn die Content-Variable aktualisiert wird
 		if ($_IPS['SENDER'] != "WebInterface" && $cfg['RunMode'] != "popup")
 			$cfg = Check_ContentVariable($cfg, $_IPS['SELF']);
 
@@ -181,7 +181,7 @@
 
 	// ------------------------------------------------------------------------
 	// CreateConfigString
-	//    Erzeugt den für Higcharts benötigten Config String und gibt diesen als String zurück
+	//    Erzeugt den fÃ¼r Higcharts benÃ¶tigten Config String und gibt diesen als String zurÃ¼ck
 	//    IN: $cfg = ..
 	//    OUT: der erzeugte Config String
 	// ------------------------------------------------------------------------
@@ -194,7 +194,7 @@
 
 		$cfgString = GetHighChartsCfgFile($cfg);
 
-		// Zusätzliche Config in Highchart Config hinzufügen
+		// ZusÃ¤tzliche Config in Highchart Config hinzufÃ¼gen
 		$cfgString = ReadAdditionalConfigData($cfg) . "\n|||\n" .  $cfgString;
 
 		// Language Options aus IPS_Template.php hierher verschoben
@@ -209,7 +209,7 @@
 
 		// Series
 		if (isset($cfg['Series']) && isset($cfg['series']))
-			die ("Abbruch - Es düfen nicht gleichzeitig 'Series' und 'series' definiert werden.");
+			die ("Abbruch - Es dÃ¼fen nicht gleichzeitig 'Series' und 'series' definiert werden.");
 		if (isset($cfg['Series']) && !isset($cfg['series']))
 			$cfg['series'] = $cfg['Series'];
 		unset ($cfg['Series']);
@@ -261,7 +261,7 @@
 
 	// ------------------------------------------------------------------------
 	// CheckCfg
-	//    Prüft daKonfiguration und korrigiert und Vervollständigtdiese zum Teil
+	//    PrÃ¼ft daKonfiguration und korrigiert und VervollstÃ¤ndigtdiese zum Teil
 	//    IN: $cfg = ..
 	//    OUT: der erzeugte Config String
 	// ------------------------------------------------------------------------
@@ -280,8 +280,8 @@
 
 	// ------------------------------------------------------------------------
 	// CheckCfg_Common
-	//    wenn RunMode=Popup, prüfen der dazugehörigen Daten wie WebfrontConfigId, usw.
-	//		und wenn RunMode=Popup, prüfen der dazugehörigen Daten wie WebfrontConfigId, usw.
+	//    wenn RunMode=Popup, prÃ¼fen der dazugehÃ¶rigen Daten wie WebfrontConfigId, usw.
+	//		und wenn RunMode=Popup, prÃ¼fen der dazugehÃ¶rigen Daten wie WebfrontConfigId, usw.
 	//    IN: $cfg
 	//    OUT: korrigiertes $cfg
 	// ------------------------------------------------------------------------
@@ -298,7 +298,7 @@
       	$instances = IPS_GetInstanceListByModuleID('{43192F0B-135B-4CE7-A0A7-1475603F3060}');
 			$cfg['ArchiveHandlerId'] = $instances[0];
 		}
-		// Prüfen des ArchiveHandlers
+		// PrÃ¼fen des ArchiveHandlers
 		$instance = @IPS_GetInstance($cfg['ArchiveHandlerId']);
 		if ($instance['ModuleInfo']['ModuleID'] != "{43192F0B-135B-4CE7-A0A7-1475603F3060}")
 			die ("Abbruch - 'ArchiveHandlerId' (".$cfg['ArchiveHandlerId'].") ist keine Instance eines ArchiveHandler.");
@@ -309,7 +309,7 @@
 			if (!isset($cfg['WebFrontConfigId']))
 				die ("Abbruch - Konfiguration von 'WebFrontConfigId' fehlt.");
 
-			// prüfen ob die übergebene Id ein WebFront ist
+			// prÃ¼fen ob die Ã¼bergebene Id ein WebFront ist
 			$instance = @IPS_GetInstance($cfg['WebFrontConfigId']);
 			if ($instance['ModuleInfo']['ModuleID'] != "{3565B1F2-8F7B-4311-A4B6-1BF1D868F39E}")
 				die ("Abbruch - 'WebFrontConfigId' ist keine WebFrontId");
@@ -323,7 +323,7 @@
 
 	// ------------------------------------------------------------------------
 	// Check_ContentVariable
-	//    prüfen ob Angaben der Content Variable stimmen oder ob es das übergeordnete Element ist
+	//    prÃ¼fen ob Angaben der Content Variable stimmen oder ob es das Ã¼bergeordnete Element ist
 	//    IN: $cfg
 	//    OUT: korrigiertes $cfg
 	// ------------------------------------------------------------------------
@@ -331,7 +331,7 @@
 	{
 	   DebugModuleName($cfg,"Check_ContentVariable");
 
-		// wenn keine Id übergeben wurde wird das übergeordnete Objekt als Content verwendet
+		// wenn keine Id Ã¼bergeben wurde wird das Ã¼bergeordnete Objekt als Content verwendet
 		if (!isset($cfg['ContentVarableId']) || $cfg['ContentVarableId'] <= 0)
 			$cfg['ContentVarableId'] = IPS_GetParent($scriptId);
 
@@ -339,9 +339,12 @@
 		if ($variable == false)
 	   	die ("Abbruch - Content-Variable nicht gefunden.");
 
-		if ($variable['VariableValue']['ValueType'] != 3)
-	   	die ("Abbruch - Content-Variable ist keine STRING-Variable.");
+		if (isset($variable['VariableValue']['ValueType']) && ($variable['VariableValue']['ValueType'] != 3))
+   		die ("Abbruch - Content-Variable ist keine STRING-Variable.");
 
+		if (isset($variable['VariableType']) && ($variable['VariableType'] != 3))
+   		die ("Abbruch - Content-Variable ist keine STRING-Variable.");
+   
 	   if ($variable['VariableCustomProfile'] != "~HTMLBox")
 	   	die ("Abbruch - Content-Variable muss als Profil '~HTMLBox' verwenden.");
 
@@ -367,7 +370,7 @@
 
 	// ------------------------------------------------------------------------
 	// CheckCfg_StartEndTime
-	//    Start- und Endzeit des gesamten Charts errechnen, und an jede Serie übergeben
+	//    Start- und Endzeit des gesamten Charts errechnen, und an jede Serie Ã¼bergeben
 	//    IN: $cfg
 	//    OUT: korrigiertes $cfg
 	// ------------------------------------------------------------------------
@@ -385,7 +388,7 @@
 		{
 			$Serie = $cfg['series'][$i];
 
-			// wenn für die Serie keine Start oder Endzeit übergeben würde wird der Standardwert genommen
+			// wenn fÃ¼r die Serie keine Start oder Endzeit Ã¼bergeben wÃ¼rde wird der Standardwert genommen
 			IfNotIssetSetValue($Serie['StartTime'], $cfg['StartTime']);
 			IfNotIssetSetValue($Serie['EndTime'], $cfg['EndTime']);
 
@@ -416,7 +419,7 @@
 
 	// ------------------------------------------------------------------------
 	// CheckCfg_Series
-	//    prüfen der Serien
+	//    prÃ¼fen der Serien
 	//    IN: $cfg
 	//    OUT: korrigiertes $cfg
 	// ------------------------------------------------------------------------
@@ -431,26 +434,26 @@
 		{
 			$VariableId = @$Serie['Id'];
 
-			// hier wird nur geprüft ob Wert von Eingabe passen könnte (wenn vorhanden)
+			// hier wird nur geprÃ¼ft ob Wert von Eingabe passen kÃ¶nnte (wenn vorhanden)
 			if  (isset($Serie['AggType']) && ($Serie['AggType']<0 || $Serie['AggType']>4) )
 				die ("Abbruch - 'AggType' hat keinen korrekten Wert");
 
 			$Serie['Ips']['IsCounter'] = $VariableId && (@AC_GetAggregationType($Id_AH, $VariableId) == 1);
 
-			// über AggValue kann Min/Max oder Avg vorgewählt werden (zum Lesen der AggregValues)
+			// Ã¼ber AggValue kann Min/Max oder Avg vorgewÃ¤hlt werden (zum Lesen der AggregValues)
 			IfNotIssetSetValue($Serie['AggValue'], "Avg");
 
 			if ($Serie['AggValue'] != "Avg"
 				&& $Serie['AggValue'] != "Min"
 				&& $Serie['AggValue'] != "Max")
-			   	die ("Abbruch - 'AggValue' hat keinen gültigen Wert");
+			   	die ("Abbruch - 'AggValue' hat keinen gÃ¼ltigen Wert");
 
-			// Offset für Darstellung von z.B. Monate und Vormonat in einem Chart
+			// Offset fÃ¼r Darstellung von z.B. Monate und Vormonat in einem Chart
 			IfNotIssetSetValue($Serie['Offset'], 0);
 
 			IfNotIssetSetValue($Serie['ReplaceValues'], false);
 
-			// Name (Kompatibilität aus V1.x)
+			// Name (KompatibilitÃ¤t aus V1.x)
 			if (isset($Serie['Name']) && !isset($Serie['name']))
 				$Serie['name'] = $Serie['Name'];
 			unset($Serie['Name']);
@@ -459,11 +462,11 @@
 
 			// type & Parameter
 			if (isset($Serie['type']) && isset($Serie['Param']))
-				die ("Abbruch - Definition von 'Param' und 'type' in Serie gleichzeitig nicht möglich.");
+				die ("Abbruch - Definition von 'Param' und 'type' in Serie gleichzeitig nicht mÃ¶glich.");
 			if (!isset($Serie['type']) && !isset($Serie['Param']))
 				die ("Abbruch - Serie muss Definition von 'Param' oder 'type' enthalten.");
 
-			// Mögliche Charttypen
+			// MÃ¶gliche Charttypen
 			$allowedSeriesTypes = array();
 			if ($cfg['Ips']['ChartType'] == 'Highcharts')
 				$allowedSeriesTypes = array('area','areaspline','bar','column','line','pie','scatter','spline');
@@ -472,7 +475,7 @@
 
 			if (!isset($Serie['type']) && isset($Serie['Param']))
 			{
-				// type aus Param übernehmen
+				// type aus Param Ã¼bernehmen
 				foreach($allowedSeriesTypes as $item)
 				{
 					if (strrpos($Serie['Param'],"'$item'") > 0)
@@ -491,22 +494,22 @@
 
 			// data
 			if (isset($Serie['Data']) && isset($Serie['data']))
-				die ("Abbruch - Definition von 'Data' und 'data' in ein und derselben Serie nicht mölglich.");
+				die ("Abbruch - Definition von 'Data' und 'data' in ein und derselben Serie nicht mÃ¶lglich.");
 			if (!isset($Serie['data']) && isset($Serie['Data']))
          {
 			   $Serie['data'] = $Serie['Data'];
 			   unset($Serie['Data']);
 			}
 
-			// diverse Prüfungen bei PIE-Charts
+			// diverse PrÃ¼fungen bei PIE-Charts
 			if ($Serie['Ips']['Type'] == 'pie')
 			{
             if (isset($Serie['Id']))
             {
 					if (!isset($Serie['AggType']))
-						die ("Abbruch - Wird ein Pie über Id definiert muss auch AggType parametriert werden");
+						die ("Abbruch - Wird ein Pie Ã¼ber Id definiert muss auch AggType parametriert werden");
 
-					// wenn nichts angegeben wird 'AggNameFormat: automatisch abhängig vom 'AggType' berechnet
+					// wenn nichts angegeben wird 'AggNameFormat: automatisch abhÃ¤ngig vom 'AggType' berechnet
 					if (!isset($Serie['AggNameFormat']))
 					{
 						if ($Serie['AggType'] == 0)   //0=Hour
@@ -526,23 +529,23 @@
                foreach($Serie['data'] as $data)
                {
                   if (isset($data['Id']) && isset($data['y']))
-                  	die ("Abbruch - Pie['data']: Id und y sind als gleichzeitige Parameter nicht möglich.");
+                  	die ("Abbruch - Pie['data']: Id und y sind als gleichzeitige Parameter nicht mÃ¶glich.");
                   //if (!isset($data['Id']) && !isset($data['y']))
                  	// 	die ("Abbruch - Pie['data']: Id oder y muss definiert sein");
-                 	// kann man so nicht prüfen
+                 	// kann man so nicht prÃ¼fen
                }
             }
             else
 				{
-					die ("Abbruch - Pie kann nie Daten besitzen. Es muss entweder über 'Id' oder über 'data' definiert werden.");
+					die ("Abbruch - Pie kann nie Daten besitzen. Es muss entweder Ã¼ber 'Id' oder Ã¼ber 'data' definiert werden.");
 				}
 
 			}
 
-			// geänderte Werte wieder zurückschreiben
+			// geÃ¤nderte Werte wieder zurÃ¼ckschreiben
 			$series[] = $Serie;
 		}
-		// geänderte Werte wieder zurückschreiben
+		// geÃ¤nderte Werte wieder zurÃ¼ckschreiben
 
 		$cfg['series'] = $series;
  		return $cfg;
@@ -550,7 +553,7 @@
 
 	// ------------------------------------------------------------------------
 	// CheckCfg_AggregatedValues
-	//    prüfen der AggregatedValues und Übernahme dieser in die Serien
+	//    prÃ¼fen der AggregatedValues und Ãœbernahme dieser in die Serien
 	//    IN: $cfg
 	//    OUT: korrigiertes $cfg
 	// ------------------------------------------------------------------------
@@ -574,8 +577,8 @@
 		foreach ($cfg['series'] as $Serie)
 		{
 
-			// prüfen ob für die Serie Einstellungen für AggregatedValues vorhanden sind,
-			// wenn nicht Übernahme aus cfg
+			// prÃ¼fen ob fÃ¼r die Serie Einstellungen fÃ¼r AggregatedValues vorhanden sind,
+			// wenn nicht Ãœbernahme aus cfg
 			if (isset($Serie['AggregatedValues']))
 			{
 				IfNotIssetSetValue($Serie['AggregatedValues']['MixedMode'], $cfg['AggregatedValues']['MixedMode']);
@@ -586,10 +589,10 @@
 				IfNotIssetSetValue($Serie['AggregatedValues']['YearValues'], $cfg['AggregatedValues']['YearValues']);
 				IfNotIssetSetValue($Serie['AggregatedValues']['NoLoggedValues'], $cfg['AggregatedValues']['NoLoggedValues']);
 			}
-			else	// nein -> Daten aus übergeordneter cfg übernehmen
+			else	// nein -> Daten aus Ã¼bergeordneter cfg Ã¼bernehmen
 				$Serie['AggregatedValues'] = $cfg['AggregatedValues'];
 
-     		// Umrechnen der Tage in Sekunden ... für direktes addieren zum Timestamp
+     		// Umrechnen der Tage in Sekunden ... fÃ¼r direktes addieren zum Timestamp
 			$MinPerTag = 24*60*60;
 
 			if ($Serie['AggregatedValues']['HourValues'] != -1)
@@ -605,13 +608,13 @@
 			if ($Serie['AggregatedValues']['NoLoggedValues'] != -1)
 				$Serie['AggregatedValues']['NoLoggedValues'] *= $MinPerTag;
 
-			// geänderte Werte wieder zurückschreiben
+			// geÃ¤nderte Werte wieder zurÃ¼ckschreiben
 			$series[] = $Serie;
 		}
-		// geänderte Werte wieder zurückschreiben
+		// geÃ¤nderte Werte wieder zurÃ¼ckschreiben
 		$cfg['series'] = $series;
 
-		// die sind jetzt nicht mehr nötig.....
+		// die sind jetzt nicht mehr nÃ¶tig.....
 		unset($cfg['AggregatedValues']);
 
 		return $cfg;
@@ -621,7 +624,7 @@
 
 	// ------------------------------------------------------------------------
 	// ReadAdditionalConfigData
-	//    zusätzliche Daten für File (hat jetzt aber nichts mit den eigentlichen Highchart Config String zu tun
+	//    zusÃ¤tzliche Daten fÃ¼r File (hat jetzt aber nichts mit den eigentlichen Highchart Config String zu tun
 	//    IN: $cfg
 	//    OUT: der String welcher dann in das IPS_Template geschrieben wird.
 	// ------------------------------------------------------------------------
@@ -629,8 +632,8 @@
 	{
 		DebugModuleName($cfg,"ReadAdditionalConfigData");
 
-		// z.B.: Breite und Höhe für Container
-		// Breite und Höhe anpassen für HTML Ausgabe
+		// z.B.: Breite und HÃ¶he fÃ¼r Container
+		// Breite und HÃ¶he anpassen fÃ¼r HTML Ausgabe
 		$s['Theme'] = $cfg['HighChart']['Theme'];
 		if ($cfg['HighChart']['Width'] == 0)
 			$s['Width'] = "100%";
@@ -647,7 +650,7 @@
 	// ------------------------------------------------------------------------
 	// GetHighChartsCfgFile
 	//    Falls nicht konfiguriert, wird dies als Default String genommen
-	//    OUT: natürlich den String ....
+	//    OUT: natÃ¼rlich den String ....
 	// ------------------------------------------------------------------------
 	function GetHighChartsCfgFile($cfg)
 	{
@@ -724,7 +727,7 @@
 	// GetHighChartsLangOptions
 	//
 	//    IN: $cfg
-	//    OUT: JSON Options String für den Bereich 'lang'
+	//    OUT: JSON Options String fÃ¼r den Bereich 'lang'
 	// ------------------------------------------------------------------------
 	function GetHighChartsLangOptions($cfg)
 	{
@@ -734,8 +737,8 @@
 		IfNotIssetSetValue($cfg['lang']['decimalPoint'], ",");
 		IfNotIssetSetValue($cfg['lang']['thousandsSep'], ".");
 
-		IfNotIssetSetValue($cfg['lang']['months'], ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember']);
-		IfNotIssetSetValue($cfg['lang']['shortMonths'], ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez']);
+		IfNotIssetSetValue($cfg['lang']['months'], ['Januar', 'Februar', 'MÃ¤rz', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember']);
+		IfNotIssetSetValue($cfg['lang']['shortMonths'], ['Jan', 'Feb', 'MÃ¤r', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez']);
 		IfNotIssetSetValue($cfg['lang']['weekdays'], ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag']);
 
 		$s = "lang:" . my_json_encode($cfg['lang']);
@@ -754,7 +757,7 @@
 	{
 		DebugModuleName($cfg,"CreateArrayForSeries");
 
-		// Daten für einzelne Serien erzeugen
+		// Daten fÃ¼r einzelne Serien erzeugen
 		$dataArr = array();
 		foreach ($cfg['series'] as $Serie)
 		{
@@ -764,7 +767,7 @@
 			}
 			else
 			{
-            // Daten wurden von extern übergeben
+            // Daten wurden von extern Ã¼bergeben
 				if (isset($Serie['data']))
 				{
 					if (is_array($Serie['data']))
@@ -781,7 +784,7 @@
 			// ... aus Serie umkopieren
 			$serieArr = $Serie;
 
-			// nicht für JSON benötigte Parameter löschen
+			// nicht fÃ¼r JSON benÃ¶tigte Parameter lÃ¶schen
 			unset($serieArr['Param']);
 			unset($serieArr['AggregatedValues']);
 			unset($serieArr['Unit']);
@@ -811,7 +814,7 @@
 	//
 	//    IN: $dt
 	//			 $serie
-	//    OUT: Date-Value für Data-String
+	//    OUT: Date-Value fÃ¼r Data-String
 	// ------------------------------------------------------------------------
 	function PopulateDate($dt, $serie)
 	{
@@ -831,7 +834,7 @@
 	// ------------------------------------------------------------------------
 	function PopulateValue($val, $serie)
 	{
-		// Werte ersetzten (sinnvoll für Boolean, oder Integer - z.B.: Tür/Fenster-Kontakt oder Drehgriffkontakt)
+		// Werte ersetzten (sinnvoll fÃ¼r Boolean, oder Integer - z.B.: TÃ¼r/Fenster-Kontakt oder Drehgriffkontakt)
 		if ($serie['ReplaceValues'] != false)
 		{
 			if (isset($serie['ReplaceValues'][$val]))
@@ -852,7 +855,7 @@
 
 	// ------------------------------------------------------------------------
 	// CreateDataArrayForPie
-	//    Liest die aktuellen Werte aus den übergebenen Variablen und erzeugt die Daten für das PIE
+	//    Liest die aktuellen Werte aus den Ã¼bergebenen Variablen und erzeugt die Daten fÃ¼r das PIE
 	//    IN: $cfg, $Serie
 	//    OUT: der Data String
 	// ------------------------------------------------------------------------
@@ -913,7 +916,7 @@
 	// ------------------------------------------------------------------------
 	// CalculateStartAndEndTimeForAggreagtedValues
 	//       Liest den Start- und Endzeitpunkt des angefragten Bereiches
-	//    IN: $Serie, $search : "" für alle Werte, "Hour", "Day", usw
+	//    IN: $Serie, $search : "" fÃ¼r alle Werte, "Hour", "Day", usw
 	//    OUT: Array(StartTime,EndTime)
 	// ------------------------------------------------------------------------
 	function CalculateStartAndEndTimeForAggreagtedValues($Serie, $search ="")
@@ -1025,7 +1028,7 @@
 			$result = CalculateStartAndEndTimeForAggreagtedValues($Serie, "");
 			if ($result != false)
 			{
-				if ($Serie['Ips']['IsCounter']) 						// wenn Zähler dann immer Agg.Values
+				if ($Serie['Ips']['IsCounter']) 						// wenn ZÃ¤hler dann immer Agg.Values
 					$dataArray = ReadAndAddToLoggedData($dataArray, $Id_AH, $VariableId, 0, $result["StartTime"], $result["EndTime"], $Serie['AggValue'], $Serie);
 				else
    			   $dataArray = ReadAndAddToLoggedData($dataArray, $Id_AH, $VariableId, -1 , $result["StartTime"], $result["EndTime"], "Value", $Serie);
@@ -1075,13 +1078,13 @@
 			else if ($Serie['AggregatedValues']['HourValues']!= -1 && $Diff > $Serie['AggregatedValues']['HourValues'])
 				$Agg = 0;	//  -> AC_GetAggregatedValues [0=Hour, 1=Day, 2=Week, 3=Month, 4=Year]
 
-			// es wurde noch nichts definiert und es handelt sich um einen Zähler --> Tageswerte
+			// es wurde noch nichts definiert und es handelt sich um einen ZÃ¤hler --> Tageswerte
          if ($Agg == -1 && $Serie['Ips']['IsCounter'])
 	         $Agg = 0;
 
 			if ($Agg == -1)
 			{
-				// Zeitraum ist zu groß -> nur bis max. Zeitraum einlesen
+				// Zeitraum ist zu groÃŸ -> nur bis max. Zeitraum einlesen
 				if ($Diff > $Serie['AggregatedValues']['NoLoggedValues'])
 					$Serie['StartTime'] = $Serie['EndTime'] - $Serie['AggregatedValues']['NoLoggedValues'];
 
@@ -1101,7 +1104,7 @@
 		// aktuellen Wert der Variable noch in Array aufnehmen
 		if ($ReadCurrentValue
 			//&& $Serie['EndTime'] >= time()    			// nicht wenn Endzeitpunkt vor NOW ist
-			&& !$Serie['Ips']['IsCounter'])				// nicht bei Zählervariablen
+			&& !$Serie['Ips']['IsCounter'])				// nicht bei ZÃ¤hlervariablen
 			{
 //                $curValue = ReadCurrentValue($VariableId);
                 $curValue    = ReadLoggedValue($Id_AH, $VariableId, $Serie['EndTime']);
@@ -1143,7 +1146,7 @@
     // ------------------------------------------------------------------------
     // ReadAndAddToLoggedData
     //    IN: siehe Parameter
-    //    OUT: Vervollständigte Logged Data
+    //    OUT: VervollstÃ¤ndigte Logged Data
     // ------------------------------------------------------------------------
     function ReadAndAddToLoggedData($loggedData, $id_AH, $variableId, $aggType, $startTime, $endTime, $aggValueName, $serie)
     {
@@ -1191,7 +1194,7 @@
 	//    Umwandeln der externen Daten in ein Daten Array
 	//    IN: $arr = Aus IPS-Datenbank ausgelesenen Daten (LoggedData)
 	//        $Serie = Config Daten der aktuellen Serie
-	//    OUT: Highcharts ConfigString für Series-Data
+	//    OUT: Highcharts ConfigString fÃ¼r Series-Data
 	// ------------------------------------------------------------------------
 	function CreateDataArrayFromExternalData($arr, $Serie)
 	{
@@ -1224,9 +1227,9 @@
 
 	// ------------------------------------------------------------------------
 	// CreateTooltipFormatter
-	//    Auslesen von immer wieder benötigten Werten aus der Variable
+	//    Auslesen von immer wieder benÃ¶tigten Werten aus der Variable
 	//    IN: $cfg = Alle Config Daten
-	//    OUT: Highcharts ConfigString für Tooltip-Formatter (Interaktive Anzeige des Wertes)
+	//    OUT: Highcharts ConfigString fÃ¼r Tooltip-Formatter (Interaktive Anzeige des Wertes)
 	// ------------------------------------------------------------------------
 	function CreateTooltipFormatter($cfg)
 	{
@@ -1263,7 +1266,7 @@
 			}
 			else
 			{
-			   // hier wird das VariableCustomProfile aus IPS übernommen
+			   // hier wird das VariableCustomProfile aus IPS Ã¼bernommen
 			   if (!isset($Serie['Unit']))
 				{
 					// hole das Variablen Profil
@@ -1278,14 +1281,14 @@
 							   $Arr[$Item['Value']] = $Item['Name'];
 							}
 
-							if (!is_array($Serie['ReplaceValues']))         // erzeuge Tooltips vollständig aus VariablenProfil
+							if (!is_array($Serie['ReplaceValues']))         // erzeuge Tooltips vollstÃ¤ndig aus VariablenProfil
 								$s .= CreateTooltipSubValues($Arr, array_keys($Arr));
 							else  														// oder nehme ReplaceValues zur Hilfe
 								$s .= CreateTooltipSubValues($Arr, $Serie['ReplaceValues']);
 						}
 						else
 						{
-							// Suffix als Einheit übernehmen
+							// Suffix als Einheit Ã¼bernehmen
 							$Serie['Unit'] = trim($IPSProfil['Suffix'], " ");
 							$s .= "[this.y + ' ". $Serie['Unit']."'],";
 						}
@@ -1295,12 +1298,12 @@
 						$s .= "[this.y ],";
 					}
 				}
-				// es wurden Unit und ReplaceValues übergeben
+				// es wurden Unit und ReplaceValues Ã¼bergeben
 				else if (is_array($Serie['Unit']) && is_array($Serie['ReplaceValues']))
 				{
 					$s .= CreateTooltipSubValues($Serie['Unit'],$Serie['ReplaceValues']);
 				}
-				else		// Einheit aus übergebenem Parmeter Unit
+				else		// Einheit aus Ã¼bergebenem Parmeter Unit
 				{
 			      $s .= "[this.y + ' ". $Serie['Unit']."'],";
 		      }
@@ -1376,7 +1379,7 @@
 
 	// ------------------------------------------------------------------------
 	// CreateTooltipSubValues
-	//    Erzeugt den Tooltip für Unter-Elemente
+	//    Erzeugt den Tooltip fÃ¼r Unter-Elemente
 	//    IN: shownTooltipArr = Array der Werte (Synonyme) welche im Tooltip angezeigt werden sollen
 	//        chartValueArr = Array der Werte welche im Chart eingetragen werden
 	//    OUT: Tooltip String
@@ -1397,8 +1400,8 @@
 
 	// ------------------------------------------------------------------------
 	// GetIPSVariableProfile
-	//    Liest das Variablen Profil der übergeben Variable aus
-	//    Versucht zuerst das eigene und wenn nicht verfügbar das Standar Profil auszulesen
+	//    Liest das Variablen Profil der Ã¼bergeben Variable aus
+	//    Versucht zuerst das eigene und wenn nicht verfÃ¼gbar das Standar Profil auszulesen
 	//    IN: variableId = Id der Variablen
 	//    OUT: Variablen Profil
 	// ------------------------------------------------------------------------
@@ -1414,7 +1417,7 @@
 			$profilName = $var['VariableProfile'];
 
 		if ($profilName != false)
-			return IPS_GetVariableProfile($profilName);  // und jetzt die dazugehörigen Daten laden
+			return IPS_GetVariableProfile($profilName);  // und jetzt die dazugehÃ¶rigen Daten laden
 		else
 			return false;
 	}
@@ -1425,7 +1428,7 @@
 	// CreateArrayForChart
 	//
 	//    IN: $cfg
-	//    OUT: Config Array für den Bereich 'chart'
+	//    OUT: Config Array fÃ¼r den Bereich 'chart'
 	// ------------------------------------------------------------------------
 	function CreateArrayForChart($cfg)
 	{
@@ -1443,7 +1446,7 @@
 	// CreateArrayForCredits
 	//
 	//    IN: $cfg
-	//    OUT: Config Array für den Bereich 'credits'
+	//    OUT: Config Array fÃ¼r den Bereich 'credits'
 	// ------------------------------------------------------------------------
 	function CreateArrayForCredits($cfg)
 	{
@@ -1460,7 +1463,7 @@
 	// CreateArrayForTitle
 	//
 	//    IN: $cfg
-	//    OUT: Config Array für den Bereich 'title'
+	//    OUT: Config Array fÃ¼r den Bereich 'title'
 	// ------------------------------------------------------------------------
 	function CreateArrayForTitle($cfg)
 	{
@@ -1474,7 +1477,7 @@
 	// CreateArrayForExporting
 	//
 	//    IN: $cfg
-	//    OUT: Config Array für den Bereich 'exporting'
+	//    OUT: Config Array fÃ¼r den Bereich 'exporting'
 	// ------------------------------------------------------------------------
 	function CreateArrayForExporting($cfg)
 	{
@@ -1491,7 +1494,7 @@
 	// CreateArrayForTooltip
 	//
 	//    IN: $cfg
-	//    OUT: Config Array für den Bereich 'tooltip'
+	//    OUT: Config Array fÃ¼r den Bereich 'tooltip'
 	// ------------------------------------------------------------------------
 	function CreateArrayForTooltip($cfg)
 	{
@@ -1515,7 +1518,7 @@
 	// CreateArrayForSubTitle
 	//
 	//    IN: $cfg
-	//    OUT: Config Array für den Bereich subtitle
+	//    OUT: Config Array fÃ¼r den Bereich subtitle
 	// ------------------------------------------------------------------------
 	function CreateArrayForSubTitle($cfg)
 	{
@@ -1537,11 +1540,11 @@
 	}
 	// ------------------------------------------------------------------------
 	// CreateArrayForXAxis
-	//    Erzeugen das ArrX-Achsen Strings für Highchart-Config
+	//    Erzeugen das ArrX-Achsen Strings fÃ¼r Highchart-Config
 	//    IN: $cfg
-	//       es besteht die Möglichkeit den Achsen String bereits im Highchart Format zu hinterlegen
+	//       es besteht die MÃ¶glichkeit den Achsen String bereits im Highchart Format zu hinterlegen
 	//       oder die folgenden Parameter als Array einzustellen: Name, Min, Max, TickInterval, Opposite, Unit
-	//    OUT: Highcharts String für die Achsen
+	//    OUT: Highcharts String fÃ¼r die Achsen
 	// ------------------------------------------------------------------------
 	function CreateArrayForXAxis($cfg)
 	{
@@ -1577,11 +1580,11 @@
 
 	// ------------------------------------------------------------------------
 	// CreateArrayForYAxis
-	//    Erzeugen der Y-Achsen Strings für Highchart-Config
+	//    Erzeugen der Y-Achsen Strings fÃ¼r Highchart-Config
 	//    IN: $cfg
-	//       es besteht die Möglichkeit den Achsen String bereits im Highchart Format zu hinterlegen
+	//       es besteht die MÃ¶glichkeit den Achsen String bereits im Highchart Format zu hinterlegen
 	//       oder die folgenden Parameter als Array einzustellen: Name, Min, Max, TickInterval, Opposite, Unit
-	//    OUT: Highcharts String für die Achsen
+	//    OUT: Highcharts String fÃ¼r die Achsen
 	// ------------------------------------------------------------------------
 	function CreateArrayForYAxis($cfg)
 	{
@@ -1606,7 +1609,7 @@
 
 	// ------------------------------------------------------------------------
 	// CreateDateUTC
-	//    Erzeugen des DateTime Strings für Highchart-Config
+	//    Erzeugen des DateTime Strings fÃ¼r Highchart-Config
 	//    IN: $timeStamp = Zeitstempel
 	//    OUT: Highcharts DateTime-Format als UTC String ... Date.UTC(1970, 9, 27, )
 	//       Achtung! Javascript Monat beginnt bei 0 = Januar
@@ -1621,7 +1624,7 @@
 	// ReplaceToGermanDate
 	//    Falls nicht konfiguriert, wird dies als Default String genommen
 	//    IN: String mit englischen Wochentagen, bzw. Monaten
-	//    OUT: der String übersetzt ins Deutsche
+	//    OUT: der String Ã¼bersetzt ins Deutsche
 	// ------------------------------------------------------------------------
 	function ReplaceToGermanDate($value)
 	{
@@ -1642,13 +1645,13 @@
 			    'Sun'       => 'So',
 			    'January'   => 'Januar',
 			    'February'  => 'Februar',
-			    'March'     => 'März',
+			    'March'     => 'MÃ¤rz',
 			    'May'       => 'Mai',
 			    'June'      => 'Juni',
 			    'July'      => 'Juli',
 			    'October'   => 'Oktober',
 			    'December'  => 'Dezember',
-			    'Mar'     	 => 'Mär',
+			    'Mar'     	 => 'MÃ¤r',
 			    'May'       => 'Mai',
 			    'Oct'   	 => 'Okt',
 			    'Dec'  		 => 'Dez',
@@ -1712,7 +1715,7 @@
 
 	// ------------------------------------------------------------------------
 	// RemoveUnsupportedStrings
-	//    Versuchen Sonderzeichen wie Zeilenumbrüche, Tabs, etc. aus dem übergebenen String zu entfernen
+	//    Versuchen Sonderzeichen wie ZeilenumbrÃ¼che, Tabs, etc. aus dem Ã¼bergebenen String zu entfernen
 	//    IN: $str
 	//    OUT: $str
 	// ------------------------------------------------------------------------
@@ -1730,14 +1733,14 @@
 
 	// ------------------------------------------------------------------------
 	// IfNotIssetSetValue
-	//    pfüft ob isset($item), wenn nicht wird $value in &$item geschrieben
+	//    pfÃ¼ft ob isset($item), wenn nicht wird $value in &$item geschrieben
 	//    IN: &$item, $value
 	//    OUT: &$item
 	// ------------------------------------------------------------------------
 	function IfNotIssetSetValue(&$item, $value )
 	{
 		if (!isset($item)
-			|| (is_string($item) && $item == ""))   // zusätzliche Abfrage in 2.01
+			|| (is_string($item) && $item == ""))   // zusÃ¤tzliche Abfrage in 2.01
 		{
 			$item = $value;
 			return false;
