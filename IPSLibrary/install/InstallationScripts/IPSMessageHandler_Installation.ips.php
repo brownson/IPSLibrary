@@ -20,13 +20,20 @@
 	 * - Installation (siehe IPSModuleManager)
 	 */
 
-	return; 
-
 	if (!isset($moduleManager)) {
 		IPSUtils_Include ('IPSModuleManager.class.php', 'IPSLibrary::install::IPSModuleManager');
 
 		echo 'ModuleManager Variable not set --> Create "default" ModuleManager';
 		$moduleManager = new IPSModuleManager('IPSMessageHandler');
+	}
+
+	$file = IPS_GetKernelDir().'scripts/IPSLibrary/config/core/IPSMessageHandler/IPSMessageHandler_Custom.inc.php';
+
+	if (file_exists($file)) {
+		$FileContent = file_get_contents($file);
+		$FileContent = str_replace(', IPSModule $module)', ', IPSLibraryModule $module)', $FileContent);
+		$moduleManager->LogHandler()->Log('Update definition of IPSModule to IPSLibraryModule in IPSMessafeHandler_Custom');
+		file_put_contents($file, $FileContent);
 	}
 
 	$moduleManager->VersionHandler()->CheckModuleVersion('IPS','2.50');
