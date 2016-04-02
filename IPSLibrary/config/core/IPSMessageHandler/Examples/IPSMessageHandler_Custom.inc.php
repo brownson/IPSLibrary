@@ -22,7 +22,7 @@
 	 * @param string $module Destination Module
 	 * @return boolean Funktions Ergebnis, bei false wird das Event NICHT weitergereicht
 	 */
-	function IPSMessageHandler_BeforeHandleEvent($variable, $value, IPSComponent $component, IPSModule $module) {
+	function IPSMessageHandler_BeforeHandleEvent($variable, $value, IPSComponent $component, IPSLibraryModule $module) {
 		switch($variable) {
 			// Taster zur Ansteuerung der Markisen
 			case 59542: /*InpS2*/
@@ -88,7 +88,7 @@
 	 * @param string $module Destination Module
 	 *
 	 */
-	function IPSMessageHandler_AfterHandleEvent($variable, $value, IPSComponent $component, IPSModule $module) {
+	function IPSMessageHandler_AfterHandleEvent($variable, $value, IPSComponent $component, IPSLibraryModule $module) {
 	}
 
 	/**

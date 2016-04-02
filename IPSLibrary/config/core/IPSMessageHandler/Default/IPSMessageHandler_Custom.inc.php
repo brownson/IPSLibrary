@@ -22,7 +22,7 @@
 	 * @param string $module Destination Module
 	 * @return boolean Funktions Ergebnis, bei false wird das Event NICHT weitergereicht
 	 */
-	function IPSMessageHandler_BeforeHandleEvent($variable, $value, IPSComponent $component, IPSModule $module) {
+	function IPSMessageHandler_BeforeHandleEvent($variable, $value, IPSComponent $component, IPSLibraryModule $module) {
 		return true;
 	}
 
@@ -36,7 +36,7 @@
 	 * @param string $module Destination Module
 	 *
 	 */
-	function IPSMessageHandler_AfterHandleEvent($variable, $value, IPSComponent $component, IPSModule $module) {
+	function IPSMessageHandler_AfterHandleEvent($variable, $value, IPSComponent $component, IPSLibraryModule $module) {
 	}
 
 	/**

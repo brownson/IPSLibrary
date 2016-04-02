@@ -306,7 +306,7 @@
 					throw new IPSMessageHandlerException('Invalid IPSMessageHandler Configuration, Event Defintion needs 2 parameters');
 				}
 				$component = IPSComponent::CreateObjectByParams($params[0]);
-				$module    = IPSModule::CreateObjectByParams($params[1]);
+				$module    = IPSLibraryModule::CreateObjectByParams($params[1]);
 
 				if (function_exists('IPSMessageHandler_BeforeHandleEvent')) {
 					if (IPSMessageHandler_BeforeHandleEvent($variable, $value, $component, $module)) {
@@ -350,7 +350,7 @@
 					throw new IPSMessageHandlerException('Invalid IPSMessageHandler Configuration, Event Defintion needs 3 parameters');
 				}
 				$component = IPSComponent::CreateObjectByParams($params[1]);
-				$module    = IPSModule::CreateObjectByParams($params[2]);
+				$module    = IPSLibraryModule::CreateObjectByParams($params[2]);
 
 				if (function_exists('IPSMessageHandler_BeforeHandleEvent')) {
 					if (IPSMessageHandler_BeforeHandleEvent($variable, $value, $component, $module)) {
