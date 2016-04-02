@@ -809,7 +809,7 @@
 					IPS_RunScript($id);
 				} else {
 					IPSLogger_Dbg(__file__, 'Execute Camera Action "'.$action.'"');
-					$module    = IPSModule::CreateObjectByParams($action);
+					$module    = IPSLibraryModule::CreateObjectByParams($action);
 					$module->ExecuteButton();
 				}
 			}
