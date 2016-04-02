@@ -22,7 +22,7 @@
 
 	IPSUtils_Include ('IPSModule.class.php', 'IPSLibrary::app::core::IPSComponent');
 
-	abstract class IPSModuleSensor extends IPSModule {
+	abstract class IPSModuleSensor extends IPSLibraryModule {
 
 		/**
 		 * @public

@@ -17,16 +17,16 @@
 	}
 
 	/**
-    * @class IPSModule
+    * @class IPSLibraryModule
     *
-    * Definiert ein IPSModule Object, das als Basis Object für die Ansteuerung aller IPSLibrary Module dient
+    * Definiert ein IPSLibraryModule Object, das als Basis Object für die Ansteuerung aller IPSLibrary Module dient
     *
     * @author Andreas Brauneis
     * @version
     * Version 2.50.1, 31.01.2012<br/>
     */
 
-	abstract class IPSModule {
+	abstract class IPSLibraryModule {
 
 		private static function IncludeClassByName($className) {
 			$pos = strpos($className, '_');
@@ -41,10 +41,10 @@
 		/**
 		 * @public
 		 *
-		 * Generiert anhand des übergebenen Parameter Strings ein IPSModule Object.
+		 * Generiert anhand des übergebenen Parameter Strings ein IPSLibraryModule Object.
 		 *
 		 * @param array $params Parameter Array (erster Parameter entspricht Klassenname, alle anderen werden als Parameter übergeben)
-		 * @return IPSModule IPSModule Object
+		 * @return IPSLibraryModule IPSLibraryModule Object
 		 */
 		public static function CreateObjectByArray($params) {
 			if (count($params)>0) {
@@ -77,10 +77,10 @@
 		/**
 		 * @public
 		 *
-		 * Generiert anhand des übergebenen Parameter Strings ein IPSModule Object.
+		 * Generiert anhand des übergebenen Parameter Strings ein IPSLibraryModule Object.
 		 *
 		 * @param string $params Parameter String (Liste mit Comma separierten Parameter Werten)
-		 * @return IPSModule IPSModule Object
+		 * @return IPSLibraryModule IPSLibraryModule Object
 		 */
 		public static function CreateObjectByParams($params) {
 			$params = explode(',', $params);
