@@ -7,7 +7,7 @@
 	 * @version
 	 * Version 2.50.1, 31.01.2012<br/>
 	 *
-	 * Funktionen zur Steuerung der Räume
+	 * Funktionen zur Steuerung der RÃ¤ume
 	 *
 	 */
 
@@ -24,7 +24,7 @@
 		foreach($ChildrenIds as $ChildrenIdx => $ChildrenId) {
 		   if (IPS_LinkExists($ChildrenId)) {
 			   $LinkData = IPS_GetLink($ChildrenId);
-			   $LinkedChildId = $LinkData["LinkChildID"];
+			   $LinkedChildId = $LinkData["TargetID"];
 		  		if ($LinkedChildId <> $PowerId) {
 		    		IPSLogger_Trc(__file__, 'Set Control "'.IPS_GetName($ChildrenId).'" of Room "'.IPS_GetName($RoomId).'" Visible='.bool2OnOff($Value));
 		  			IPS_SetHidden($ChildrenId, !$Value);
