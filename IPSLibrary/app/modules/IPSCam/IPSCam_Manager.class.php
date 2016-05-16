@@ -408,11 +408,11 @@
 				if ($startTime=='Once') {
 					$nextTime = strtotime('+'.$timerValue.' sec');
 					IPS_SetEventCyclic($timerId, 2 /**Daily*/, 1 /*Unused*/,0 /*Unused*/,0 /*Unused*/,0 /*Einmalig*/,0 /*Unused*/);
-					IPS_SetEventCyclicTimeBounds($timerId, mktime(date('H',$nextTime), date('i',$nextTime), date('s',$nextTime)), 0);
+					IPS_SetEventCyclicTimeFrom($timerId, date('H',$nextTime),  date('i',$nextTime), date('s',$nextTime));
 				} elseif ($hours==24) {
 					$startTime = explode(':', $startTime);
 					IPS_SetEventCyclic($timerId, 2 /**Daily*/, 1 /*Unused*/,0 /*Unused*/,0 /*Unused*/,0 /*Einmalig*/,0 /*Unused*/);
-					IPS_SetEventCyclicTimeBounds($timerId, mktime($startTime[0], $startTime[1], 0), 0);
+					IPS_SetEventCyclicTimeFrom($timerId, $startTime[0], $startTime[1], 0);
 				} elseif ($hours > 0) {
 					IPS_SetEventCyclic($timerId, 2 /*Daily*/, 1 /*Unused*/,0 /*Unused*/,0 /*Unused*/,3 /*TimeType Hours*/,$hours /*Stunden*/);
 				} elseif ($mins > 0) {

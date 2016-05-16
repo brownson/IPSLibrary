@@ -11,8 +11,8 @@
 	 *
 	 */
 
-	$id         = $_GET['id'];
-	$cameraIdx  = $_GET['cameraidx'];
+	$id         = $_POST['id'];
+	$cameraIdx  = $_POST['cameraidx'];
 	IPSUtils_Include ("IPSCam.inc.php", "IPSLibrary::app::modules::IPSCam");
 
 	$camManager = new IPSCam_Manager();
