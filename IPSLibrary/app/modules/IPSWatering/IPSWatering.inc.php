@@ -20,15 +20,15 @@
 	 * @ingroup modules
 	 * @{
 	 *
-	 * IPSWatering ist ein IPS Modul, das die automatische Gartenbewässerung ermöglicht. 
+	 * IPSWatering ist ein IPS Modul, das die automatische GartenbewÃ¤sserung ermÃ¶glicht. 
 	 * 
-	 * In den Einstellungen gibt es die Möglichkeit die Automatik für jeden Kreis einzeln ein- oder auszuschalten. Eine manuelle Aktivierung 
-	 * der Bewässerung ist jedoch jederzeit möglich. 
+	 * In den Einstellungen gibt es die MÃ¶glichkeit die Automatik fÃ¼r jeden Kreis einzeln ein- oder auszuschalten. Eine manuelle Aktivierung 
+	 * der BewÃ¤sserung ist jedoch jederzeit mÃ¶glich. 
 	 * 
-	 * Die Beregnungsdauer und der Startzeitpunkt können für jeden Kreis getrennt eingestellt werden.  Die Frequenz der Beregnung wird über 
+	 * Die Beregnungsdauer und der Startzeitpunkt kÃ¶nnen fÃ¼r jeden Kreis getrennt eingestellt werden.  Die Frequenz der Beregnung wird Ã¼ber 
 	 * das jeweilige Programm eingestellt. 
 	 * 
-	 * Zur Zeit werden folgende Programme unterstützt:
+	 * Zur Zeit werden folgende Programme unterstÃ¼tzt:
 	 * - Manuell - Die Beregnung wird immer manuell gestartet
 	 * - Jeden Tag
 	 * - Jeden 2. Tag
@@ -37,8 +37,8 @@
 	 * - Montag und Donnerstag
 	 * - Sonntags
 	 * 
-	 * Mit einem Regensensor ist es möglich, die regelmässige Bewässerung für Tage mit Regen zu unterbinden. Sollte der in der Konfiguration 
-	 * angegebene Sensor eine Menge grösser/gleich der spezifizierten Menge melden, wird die Beregung ausgesetzt und autom. der nächste Zeitpunkt 
+	 * Mit einem Regensensor ist es mÃ¶glich, die regelmÃ¤ssige BewÃ¤sserung fÃ¼r Tage mit Regen zu unterbinden. Sollte der in der Konfiguration 
+	 * angegebene Sensor eine Menge grÃ¶sser/gleich der spezifizierten Menge melden, wird die Beregung ausgesetzt und autom. der nÃ¤chste Zeitpunkt 
 	 * laut Intervall berechnet.
 	 *
 	 * @file          IPSWatering.inc.php
@@ -133,13 +133,14 @@
 			}
 		}
 		if ($Value) {
-			if (!IPS_SetEventCyclicDateBounds ($TimerId, get_DateTime(get_ControlId(c_Control_NextDate, $CircleId), c_Format_NextDate),0)) {
-				IPSLogger_Err(__file__, "IPS_SetEventCyclicTimeBounds failed for WateringCircle '$Name' Timer !!!");
+		   $Time =get_DateTime(get_ControlId(c_Control_NextDate, $CircleId), c_Format_NextDate);
+			if (!IPS_SetEventCyclicDateFrom ($TimerId, date('d',$Time),  date('m',$Time), date('Y',$Time))) {
+				IPSLogger_Err(__file__, "IPS_SetEventCyclicDateFrom failed for WateringCircle '$Name' Timer !!!");
 				exit;
 			}
 			$Time = GetValue(get_ControlId(c_Control_NextTime, $CircleId));
-			if (!IPS_SetEventCyclicTimeBounds($TimerId, mktime(substr($Time,0,2), substr($Time,3,2), 0), 0)) {
-				IPSLogger_Err(__file__, "IPS_SetEventCyclicTimeBounds failed for WateringCircle '$Name' Timer !!!");
+			if (!IPS_SetEventCyclicTimeFrom($TimerId, (int)substr($Time,0,2), (int)substr($Time,3,2), 0)) {
+				IPSLogger_Err(__file__, "IPS_SetEventCyclicTimeFrom failed for WateringCircle '$Name' Timer !!!");
 				exit;
 			}
 		}
@@ -408,7 +409,7 @@
 		    'Sun'       => 'So',
 		    'January'   => 'Januar',
 		    'February'  => 'Februar',
-		    'March'     => 'März',
+		    'March'     => 'MÃ¤rz',
 		    'May'       => 'Mai',
 		    'June'      => 'Juni',
 		    'July'      => 'Juli',
