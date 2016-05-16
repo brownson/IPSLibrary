@@ -3,17 +3,17 @@
 	 * @ingroup ipsedip
 	 * @{
 	 *
-	 * Zur Zeit wird nur die Ansteuerung von Displays des Types eDIPTFT43A unterstützt (horizontale Montage). Die Anzeige
+	 * Zur Zeit wird nur die Ansteuerung von Displays des Types eDIPTFT43A unterstÃ¼tzt (horizontale Montage). Die Anzeige
 	 * ist aufgeteilt in einen Navigations Teil (links) und in einen Variablen  Teil (rechts). Angezeit werden alle Variablen
-	 * außer jene mit Profil "HTMLBox", editieren kann man zur Zeit folgende (Voraussetzung ActionScript ist definiert):
+	 * auÃŸer jene mit Profil "HTMLBox", editieren kann man zur Zeit folgende (Voraussetzung ActionScript ist definiert):
 	 *  - Boolean
 	 *  - Integer mit Prefix "%"
 	 *  - Integer mit Assoziationen
 	 *
-	 * Zusätzlich kann die Anzeige auch noch durch die Angabe von speziellen "Tags" in der Descritpion von Variablen/Links
-	 * beeinflusst werden. Dadurch ist es möglich:
-	 *  - Darstellung von Texten mit doppelter Schriftgrösse
-	 *  - Darstelung von Assoziationen über die volle Breite
+	 * ZusÃ¤tzlich kann die Anzeige auch noch durch die Angabe von speziellen "Tags" in der Descritpion von Variablen/Links
+	 * beeinflusst werden. Dadurch ist es mÃ¶glich:
+	 *  - Darstellung von Texten mit doppelter SchriftgrÃ¶sse
+	 *  - Darstelung von Assoziationen Ã¼ber die volle Breite
 	 *  - Darstellung von Assoziationen mit variabler Breite
 	 *
 	 *  Montage Beispiel eines Displays in der Praxis
@@ -25,7 +25,7 @@
 	 *  Edit einer Variable mit Assoziationen
 	 *  @image html IPSEDIP_Selection.jpg
 	 *
-	 *  Beispiel von Assoziationen über die volle Breite
+	 *  Beispiel von Assoziationen Ã¼ber die volle Breite
 	 *  @image html IPSEDIP_FullWidth.jpg
 	 *
 	 */
@@ -34,13 +34,13 @@
 	/**@defgroup ipsedip IPSEDIP 
 	 * @{
 	 *
-	 * Es handelt sich bei IPSEDIP um Scripts, mit denen es möglich ist IPS Strukturen auf einem EDIP43 Display
-	 * zu visualisieren. Das hat den Vorteil, dass man die Visualisierung komplett aus IPS steuern kann. Eine Änderung
-	 * der EDIP Programmierung entfällt somit komplett und eine Anbindung neuer EDIP Displays kann praktisch per
+	 * Es handelt sich bei IPSEDIP um Scripts, mit denen es mÃ¶glich ist IPS Strukturen auf einem EDIP43 Display
+	 * zu visualisieren. Das hat den Vorteil, dass man die Visualisierung komplett aus IPS steuern kann. Eine Ã„nderung
+	 * der EDIP Programmierung entfÃ¤llt somit komplett und eine Anbindung neuer EDIP Displays kann praktisch per
 	 * Plug and Play erledigt werden !
 	 *
-	 * Update der Displays erfolgt entweder über einen internen Timer oder über Events (d.h es wird autom. für jede visualisierte
-	 * Variable ein Event angelegt, das bei Änderung sofort ein Refresh des Displays auslöst).
+	 * Update der Displays erfolgt entweder Ã¼ber einen internen Timer oder Ã¼ber Events (d.h es wird autom. fÃ¼r jede visualisierte
+	 * Variable ein Event angelegt, das bei Ã„nderung sofort ein Refresh des Displays auslÃ¶st).
 	 *
 	 * @file          IPSEDIP.class.php
 	 * @author        Andreas Brauneis
@@ -364,7 +364,7 @@
 				$linkId     = $childrenId;
 				if ($object['ObjectType']==6) { // Link
 					$link = IPS_GetLink($childrenId);
-					$childrenId = $link['LinkChildID'];
+					$childrenId = $link['TargetID'];
 					$object     = IPS_GetObject($childrenId);
 				}
 				switch($object['ObjectType']) {
@@ -491,7 +491,7 @@
 		 * Empfang von Daten
 		 *
 	    * @param string $string - Empfangene Daten vom Display
-	    * @param boolean $useEvents - Anlegen von Events für jede visualisierte Variable
+	    * @param boolean $useEvents - Anlegen von Events fÃ¼r jede visualisierte Variable
 		 */
 		public function ReceiveText($string, $useEvents=true) {
 		   if ($useEvents) {
@@ -568,15 +568,15 @@
 	   public function SendText($string){
 
 			// Translate special Characters
-			$string = str_replace("Ä", "\x8E", $string);
-			$string = str_replace("ä", "\x84", $string);
-			$string = str_replace("Ö", "\x99", $string);
-			$string = str_replace("ö", "\x94", $string);
-			$string = str_replace("ü", "\x81", $string);
-			$string = str_replace("Ü", "\x9A", $string);
-			$string = str_replace("ß", "\xE1", $string);
+			$string = str_replace("Ã„", "\x8E", $string);
+			$string = str_replace("Ã¤", "\x84", $string);
+			$string = str_replace("Ã–", "\x99", $string);
+			$string = str_replace("Ã¶", "\x94", $string);
+			$string = str_replace("Ã¼", "\x81", $string);
+			$string = str_replace("Ãœ", "\x9A", $string);
+			$string = str_replace("ÃŸ", "\xE1", $string);
 			//$string = str_replace(",", "\xFB", $string);
-			$string = str_replace("°", "\xF8", $string);
+			$string = str_replace("Â°", "\xF8", $string);
 
 			// Build Message
 			$string = chr(17).chr(strlen($string)).$string; //Build Message <DC1><Len><DataBytes> 
