@@ -587,6 +587,11 @@
 		}
 
 		// ----------------------------------------------------------------------------------------------------------------------------
+		private function GetLoggingTextFromURL($url) {
+			return str_replace(parse_url($url, PHP_URL_USER).":".parse_url($url, PHP_URL_PASS)."@", "<<user:pwd>>",$url);
+		}
+		
+		// ----------------------------------------------------------------------------------------------------------------------------
 		private function DownloadImageFromCam($cameraIdx, $directoryName, $size, $fileName) {
 			if (!$this->IsCameraAvailable($cameraIdx)) {
 				return false;
@@ -598,7 +603,7 @@
 				$component       = IPSComponent::CreateObjectByParams($componentParams);
 				$urlPicture      = $component->Get_URLPicture($size);
 				$localFile       = IPS_GetKernelDir().'Cams/'.$cameraIdx.'/'.$directoryName.'/'.$fileName.'.jpg';
-				IPSLogger_Trc(__file__, "Copy $urlPicture --> $localFile");
+				IPSLogger_Trc(__file__, "Copy ".$this->GetLoggingTextFromURL($urlPicture)." --> $localFile");
 
 				$curl_handle=curl_init();
 				curl_setopt($curl_handle, CURLOPT_URL, $urlPicture);
@@ -611,7 +616,7 @@
 				curl_close($curl_handle);
 
 				if ($fileContent===false) {
-					IPSLogger_Dbg (__file__, 'File '.$urlPicture.' could NOT be found on the Server !!!');
+					IPSLogger_Dbg (__file__, 'File '.$this->GetLoggingTextFromURL($urlPicture).' could NOT be found on the Server !!!');
 					return false;
 				}
 				$result = file_put_contents($localFile, $fileContent);
