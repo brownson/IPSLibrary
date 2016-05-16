@@ -84,22 +84,24 @@
 	define ('IPSCAM_DAY_BACK',					0);
 	define ('IPSCAM_DAY_FORWARD',				1);
 
+	// Common Variables
 	define ('IPSCAM_VAR_CAMSELECT',				'CamSelect');
-	define ('IPSCAM_VAR_CAMPOWER',				'CamPower');
-	define ('IPSCAM_VAR_CAMHTML',				'CamHtml');
-	define ('IPSCAM_VAR_HTML',					'Html');
-	define ('IPSCAM_VAR_IHTML',					'iHtml');
-	define ('IPSCAM_VAR_CAMPICT',				'CamPict');
-	define ('IPSCAM_VAR_CAMHIST',				'CamHist');
-	define ('IPSCAM_VAR_CAMSTREAM',				'CamStream');
 	define ('IPSCAM_VAR_MODE',					'Mode');
 	define ('IPSCAM_VAR_MODELIVE',				'ModeLive');
 	define ('IPSCAM_VAR_MODEPICT',				'ModePicture');
 	define ('IPSCAM_VAR_MODEHIST',				'ModeHistory');
 	define ('IPSCAM_VAR_MODESETT',				'ModeSettings');
-	define ('IPSCAM_VAR_SIZE',					'Size');
 	define ('IPSCAM_VAR_NAVPICT',				'NavigatePict');
 	define ('IPSCAM_VAR_NAVDAYS',				'NavigateDays');
+	define ('IPSCAM_VAR_HTML',					'Html');
+	define ('IPSCAM_VAR_IHTML',					'iHtml');
+
+	// Camera specific Variables
+	define ('IPSCAM_VAR_CAMPOWER',				'CamPower');
+	define ('IPSCAM_VAR_CAMHTML',				'CamHtml');
+	define ('IPSCAM_VAR_CAMPICT',				'CamPict');
+	define ('IPSCAM_VAR_CAMHIST',				'CamHist');
+	define ('IPSCAM_VAR_CAMSTREAM',				'CamStream');
 	define ('IPSCAM_VAR_NAVTIME',				'NavigateTime');
 	define ('IPSCAM_VAR_NAVFILE',				'NavigateFile');
 	define ('IPSCAM_VAR_MOTMODE',				'MotionMode');

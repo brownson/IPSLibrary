@@ -201,18 +201,17 @@
 	$variableIdModePict  = CreateVariable(IPSCAM_VAR_MODEPICT, 0 /*Boolean*/, $categoryIdCommon, 40, '~Switch',        $scriptIdActionScript, false, 'Image');
 	$variableIdModeHist  = CreateVariable(IPSCAM_VAR_MODEHIST, 0 /*Boolean*/, $categoryIdCommon, 50, '~Switch',        $scriptIdActionScript, false, 'Clock');
 	$variableIdModeSett  = CreateVariable(IPSCAM_VAR_MODESETT, 0 /*Boolean*/, $categoryIdCommon, 60, '~Switch',        $scriptIdActionScript, false, 'Gear');
-	$variableIdSize      = CreateVariable(IPSCAM_VAR_SIZE,     1 /*Integer*/, $categoryIdCommon, 65, 'IPSCam_Size',    $scriptIdActionScript, 1, 'Distance');
 	$variableIdNavPict   = CreateVariable(IPSCAM_VAR_NAVPICT,  1 /*Integer*/, $categoryIdCommon, 70, 'IPSCam_NavPict', $scriptIdActionScript, -1, 'HollowArrowRight');
 	$variableIdNavDays   = CreateVariable(IPSCAM_VAR_NAVDAYS,  1 /*Integer*/, $categoryIdCommon, 80, 'IPSCam_NavDays', $scriptIdActionScript, -1, 'HollowDoubleArrowRight');
-	$variableIdNavTime   = CreateVariable(IPSCAM_VAR_NAVTIME,  3 /*String*/,  $categoryIdCommon, 90, '~String',        null,                  date(IPSCAM_NAV_DATEFORMATDISP), 'Clock');
-	$variableIdNavFile   = CreateVariable(IPSCAM_VAR_NAVFILE,  3 /*String*/,  $categoryIdCommon, 95, '~String',        null,                  date(IPSCAM_NAV_DATEFORMATFILE), '');
+	$variableIdNavTime   = CreateVariable(IPSCAM_VAR_NAVTIME,  3 /*String*/,  $categoryIdCommon, 90, '~String',        null,  date(IPSCAM_NAV_DATEFORMATDISP), 'Clock');
 
 	$camConfig = IPSCam_GetConfiguration();
 	foreach ($camConfig as $idx=>$data) {
 		$categoryIdCamX      = CreateCategory($idx, $categoryIdCams, $idx);
 		$variableIdCamPowerX = CreateVariable(IPSCAM_VAR_CAMPOWER,   0 /*Boolean*/,  $categoryIdCamX, 10, '~Switch',             $scriptIdActionScript, false, 'Power');
 		$variableIdCamHtmlX  = CreateVariable(IPSCAM_VAR_CAMHTML,    3 /*String*/,   $categoryIdCamX, 20, '~HTMLBox',            $scriptIdActionScript, '<iframe frameborder="0" width="100%" height="530px"  src="../user/IPSCam/IPSCam_Camera'.$idx.'.php"</iframe>', 'Window');
-		$variableIdCamPictX  = CreateMedia (IPSCAM_VAR_CAMPICT, $categoryIdCamX, IPS_GetKernelDir().'Cams/'.$idx.'/Picture/Current.jpg', false, 1 /*Image*/, 'Image', 30); 
+		$variableIdCamPictX  = CreateMedia (IPSCAM_VAR_CAMPICT, $categoryIdCamX, IPS_GetKernelDir().'Cams/'.$idx.'/Picture/Current.jpg',  false, 1 /*Image*/, 'Image', 30); 
+    	$variableIdCamHistX  = CreateMedia (IPSCAM_VAR_CAMHIST, $categoryIdCamX, IPS_GetKernelDir().'Cams/'.$idx.'/History/20120101.jpg', false, 1 /*Image*/, 'Clock', 110); 
 		$componentParams     = $data[IPSCAM_PROPERTY_COMPONENT];
 		$component           = IPSComponent::CreateObjectByParams($componentParams);
 		$urlStream           = $component->Get_URLLiveStream();
@@ -227,12 +226,24 @@
 		$variableIdPictReset = CreateVariable(IPSCAM_VAR_PICTRESET,  1 /*Integer*/,  $categoryIdCamX, 220, 'IPSCam_PictReset',   $scriptIdActionScript, IPSCAM_VAL_DISABLED, 'Cross');
 		$variableIdPictHist  = CreateVariable(IPSCAM_VAR_PICTHIST,   1 /*Integer*/,  $categoryIdCamX, 230, 'IPSCam_PictHist',    $scriptIdActionScript, 14, 'Image');
 		$variableIdPictSize  = CreateVariable(IPSCAM_VAR_PICTSIZE,   1 /*Integer*/,  $categoryIdCamX, 240, 'IPSCam_Size',        $scriptIdActionScript, 1, 'Distance');
+		$variableIdNavTime   = CreateVariable(IPSCAM_VAR_NAVTIME,    3 /*String*/,   $categoryIdCamX, 300, '~String',            null,                  date(IPSCAM_NAV_DATEFORMATDISP), 'Clock');
+		$variableIdNavFile   = CreateVariable(IPSCAM_VAR_NAVFILE,    3 /*String*/,   $categoryIdCamX, 310, '~String',            null,                  date(IPSCAM_NAV_DATEFORMATFILE), '');
 		
 		IPSCAM_CreateDirectory(IPS_GetKernelDir().'Cams/'.$idx.'/History/');
 		IPSCAM_CreateDirectory(IPS_GetKernelDir().'Cams/'.$idx.'/Picture/');
 		IPSCAM_CreateDirectory(IPS_GetKernelDir().'Cams/'.$idx.'/MotionCapture/');
-
 	}
+
+	// Remove unused Variables
+	$variableIdSize   = @IPS_GetObjectIDByIdent(Get_IdentByName('Size'), $categoryIdCommon);
+	if ($variableIdSize !== false) {
+		IPS_DeleteVariable($variableIdSize);
+	}
+	$variableIdNavFile   = @IPS_GetObjectIDByIdent(Get_IdentByName(IPSCAM_VAR_NAVFILE), $categoryIdCommon);
+	if ($variableIdNavFile !== false) {
+		IPS_DeleteVariable($variableIdNavFile);
+	}
+
 
 	function IPSCAM_CreateDirectory($directory) {
 		if (!file_exists($directory)) {
@@ -261,12 +272,11 @@
 	$instanceId = CreateDummyInstance("Navigation", $categoryIdNavPanel, 20);
 	CreateLink('Bilder',         IPS_GetObjectIDByIdent(IPSCAM_VAR_NAVPICT, $categoryIdCommon), $instanceId, 10);
 	CreateLink('Tage',           IPS_GetObjectIDByIdent(IPSCAM_VAR_NAVDAYS, $categoryIdCommon), $instanceId, 20);
-	CreateLink('Uhrzeit',        IPS_GetObjectIDByIdent(IPSCAM_VAR_NAVTIME, $categoryIdCommon), $instanceId, 30);
+	//CreateLink('Uhrzeit',        IPS_GetObjectIDByIdent(IPSCAM_VAR_NAVTIME, $categoryIdCommon), $instanceId, 30);
 	$instanceId = CreateDummyInstance("Bild", $categoryIdNavPanel, 30);
 	CreateLink('Aktualisieren',  IPSUtil_ObjectIDByPath('Program.IPSLibrary.app.modules.IPSCam.IPSCam_RefreshPicture'), $instanceId, 10);
 	CreateLink('Speichern',      IPSUtil_ObjectIDByPath('Program.IPSLibrary.app.modules.IPSCam.IPSCam_StorePicture'), $instanceId, 20);
 	$instanceId = CreateDummyInstance("Kamera Einstellungen", $categoryIdNavPanel, 35);
-	CreateLink('Bildgröße',      IPS_GetObjectIDByIdent(IPSCAM_VAR_SIZE, $categoryIdCommon), $instanceId, 10);
 	$instanceId = CreateDummyInstance("Power", $categoryIdNavPanel, 40);
 	$id = CreateLink('Power',          IPS_GetObjectIDByIdent(IPSCAM_VAR_MODESETT, $categoryIdCommon), $instanceId, 10);
 	IPS_SetIcon($id, 'Power');
@@ -303,10 +313,10 @@
 			$mobileIdCam    = CreateCategory($data[IPSCAM_PROPERTY_NAME], $mobileId, $cameraIdx, 'Image');
 			$categoryIdCam      = IPS_GetCategoryIDByName($cameraIdx, $categoryIdCams);
 
-			CreateLink('Live',  IPS_GetObjectIDByIdent(IPSCAM_VAR_CAMHTML, $categoryIdCam),  $mobileIdCam, 10);
-			CreateLink('Bild',  IPS_GetObjectIDByIdent(IPSCAM_VAR_CAMPICT, $categoryIdCam),  $mobileIdCam, 20);
-			CreateLink('Bild Aktualisieren',  IPSUtil_ObjectIDByPath('Program.IPSLibrary.app.modules.IPSCam.IPSCam_RefreshPicture'), $mobileIdCam, 30);
-			CreateLink('Bild Speichern',      IPSUtil_ObjectIDByPath('Program.IPSLibrary.app.modules.IPSCam.IPSCam_StorePicture'), $mobileIdCam, 40);
+			CreateLink('Live',                IPS_GetObjectIDByIdent(IPSCAM_VAR_CAMHTML, $categoryIdCam),  $mobileIdCam, 10);
+			CreateLink('Bild',                IPS_GetObjectIDByIdent(IPSCAM_VAR_CAMPICT, $categoryIdCam),  $mobileIdCam, 20);
+			CreateLink('Bild Aktualisieren',  IPSUtil_ObjectIDByPath('Program.IPSLibrary.app.modules.IPSCam.IPSCam_RefreshPicture'.($cameraIdx+1)), $mobileIdCam, 30);
+			CreateLink('Bild Speichern',      IPSUtil_ObjectIDByPath('Program.IPSLibrary.app.modules.IPSCam.IPSCam_StorePicture'.($cameraIdx+1)),   $mobileIdCam, 40);
 
 			if (array_key_exists(IPSCAM_PROPERTY_SWITCHPOWER, $camConfig[$cameraIdx])) { 
 				$variableIdPower = $camConfig[$cameraIdx][IPSCAM_PROPERTY_SWITCHPOWER];
