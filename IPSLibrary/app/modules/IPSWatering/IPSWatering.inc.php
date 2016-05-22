@@ -133,8 +133,8 @@
 			}
 		}
 		if ($Value) {
-		   $Time =get_DateTime(get_ControlId(c_Control_NextDate, $CircleId), c_Format_NextDate);
-			if (!IPS_SetEventCyclicDateFrom ($TimerId, date('d',$Time),  date('m',$Time), date('Y',$Time))) {
+			$Time =get_DateTime(get_ControlId(c_Control_NextDate, $CircleId), c_Format_NextDate);
+			if (!IPS_SetEventCyclicDateFrom ($TimerId, (int)date('d',$Time), (int)date('m',$Time), (int)date('Y',$Time))) {
 				IPSLogger_Err(__file__, "IPS_SetEventCyclicDateFrom failed for WateringCircle '$Name' Timer !!!");
 				exit;
 			}
