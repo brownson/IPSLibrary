@@ -452,18 +452,18 @@
 	$scenarioManager = new IPSShadowing_ScenarioManager();
 	$scenarioManager->AssignAllScenarioAssociations();
 
-	$ScenarioId = @IPS_GetObjectIDByName('Alle Schliessen', $CategoryIdScenarios);
-	if ($ScenarioId===false) {
+	$scenarioId = @IPS_GetObjectIDByName('Alle Schliessen', $CategoryIdScenarios);
+	if ($scenarioId===false) {
 		echo 'Create Scenario "Alle Schliessen"'.PHP_EOL;
 		$scenarioId = $scenarioManager->Create('Alle Schliessen', c_MovementId_Closed);
 		$scenario = new IPSShadowing_Scenario($scenarioId);
 		$scenario->ResetEditMode();
 
 	}
-	$ScenarioId = @IPS_GetObjectIDByName('Alle Öffnen', $CategoryIdScenarios);
-	if ($ScenarioId===false) {
+	$scenarioId = @IPS_GetObjectIDByName('Alle Öffnen', $CategoryIdScenarios);
+	if ($scenarioId===false) {
 		echo 'Create Scenario "Alle Öffnen"'.PHP_EOL;
-		$scenarioManager->Create('Alle Öffnen', c_MovementId_Opened);
+		$scenarioId = $scenarioManager->Create('Alle Öffnen', c_MovementId_Opened);
 		$scenario = new IPSShadowing_Scenario($scenarioId);
 		$scenario->ResetEditMode();
 	}
