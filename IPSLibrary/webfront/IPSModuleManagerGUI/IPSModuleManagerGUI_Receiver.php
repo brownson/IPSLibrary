@@ -38,6 +38,7 @@
 				IPSLogger_Inf(__file__, 'IPSModuleManagerGUI - Installation of Module '.$module);
 				$moduleManager = new IPSModuleManager($module);
 				$moduleManager->InstallModule();
+				IPSModuleManagerGUI_ReleaseLock();
 			}
 			IPSModuleManagerGUI_SetPage(IPSMMG_ACTION_MODULE, $module);
 			break;
@@ -51,6 +52,7 @@
 			if (IPSModuleManagerGUI_GetLock($action, true)) {
 				$moduleManager = new IPSModuleManager('', '', sys_get_temp_dir(), true);
 				$moduleManager->VersionHandler()->BuildKnownModules();
+				IPSModuleManagerGUI_ReleaseLock();
 			}
 			break;
 		case 'UpdateAll':
@@ -58,6 +60,7 @@
 				IPSLogger_Inf(__file__, 'IPSModuleManagerGUI - Update of all Modules');
 				$moduleManager = new IPSModuleManager();
 				$moduleManager->UpdateAllModules();
+				IPSModuleManagerGUI_ReleaseLock();
 			}
 			break;
 		case 'Update':
@@ -65,6 +68,7 @@
 				IPSLogger_Inf(__file__, 'IPSModuleManagerGUI - Update of Module '.$module.' from Repository "'.$repository.'"');
 				$moduleManager = new IPSModuleManager($module, $repository);
 				$moduleManager->UpdateModule();
+				IPSModuleManagerGUI_ReleaseLock();
 			}
 			break;
 		case 'Install':
@@ -72,6 +76,7 @@
 				IPSLogger_Inf(__file__, 'IPSModuleManagerGUI - Installation of Module '.$module);
 				$moduleManager = new IPSModuleManager($module);
 				$moduleManager->InstallModule();
+				IPSModuleManagerGUI_ReleaseLock();
 			}
 			break;
 		case 'Load':
@@ -79,6 +84,7 @@
 				IPSLogger_Inf(__file__, 'IPSModuleManagerGUI - Load Files of Module '.$module.' from Repository "'.$repository.'"');
 				$moduleManager = new IPSModuleManager($module, $repository);
 				$moduleManager->LoadModule();
+				IPSModuleManagerGUI_ReleaseLock();
 			}
 			IPSModuleManagerGUI_SetPage(IPSMMG_ACTION_MODULE, $module);
 			break;
@@ -87,6 +93,7 @@
 				IPSLogger_Inf(__file__, 'IPSModuleManagerGUI - Delete of Module '.$module);
 				$moduleManager = new IPSModuleManager($module);
 				$moduleManager->DeleteModule();
+				IPSModuleManagerGUI_ReleaseLock();
 			}
 			IPSModuleManagerGUI_SetPage(IPSMMG_ACTION_OVERVIEW, $module);
 			break;
