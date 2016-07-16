@@ -12,7 +12,14 @@
 	 *
 	 */
 
-	$id = $_GET['id'];
+	$id = null;
+	if (array_key_exists('id', $_GET)) {
+		$id = $_GET['id'];
+	}
+	if (array_key_exists('id', $_POST)) {
+		$id = $_POST['id'];
+	}
+	
 	IPSUtils_Include ("NetPlayer.inc.php", "IPSLibrary::app::modules::NetPlayer");
 
 	if ($id<>"rc_mp_current" and $id<>"rc_mp_status" and $id<>"rc_mp_length"  and $id<>"rc_mp_interpret" and $id<>"rc_mp_album" and $id<>"rc_mp_titel") {
