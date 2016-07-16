@@ -616,6 +616,7 @@
 				curl_close($curl_handle);
 
 				if ($fileContent===false) {
+					IPS_SemaphoreLeave('IPSCam_'.$cameraIdx);
 					IPSLogger_Dbg (__file__, 'File '.$this->GetLoggingTextFromURL($urlPicture).' could NOT be found on the Server !!!');
 					return false;
 				}
