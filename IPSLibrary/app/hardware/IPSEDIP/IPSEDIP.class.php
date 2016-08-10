@@ -278,7 +278,7 @@
 			$value        = GetValue($id);
 			$variable     = IPS_GetVariable($id);
 			$action       = $variable['VariableCustomAction'] ;
-			$type         = $variable['VariableValue']['ValueType'];
+			$type         = $variable['VariableType'];
 			$profile      = $variable['VariableCustomProfile'];
 			if ($profile=='') return;
 			$profileData  = IPS_GetVariableProfile($profile);
