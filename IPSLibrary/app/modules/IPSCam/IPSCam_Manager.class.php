@@ -607,8 +607,8 @@
 
 				$curl_handle=curl_init();
 				curl_setopt($curl_handle, CURLOPT_URL, $urlPicture);
-				curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 2);
-				curl_setopt($curl_handle, CURLOPT_TIMEOUT, 3);  
+				curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 20);
+				curl_setopt($curl_handle, CURLOPT_TIMEOUT, 30);  
 				curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER,true);
 				curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
 				curl_setopt($curl_handle, CURLOPT_FAILONERROR, true);
@@ -683,7 +683,7 @@
 				SetValue($variableIdNavTime, date(IPSCAM_NAV_DATEFORMATDISP, $navTime));
 
 				$mediaFileName     = IPS_GetKernelDir().'Cams/'.$cameraIdx.'/History/'.$navFile.'.jpg';
-				$userFileName      = IPS_GetKernelDir().'WebFront/User/IPSCam/ImageHistory.jpg';
+				$userFileName      = IPS_GetKernelDir().'webfront/user/IPSCam/ImageHistory.jpg';  
 
 				$variableIdMedia   = IPS_GetObjectIDByIdent(IPSCAM_VAR_CAMHIST, IPS_GetObjectIDByIdent($cameraIdx, $this->categoryIdCams));
 				IPS_SetMediaFile($variableIdMedia, $mediaFileName, false);
