@@ -59,7 +59,8 @@
 		$id_LogMessages = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSWatering.Log.LogMessages');
 		$id_LogId       = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSWatering.Log.LogId');
 
-		$Msg          = htmlentities($Msg, ENT_COMPAT, 'ISO-8859-1');
+		if(mb_detect_encoding($Msg, 'UTF-8, ISO-8859-1') !== 'UTF-8')
+			$Msg          = htmlentities($Msg, ENT_COMPAT, 'ISO-8859-1');
 		$Msg          = str_replace("\n", "<BR>", $Msg);
 
 		$MsgList      = GetValue($id_LogMessages);
