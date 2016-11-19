@@ -831,7 +831,8 @@
 		private function GetCameraProperty($cameraIdx, $property, $mandatory=false) {
 			if (array_key_exists($property, $this->config[$cameraIdx])) {
 				$value = $this->config[$cameraIdx][$property];
-				$value = htmlentities($value, ENT_COMPAT, 'ISO-8859-1');
+				if(mb_detect_encoding($value, 'UTF-8, ISO-8859-1') !== 'UTF-8')
+					$value = htmlentities($value, ENT_COMPAT, 'ISO-8859-1');
 			} elseif ($mandatory) {
 				trigger_error('Property "'.$property.'" could NOT be found for CameraIdx='.$cameraIdx);
 			} else {
