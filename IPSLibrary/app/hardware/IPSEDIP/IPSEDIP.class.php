@@ -71,7 +71,7 @@
 		protected $rootId=0;
 		protected $currentId=0;
 		private   $registerId=0;
-		private   $errorcounter=0;
+		private   $errorCounter=0;
 
 		protected $objectIdsId=0;
 		protected $objectValuesId=0;
