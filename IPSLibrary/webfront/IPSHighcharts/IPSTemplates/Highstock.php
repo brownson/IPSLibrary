@@ -39,7 +39,10 @@
 		include_once(IPS_GetKernelDir() . "scripts/" .$ConfigScript['ScriptFile']);
 		global $sConfig;
 		//$sConfig = IPS_RunScriptWait($iScriptId);
-		$s = utf8_encode($sConfig);	
+		$s = $sConfig;	
+		if (mb_detect_encoding($sConfig, 'UTF-8', true) === false) {       
+			$s = utf8_encode($sConfig);   
+		}  	
 		
 	}
 	// Filename würde übergeben -> Daten aus Datei lesen
@@ -60,7 +63,9 @@
 			$s .= fgets($handle);
 		}
 		fclose($handle);
-		$s = utf8_encode($s);	
+		if (mb_detect_encoding($s, 'UTF-8', true) === false) {       
+			$s = utf8_encode($s);   
+		}  	
 	}
 	else
 	{
