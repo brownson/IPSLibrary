@@ -1708,7 +1708,10 @@
 			{
 				$item = "'" . trim($item, "'") . "'";
 			}
-			$item = utf8_encode($item);
+
+			if (mb_detect_encoding($item, 'UTF-8', true) === false) {       
+				$item = utf8_encode($item);   
+			}  			
 
 		}
 	}
