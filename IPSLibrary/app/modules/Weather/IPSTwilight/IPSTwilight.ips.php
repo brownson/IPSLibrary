@@ -21,24 +21,24 @@
 	 * @ingroup modules_weather
 	 * @{
 	 *
-	 * Script zur Berechnung der aktuellen Dämmerungs Zeiten
+	 * Script zur Berechnung der aktuellen DÃ¤mmerungs Zeiten
 	 *
-	 * IPSTwilight ist ein IPS Modul, um die täglichen Dämmerungszeiten zu berechnen und grafisch darzustellen.
-	 * Ein Timer berechnet jeden Tag automatisch die aktuellen Dämmerungszeiten.
+	 * IPSTwilight ist ein IPS Modul, um die tÃ¤glichen DÃ¤mmerungszeiten zu berechnen und grafisch darzustellen.
+	 * Ein Timer berechnet jeden Tag automatisch die aktuellen DÃ¤mmerungszeiten.
 	 *
-	 * Es gibt die Möglichkeit durch Angabe einer Minimal bzw. Maximal Range die jeweilige Dämmerungszeit zu begrenzen.
+	 * Es gibt die MÃ¶glichkeit durch Angabe einer Minimal bzw. Maximal Range die jeweilige DÃ¤mmerungszeit zu begrenzen.
 	 *
-	 * So ist es z.B. möglich mit einer Beschattungssteuerung das Schließen der Jalousien an die Dämmerungszeit zu binden, aber gleichzeitig 
-	 * zu definieren, dass das Schließen frühestens um 18:00 aber spätestens um 20:00 zu geschehen hat.
+	 * So ist es z.B. mÃ¶glich mit einer Beschattungssteuerung das SchlieÃŸen der Jalousien an die DÃ¤mmerungszeit zu binden, aber gleichzeitig 
+	 * zu definieren, dass das SchlieÃŸen frÃ¼hestens um 18:00 aber spÃ¤testens um 20:00 zu geschehen hat.
 	 *
-	 * Es werden folgende Dämmerungszeiten berechnet:
+	 * Es werden folgende DÃ¤mmerungszeiten berechnet:
 	 * - Sonnenaufgang/Sonnenuntergang
-	 * - bürgerliche (zivile/ civil) Dämmerung - ist der Zeitpunkt, an dem die Sonne 6 Grad unter dem Horizont ist.
-	 * - nautische Dämmerung - ist der Zeitpunkt, an dem die Sonne 12 Grad unter dem Horizont ist.
-	 * - astronomische Dämmerung - ist der Zeitpunkt, an dem die Sonne 18 Grad unter dem Horizont ist.
+	 * - bÃ¼rgerliche (zivile/ civil) DÃ¤mmerung - ist der Zeitpunkt, an dem die Sonne 6 Grad unter dem Horizont ist.
+	 * - nautische DÃ¤mmerung - ist der Zeitpunkt, an dem die Sonne 12 Grad unter dem Horizont ist.
+	 * - astronomische DÃ¤mmerung - ist der Zeitpunkt, an dem die Sonne 18 Grad unter dem Horizont ist.
 	 * 
-	 * Das Einsetzen der Dämmerung hängt vom Längengrand und somit vom jeweiligen Ort ab. Dazu muß im File "IPSTwilight_Configuraiton.inc.php" 
-	 * der jeweilige Breiten und Längengrad gesetzt werden.'''
+	 * Das Einsetzen der DÃ¤mmerung hÃ¤ngt vom LÃ¤ngengrand und somit vom jeweiligen Ort ab. Dazu muÃŸ im File "IPSTwilight_Configuraiton.inc.php" 
+	 * der jeweilige Breiten und LÃ¤ngengrad gesetzt werden.'''
 	 * 
 	 * @file          IPSTwilight.ips.php
 	 * @author        Andreas Brauneis
@@ -95,6 +95,21 @@
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
+   	function SendTwilightMediaEvent($name) {
+		$categoryId_Twilight  = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.Weather.IPSTwilight');
+		$categoryId_Graphics  = IPS_GetObjectIDByIdent('Graphics',$categoryId_Twilight);
+		
+		$mediaID = @IPS_GetObjectIDByIdent($name, $categoryId_Graphics);
+		if ($mediaID === false) {
+			$mediaID = @IPS_GetObjectIDByName($name, $categoryId_Graphics);
+		}
+		
+		if ($mediaID > 0) {
+			IPS_SendMediaEvent($mediaID);
+		}	
+	}
+
+	// ----------------------------------------------------------------------------------------------------------------------------
 	function CopyGraphics($variableId_Display) {
 		if (GetValue($variableId_Display)) {
 			$SourceYear = IPS_GetKernelDir().'media/IPSTwilight_YearLimited.gif';
@@ -107,9 +122,11 @@
 		if (!copy($SourceYear, IPS_GetKernelDir().'media/IPSTwilight_Year.gif')) {
 			IPSLogger_Err(__file__, "Error while coping $SourceYear to Destination File 'IPSTwilight_Year.gif'");
 		}
+		SendTwilightMediaEvent('IPSTwilight_Year');
 		if (!copy($SourceDay,  IPS_GetKernelDir().'media/IPSTwilight_Day.gif')) {
 			IPSLogger_Err(__file__, "Error while coping $SourceDay to Destination File 'IPSTwilight_Day.gif'");
 		}
+		SendTwilightMediaEvent('IPSTwilight_Day');
 	}
 
 	// ----------------------------------------------------------------------------------------------------------------------------
