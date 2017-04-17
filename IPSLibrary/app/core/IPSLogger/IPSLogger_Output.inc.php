@@ -46,14 +46,22 @@
 			if (function_exists('IPS_GetLogDir'))
 				$Directory = IPS_GetLogDir();
 		}
+		// bumaas: Semaphor eingebaut um einen zeitgleichen Zugriff ("Warning: fopen ...:
+		// failed to open stream: permission denied")zu verhindern.
+		// Da im Fall eines 'Parse Errors' keine Semaphore erhältlich ist ('Warning: 
+		// Cannot detect ThreadID!') sollten die Warnings unterdrückt werden (@)
+		@IPS_SemaphoreEnter(__FUNCTION__.$Directory.$File, 1000);
+
 		if(($FileHandle = fopen($Directory.$File, "a")) === false) {
 			SetValue($ID_OutEnabled, false);
-			Exit;
+			@IPS_SemaphoreLeave(__FUNCTION__.$Directory.$File);
+			return;
 		}
 		fwrite($FileHandle, $Text.c_lf);
 		fclose($FileHandle);
+		@IPS_SemaphoreLeave(__FUNCTION__.$Directory.$File);
 	}
-
+	
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function IPSLogger_OutFile($LogLevel, $LogType, $Context, $Msg) {
 			switch ($LogType) {
@@ -78,17 +86,21 @@
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function IPSLogger_OutLog4IPS($LogLevel, $LogType, $Context, $Msg) {
-			$Out  = '<event';
-			$Out .=   ' logger="'.$Context.'"';
-			$Out .=   ' timestamp="'.date('Y-m-d\TH:i:s.u').'+01:00"';
-			$Out .=   ' level="'.IPSLogger_LogTypeXml($LogType).'"';
-			$Out .=   ' domain="IPS.exe"';
-			$Out .=   ' username="IPS">';
-			$Out .=   '<message>'.$Msg.'</message>';
-			$Out .= '</event>';
+			// bumaas: Sonderzeichen entfernen um Lesefehler von Log4View zu vermeiden
+			$Msg  =  str_replace (array('<','>'), '.', $Msg); 
+            $Out  = '<event';
+            $Out .=   ' logger="'.$Context.'"';
+            $Out .=   ' timestamp="'.date('Y-m-d\TH:i:s.u').'+01:00"';
+            $Out .=   ' level="'.IPSLogger_LogTypeXml($LogType).'"';
+            $Out .=   ' domain="IPS.exe"';
+            $Out .=   ' thread="'.$_IPS['THREAD'].'"';
+            $Out .=   ' username="IPS">';
+			// bumaas: die Ausgabe muss utf8 decodiert werden
+            $Out .=   '<message>'.utf8_decode($Msg).'</message>';
+            $Out .= '</event>';
 
-			$File = 'IPSLogger_'.date('Ymd').'.'.c_Log4IPS_Extension;
-			IPSLogger_WriteFile(c_Log4IPS_Directory, $File, $Out, c_ID_Log4IPSOutEnabled);
+            $File = 'IPSLogger_'.date('Ymd').'.'.c_Log4IPS_Extension;
+            IPSLogger_WriteFile(c_Log4IPS_Directory, $File, $Out, c_ID_Log4IPSOutEnabled);
 		}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
