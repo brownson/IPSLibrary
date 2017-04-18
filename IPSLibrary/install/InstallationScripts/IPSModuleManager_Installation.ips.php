@@ -1,15 +1,15 @@
 <?
-	/**@defgroup ipsmodulemanager_overview IPSModuleManager Übersicht
+	/**@defgroup ipsmodulemanager_overview IPSModuleManager Ãœbersicht
 	 * @ingroup ipsmodulemanager
 	 * @{
 	 *
-	 * Übersicht IPSModuleManager
+	 * Ãœbersicht IPSModuleManager
 	 * @image html IPSModuleManager_Overview.png
 	 *
-	 * Der IPSModuleManager supportet die folgenden Möglichkeiten:
+	 * Der IPSModuleManager supportet die folgenden MÃ¶glichkeiten:
 	 * - Initialer Download und Installation neuer Module
 	 * - Update auf neuere Version von Modulen
-	 * - Versionsverwaltung für Module
+	 * - Versionsverwaltung fÃ¼r Module
 	 * - Backup Handler
 	 * - Konfigurations Handler
 	 * - Log Handler
@@ -27,12 +27,12 @@
 	      $moduleManager.LoadModule();
 	    @endcode
 	 *
-	 * Eine Konfiguration ist nicht bei jedem Module nötig, Details über die jeweilige Konfiguration kann der jeweiligen Module Dokumentation entnommen werden.
+	 * Eine Konfiguration ist nicht bei jedem Module nÃ¶tig, Details Ã¼ber die jeweilige Konfiguration kann der jeweiligen Module Dokumentation entnommen werden.
 	 *
-	 *  Folgende Schritte warden bei einer Installation ausgeführt:
-	 *  - Check von anderen Modulen, die für die Installation Voraussetzung sind
+	 *  Folgende Schritte warden bei einer Installation ausgefÃ¼hrt:
+	 *  - Check von anderen Modulen, die fÃ¼r die Installation Voraussetzung sind
 	 *  Versions Check von referenzierten Modulen
-	 *  Installation (beinhaltet das Anlegen aller benötigten Variablen und Scripte)
+	 *  Installation (beinhaltet das Anlegen aller benÃ¶tigten Variablen und Scripte)
 	 *
 	 *  Beispiel zur Installation des IPSLogger Modules:
 	 *  @code
@@ -57,26 +57,26 @@
         @endcode
 	 *
 	 *  Bei einem Update werden alle Scripte des jeweiligen Modules neu aus dem Repository geladen
-	 *  (Konfigurations Scripte und Dateien werden nicht verändert). Sollte nach dem Update eine neue
-	 *  Versionsnummer gefunden werden, wird automatisch das Installations Script ausgeführt (inklusive
+	 *  (Konfigurations Scripte und Dateien werden nicht verÃ¤ndert). Sollte nach dem Update eine neue
+	 *  Versionsnummer gefunden werden, wird automatisch das Installations Script ausgefÃ¼hrt (inklusive
 	 *  Anpassung der WebFront und Mobile Strukturen).
 	 *
 	 * @page ipsmodulemanager_version Versions Verwaltung
-	 *  Der IPSModuleManager beinhaltet eine interne Versionsverwaltung, der die aktuelle IPS Version überprüft und auch alle Module überprüft, die
+	 *  Der IPSModuleManager beinhaltet eine interne Versionsverwaltung, der die aktuelle IPS Version Ã¼berprÃ¼ft und auch alle Module Ã¼berprÃ¼ft, die
 	 *  Voraussetzung des aktuellen Modules sind.
 	 *
 	 * @page ipsmodulemanager_logging Logging des IPSModuleManagers
 	 *  Der LogHandler legt bei jedem Update oder Installations Vorgang ein Protokoll File an, wo man die einzelnen Schritte des Installations Ablaufes
-	 *  nachvollziehen kann. Standardmäßig ist das Output Verzeichnis auf "logs" gesetzt, kann aber jederzeit über den Parameter "LogDirectory" verändert werden.
+	 *  nachvollziehen kann. StandardmÃ¤ÃŸig ist das Output Verzeichnis auf "logs" gesetzt, kann aber jederzeit Ã¼ber den Parameter "LogDirectory" verÃ¤ndert werden.
 	 *  Output erfolgt in eine Datei mit dem Namen IPSModuleManager_YYYY-MM-DD_HHMI.log
 	 *
 	 * @page ipsmodulemanager_config Konfigurations Handler
-	 *  Der Konfigurations Handler bietet die Möglichkeit Installation Parameter (wie zum Beispiel WebFront Konfigurator ID, persönliche
-	 *  Icons, Namen usw.) in einem Initialisierungs File abzulegen und so die Installation der Module auf die persönlichen Bedürfnisse abzustimmen.
+	 *  Der Konfigurations Handler bietet die MÃ¶glichkeit Installation Parameter (wie zum Beispiel WebFront Konfigurator ID, persÃ¶nliche
+	 *  Icons, Namen usw.) in einem Initialisierungs File abzulegen und so die Installation der Module auf die persÃ¶nlichen BedÃ¼rfnisse abzustimmen.
 	 *
 	 * @page ipsmodulemanager_backup Backup Handler
 	 *  Vor dem Download der neuen Scripte wird auch automatisch ein Backup der Scripte des betroffen Modules gemacht.
-	 *  Ablageort für Backups ist standardmäßig auf "backups" gesetzt und kann über den Konfigurations Parameter "BackupDirectory" jederzeit verändert
+	 *  Ablageort fÃ¼r Backups ist standardmÃ¤ÃŸig auf "backups" gesetzt und kann Ã¼ber den Konfigurations Parameter "BackupDirectory" jederzeit verÃ¤ndert
 	 *  werden. Das Backup des jeweiligen Update Vorgangs wird dann in einem Folder IPSLibrary_YYYY-MM-DD_HH:MI abgelegt.
 	 *
 	 * @}*/
@@ -84,11 +84,11 @@
 	/**@defgroup ipsmodulemanager_configuration IPSModuleManager Konfiguration
 	 * @ingroup ipsmodulemanager
 	 * @{
-	 * Alle Konfigurations Einstellung, die für Installation von Modulen benötigt werden, sind in Initialisierungs Files abgelegt. Ablageort
-	 * für diese Files ist "IPSLibray.install.InitializationFiles", die Files werden beim initialen Download des Modules aus den Files im "Default"
-	 * Verzeichnis generiert und bei späteren Updates nicht mehr verändert.
+	 * Alle Konfigurations Einstellung, die fÃ¼r Installation von Modulen benÃ¶tigt werden, sind in Initialisierungs Files abgelegt. Ablageort
+	 * fÃ¼r diese Files ist "IPSLibray.install.InitializationFiles", die Files werden beim initialen Download des Modules aus den Files im "Default"
+	 * Verzeichnis generiert und bei spÃ¤teren Updates nicht mehr verÃ¤ndert.
 	 * Bei Problemen kann das File wieder mit der Version im Default Verzeichnis repariert werden. Im Verzeichnis "Examples" finden sich noch weitere
-	 * Files, die Beispiele für die jeweilige Konfiguration beinhalten.
+	 * Files, die Beispiele fÃ¼r die jeweilige Konfiguration beinhalten.
 	 *
 	 * Eine kurze Beschreibung des jeweiligen Parameters, ist im jeweilen Initialisierungs File zu finden.
 	 *
@@ -145,8 +145,8 @@
          Order=20
 	    @endcode
 	 *
-	 * [] markiert immer eine Gruppe von Einstellungen, In der Gruppe "WFC10” werden die Einstellungen gesucht, die für die WebFront
-	 * Installation benötigt werden. (WFC10 - WebFront mit 10 Zoll Optimierung). Analog gibt es eine Gruppe "Mobile", die für das Mobile
+	 * [] markiert immer eine Gruppe von Einstellungen, In der Gruppe "WFC10â€ werden die Einstellungen gesucht, die fÃ¼r die WebFront
+	 * Installation benÃ¶tigt werden. (WFC10 - WebFront mit 10 Zoll Optimierung). Analog gibt es eine Gruppe "Mobile", die fÃ¼r das Mobile
 	 * Interface (iPhone, iPad und Android) verwendet wird.
 	 *
 	 * Beschreibung der wichtigsten Parameter:
@@ -159,14 +159,14 @@
 	 * - "TabPaneName" Name des TabPane's
 	 * - "TabPaneIcon" Icon des TabPane's
 	 * - "TabPaneOrder" Position des TabPane's
-	 * - "TabPaneExclusive" Wird das TabPane exklusiv vom Modul verwendet (wichtig für Deinstallation)
-	 * - "TabItem" Item Name der für das Tab verwendet wird
+	 * - "TabPaneExclusive" Wird das TabPane exklusiv vom Modul verwendet (wichtig fÃ¼r Deinstallation)
+	 * - "TabItem" Item Name der fÃ¼r das Tab verwendet wird
 	 * - "TabName" definiert Namen im Tab des WebFronts
 	 * - "TabIcon" definiert Icon im Tab des WebFronts
 	 * - "TabOrder" definiert Position im Tab des WebFronts
-	 * - "Name" für Mobile Frontend Installation
+	 * - "Name" fÃ¼r Mobile Frontend Installation
 	 * - "Order" Position Mobile Frontend
-	 * - "Icon" Icon für Mobile Frontend
+	 * - "Icon" Icon fÃ¼r Mobile Frontend
 	 *
 	 * @}*/
 
@@ -174,7 +174,7 @@
 	 * @ingroup ipsmodulemanager
 	 * @{
 	 *
-	 * Installations Script für IPSModuleManager
+	 * Installations Script fÃ¼r IPSModuleManager
 	 *
 	 * @file          IPSModuleManager_Installation.ips.php
 	 * @author        Andreas Brauneis

@@ -2,7 +2,7 @@
 	/**@addtogroup ipslogger
 	 * @{
 	 *
-	 * Deinstallations File für den IPSLogger
+	 * Deinstallations File fÃ¼r den IPSLogger
 	 *
 	 * @file          IPSLogger_Deinstallation.ips.php
 	 * @author        Andreas Brauneis

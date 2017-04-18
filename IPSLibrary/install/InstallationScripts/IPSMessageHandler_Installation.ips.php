@@ -3,7 +3,7 @@
 	 * @ingroup ipsmessagehandler
 	 * @{
 	 *
-	 * Installations Script für IPSMessageHandler
+	 * Installations Script fÃ¼r IPSMessageHandler
 	 *
 	 * @file          IPSMessageHandler_Installation.ips.php
 	 * @author        Andreas Brauneis
@@ -15,7 +15,7 @@
 	 * - IPSModuleManager >= 2.50.1
 	 *
 	 * @page install_messagehandler Installations Schritte
-	 * Folgende Schritte sind zur Installation von IPSMessageHandler nötig:
+	 * Folgende Schritte sind zur Installation von IPSMessageHandler nÃ¶tig:
 	 * - Laden des Modules (siehe IPSModuleManager)
 	 * - Installation (siehe IPSModuleManager)
 	 */

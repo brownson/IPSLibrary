@@ -20,7 +20,7 @@
 	 * - IPSLogger >= 2.5.1
 	 *
 	 * @page install_netplayer Installations Schritte
-	 * Folgende Schritte sind zur Installation des NetPlayers nötig:
+	 * Folgende Schritte sind zur Installation des NetPlayers nÃ¶tig:
 	 * - Laden des Modules (siehe IPSModuleManager)
 	 * - Konfiguration (Details siehe Konfiguration)
 	 * - Installation (siehe IPSModuleManager)

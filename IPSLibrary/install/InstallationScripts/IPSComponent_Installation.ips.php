@@ -3,7 +3,7 @@
 	 * @ingroup ipscomponent
 	 * @{
 	 *
-	 * Installations Script für IPSComponent
+	 * Installations Script fÃ¼r IPSComponent
 	 *
 	 * @file          IPSComponent_Installation.ips.php
 	 * @author        Andreas Brauneis
@@ -15,7 +15,7 @@
 	 * - IPSModuleManager >= 2.50.1
 	 *
 	 * @page install_component Installations Schritte
-	 * Folgende Schritte sind zur Installation von IPSComponent nötig:
+	 * Folgende Schritte sind zur Installation von IPSComponent nÃ¶tig:
 	 * - Laden des Modules (siehe IPSModuleManager)
 	 * - Installation (siehe IPSModuleManager)
 	 */

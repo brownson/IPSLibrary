@@ -99,8 +99,8 @@
 		/**
 		 * @public
 		 *
-		 * Überprüft die Version eines Modules mit dem Namen $moduleName and erzeugt einen Fehler, wenn
-		 * die installierte Version < der übergebenen Version ist.
+		 * ÃœberprÃ¼ft die Version eines Modules mit dem Namen $moduleName and erzeugt einen Fehler, wenn
+		 * die installierte Version < der Ã¼bergebenen Version ist.
 		 *
 		 * Examples:
 		 *   installed=2.5.3, required=2.5.3 --> OK
@@ -109,7 +109,7 @@
 		 *   installed=2.4.3, required=2.5.2 --> Error
 		 *   installed=2.5.1, required=2.5.2 --> Error
 		 *
-		 * @param string $moduleName Name des Modules, das überprüft werden soll
+		 * @param string $moduleName Name des Modules, das Ã¼berprÃ¼ft werden soll
 		 * @param string $moduleVersion Version des Modules
 		 * @throws IPSVersionHandlerException wenn Version nicht korrekt ist
 		 */
@@ -128,7 +128,7 @@
 		/**
 		 * @public
 		 *
-		 * Überprüft ob ein Module in der spezifizierten Version installiert ist.
+		 * ÃœberprÃ¼ft ob ein Module in der spezifizierten Version installiert ist.
 		 *
 		 * @param string $moduleVersion Version des Modules (Format IPSMajorVersion.IPSMinorVersion.ModuleVersion.ModuleStatus.InstallationStatus)
 		 * @return boolean Liefert true wenn Module installiert, andernfalls false
@@ -159,7 +159,7 @@
 		/**
 		 * @public
 		 *
-		 * Löschen eines Modules
+		 * LÃ¶schen eines Modules
 		 */
 		public function DeleteModule() {
 			$this->logHandler->Log('Remove Module '.$this->moduleName.' from Versioning System');

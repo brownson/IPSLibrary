@@ -271,7 +271,7 @@
 		/**
 		 * @public
 		 *
-		 * Erhöht die Versionsnummer im entsprechenden Download File und legt den übergebenen Text 
+		 * ErhÃ¶ht die Versionsnummer im entsprechenden Download File und legt den Ã¼bergebenen Text 
 		 * unter der ChangeList des Modules ab.
 		 * 
 		 */

@@ -4,11 +4,11 @@
 	 * @{
 	 *
 	 * Der IPSInstaller bietet diverse Funktionen um Objekte (Kategorien, Variablen, Links, usw.) in IPS anzulegen.
-	 * Die Funktionen überprüfen ob das Objekt bereits existiert, wenn nein wird es neu angelegt ansonsten werden die
+	 * Die Funktionen Ã¼berprÃ¼fen ob das Objekt bereits existiert, wenn nein wird es neu angelegt ansonsten werden die
 	 * Object Parameter angepasst.
 	 *
-	 * Dadurch ist es möglich Installations Skripts zu schreiben, die man einerseits verwenden kann Entwicklungen vom
-	 * Test-System auf das Echt-System zu bringen oder andererseits Entwicklungen auch anderen Usern zur Verfügung zu
+	 * Dadurch ist es mÃ¶glich Installations Skripts zu schreiben, die man einerseits verwenden kann Entwicklungen vom
+	 * Test-System auf das Echt-System zu bringen oder andererseits Entwicklungen auch anderen Usern zur VerfÃ¼gung zu
 	 * stellen.
 	 *
 	 * @file          IPSInstaller.inc.php
@@ -20,12 +20,12 @@
 
 	/** Anlegen einer Kategorie.
 	 *
-	 * Die Funktion legt eine Kategory, als übergeordnete ID dient dabei $ParentId. Sollte
+	 * Die Funktion legt eine Kategory, als Ã¼bergeordnete ID dient dabei $ParentId. Sollte
 	 * dort bereits eine Kategorie mit dem angegebenen Namen existieren, werden die Parameter
 	 * (Position und Icon) der existierenden Kategorie auf den neuen Wert gesetzt.
 	 *
 	 * @param string $Name Name der Kategorie
-	 * @param integer $ParentId ID des übergeordneten Objekts im logischen Objektbaum
+	 * @param integer $ParentId ID des Ã¼bergeordneten Objekts im logischen Objektbaum
 	 * @param integer $Position Positionswert des Objekts
 	 * @param string $Icon Dateiname des Icons ohne Pfad/Erweiterung
 	 * @return integer ID der Kategorie
@@ -51,10 +51,10 @@
 		return $CategoryId;
 	}
 
-	/** Löschen einer Kategory inklusve Inhalt
+	/** LÃ¶schen einer Kategory inklusve Inhalt
 	 *
-	 * Die Funktion löscht eine Kategory, vor dem Löschen werden noch alle beinhaltenden Objekte
-	 * aus der Kategory gelöscht.
+	 * Die Funktion lÃ¶scht eine Kategory, vor dem LÃ¶schen werden noch alle beinhaltenden Objekte
+	 * aus der Kategory gelÃ¶scht.
 	 *
 	 * @param integer $CategoryId ID der Kategory
 	 *
@@ -65,9 +65,9 @@
 		IPS_DeleteCategory($CategoryId);
 	}
 
-	/** Löschen eines beliebigen Objektes
+	/** LÃ¶schen eines beliebigen Objektes
 	 *
-	 * Die Funktion löscht ein IP-Symcon Object mit der übergebenen ID.
+	 * Die Funktion lÃ¶scht ein IP-Symcon Object mit der Ã¼bergebenen ID.
 	 *
 	 * @param integer $objectId ID des Objektes
 	 *
@@ -105,9 +105,9 @@
 	}
 	
 	
-	/** Löschen des Inhalts einer Kategorie inklusve Inhalt
+	/** LÃ¶schen des Inhalts einer Kategorie inklusve Inhalt
 	 *
-	 * Die Funktion löscht den gesamtem Inhalt einer Kategorie
+	 * Die Funktion lÃ¶scht den gesamtem Inhalt einer Kategorie
 	 *
 	 * @param integer $CategoryId ID der Kategory
 	 *
@@ -126,7 +126,7 @@
 
 	/** Anlegen eines Kategorie Pfades.
 	 *
-	 * Eine Liste von Kategorien, die durch einen '.' voneinander separiert sind, können als String übergeben
+	 * Eine Liste von Kategorien, die durch einen '.' voneinander separiert sind, kÃ¶nnen als String Ã¼bergeben
 	 * werden.
 	 *
 	 * @param string $Path Kategorie Pfad (zB. 'Program.IPSInstaller')
@@ -154,7 +154,7 @@
 	 * Der Befehl ermittelt aus einer Pfadangabe (zB. "Program.IPSInstaller") die ID der Kategorie
 	 *
 	 * @param string $Path Pfadangabe
-	 * @param string $ReturnFalse wenn true, retouniert die Funktion false wenn das übergebene Object nicht gefunden wurde
+	 * @param string $ReturnFalse wenn true, retouniert die Funktion false wenn das Ã¼bergebene Object nicht gefunden wurde
 	 *
 	 */
 	function get_ObjectIDByPath($Path, $ReturnFalse=false) {
@@ -180,7 +180,7 @@
 
 	/** Ident aus Namen generieren
 	 *
-	 * Die Funktion wandelt einen Namen auf einen gültigen  IPS Ident um.
+	 * Die Funktion wandelt einen Namen auf einen gÃ¼ltigen  IPS Ident um.
 	 *
 	 * @param string $name Name
 	 * @return string Identifier 
@@ -188,11 +188,11 @@
 	 */
 	function Get_IdentByName($name) {
 		$ident = str_replace(' ', '', $name);
-		$ident = str_replace(array('ö','ä','ü','Ö','Ä','Ü'), array('oe', 'ae','ue','Oe', 'Ae','Ue' ), $ident);
+		$ident = str_replace(array('Ã¶','Ã¤','Ã¼','Ã–','Ã„','Ãœ'), array('oe', 'ae','ue','Oe', 'Ae','Ue' ), $ident);
 		$ident = str_replace(array('"','\'','%','&','(',')','=','#','<','>','|','\\'), '', $ident);
 		$ident = str_replace(array(',','.',':',';','!','?'), '', $ident);
 		$ident = str_replace(array('+','-','/','*'), '', $ident);
-		$ident = str_replace(array('ß'), 'ss', $ident);
+		$ident = str_replace(array('ÃŸ'), 'ss', $ident);
 		return $ident;
 	}
 
@@ -200,12 +200,12 @@
 
 	/** Anlegen einer Instanz.
 	 *
-	 * Die Funktion legt eine unkonfigurierte Instanz an, als übergeordnete ID dient dabei $ParentId. Sollte
+	 * Die Funktion legt eine unkonfigurierte Instanz an, als Ã¼bergeordnete ID dient dabei $ParentId. Sollte
 	 * dort bereits eine Kategorie mit dem angegebenen Namen existieren, werden die Parameter
 	 * (Position und Icon) der existierenden Kategorie auf den neuen Wert gesetzt.
 	 *
 	 * @param string $Name Name der Instance
-	 * @param integer $ParentId ID des übergeordneten Objekts im logischen Objektbaum
+	 * @param integer $ParentId ID des Ã¼bergeordneten Objekts im logischen Objektbaum
 	 * @param string $ModulId ModulID des zu erstellenden Objekts. Die ModulID ist eine 32Bit GUID im Format
 	 *                        {00000000-0000-0000-0000-000000000000}.
 	 * @param integer $Position Positionswert des Objekts
@@ -229,11 +229,11 @@
 
 	/** Anlegen einer "MediaPlayer" Instanz.
 	 *
-	 * Die Funktion legt eine "MediaPlayer" Instanz an und liefert die ID des generierten Objekts als Return Wert zurück
+	 * Die Funktion legt eine "MediaPlayer" Instanz an und liefert die ID des generierten Objekts als Return Wert zurÃ¼ck
 	 * Es wird die erste Soundkarte verwendet, die im System gefunden wird.
 	 *
 	 * @param string $Name Name der MediaPlayer Instance
-	 * @param integer $ParentId ID des übergeordneten Objekts im logischen Objektbaum
+	 * @param integer $ParentId ID des Ã¼bergeordneten Objekts im logischen Objektbaum
 	 * @param integer $Position Positionswert des Objekts
 	 * @return integer ID der Instanz
 	 *
@@ -255,12 +255,12 @@
 
 	/** Anlegen einer "Media" Instanz.
 	 *
-	 * Die Funktion legt eine "Media" Instanz an und liefert die ID des generierten Objekts als Return Wert zurück
+	 * Die Funktion legt eine "Media" Instanz an und liefert die ID des generierten Objekts als Return Wert zurÃ¼ck
 	 *
 	 * @param string $Name Name der Media Instance
-	 * @param integer $ParentId ID des übergeordneten Objekts im logischen Objektbaum
+	 * @param integer $ParentId ID des Ã¼bergeordneten Objekts im logischen Objektbaum
 	 * @param string $FileName Dateiname der Mediendatei.
-	 * @param boolean $FileExists TRUE, wenn Existenz geprüft werden soll, sonst FALSE
+	 * @param boolean $FileExists TRUE, wenn Existenz geprÃ¼ft werden soll, sonst FALSE
 	 * @param boolean $MediaType MedienType (0=Designer Formular, 1=Image Obejct, 2=Sound Objekt)
 	 * @param string $Icon Dateiname des Icons ohne Pfad/Erweiterung
 	 * @param integer $Position Positionswert des Objekts
@@ -286,10 +286,10 @@
 	/** Anlegen einer "MediaStream" Instanz.
 	 *
 	 * Die Funktion legt eine "Media" Instanz vom Type "Stream" an und liefert die ID des generierten
-	 * Objekts als Return Wert zurück
+	 * Objekts als Return Wert zurÃ¼ck
 	 *
 	 * @param string $Name Name der Media Instance
-	 * @param integer $ParentId ID des übergeordneten Objekts im logischen Objektbaum
+	 * @param integer $ParentId ID des Ã¼bergeordneten Objekts im logischen Objektbaum
 	 * @param string $URL der Camera.
 	 * @param string $Icon Dateiname des Icons ohne Pfad/Erweiterung
 	 * @param integer $Position Positionswert des Objekts
@@ -314,10 +314,10 @@
 
 	/** Anlegen einer Instanz.
 	 *
-	 * Die Funktion legt eine "Dummy" Instanz an und liefert die ID des generierten Objects als Return Wert zurück
+	 * Die Funktion legt eine "Dummy" Instanz an und liefert die ID des generierten Objects als Return Wert zurÃ¼ck
 	 *
 	 * @param string $Name Name der Dummy Instance
-	 * @param integer $ParentId ID des übergeordneten Objekts im logischen Objektbaum
+	 * @param integer $ParentId ID des Ã¼bergeordneten Objekts im logischen Objektbaum
 	 * @param integer $Position Positionswert des Objekts
 	 * @return integer ID der Instanz
 	 *
@@ -396,10 +396,10 @@
 	 * Die Funktion legt eine Splitter Instanz an, die mit linkem und rechtem Trennzeichen arbeitet.
 	 *
 	 * @param string $name Name der Cutter Instanz
-	 * @param integer $ioInstanceId ID der übergeordneten IO Instanz
+	 * @param integer $ioInstanceId ID der Ã¼bergeordneten IO Instanz
 	 * @param string $leftCutChar Linkes Trennzeichen
 	 * @param string $rightCutChar Rechtes Trennzeichen
-	 * @param string $timeout Timeout, wenn die Verzögerung zweier Pakete größer als Timeout ist, wird der Puffer gelöscht und as zweite Paket als neuer Inhalt übernommen
+	 * @param string $timeout Timeout, wenn die VerzÃ¶gerung zweier Pakete grÃ¶ÃŸer als Timeout ist, wird der Puffer gelÃ¶scht und as zweite Paket als neuer Inhalt Ã¼bernommen
 	 * @return integer ID der Cutter Instanz
 	 *
 	 */
@@ -419,15 +419,15 @@
 	}
 
 
-	/** Anlegen eines Splitter mit fester Länge
+	/** Anlegen eines Splitter mit fester LÃ¤nge
 	 *
-	 * Die Funktion legt eine Splitter Instanz an, die eine feste Länge verwendet.
+	 * Die Funktion legt eine Splitter Instanz an, die eine feste LÃ¤nge verwendet.
 	 *
 	 * @param string $name Name der Cutter Instanz
-	 * @param integer $ioInstanceId ID der übergeordneten IO Instanz
-	 * @param string $inputLength Eingabelänge
+	 * @param integer $ioInstanceId ID der Ã¼bergeordneten IO Instanz
+	 * @param string $inputLength EingabelÃ¤nge
 	 * @param string $syncChar Sync Zeichen
-	 * @param string $timeout Timeout, wenn die Verzögerung zweier Pakete größer als Timeout ist, wird der Puffer gelöscht und as zweite Paket als neuer Inhalt übernommen
+	 * @param string $timeout Timeout, wenn die VerzÃ¶gerung zweier Pakete grÃ¶ÃŸer als Timeout ist, wird der Puffer gelÃ¶scht und as zweite Paket als neuer Inhalt Ã¼bernommen
 	 * @return integer ID der Cutter Instanz
 	 *
 	 */
@@ -449,12 +449,12 @@
 
 	/** Anlegen einer Register-Variable
 	 *
-	 * Die Funktion legt eine Register Variable, als übergeordnete ID dient dabei $ParentId. Sollte
+	 * Die Funktion legt eine Register Variable, als Ã¼bergeordnete ID dient dabei $ParentId. Sollte
 	 * dort bereits eine Register Variable mit dem spezifizierten Namen existieren, werden alle Parameter
 	 * auf den aktuellen Wert gesetzt.
 	 *
 	 * @param string $Name Name der Register Variable
-	 * @param integer $ParentId ID des übergeordneten Objekts im logischen Objektbaum
+	 * @param integer $ParentId ID des Ã¼bergeordneten Objekts im logischen Objektbaum
 	 * @param integer $ScriptId ID des Scriptes
 	 * @param integer $PortId ID der zu verbindenden Instanz
 	 * @param integer $Position Positionswert des Objekts
@@ -476,7 +476,7 @@
 	 *
 	 * @param string $Name Name des Scripts im logischen Objektbaum
 	 * @param string $File Dateiname des PHP Skripts (relativ zum "/scripts" Ordner)
-	 * @param integer $ParentId ID des übergeordneten Objekts im logischen Objektbaum
+	 * @param integer $ParentId ID des Ã¼bergeordneten Objekts im logischen Objektbaum
 	 * @param integer $Position Positionswert des Objekts
 	 * @return integer ID des Scriptes
 	 *
@@ -512,10 +512,10 @@
 	 *
 	 * @param string $Name Name der Variable im logischen Objektbaum
 	 * @param integer $Type VariablenType 0=Boolean, 1=Integer, 2=Float, 3=String
-	 * @param integer $ParentId ID des übergeordneten Objekts im logischen Objektbaum
+	 * @param integer $ParentId ID des Ã¼bergeordneten Objekts im logischen Objektbaum
 	 * @param integer $Position Positionswert des Objekts
-	 * @param string $Profile Name des Profils. Verfügbare Profile können über IPS_GetVariableProfileList abgefragt werden. Wenn ein Leerstring übergeben wird, dann wird das benutzerdefinierte Profil deaktiviert.
-	 * @param integer $Action ID eines Skriptes das als Aktions aufgeführt werden soll
+	 * @param string $Profile Name des Profils. VerfÃ¼gbare Profile kÃ¶nnen Ã¼ber IPS_GetVariableProfileList abgefragt werden. Wenn ein Leerstring Ã¼bergeben wird, dann wird das benutzerdefinierte Profil deaktiviert.
+	 * @param integer $Action ID eines Skriptes das als Aktions aufgefÃ¼hrt werden soll
 	 * @param string $ValueDefault Wert den die Variable nach dem Anlegen haben soll
 	 * @param string $Icon Dateiname des Icons ohne Pfad/Erweiterung
 	 * @return integer ID der Variable
@@ -562,15 +562,15 @@
 
 	/** Anlegen eines Links
 	 *
-	 * Die Funktion legt einen Link an, als übergeordnete ID dient dabei $ParentId. Sollte
+	 * Die Funktion legt einen Link an, als Ã¼bergeordnete ID dient dabei $ParentId. Sollte
 	 * dort bereits ein Link mit dem angegebenen Namen existieren, werden die Parameter
 	 * (Position und Icon) des existierenden Links auf den neuen Wert gesetzt.
 	 *
 	 * @param string $Name Name des Links im logischen Objektbaum
-	 * @param integer $Link ID des zu verknüpfenden Objekts
-	 * @param integer $ParentId ID des übergeordneten Objekts im logischen Objektbaum
+	 * @param integer $Link ID des zu verknÃ¼pfenden Objekts
+	 * @param integer $ParentId ID des Ã¼bergeordneten Objekts im logischen Objektbaum
 	 * @param integer $Position Positionswert des Objekts
-	 * @param string $ident Identifikator für das Objekt
+	 * @param string $ident Identifikator fÃ¼r das Objekt
 	 * @return integer ID der Variable
 	 *
 	 */
@@ -607,15 +607,15 @@
 
 	/** Anlegen eines Links
 	 *
-	 * Die Funktion sucht in der spezifizierten Parent Kategorie alle vorhandenen Links und überprüft ob einer der
-	 * Links bereits auf das zu verknüpfende Objekt verweist. Wenn kein Link gefunden wurde wird ein neuer angelegt,
+	 * Die Funktion sucht in der spezifizierten Parent Kategorie alle vorhandenen Links und Ã¼berprÃ¼ft ob einer der
+	 * Links bereits auf das zu verknÃ¼pfende Objekt verweist. Wenn kein Link gefunden wurde wird ein neuer angelegt,
 	 * anderenfalls wird Position und Name existierenden Links auf den neuen Wert gesetzt.
 	 *
 	 * @param string $Name Name des Links im logischen Objektbaum
-	 * @param integer $LinkChildId ID des zu verknüpfenden Objekts
-	 * @param integer $ParentId ID des übergeordneten Objekts im logischen Objektbaum
+	 * @param integer $LinkChildId ID des zu verknÃ¼pfenden Objekts
+	 * @param integer $ParentId ID des Ã¼bergeordneten Objekts im logischen Objektbaum
 	 * @param integer $Position Positionswert des Objekts
-	 * @param string $ident Identifikator für das Objekt
+	 * @param string $ident Identifikator fÃ¼r das Objekt
 	 * @return integer ID der Variable
 	 *
 	 */
@@ -664,7 +664,7 @@
 
 	/** Definieren einer ID Konstante
 	 *
-	 * Mit der Funktion ist es möglich, eine Konstane in einem PHP Script File auf einen beliebigen Wert zu setzen.
+	 * Mit der Funktion ist es mÃ¶glich, eine Konstane in einem PHP Script File auf einen beliebigen Wert zu setzen.
 	 *
 	 * @param string $Name Name dee Konstante
 	 * @param integer $ID Wert der Konstante
@@ -697,10 +697,10 @@
 
 	/** Definieren "Tages" Timers
 	 *
-	 * Anlegen eines Timers, der einmal pro Tag zu einer bestimmten Uhrzeit ausgeführt wird
+	 * Anlegen eines Timers, der einmal pro Tag zu einer bestimmten Uhrzeit ausgefÃ¼hrt wird
 	 *
 	 * @param string $Name Name des Timers
-	 * @param integer $ParentId ID des übergeordneten Objekts im logischen Objektbaum
+	 * @param integer $ParentId ID des Ã¼bergeordneten Objekts im logischen Objektbaum
 	 * @param integer $Hour Stunde zu der der Timer aktiviert werden soll
 	 * @param integer $Minute Minute zu der der Timer aktiviert werden soll
 	 * @return integer ID des Timers
@@ -728,10 +728,10 @@
 
 	/** Definieren "Sekunden" Timers
 	 *
-	 * Anlegen eines Timers, der alle $Seconds Sekunden ausgeführt wird
+	 * Anlegen eines Timers, der alle $Seconds Sekunden ausgefÃ¼hrt wird
 	 *
 	 * @param string $Name Name des Timers
-	 * @param integer $ParentId ID des übergeordneten Objekts im logischen Objektbaum
+	 * @param integer $ParentId ID des Ã¼bergeordneten Objekts im logischen Objektbaum
 	 * @param integer $Seconds Intervall in Sekunden
 	 * @param boolean $Active Timer aktiv setzen
 	 * @return integer ID des Timers
@@ -756,10 +756,10 @@
 
 	/** Definieren "Minuten" Timers
 	 *
-	 * Anlegen eines Timers, der alle $Minutes Minuten ausgeführt wird
+	 * Anlegen eines Timers, der alle $Minutes Minuten ausgefÃ¼hrt wird
 	 *
 	 * @param string $Name Name des Timers
-	 * @param integer $ParentId ID des übergeordneten Objekts im logischen Objektbaum
+	 * @param integer $ParentId ID des Ã¼bergeordneten Objekts im logischen Objektbaum
 	 * @param integer $Minutes Intervall in Minuten
 	 * @param boolean $Active Timer aktiv setzen
 	 * @return integer ID des Timers
@@ -784,13 +784,13 @@
 
 	/** Anlegen eines Events
 	 *
-	 * Der Befehl erzeugt ein Event, das bei Änderungen der Variable $VariableId das Script
+	 * Der Befehl erzeugt ein Event, das bei Ã„nderungen der Variable $VariableId das Script
 	 * mit der ID $ScriptId aufruft.
 	 *
 	 * @param string $Name Name des Events
 	 * @param integer $VariableId ID der Variable auf der das Event definiert ist
-	 * @param integer $ScriptId ID des Scripts das ausgeführt werden soll
-	 * @param integer $TriggerType Type des Triggers 0=Bei Variablenaktualisierung, 1=Bei Variablenänderung, 2=Bei Grenzüberschreitung, 3=Bei Grenzunterschreitung
+	 * @param integer $ScriptId ID des Scripts das ausgefÃ¼hrt werden soll
+	 * @param integer $TriggerType Type des Triggers 0=Bei Variablenaktualisierung, 1=Bei VariablenÃ¤nderung, 2=Bei GrenzÃ¼berschreitung, 3=Bei Grenzunterschreitung
 	 * @return integer ID des Events
 	 *
 	 */
@@ -811,13 +811,13 @@
 
 	/** Anlegen eines Profils mit Associations
 	 *
-	 * der Befehl legt ein Profile an und erzeugt für die übergebenen Werte Assoziationen
+	 * der Befehl legt ein Profile an und erzeugt fÃ¼r die Ã¼bergebenen Werte Assoziationen
 	 *
 	 * @param string $Name Name des Profiles
 	 * @param string $Associations[] Array mit Wert und Namens Zuordnungen
 	 * @param string $Icon Dateiname des Icons ohne Pfad/Erweiterung
-	 * @param integer $Color[] Array mit Farbwerten im HTML Farbcode (z.b. 0x0000FF für Blau). Sonderfall: -1 für Transparent
-	 * @param boolean $DeleteProfile Profile löschen und neu generieren
+	 * @param integer $Color[] Array mit Farbwerten im HTML Farbcode (z.b. 0x0000FF fÃ¼r Blau). Sonderfall: -1 fÃ¼r Transparent
+	 * @param boolean $DeleteProfile Profile lÃ¶schen und neu generieren
 	 *
 	 */
 	function CreateProfile_Associations ($Name, $Associations, $Icon="", $Color=-1, $DeleteProfile=true) {
@@ -840,20 +840,20 @@
 		}
 	}
 
-	/** Anlegen eines Profils für boolsche Varaiblen
+	/** Anlegen eines Profils fÃ¼r boolsche Varaiblen
 	 *
-	 * Der Befehl legt ein Switch Profil an. Es können für den Zustand Ein bzw. Aus jeweils ein eigener
+	 * Der Befehl legt ein Switch Profil an. Es kÃ¶nnen fÃ¼r den Zustand Ein bzw. Aus jeweils ein eigener
 	 * Text, eine eigene Farbe und ein eigenes Icon gesetzt werden. Angabe von Icons und Farbe ist optional
 	 *
 	 * @param string $Name Name des Profiles
-	 * @param string $DisplayFalse Text der für FALSE verwendet werden soll
-	 * @param string $DisplayTrue Text der für TRUE verwendet werden soll
+	 * @param string $DisplayFalse Text der fÃ¼r FALSE verwendet werden soll
+	 * @param string $DisplayTrue Text der fÃ¼r TRUE verwendet werden soll
 	 * @param string $Icon Dateiname des Icons ohne Pfad/Erweiterung
-	 * @param integer $ColorOff Farbwert der für FALSE verwendet werden soll im HTML Farbcode (z.b. 0x0000FF für Blau). Sonderfall: -1 für Transparent
-	 * @param integer $ColorOn Farbwert der für TRUE verwendet werden soll im HTML Farbcode (z.b. 0x0000FF für Blau). Sonderfall: -1 für Transparent
-	 * @param string $IconOff Dateiname des Icons das für FALSE verwendet werden soll
-	 * @param string $IconOn Dateiname des Icons das für TRUE verwendet werden soll
-	 * @param boolean $DeleteProfile Spezifiziert ob ein bestehendes Profil geöscht werden soll
+	 * @param integer $ColorOff Farbwert der fÃ¼r FALSE verwendet werden soll im HTML Farbcode (z.b. 0x0000FF fÃ¼r Blau). Sonderfall: -1 fÃ¼r Transparent
+	 * @param integer $ColorOn Farbwert der fÃ¼r TRUE verwendet werden soll im HTML Farbcode (z.b. 0x0000FF fÃ¼r Blau). Sonderfall: -1 fÃ¼r Transparent
+	 * @param string $IconOff Dateiname des Icons das fÃ¼r FALSE verwendet werden soll
+	 * @param string $IconOn Dateiname des Icons das fÃ¼r TRUE verwendet werden soll
+	 * @param boolean $DeleteProfile Spezifiziert ob ein bestehendes Profil geÃ¶scht werden soll
 	 *
 	 */
 	function CreateProfile_Switch ($Name, $DisplayFalse, $DisplayTrue, $Icon="", $ColorOff=-1, $ColorOn=0x00ff00, $IconOff="", $IconOn="", $DeleteProfile=true) {
@@ -875,13 +875,13 @@
 	 * angegeben werden.
 	 *
 	 * @param string $Name Name des Profiles
-	 * @param integer $Start Der für die Visualisierung genutzte Minimalwert. Diese Soft-Limitation beeinflusst nicht den Variablenwert.
-	 * @param integer $Step Die für die Visualisierung genutzte Schrittweite zur Erstellung der Sollwert-Veränderngsleiste. Eine Schrittweite von 0 aktiviert die Assoziationsliste.
-	 * @param integer $Stop Der für die Visualisierung genutzte Maximalwert. Diese Soft-Limitation beeinflusst nicht den Variablenwert.
-	 * @param string $Prefix Prefix für den Wert
-	 * @param string $Suffix Suffix für den Wert
+	 * @param integer $Start Der fÃ¼r die Visualisierung genutzte Minimalwert. Diese Soft-Limitation beeinflusst nicht den Variablenwert.
+	 * @param integer $Step Die fÃ¼r die Visualisierung genutzte Schrittweite zur Erstellung der Sollwert-VerÃ¤nderngsleiste. Eine Schrittweite von 0 aktiviert die Assoziationsliste.
+	 * @param integer $Stop Der fÃ¼r die Visualisierung genutzte Maximalwert. Diese Soft-Limitation beeinflusst nicht den Variablenwert.
+	 * @param string $Prefix Prefix fÃ¼r den Wert
+	 * @param string $Suffix Suffix fÃ¼r den Wert
 	 * @param string $Icon Dateiname des Icons
-	 * @param boolean $DeleteProfile Spezifiziert ob ein bestehendes Profil geöscht werden soll
+	 * @param boolean $DeleteProfile Spezifiziert ob ein bestehendes Profil geÃ¶scht werden soll
 	 *
 	 */
 	function CreateProfile_Count ($Name, $Start=0, $Step=0, $Stop=0, $Prefix="", $Suffix="", $Icon="", $DeleteProfile=true) {
@@ -896,7 +896,7 @@
 	}
 
 	/**
-	 * Lädt alle WebFronts neu
+	 * LÃ¤dt alle WebFronts neu
 	 */
 	function ReloadAllWebFronts() {
 		$wfIds = IPS_GetInstanceListByModuleID('{3565B1F2-8F7B-4311-A4B6-1BF1D868F39E}');
@@ -908,7 +908,7 @@
 	/** 
 	 * Liefert die ID des ersten gefundenen WebFront Konfigurators
 	 *
-	 * Die Funktion gibt die ID des ersten WebFront Konfigurators zurück. Wenn keiner existiert, wird 'false' zurückgegeben.
+	 * Die Funktion gibt die ID des ersten WebFront Konfigurators zurÃ¼ck. Wenn keiner existiert, wird 'false' zurÃ¼ckgegeben.
 	 *
 	 */
 	function GetWFCIdDefault() {
@@ -919,9 +919,9 @@
 		return false;
 	}
 
-	/** Existenz eines WebFront Konfigurator Items überprüfen
+	/** Existenz eines WebFront Konfigurator Items Ã¼berprÃ¼fen
 	 *
-	 * Der Befehl überprüft ob ein bestimmtes Item im WebFront Konfigurator existiert
+	 * Der Befehl Ã¼berprÃ¼ft ob ein bestimmtes Item im WebFront Konfigurator existiert
 	 *
 	 * @param integer $WFCId ID des WebFront Konfigurators
 	 * @param string $ItemId Element Name im Konfigurator Objekt Baum
@@ -970,7 +970,7 @@
 	 *
 	 * @param integer $WFCId ID des WebFront Konfigurators
 	 * @param string $ItemId Element Name im Konfigurator Objekt Baum
-	 * @param string $ParentId Übergeordneter Element Name im Konfigurator Objekt Baum
+	 * @param string $ParentId Ãœbergeordneter Element Name im Konfigurator Objekt Baum
 	 * @param integer $Position Positionswert im Objekt Baum
 	 * @param string $Title Title
 	 * @param string $Icon Dateiname des Icons ohne Pfad/Erweiterung
@@ -988,14 +988,14 @@
 	 *
 	 * @param integer $WFCId ID des WebFront Konfigurators
 	 * @param string $ItemId Element Name im Konfigurator Objekt Baum
-	 * @param string $ParentId Übergeordneter Element Name im Konfigurator Objekt Baum
+	 * @param string $ParentId Ãœbergeordneter Element Name im Konfigurator Objekt Baum
 	 * @param integer $Position Positionswert im Objekt Baum
 	 * @param string $Title Title
 	 * @param string $Icon Dateiname des Icons ohne Pfad/Erweiterung
 	 * @param integer $Alignment Aufteilung der Container (0=horizontal, 1=vertical)
-	 * @param integer $Ratio Größe der Container
-	 * @param integer $RatioTarget Zuordnung der Größenangabe (0=erster Container, 1=zweiter Container)
-	 * @param integer $RatioType Einheit der Größenangabe (0=Percentage, 1=Pixel)
+	 * @param integer $Ratio GrÃ¶ÃŸe der Container
+	 * @param integer $RatioTarget Zuordnung der GrÃ¶ÃŸenangabe (0=erster Container, 1=zweiter Container)
+	 * @param integer $RatioType Einheit der GrÃ¶ÃŸenangabe (0=Percentage, 1=Pixel)
 	 * @param string $ShowBorder Zeige Begrenzungs Linie
 	 *
 	 */
@@ -1011,7 +1011,7 @@
 	 *
 	 * @param integer $WFCId ID des WebFront Konfigurators
 	 * @param string $ItemId Element Name im Konfigurator Objekt Baum
-	 * @param string $ParentId Übergeordneter Element Name im Konfigurator Objekt Baum
+	 * @param string $ParentId Ãœbergeordneter Element Name im Konfigurator Objekt Baum
 	 * @param integer $Position Positionswert im Objekt Baum
 	 * @param string $Title Title
 	 * @param string $Icon Dateiname des Icons ohne Pfad/Erweiterung
@@ -1034,7 +1034,7 @@
 	 *
 	 * @param integer $WFCId ID des WebFront Konfigurators
 	 * @param string $ItemId Element Name im Konfigurator Objekt Baum
-	 * @param string $ParentId Übergeordneter Element Name im Konfigurator Objekt Baum
+	 * @param string $ParentId Ãœbergeordneter Element Name im Konfigurator Objekt Baum
 	 * @param integer $Position Positionswert im Objekt Baum
 	 * @param string $Title Title
 	 * @param string $Icon Dateiname des Icons ohne Pfad/Erweiterung
@@ -1054,10 +1054,10 @@
 	 *
 	 * @param integer $WFCId ID des WebFront Konfigurators
 	 * @param string $ItemId Element Name im Konfigurator Objekt Baum
-	 * @param string $ParentId Übergeordneter Element Name im Konfigurator Objekt Baum
+	 * @param string $ParentId Ãœbergeordneter Element Name im Konfigurator Objekt Baum
 	 * @param integer $Position Positionswert im Objekt Baum
 	 * @param string $variableId VariableId, die zur Anzeige im Widget verwendet werden soll
-	 * @param string $scriptId ScriptId, Script das ausgeführt werden soll
+	 * @param string $scriptId ScriptId, Script das ausgefÃ¼hrt werden soll
 	 *
 	 */
 	function CreateWFCItemWidget ($WFCId, $ItemId, $ParentId, $Position, $variableId, $scriptId) {
@@ -1066,9 +1066,9 @@
 		CreateWFCItem ($WFCId, $ItemId, $ParentId, $Position, '', '', 'InfoWidget', $Configuration);
 	}
 
-	/** Löschen eines kompletten Objektbaumes aus dem WebFront Konfigurator
+	/** LÃ¶schen eines kompletten Objektbaumes aus dem WebFront Konfigurator
 	 *
-	 * Der Befehl löscht im WebFront Konfigurator einen Teilbaum durch Angabe des Root Element Namens $ItemId
+	 * Der Befehl lÃ¶scht im WebFront Konfigurator einen Teilbaum durch Angabe des Root Element Namens $ItemId
 	 *
 	 * @param integer $WFCId ID des WebFront Konfigurators
 	 * @param string $ItemId Root Element Name im Konfigurator Objekt Baum
@@ -1083,9 +1083,9 @@
 		}
 	}
 
-	/** Löschen ein Element aus dem WebFront Konfigurator
+	/** LÃ¶schen ein Element aus dem WebFront Konfigurator
 	 *
-	 * Der Befehl löscht im WebFront Konfigurator ein Element durch Angabe des Element Namens $ItemId
+	 * Der Befehl lÃ¶scht im WebFront Konfigurator ein Element durch Angabe des Element Namens $ItemId
 	 *
 	 * @param integer $WFCId ID des WebFront Konfigurators
 	 * @param string $ItemId Element Name im Konfigurator Objekt Baum

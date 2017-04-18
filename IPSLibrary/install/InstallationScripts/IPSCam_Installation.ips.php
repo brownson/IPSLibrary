@@ -33,8 +33,8 @@
 	 *
 	 * Script zur kompletten Installation der IPSCam Steuerung.
 	 *
-	 * Vor der Installation muß das File IPSCam_Configuration.inc.php an die persönlichen
-	 * Bedürfnisse angepasst werden.
+	 * Vor der Installation muÃŸ das File IPSCam_Configuration.inc.php an die persÃ¶nlichen
+	 * BedÃ¼rfnisse angepasst werden.
 	 *
 	 * @page rquirements_IPSCam Installations Voraussetzungen
 	 * - IPS Kernel >= 2.50
@@ -43,7 +43,7 @@
 	 * - IPSComponent >= 2.50.1
 	 *
 	 * @page install_IPSCam Installations Schritte
-	 * Folgende Schritte sind zur Installation der IPSCam Ansteuerung nötig:
+	 * Folgende Schritte sind zur Installation der IPSCam Ansteuerung nÃ¶tig:
 	 * - Laden des Modules (siehe IPSModuleManager)
 	 * - Konfiguration (Details siehe Konfiguration)
 	 * - Installation (siehe IPSModuleManager)
@@ -341,12 +341,12 @@
 			$instanceIdDetail  = CreateDummyInstance("Automatische Bilder", $categoryIdSettings, 10);
 			CreateLink('Autom. Bild Speicherung',IPS_GetObjectIDByIdent(IPSCAM_VAR_PICTSTORE, $categoryIdCam), $instanceIdDetail, 20);
 			CreateLink('Bild Historisierung',    IPS_GetObjectIDByIdent(IPSCAM_VAR_PICTHIST, $categoryIdCam), $instanceIdDetail, 40);
-			CreateLink('Bildgröße',              IPS_GetObjectIDByIdent(IPSCAM_VAR_PICTSIZE, $categoryIdCam), $instanceIdDetail, 50);
+			CreateLink('BildgrÃ¶ÃŸe',              IPS_GetObjectIDByIdent(IPSCAM_VAR_PICTSIZE, $categoryIdCam), $instanceIdDetail, 50);
 			$instanceIdDetail  = CreateDummyInstance("Zeitraffer", $categoryIdSettings, 10);
 			CreateLink('Modus',       IPS_GetObjectIDByIdent(IPSCAM_VAR_MOTMODE, $categoryIdCam), $instanceIdDetail, 60);
 			CreateLink('Abstand',     IPS_GetObjectIDByIdent(IPSCAM_VAR_MOTTIME, $categoryIdCam), $instanceIdDetail, 70);
 			CreateLink('Zeitraum',    IPS_GetObjectIDByIdent(IPSCAM_VAR_MOTHIST, $categoryIdCam), $instanceIdDetail, 80);
-			CreateLink('Bildgröße',   IPS_GetObjectIDByIdent(IPSCAM_VAR_MOTSIZE, $categoryIdCam), $instanceIdDetail, 90);
+			CreateLink('BildgrÃ¶ÃŸe',   IPS_GetObjectIDByIdent(IPSCAM_VAR_MOTSIZE, $categoryIdCam), $instanceIdDetail, 90);
 		}
 
 		$instanceIdStreams = CreateDummyInstance("Live Streams", $mobileId, 100);
@@ -361,9 +361,9 @@
 		CreateLink('History Bild',  IPS_GetObjectIDByIdent(IPSCAM_VAR_CAMHIST,   $categoryIdCommon), $instanceIdHistory, 20);
 		CreateLink('Uhrzeit',       IPS_GetObjectIDByIdent(IPSCAM_VAR_NAVTIME,   $categoryIdCommon), $instanceIdHistory, 30);
 		CreateLink('Voriges Bild',  IPSUtil_ObjectIDByPath('Program.IPSLibrary.app.modules.IPSCam.IPSCam_NavPicPrev'), $instanceIdHistory, 100);
-		CreateLink('Nächstes Bild', IPSUtil_ObjectIDByPath('Program.IPSLibrary.app.modules.IPSCam.IPSCam_NavPicNext'), $instanceIdHistory, 110);
+		CreateLink('NÃ¤chstes Bild', IPSUtil_ObjectIDByPath('Program.IPSLibrary.app.modules.IPSCam.IPSCam_NavPicNext'), $instanceIdHistory, 110);
 		CreateLink('Voriger Tag',   IPSUtil_ObjectIDByPath('Program.IPSLibrary.app.modules.IPSCam.IPSCam_NavDayPrev'), $instanceIdHistory, 120);
-		CreateLink('Nächster Tag',  IPSUtil_ObjectIDByPath('Program.IPSLibrary.app.modules.IPSCam.IPSCam_NavDayNext'), $instanceIdHistory, 130);
+		CreateLink('NÃ¤chster Tag',  IPSUtil_ObjectIDByPath('Program.IPSLibrary.app.modules.IPSCam.IPSCam_NavDayNext'), $instanceIdHistory, 130);
 	}
 
 ?>

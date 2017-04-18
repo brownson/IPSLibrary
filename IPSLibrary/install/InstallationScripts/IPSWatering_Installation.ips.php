@@ -24,19 +24,19 @@
 	 *
 	 * IPSWatering WebFront Visualisierung:
 	 *
-	 *  Übersicht über alle Bewässerungs Kreise
+	 *  Ãœbersicht Ã¼ber alle BewÃ¤sserungs Kreise
 	 *  @image html IPSWatering_WebFrontOverview.jpg
 	 *  <BR>
-	 *  Detailansicht eines Bewässerungs Kreises
+	 *  Detailansicht eines BewÃ¤sserungs Kreises
 	 *  @image html IPSWatering_WebFrontSettings.jpg
 	 *
 	 *
 	 * IPSWatering Mobile Visualisierung:
 	 *
-	 *  Übersicht über alle Bewässerungs Kreise
+	 *  Ãœbersicht Ã¼ber alle BewÃ¤sserungs Kreise
 	 *  @image html IPSWatering_MobileOverview.png
 	 *  <BR>
-	 *  Detailansicht eines Bewässerungs Kreises
+	 *  Detailansicht eines BewÃ¤sserungs Kreises
 	 *  @image html IPSWatering_MobileSettings.png
 	 *
 	 *@}*/
@@ -47,8 +47,8 @@
 	 *
 	 * Script zur kompletten Installation der IPSWatering Steuerung.
 	 *
-	 * Vor der Installation muß das File IPSWatering_Configuration.inc.php an die persönlichen
-	 * Bedürfnisse angepasst werden.
+	 * Vor der Installation muÃŸ das File IPSWatering_Configuration.inc.php an die persÃ¶nlichen
+	 * BedÃ¼rfnisse angepasst werden.
 	 *
 	 * @page rquirements_ipswatering Installations Voraussetzungen
 	 * - IPS Kernel >= 2.50
@@ -58,7 +58,7 @@
 	 * - IPSMessageHandler >= 2.50.1
 	 *
 	 * @page install_ipswatering Installations Schritte
-	 * Folgende Schritte sind zur Installation der IPSWatering Ansteuerung nötig:
+	 * Folgende Schritte sind zur Installation der IPSWatering Ansteuerung nÃ¶tig:
 	 * - Laden des Modules (siehe IPSModuleManager)
 	 * - Konfiguration (Details siehe Konfiguration)
 	 * - Installation (siehe IPSModuleManager)
@@ -246,9 +246,9 @@
 			CreateLink('Start Zeit',         get_WateringControlId(c_Control_StartTime,  $CirclyId),  $iPhoneProgram, 50);
 
 			$iPhoneInfos = CreateDummyInstance("Infos", $WebFrontiPhoneDetailId, 30);
-			CreateLink('Nächste Dauer',      get_WateringControlId(c_Control_ToBeDone,   $CirclyId),  $iPhoneInfos, 60);
-			CreateLink('Nächste Beregnung',  get_WateringControlId(c_Control_NextDisplay,$CirclyId),  $iPhoneInfos, 70);
-			CreateLink('Nächstes Datum',     get_WateringControlId(c_Control_NextDate,   $CirclyId),  $iPhoneInfos, 80);
+			CreateLink('NÃ¤chste Dauer',      get_WateringControlId(c_Control_ToBeDone,   $CirclyId),  $iPhoneInfos, 60);
+			CreateLink('NÃ¤chste Beregnung',  get_WateringControlId(c_Control_NextDisplay,$CirclyId),  $iPhoneInfos, 70);
+			CreateLink('NÃ¤chstes Datum',     get_WateringControlId(c_Control_NextDate,   $CirclyId),  $iPhoneInfos, 80);
 			CreateLink('Letztes Datum',      get_WateringControlId(c_Control_LastDate,   $CirclyId),  $iPhoneInfos, 90);
 			CreateLink('Letzte Zeit',        get_WateringControlId(c_Control_LastTime,   $CirclyId),  $iPhoneInfos, 100);
 

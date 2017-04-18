@@ -33,8 +33,8 @@
 	 *
 	 * Script zur kompletten Installation der IPSModuleManagerGUI Steuerung.
 	 *
-	 * Vor der Installation muß das File IPSModuleManagerGUI_Configuration.inc.php an die persönlichen
-	 * Bedürfnisse angepasst werden.
+	 * Vor der Installation muÃŸ das File IPSModuleManagerGUI_Configuration.inc.php an die persÃ¶nlichen
+	 * BedÃ¼rfnisse angepasst werden.
 	 *
 	 * @page rquirements_IPSModuleManagerGUI Installations Voraussetzungen
 	 * - IPS Kernel >= 2.50
@@ -42,7 +42,7 @@
 	 * - IPSLogger >= 2.50.1
 	 *
 	 * @page install_IPSModuleManagerGUI Installations Schritte
-	 * Folgende Schritte sind zur Installation der IPSModuleManagerGUI Ansteuerung nötig:
+	 * Folgende Schritte sind zur Installation der IPSModuleManagerGUI Ansteuerung nÃ¶tig:
 	 * - Laden des Modules (siehe IPSModuleManager)
 	 * - Konfiguration (Details siehe Konfiguration)
 	 * - Installation (siehe IPSModuleManager)

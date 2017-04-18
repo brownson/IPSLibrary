@@ -3,20 +3,20 @@
 	 * @ingroup ipslogger
 	 * @{
 	 *
-	 * Installations File für den IPSLogger
+	 * Installations File fÃ¼r den IPSLogger
 	 *
 	 * @section requirements_ipslogger Installations Voraussetzungen IPSLogger
 	 * - IPS Kernel >= 2.50
 	 * - IPSModuleManager >= 2.50.1
 	 *
-	 * @section visu_ipslogger Visualisierungen für IPSLogger
+	 * @section visu_ipslogger Visualisierungen fÃ¼r IPSLogger
 	 * - WebFront 10Zoll
 	 * - Mobile
 	 *
 	 * @page install_ipslogger Installations Schritte
-	 * Folgende Schritte sind zur Installation der EDIP Ansteuerung nötig:
+	 * Folgende Schritte sind zur Installation der EDIP Ansteuerung nÃ¶tig:
 	 * - Laden des Modules (siehe IPSModuleManager)
-	 * - Konfiguration (Details siehe Konfiguration, Installation ist auch ohne spezielle Konfiguration möglich)
+	 * - Konfiguration (Details siehe Konfiguration, Installation ist auch ohne spezielle Konfiguration mÃ¶glich)
 	 * - Installation (siehe IPSModuleManager)
 	 *
 	 * @file          IPSLogger_Installation.ips.php

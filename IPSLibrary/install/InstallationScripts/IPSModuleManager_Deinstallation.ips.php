@@ -2,7 +2,7 @@
 	 /**@addtogroup ipsmodulemanager
 	 * @{
 	 *
-	 * Deinstallations Script für IPSModuleManager
+	 * Deinstallations Script fÃ¼r IPSModuleManager
 	 *
 	 * @file          IPSModuleManager_Deinstallation.ips.php
 	 * @author        Andreas Brauneis

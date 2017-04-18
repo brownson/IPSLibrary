@@ -24,7 +24,7 @@
 	 *
 	 * IPSShadowing WebFront Visualisierung:
 	 *
-	 *  Übersicht über alle Beschattungselemente
+	 *  Ãœbersicht Ã¼ber alle Beschattungselemente
 	 *  @image html IPSShadowing_WFOverview.png
 	 *  <BR>
 	 *  Detailansicht eines eines Beschattungselementes
@@ -38,8 +38,8 @@
 	 *
 	 * Script zur kompletten Installation der IPSShadowing Steuerung.
 	 *
-	 * Vor der Installation muß das File IPSShadowing_Configuration.inc.php an die persönlichen
-	 * Bedürfnisse angepasst werden.
+	 * Vor der Installation muÃŸ das File IPSShadowing_Configuration.inc.php an die persÃ¶nlichen
+	 * BedÃ¼rfnisse angepasst werden.
 	 *
 	 * @page rquirements_ipsshadowing Installations Voraussetzungen
 	 * - IPS Kernel >= 2.50
@@ -48,7 +48,7 @@
 	 * - IPSComponent >= 2.50.1
 	 *
 	 * @page install_ipsshadowing Installations Schritte
-	 * Folgende Schritte sind zur Installation der IPSShadowing Ansteuerung nötig:
+	 * Folgende Schritte sind zur Installation der IPSShadowing Ansteuerung nÃ¶tig:
 	 * - Laden des Modules (siehe IPSModuleManager)
 	 * - Konfiguration (Details siehe Konfiguration)
 	 * - Installation (siehe IPSModuleManager)
@@ -268,23 +268,23 @@
 
 	CreateProfile_Count        ('IPSShadowing_Step',      -5, 1,   100,   null, "",    null);
 	CreateProfile_Count        ('IPSShadowing_Priority',   1, 1,   10,    null, "",    null);
-	CreateProfile_Count        ('IPSShadowing_TempDelta',  1, 1,   5,     null, " °C", null);
+	CreateProfile_Count        ('IPSShadowing_TempDelta',  1, 1,   5,     null, " Â°C", null);
 	CreateProfile_Count        ('IPSShadowing_Position',   0, 1,   100,   null, "%",   null);
 
-	CreateProfile_Associations ('IPSShadowing_TempLevelOutShadow', array(22=>'Aussen >= 22°C', 23=>'>= 23°C', 24=>'>= 24°C', 25=>'>= 25°C', 26=>'>= 26°C', c_TempLevel_Ignore=>'Ignorieren'));
-	CreateProfile_Associations ('IPSShadowing_TempLevelInShadow',  array(22=>'Innen >= 22°C',  23=>'>= 23°C', 24=>'>= 24°C', 25=>'>= 25°C', 26=>'>= 26°C', c_TempLevel_Ignore=>'Ignorieren'));
-	CreateProfile_Associations ('IPSShadowing_TempLevelOutClose',  array(22=>'Aussen >= 22°C', 23=>'>= 23°C', 24=>'>= 24°C', 25=>'>= 25°C', 26=>'>= 26°C', c_TempLevel_Ignore=>'Ignorieren'));
-	CreateProfile_Associations ('IPSShadowing_TempLevelInClose',   array(22=>'Innen >= 22°C',  23=>'>= 23°C', 24=>'>= 24°C', 25=>'>= 25°C', 26=>'>= 26°C', c_TempLevel_Ignore=>'Ignorieren'));
-	CreateProfile_Associations ('IPSShadowing_TempLevelOutOpen',   array(22=>'Aussen <= 22°C', 23=>'<= 23°C', 24=>'<= 24°C', 25=>'<= 25°C', 26=>'<= 26°C', c_TempLevel_Ignore=>'Ignorieren'));
-	CreateProfile_Associations ('IPSShadowing_TempLevelInOpen',    array(22=>'Innen <= 22°C',  23=>'<= 23°C', 24=>'<= 24°C', 25=>'<= 25°C', 26=>'<= 26°C', c_TempLevel_Ignore=>'Ignorieren'));
+	CreateProfile_Associations ('IPSShadowing_TempLevelOutShadow', array(22=>'Aussen >= 22Â°C', 23=>'>= 23Â°C', 24=>'>= 24Â°C', 25=>'>= 25Â°C', 26=>'>= 26Â°C', c_TempLevel_Ignore=>'Ignorieren'));
+	CreateProfile_Associations ('IPSShadowing_TempLevelInShadow',  array(22=>'Innen >= 22Â°C',  23=>'>= 23Â°C', 24=>'>= 24Â°C', 25=>'>= 25Â°C', 26=>'>= 26Â°C', c_TempLevel_Ignore=>'Ignorieren'));
+	CreateProfile_Associations ('IPSShadowing_TempLevelOutClose',  array(22=>'Aussen >= 22Â°C', 23=>'>= 23Â°C', 24=>'>= 24Â°C', 25=>'>= 25Â°C', 26=>'>= 26Â°C', c_TempLevel_Ignore=>'Ignorieren'));
+	CreateProfile_Associations ('IPSShadowing_TempLevelInClose',   array(22=>'Innen >= 22Â°C',  23=>'>= 23Â°C', 24=>'>= 24Â°C', 25=>'>= 25Â°C', 26=>'>= 26Â°C', c_TempLevel_Ignore=>'Ignorieren'));
+	CreateProfile_Associations ('IPSShadowing_TempLevelOutOpen',   array(22=>'Aussen <= 22Â°C', 23=>'<= 23Â°C', 24=>'<= 24Â°C', 25=>'<= 25Â°C', 26=>'<= 26Â°C', c_TempLevel_Ignore=>'Ignorieren'));
+	CreateProfile_Associations ('IPSShadowing_TempLevelInOpen',    array(22=>'Innen <= 22Â°C',  23=>'<= 23Â°C', 24=>'<= 24Â°C', 25=>'<= 25Â°C', 26=>'<= 26Â°C', c_TempLevel_Ignore=>'Ignorieren'));
 	CreateProfile_Count        ('IPSShadowing_Brightness', 0, 2000, 100000, null, " Lux",    null);
 
-	CreateProfile_Count        ('IPSShadowing_AzimuthBgn', 0, 5,   360,   null, " °",  null);
-	CreateProfile_Count        ('IPSShadowing_AzimuthEnd', 0, 5,   360,   null, " °",  null);
-	CreateProfile_Count        ('IPSShadowing_Elevation',  0, 1,   90,    null, " °",  null);
+	CreateProfile_Count        ('IPSShadowing_AzimuthBgn', 0, 5,   360,   null, " Â°",  null);
+	CreateProfile_Count        ('IPSShadowing_AzimuthEnd', 0, 5,   360,   null, " Â°",  null);
+	CreateProfile_Count        ('IPSShadowing_Elevation',  0, 1,   90,    null, " Â°",  null);
 	CreateProfile_Count        ('IPSShadowing_Date',       1, 1,   12,    null, "%",   null);
 
-	CreateProfile_Associations ('IPSShadowing_TimeMode',   array('individuelle Zeit', 'Dämmerung', 'Dämmerung (begrenzt)'));
+	CreateProfile_Associations ('IPSShadowing_TimeMode',   array('individuelle Zeit', 'DÃ¤mmerung', 'DÃ¤mmerung (begrenzt)'));
 	CreateProfile_Count        ('IPSShadowing_TimeOffset', -120, 5, 120, null, " Min",  null);
 
 	CreateProfile_Count        ('IPSShadowing_Wind', 0, 10, 100, null, " kmh",    null);
@@ -365,7 +365,7 @@
 	}
 	$linkId = @IPS_GetObjectIDByName('Differenz Beschattung', $CategoryIdProfileTempDisplay); if ($linkId!==false) { IPS_DeleteLink($linkId); }
 	$linkId = @IPS_GetObjectIDByName('Differenz Abdunkelung', $CategoryIdProfileTempDisplay); if ($linkId!==false) { IPS_DeleteLink($linkId); }
-	$linkId = @IPS_GetObjectIDByName('Differenz Öffnen',      $CategoryIdProfileTempDisplay); if ($linkId!==false) { IPS_DeleteLink($linkId); }
+	$linkId = @IPS_GetObjectIDByName('Differenz Ã–ffnen',      $CategoryIdProfileTempDisplay); if ($linkId!==false) { IPS_DeleteLink($linkId); }
 	@IPS_DeleteVariableProfile('IPSShadowing_TempDiffShadowing');
 	@IPS_DeleteVariableProfile('IPSShadowing_TempDiffClosing');
 	@IPS_DeleteVariableProfile('IPSShadowing_TempDiffOpening');
@@ -387,11 +387,11 @@
 						1 => 'leiser Zug (2 km/h)',
 						2 => 'leichte Brise (6 km/h)',
 						3 => 'schwache Brise (12 km/h)',
-						4 => 'mäßige Brise (20 km/h)',
+						4 => 'mÃ¤ÃŸige Brise (20 km/h)',
 						5 => 'frischer Wind (29 km/h)',
 						6 => 'starker Wind (39 km/h)',
 						7 => 'steifer Wind (50 km/h)',
-						8 => 'stürmischer Wind (62 km/h)',
+						8 => 'stÃ¼rmischer Wind (62 km/h)',
 						9 => 'Sturm (75 km/h)',
 						10 => 'schwerer Sturm (89 km/h)',
 						11 => 'orkanartiger Sturm (103 km/h)',
@@ -426,7 +426,7 @@
 	}
 	$Profiles = IPS_GetChildrenIDs($CategoryIdProfilesSun);
 	if (count($Profiles)==0) {
-		$profileManager->CreateSun('Süden');
+		$profileManager->CreateSun('SÃ¼den');
 	}
 	$Profiles = IPS_GetChildrenIDs($CategoryIdProfilesWeather);
 	if (count($Profiles)==0) {
@@ -435,11 +435,11 @@
 	}
 	$Profiles = IPS_GetChildrenIDs($CategoryIdProfilesBgnOfDay);
 	if (count($Profiles)==0) {
-		$profileManager->CreateBgnOfDay('Dämmerung');
+		$profileManager->CreateBgnOfDay('DÃ¤mmerung');
 	}
 	$Profiles = IPS_GetChildrenIDs($CategoryIdProfilesEndOfDay);
 	if (count($Profiles)==0) {
-		$profileManager->CreateEndOfDay('Dämmerung');
+		$profileManager->CreateEndOfDay('DÃ¤mmerung');
 	}
 	// Scenario Manager
 	// ====================================================================================================================================
@@ -460,10 +460,10 @@
 		$scenario->ResetEditMode();
 
 	}
-	$scenarioId = @IPS_GetObjectIDByName('Alle Öffnen', $CategoryIdScenarios);
+	$scenarioId = @IPS_GetObjectIDByName('Alle Ã–ffnen', $CategoryIdScenarios);
 	if ($scenarioId===false) {
-		echo 'Create Scenario "Alle Öffnen"'.PHP_EOL;
-		$scenarioId = $scenarioManager->Create('Alle Öffnen', c_MovementId_Opened);
+		echo 'Create Scenario "Alle Ã–ffnen"'.PHP_EOL;
+		$scenarioId = $scenarioManager->Create('Alle Ã–ffnen', c_MovementId_Opened);
 		$scenario = new IPSShadowing_Scenario($scenarioId);
 		$scenario->ResetEditMode();
 	}
@@ -737,7 +737,7 @@
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_ScenariosTopR",$WFC10_TabPaneItem."_ScenariosTop", 20, '', '', $WebFrontScenariosIdTopR /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateLink('Szenario Auswahl',  $ControlIdScenarioSelect,  $WebFrontScenariosIdTopL, 10);
 		CreateLink('Neues Szenario',    $ScriptIdScenarioCreate,   $WebFrontScenariosIdTopR, 10);
-		CreateLink('Szenario löschen',  $ScriptIdScenarioDelete,   $WebFrontScenariosIdTopR, 20);
+		CreateLink('Szenario lÃ¶schen',  $ScriptIdScenarioDelete,   $WebFrontScenariosIdTopR, 20);
 
 		// Profiles
 		$WebFrontProfilesId       = CreateCategory('Profiles', $categoryId_WebFront, 40);
@@ -792,19 +792,19 @@
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem."_Profiles5TopR",$WFC10_TabPaneItem."_Profiles5Top", 20, '', '', $WebFrontProfilesId5TopR /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateLink('Profil Auswahl',   $ControlIdProfileTempSelect,      $WebFrontProfilesId1TopL, 10);
 		CreateLink('Neues Profil',     $ScriptIdProfileTempCreate,       $WebFrontProfilesId1TopR, 10);
-		CreateLink('Profil löschen',   $ScriptIdProfileTempDelete,       $WebFrontProfilesId1TopR, 20);
+		CreateLink('Profil lÃ¶schen',   $ScriptIdProfileTempDelete,       $WebFrontProfilesId1TopR, 20);
 		CreateLink('Profil Auswahl',   $ControlIdProfileSunSelect,       $WebFrontProfilesId2TopL, 10);
 		CreateLink('Neues Profil',     $ScriptIdProfileSunCreate,        $WebFrontProfilesId2TopR, 10);
-		CreateLink('Profil löschen',   $ScriptIdProfileSunDelete,        $WebFrontProfilesId2TopR, 20);
+		CreateLink('Profil lÃ¶schen',   $ScriptIdProfileSunDelete,        $WebFrontProfilesId2TopR, 20);
 		CreateLink('Profil Auswahl',   $ControlIdProfileWeatherSelect,   $WebFrontProfilesId3TopL, 10);
 		CreateLink('Neues Profil',     $ScriptIdProfileWeatherCreate,    $WebFrontProfilesId3TopR, 10);
-		CreateLink('Profil löschen',   $ScriptIdProfileWeatherDelete,    $WebFrontProfilesId3TopR, 20);
+		CreateLink('Profil lÃ¶schen',   $ScriptIdProfileWeatherDelete,    $WebFrontProfilesId3TopR, 20);
 		CreateLink('Profile Auswahl',  $ControlIdProfileBgnOfDaySelect,  $WebFrontProfilesId4TopL, 10);
 		CreateLink('Neues Profil',     $ScriptIdProfileBgnOfDayCreate,   $WebFrontProfilesId4TopR, 10);
-		CreateLink('Profil löschen',   $ScriptIdProfileBgnOfDayDelete,   $WebFrontProfilesId4TopR, 20);
+		CreateLink('Profil lÃ¶schen',   $ScriptIdProfileBgnOfDayDelete,   $WebFrontProfilesId4TopR, 20);
 		CreateLink('Profile Auswahl',  $ControlIdProfileEndOfDaySelect,  $WebFrontProfilesId5TopL, 10);
 		CreateLink('Neues Profil',     $ScriptIdProfileEndOfDayCreate,   $WebFrontProfilesId5TopR, 10);
-		CreateLink('Profil löschen',   $ScriptIdProfileEndOfDayDelete,   $WebFrontProfilesId5TopR, 20);
+		CreateLink('Profil lÃ¶schen',   $ScriptIdProfileEndOfDayDelete,   $WebFrontProfilesId5TopR, 20);
 
 		// Common Settings
 		$WebFrontSettingId  = CreateCategory('Settings', $categoryId_WebFront, 50);
@@ -884,13 +884,13 @@
 		CreateLink('Szenario Auswahl',     $ControlIdScenarioSelect,         $MobileSettingScenarioId, 10);
 		CreateLink('Szenario Einstellungen', $CategoryIdScenarioDisplay,     $MobileSettingScenarioId, 10);
 		CreateLink('Neues Szenario',       $ScriptIdScenarioCreate,          $MobileSettingScenarioId, 20);
-		CreateLink('Szenario löschen',     $ScriptIdScenarioDelete,          $MobileSettingScenarioId, 30);
+		CreateLink('Szenario lÃ¶schen',     $ScriptIdScenarioDelete,          $MobileSettingScenarioId, 30);
 
 		$MobileSettingProfileId = CreateCategory('Temperatur Profile', $MobileSettingsId, 10, 'Temperature');
 		CreateLink('Profil Auswahl',       $ControlIdProfileTempSelect,      $MobileSettingProfileId, 10);
 		CreateLink('Profil Einstellungen', $CategoryIdProfileTempDisplay,    $MobileSettingProfileId,10);
 		CreateLink('Neues Profil',         $ScriptIdProfileTempCreate,       $MobileSettingProfileId, 30);
-		CreateLink('Profil löschen',       $ScriptIdProfileTempDelete,       $MobileSettingProfileId, 40);
+		CreateLink('Profil lÃ¶schen',       $ScriptIdProfileTempDelete,       $MobileSettingProfileId, 40);
 		$MobileSettingProfileId = CreateCategory('Sonnenstand Profile', $MobileSettingsId, 20, 'Sun');
 		CreateLink('Profil Auswahl',       $ControlIdProfileSunSelect,      $MobileSettingProfileId, 10);
 		CreateLink('Profil Einstellungen', $CategoryIdProfileSunDisplay,    $MobileSettingProfileId,10);
@@ -898,22 +898,22 @@
 		CreateLink('Profil Graph',         $MediaIdAzimuth,                 $MobileSettingProfileId,20);
 
 		CreateLink('Neues Profil',         $ScriptIdProfileSunCreate,       $MobileSettingProfileId, 30);
-		CreateLink('Profil löschen',       $ScriptIdProfileSunDelete,       $MobileSettingProfileId, 40);
+		CreateLink('Profil lÃ¶schen',       $ScriptIdProfileSunDelete,       $MobileSettingProfileId, 40);
 		$MobileSettingProfileId = CreateCategory('Wetter Profile', $MobileSettingsId, 30, 'Drops');
 		CreateLink('Profil Auswahl',       $ControlIdProfileWeatherSelect,      $MobileSettingProfileId, 10);
 		CreateLink('Profil Einstellungen', $CategoryIdProfileWeatherDisplay,    $MobileSettingProfileId,10);
 		CreateLink('Neues Profil',         $ScriptIdProfileWeatherCreate,       $MobileSettingProfileId, 30);
-		CreateLink('Profil löschen',       $ScriptIdProfileWeatherDelete,       $MobileSettingProfileId, 40);
+		CreateLink('Profil lÃ¶schen',       $ScriptIdProfileWeatherDelete,       $MobileSettingProfileId, 40);
 		$MobileSettingProfileId = CreateCategory('Tagesbeginn Profile',$MobileSettingsId, 40, 'Clock');
 		CreateLink('Profile Auswahl',      $ControlIdProfileBgnOfDaySelect,  $MobileSettingProfileId, 10);
 		CreateLink('Profil Einstellungen', $CategoryIdProfileBgnOfDayDisplay,$MobileSettingProfileId,10);
 		CreateLink('Neues Profil',         $ScriptIdProfileBgnOfDayCreate,   $MobileSettingProfileId, 20);
-		CreateLink('Profil löschen',       $ScriptIdProfileBgnOfDayDelete,   $MobileSettingProfileId, 30);
+		CreateLink('Profil lÃ¶schen',       $ScriptIdProfileBgnOfDayDelete,   $MobileSettingProfileId, 30);
 		$MobileSettingProfileId = CreateCategory('Tagesende Profile',  $MobileSettingsId, 50, 'Clock');
 		CreateLink('Profile Auswahl',      $ControlIdProfileEndOfDaySelect,  $MobileSettingProfileId, 10);
 		CreateLink('Profil Einstellungen', $CategoryIdProfileEndOfDayDisplay,$MobileSettingProfileId,10);
 		CreateLink('Neues Profil',         $ScriptIdProfileEndOfDayCreate,   $MobileSettingProfileId, 20);
-		CreateLink('Profil löschen',       $ScriptIdProfileEndOfDayDelete,   $MobileSettingProfileId, 30);
+		CreateLink('Profil lÃ¶schen',       $ScriptIdProfileEndOfDayDelete,   $MobileSettingProfileId, 30);
 
 		CreateLink('Meldungen', $ControlIdLog,  $MobileLogId, 100);
 	}

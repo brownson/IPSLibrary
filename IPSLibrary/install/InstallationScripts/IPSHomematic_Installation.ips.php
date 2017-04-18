@@ -20,19 +20,19 @@
 	 * @ingroup ipshomematic
 	 * @{
 	 *
-	 * Installations File f¸r den ipshomematic
+	 * Installations File f√ºr den ipshomematic
 	 *
 	 * @section requirements_ipshomematic Installations Voraussetzungen ipshomematic
 	 * - IPS Kernel >= 2.50
 	 * - IPSModuleManager >= 2.50.1
 	 * - IPSLogger >= 2.50.1
 	 *
-	 * @section ipshomematic_visu Visualisierungen f¸r ipshomematic
+	 * @section ipshomematic_visu Visualisierungen f√ºr ipshomematic
 	 * - WebFront 10Zoll
 	 * - Mobile
 	 *
 	 * @page install_ipshomematic_install Installations Schritte
-	 * Folgende Schritte sind zur Installation der Homematic Ansteuerung nˆtig:
+	 * Folgende Schritte sind zur Installation der Homematic Ansteuerung n√∂tig:
 	 * - Laden des Modules (siehe IPSModuleManager)
 	 * - Konfiguration (Details siehe Konfiguration)
 	 * - Installation (siehe IPSModuleManager)
@@ -160,17 +160,17 @@
 		$categoryIdWebFrontLeft          = CreateCategory('Left',  $categoryIdWebFront, 10);
 		$categoryIdWebFrontRight         = CreateCategory('Right', $categoryIdWebFront, 20);
 		$categoryIdWebFrontRightDetail1  = CreateCategory('RSSI Sender',    $categoryIdWebFrontRight, 20);
-		$categoryIdWebFrontRightDetail2  = CreateCategory('RSSI Empf‰nger', $categoryIdWebFrontRight, 30);
+		$categoryIdWebFrontRightDetail2  = CreateCategory('RSSI Empf√§nger', $categoryIdWebFrontRight, 30);
 		CreateLink('Service Meldungen', $controlIdMessages,    $categoryIdWebFrontRight, 10);
-		CreateLink('Empfangsst‰rken',   $controlIdRSSI,        $categoryIdWebFrontRight, 20);
+		CreateLink('Empfangsst√§rken',   $controlIdRSSI,        $categoryIdWebFrontRight, 20);
 		CreateLink('RSSI Sender',       $controlIdRSSIDevice,  $categoryIdWebFrontRightDetail1, 10);
-		CreateLink('RSSI Empf‰nger',    $controlIdRSSIPeer,    $categoryIdWebFrontRightDetail2, 10);
+		CreateLink('RSSI Empf√§nger',    $controlIdRSSIPeer,    $categoryIdWebFrontRightDetail2, 10);
 
 		$instanceId = CreateDummyInstance('Service Meldungen', $categoryIdWebFrontLeft, 10);
 		CreateLink('Meldungen laden',         $scriptIdRefreshServiceMessages, $instanceId, 10);
-		CreateLink('Meldungen best‰tigen',    $scriptIdResetServiceMessage,    $instanceId, 20);
-		CreateLink('Priorit‰t Notifizierung', $controlIdPriority,              $instanceId, 30);
-		CreateLink('Refresh Empfangsst‰rken', $scriptIdRefreshRSSI,            $categoryIdWebFrontLeft, 20);
+		CreateLink('Meldungen best√§tigen',    $scriptIdResetServiceMessage,    $instanceId, 20);
+		CreateLink('Priorit√§t Notifizierung', $controlIdPriority,              $instanceId, 30);
+		CreateLink('Refresh Empfangsst√§rken', $scriptIdRefreshRSSI,            $categoryIdWebFrontLeft, 20);
 		CreateLink('Refresh Statusvariablen', $scriptIdRefreshStatusVariables, $categoryIdWebFrontLeft, 30);
 
 		$WFC10Tab = $WFC10_TabPaneItem.$WFC10_TabItem1;
@@ -192,16 +192,16 @@
 		$categoryIdMobile    = CreateCategoryPath($Mobile_Path, $Mobile_PathOrder, $Mobile_PathIcon);
 		$categoryIdMobile    = CreateCategory($Mobile_Name1,  $categoryIdMobile, $Mobile_Order1, $Mobile_Icon1);
 
-		$instanceId = CreateDummyInstance('Empfangsst‰rken', $categoryIdMobile, 10);
+		$instanceId = CreateDummyInstance('Empfangsst√§rken', $categoryIdMobile, 10);
 		CreateLink('RSSI Sender',       $controlIdRSSIDevice,  $instanceId, 10);
-		CreateLink('RSSI Empf‰nger',    $controlIdRSSIPeer,    $instanceId, 20);
+		CreateLink('RSSI Empf√§nger',    $controlIdRSSIPeer,    $instanceId, 20);
 		CreateLink('Refresh',           $scriptIdRefreshRSSI,  $instanceId, 30);
 
 		$instanceId = CreateDummyInstance('Service Meldungen', $categoryIdMobile, 20);
 		CreateLink('Aktuelle Meldungen',      $controlIdMessages,              $instanceId, 10);
-		CreateLink('Priorit‰t Notifizierung', $controlIdPriority,              $instanceId, 20);
+		CreateLink('Priorit√§t Notifizierung', $controlIdPriority,              $instanceId, 20);
 		CreateLink('Meldungen laden',         $scriptIdRefreshServiceMessages, $instanceId, 30);
-		CreateLink('Meldungen best‰tigen',    $scriptIdResetServiceMessage,    $instanceId, 40);
+		CreateLink('Meldungen best√§tigen',    $scriptIdResetServiceMessage,    $instanceId, 40);
 
 		$instanceId = CreateDummyInstance('Status Variablen', $categoryIdMobile, 30);
 		CreateLink('Refresh', $scriptIdRefreshStatusVariables, $instanceId, 10);

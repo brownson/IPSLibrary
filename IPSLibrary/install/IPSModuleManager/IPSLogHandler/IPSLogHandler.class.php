@@ -32,9 +32,9 @@
 		 * Initialisierung des LogHandlers
 		 *
 		 * @param string $logContext Aktueller Logging Context (File, Class, Identifier...)
-		 * @param string $logDirectory Verzeichnis f¸r Log File
+		 * @param string $logDirectory Verzeichnis f√ºr Log File
 		 * @param string $logFile Name des Log Files
-		 * @param string $debugMode Debug Mode, Switch f¸r Ausgae von Debug Meldungen
+		 * @param string $debugMode Debug Mode, Switch f√ºr Ausgae von Debug Meldungen
 		 * @param string $silentMode bei TRUE werden Meldungen nicht mit ECHO gelogged
 		 */
 		public function __construct($logContext, $logDirectory, $moduleName='', $debugMode=true, $silentMode=false, $logFile='') {
@@ -53,7 +53,7 @@
 		 *
 		 * Liefert eine Liste aller LogFiles in absteigender Reihenfolge (Neueste Files zuerst)
 		 *
-		 * @param integer $limit Maximale Anzahl von Eintr‰gen
+		 * @param integer $limit Maximale Anzahl von Eintr√§gen
 		 * @return string[] Liste der LogFiles
 		 */
 		public function GetLogFileList($limit=10) {
@@ -98,7 +98,7 @@
 		/**
 		 * @public
 		 *
-		 * Liefert eine Instance des LogHandlers, Logger muﬂ in der aktuellen Session bereits initialisiert 
+		 * Liefert eine Instance des LogHandlers, Logger mu√ü in der aktuellen Session bereits initialisiert 
 		 * worden sein.
 		 *
 		 * @param string $logContext Aktueller Logging Context (File, Class, Identifier...)

@@ -5,17 +5,17 @@
 	 *
 	 * Script zur kompletten Installation der Entertainment Steuerung.
 	 *
-	 * Vor der Installation muß das File Entertainment_Configuration.inc.php an die persönlichen
-	 * Bedürfnisse angepasst werden.
+	 * Vor der Installation muÃŸ das File Entertainment_Configuration.inc.php an die persÃ¶nlichen
+	 * BedÃ¼rfnisse angepasst werden.
 	 *
 	 * @page rquirements_entertainment Installations Voraussetzungen
 	 * - IPS Kernel >= 2.50
 	 * - IPSModuleManager >= 2.50.1
 	 * - IPSLogger >= 2.50.1
-	 * - abhängig von der Konfiguration kann es noch weitere Abhängigkeiten geben.
+	 * - abhÃ¤ngig von der Konfiguration kann es noch weitere AbhÃ¤ngigkeiten geben.
 	 *
 	 * @page install_entertainment Installations Schritte
-	 * Folgende Schritte sind zur Installation der Entertainment Ansteuerung nötig:
+	 * Folgende Schritte sind zur Installation der Entertainment Ansteuerung nÃ¶tig:
 	 * - Laden des Modules (siehe IPSModuleManager)
 	 * - Konfiguration (Details siehe Konfiguration)
 	 * - Installation (siehe IPSModuleManager)
@@ -207,7 +207,7 @@
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OvCatTop.'.$UniqueId,   $WFC10_TabPaneItem.'_OvSPRight', 10, '', '', $ID_CategoryWebFrontOverviewRightTop /*BaseId*/, 'false' /*BarBottomVisible*/);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_OvCatBottom'.$UniqueId, $WFC10_TabPaneItem.'_OvSPRight', 20, '', '', $ID_CategoryWebFrontOverviewRightBottom /*BaseId*/, 'false' /*BarBottomVisible*/);
 
-		CreateLink('Alle Räume Ausschalten',  $ScriptIdAllOff,  $ID_CategoryWebFrontOverviewRightTop, 1000);
+		CreateLink('Alle RÃ¤ume Ausschalten',  $ScriptIdAllOff,  $ID_CategoryWebFrontOverviewRightTop, 1000);
 	}
 
 
@@ -216,7 +216,7 @@
 		if ($Mobile_Recreate) {
 		   EmptyCategory($iPhoneId);
 		}
-		CreateLink('Alle Räume Ausschalten',  $ScriptIdAllOff,  $iPhoneId,                            1000);
+		CreateLink('Alle RÃ¤ume Ausschalten',  $ScriptIdAllOff,  $iPhoneId,                            1000);
 	}
 
 	// Link to Roomes and Room Controls
@@ -283,7 +283,7 @@
 
 	// Link to Devices and Device Controls
 	$Order = 100;
-	if ($Mobile_Enabled) $ID_iPhoneDevices = CreateDummyInstance("Geräte", $iPhoneId, 2000);
+	if ($Mobile_Enabled) $ID_iPhoneDevices = CreateDummyInstance("GerÃ¤te", $iPhoneId, 2000);
 	foreach($DeviceData as $DeviceItem => $DeviceProperties) {
 		$DeviceId        = IPS_GetCategoryIDByName($DeviceItem, $CategoryIdDevices);
 

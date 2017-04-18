@@ -96,7 +96,7 @@
 		/**
 		 * @public
 		 *
-		 * Erhöht die Versionsnummer im entsprechenden Download File und legt den übergebenen Text 
+		 * ErhÃ¶ht die Versionsnummer im entsprechenden Download File und legt den Ã¼bergebenen Text 
 		 * unter der ChangeList des Modules ab.
 		 * 
 		 */
@@ -167,7 +167,7 @@
 		 *
 		 * Lesen der aktuellen Version eines Modules
 		 *
-		 * @param string $moduleName Name des Modules, das überprüft werden soll
+		 * @param string $moduleName Name des Modules, das Ã¼berprÃ¼ft werden soll
 		 * @return string Version
 		 */
 		public function GetVersion($moduleName) {
@@ -222,8 +222,8 @@
 		/**
 		 * @public
 		 *
-		 * Überprüft die Version eines Modules mit dem Namen $moduleName and erzeugt einen Fehler, wenn
-		 * die installierte Version < der übergebenen Version ist.
+		 * ÃœberprÃ¼ft die Version eines Modules mit dem Namen $moduleName and erzeugt einen Fehler, wenn
+		 * die installierte Version < der Ã¼bergebenen Version ist.
 		 *
 		 * Examples:
 		 *   installed=2.5.3, required=2.5.3 --> OK
@@ -232,7 +232,7 @@
 		 *   installed=2.4.3, required=2.5.2 --> Error
 		 *   installed=2.5.1, required=2.5.2 --> Error
 		 *
-		 * @param string $moduleName Name des Modules, das überprüft werden soll
+		 * @param string $moduleName Name des Modules, das Ã¼berprÃ¼ft werden soll
 		 * @param string $moduleVersion Version des Modules
 		 * @throws IPSVersionHandlerException wenn Version nicht korrekt ist
 		 */
@@ -251,9 +251,9 @@
 			        ) {
 				throw new IPSVersionHandlerException('Versions Fehler:'.PHP_EOL
 				                                    .'========================================================================'.PHP_EOL
-				                                    .'=== Modul '.$moduleName.' ist veraltet und benötigt ein Update'.PHP_EOL
+				                                    .'=== Modul '.$moduleName.' ist veraltet und benÃ¶tigt ein Update'.PHP_EOL
 				                                    .'===   Aktuelle Version:  '.$versionHandler->GetScriptVersion().PHP_EOL
-				                                    .'===   Benötigte Version: '.$moduleVersion.PHP_EOL
+				                                    .'===   BenÃ¶tigte Version: '.$moduleVersion.PHP_EOL
 				                                    .'========================================================================'.PHP_EOL
 				                                    );
 			}
@@ -262,7 +262,7 @@
 		/**
 		 * @public
 		 *
-		 * Überprüft ob die installierte Version eines Modules < der übergebenen Version ist.
+		 * ÃœberprÃ¼ft ob die installierte Version eines Modules < der Ã¼bergebenen Version ist.
 		 *
 		 * Examples:
 		 *   installed=2.5.3, required=2.5.3 --> OK
@@ -271,9 +271,9 @@
 		 *   installed=2.4.3, required=2.5.2 --> Newer
 		 *   installed=2.5.1, required=2.5.2 --> Newer
 		 *
-		 * @param string $moduleName Name des Modules, das überprüft werden soll
+		 * @param string $moduleName Name des Modules, das Ã¼berprÃ¼ft werden soll
 		 * @param string $moduleVersion Version des Modules
-		 * @return boolean Übergebene Version ist neuer oder nicht
+		 * @return boolean Ãœbergebene Version ist neuer oder nicht
 		 */
 		public function IsVersionNewer($moduleName, $moduleVersion) {
 			$versionHandler = new IPSFileVersionHandler($moduleName);
@@ -293,11 +293,11 @@
 		/**
 		 * @public
 		 *
-		 * Vergleicht 2 Versionsnummern und überprüft ob die 2. übergebene Version neuer ist als die 1.
+		 * Vergleicht 2 Versionsnummern und Ã¼berprÃ¼ft ob die 2. Ã¼bergebene Version neuer ist als die 1.
 		 *
 		 * @param string $moduleVersion1 Version 1 des Modules
 		 * @param string $moduleVersion2 Version 2 des Modules 
-		 * @return boolean Übergebene Version ist neuer oder nicht
+		 * @return boolean Ãœbergebene Version ist neuer oder nicht
 		 */
 		public function CompareVersionsNewer($moduleVersion1, $moduleVersion2) {
 			$moduleVersion1 = $this->VersionToArray($moduleVersion1);
@@ -315,11 +315,11 @@
 		/**
 		 * @public
 		 *
-		 * Vergleicht 2 Versionsnummern und überprüft ob die 2. übergebene Version gleich der 1.
+		 * Vergleicht 2 Versionsnummern und Ã¼berprÃ¼ft ob die 2. Ã¼bergebene Version gleich der 1.
 		 *
 		 * @param string $moduleVersion1 Version 1 des Modules
 		 * @param string $moduleVersion2 Version 2 des Modules 
-		 * @return boolean Übergebene Version ist neuer oder nicht
+		 * @return boolean Ãœbergebene Version ist neuer oder nicht
 		 */
 		public function CompareVersionsEqual($moduleVersion1, $moduleVersion2) {
 			$moduleVersion1 = $this->VersionToArray($moduleVersion1);
@@ -334,7 +334,7 @@
 		/**
 		 * @public
 		 *
-		 * Überprüft ob ein Module in der spezifizierten Version installiert ist.
+		 * ÃœberprÃ¼ft ob ein Module in der spezifizierten Version installiert ist.
 		 *
 		 * @param string $moduleVersion Version des Modules (Format IPSMajorVersion.IPSMinorVersion.ModuleVersion.ModuleStatus.InstallationStatus)
 		 * @return boolean Liefert true wenn Module installiert, andernfalls false
@@ -354,7 +354,7 @@
 		/**
 		 * @public
 		 *
-		 * Überprüft ob ein Module in der spezifizierten Version installiert ist.
+		 * ÃœberprÃ¼ft ob ein Module in der spezifizierten Version installiert ist.
 		 *
 		 * @param string $moduleVersion Version des Modules (Format IPSMajorVersion.IPSMinorVersion.ModuleVersion.ModuleStatus.InstallationStatus)
 		 * @return boolean Liefert true wenn Module installiert, andernfalls false
@@ -367,7 +367,7 @@
 		/**
 		 * @public
 		 *
-		 * Löschen eines Modules
+		 * LÃ¶schen eines Modules
 		 */
 		public function DeleteModule() {
 			$this->logHandler->Log('Remove Module '.$this->moduleName.' from Versioning System');
@@ -545,7 +545,7 @@
 		/**
 		 * @public
 		 *
-		 * Liefert eine Liste Changes zu einer übergebenen Version
+		 * Liefert eine Liste Changes zu einer Ã¼bergebenen Version
 		 *
 		 * @param string $moduleName Name des Modules
 		 * @return string[] Liste der Repository Versionen
@@ -573,10 +573,10 @@
 		/**
 		 * @public
 		 *
-		 * Liefert eine Liste der benötigten Module und Versionen zu einem Module
+		 * Liefert eine Liste der benÃ¶tigten Module und Versionen zu einem Module
 		 *
 		 * @param string $moduleName Name des Modules
-		 * @return string[] Liste der benötigten Module
+		 * @return string[] Liste der benÃ¶tigten Module
 		 */
 		public function GetRequiredModules($moduleName='') {
 			if ($moduleName=='') {
@@ -592,11 +592,11 @@
 		/**
 		 * @public
 		 *
-		 * Liefert eine Liste der benötigten Updates zu einem Module (benötigte SubModule
-		 * die nicht vorhanden sind oder die ein Update benötigen).
+		 * Liefert eine Liste der benÃ¶tigten Updates zu einem Module (benÃ¶tigte SubModule
+		 * die nicht vorhanden sind oder die ein Update benÃ¶tigen).
 		 *
 		 * @param string $moduleName Name des Modules
-		 * @return string[] Liste der benötigten Module
+		 * @return string[] Liste der benÃ¶tigten Module
 		 */
 		public function GetRequiredUpdates($moduleName='') {
 			if ($moduleName=='') {
@@ -642,7 +642,7 @@
 		/**
 		 * @public
 		 *
-		 * Liefert eine Liste der mit Modulen, für die ein Update verfügbar ist
+		 * Liefert eine Liste der mit Modulen, fÃ¼r die ein Update verfÃ¼gbar ist
 		 *
 		 * @return string[] Liste der Module
 		 */

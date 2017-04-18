@@ -37,14 +37,14 @@
 	 * @ingroup ipstwilight
 	 * @{
 	 *
-	 * Installations File für IPSTwilight
+	 * Installations File fÃ¼r IPSTwilight
 	 *
 	 * @section requirements_ipstwilight Installations Voraussetzungen IPSTwilight
 	 * - IPS Kernel >= 2.50
 	 * - IPSModuleManager >= 2.50.1
 	 *
 	 * @page install_ipstwilight Installations Schritte
-	 * Folgende Schritte sind zur Installation von IPSTwilight nötig
+	 * Folgende Schritte sind zur Installation von IPSTwilight nÃ¶tig
 	 * - Laden des Modules (siehe IPSModuleManager)
 	 * - Installation (siehe IPSModuleManager)
 	 *
@@ -157,11 +157,11 @@
 
 		CreateLinkByDestination('Sonnen-Aufgang/Untergang', $SunriseDisplay,    $categoryId_WebFrontTopLeft,  10);
 		CreateLinkByDestination('Limits',                   $SunriseLimits,     $categoryId_WebFrontTopRight, 10);
-		CreateLinkByDestination('Zivile Dämmerung',         $CivilDisplay,      $categoryId_WebFrontTopLeft,  20);
+		CreateLinkByDestination('Zivile DÃ¤mmerung',         $CivilDisplay,      $categoryId_WebFrontTopLeft,  20);
 		CreateLinkByDestination('Limits',                   $CivilLimits,       $categoryId_WebFrontTopRight, 20);
-		CreateLinkByDestination('Nautische Dämmerung',      $NauticDisplay,     $categoryId_WebFrontTopLeft,  30);
+		CreateLinkByDestination('Nautische DÃ¤mmerung',      $NauticDisplay,     $categoryId_WebFrontTopLeft,  30);
 		CreateLinkByDestination('Limits',                   $NauticLimits,      $categoryId_WebFrontTopRight, 30);
-		CreateLinkByDestination('Astronomische Dämmerung',  $AstronomicDisplay, $categoryId_WebFrontTopLeft,  40);
+		CreateLinkByDestination('Astronomische DÃ¤mmerung',  $AstronomicDisplay, $categoryId_WebFrontTopLeft,  40);
 		CreateLinkByDestination('Limits',                   $AstronomicLimits,  $categoryId_WebFrontTopRight, 40);
 
 		CreateLinkByDestination("Tag- und Nachtstunden in $Location",  $YearMediaId,      $categoryId_WebFrontBottom, 10);
@@ -193,13 +193,13 @@
 		$InstanceId    = CreateDummyInstance("Sonnen-Aufgang/Untergang",  $mobileId, 10);
 		CreateLink('Begin/Ende',   $SunriseDisplay, $InstanceId, 10);
 		CreateLink('Limits',       $SunriseLimits,  $InstanceId, 20);
-		$InstanceId    = CreateDummyInstance("Zivile Dämmerung",  $mobileId, 20);
+		$InstanceId    = CreateDummyInstance("Zivile DÃ¤mmerung",  $mobileId, 20);
 		CreateLink('Begin/Ende',   $CivilDisplay, $InstanceId, 10);
 		CreateLink('Limits',       $CivilLimits,  $InstanceId, 20);
-		$InstanceId    = CreateDummyInstance("Nautische Dämmerung",  $mobileId, 30);
+		$InstanceId    = CreateDummyInstance("Nautische DÃ¤mmerung",  $mobileId, 30);
 		CreateLink('Begin/Ende',   $NauticDisplay, $InstanceId, 10);
 		CreateLink('Limits',       $NauticLimits,  $InstanceId, 20);
-		$InstanceId    = CreateDummyInstance("Astronomische Dämmerung",  $mobileId, 40);
+		$InstanceId    = CreateDummyInstance("Astronomische DÃ¤mmerung",  $mobileId, 40);
 		CreateLink('Begin/Ende',   $AstronomicDisplay, $InstanceId, 10);
 		CreateLink('Limits',       $AstronomicLimits,  $InstanceId, 20);
 

@@ -38,7 +38,7 @@
 	 * @ingroup ipsweatherforcastat
 	 * @{
 	 *
-	 * Installations File für IPSWeatherForcastAT
+	 * Installations File fÃ¼r IPSWeatherForcastAT
 	 *
 	 * @section requirements_ipsweatherforcastat Installations Voraussetzungen IPSWeatherForcast (AT)
 	 * - IPS Kernel >= 2.50
@@ -47,9 +47,9 @@
 	 *
 	 *
 	 * @page install_ipsweatherforcastat Installations Schritte
-	 * Folgende Schritte sind zur Installation der EDIP Ansteuerung nötig:
+	 * Folgende Schritte sind zur Installation der EDIP Ansteuerung nÃ¶tig:
 	 * - Laden des Modules (siehe IPSModuleManager)
-	 * - Konfiguration (Details siehe Konfiguration, Installation ist auch ohne spezielle Konfiguration möglich)
+	 * - Konfiguration (Details siehe Konfiguration, Installation ist auch ohne spezielle Konfiguration mÃ¶glich)
 	 * - Installation (siehe IPSModuleManager)
 	 *
 	 * @file          IPSWeatherForcastAT_Installation.ips.php
@@ -104,7 +104,7 @@
 	$scriptId_Refresh  = IPS_GetScriptIDByName('IPSWeatherForcastAT_Refresh',  $categoryId_App);
 	$timerId_Refresh   = CreateTimer_CyclicByMinutes ('Refresh', $scriptId_Refresh, 30) ;
 
-	CreateProfile_Count        ('IPSWeatherForcastAT_Temp',  null, null,  null,     null, " °C", null);
+	CreateProfile_Count        ('IPSWeatherForcastAT_Temp',  null, null,  null,     null, " Â°C", null);
 	
 	// Create Variables
 	$LastRefreshDateTime     = CreateVariable("LastRefreshDateTime",    3 /*String*/,  $categoryId_Data,  10,  '~String',  null, '');

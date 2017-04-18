@@ -23,58 +23,58 @@
 	 * Prinzipieller Aufbau der Kommunikation:
 	 *   CommandType "SVR" Command [Room] [Audio] Value
 	 *
-	 * @page audiomax_protocol_types ‹bersicht ¸ber die verschiedenen Befehlstypen
-	 * Grunds‰tzlich gibt es vier verschiedene Befehlsarten
+	 * @page audiomax_protocol_types √úbersicht √ºber die verschiedenen Befehlstypen
+	 * Grunds√§tzlich gibt es vier verschiedene Befehlsarten
 	 * - SET:  Setzen von Werten im AudioMax
 	 * - GET:  Abfrage von Serverwerten
-	 * - EVT:  Nachrichten die vom AudioMax selbstt‰tig gesendet werden
+	 * - EVT:  Nachrichten die vom AudioMax selbstt√§tig gesendet werden
 	 *
 	 * @page audiomax_protocol_commands Befehlsaufbau
-	 * -  Alle Befehle kˆnnen in Groﬂ- oder Kleinbuchstaben geschrieben werden.
+	 * -  Alle Befehle k√∂nnen in Gro√ü- oder Kleinbuchstaben geschrieben werden.
 	 * -  Die einzelnen Befehlsteile sind durch ein Semikolon voneinander getrennt.
-	 * -  Alle Befehle werden mit ÑCarriage Returnì (ÑCRì, Dezimal 13) beendet
-	 * -  Das System gibt auf jeden Befehl eine Best‰tigung 
-	 * -  Der AudioServer sendet alle 60 Sekunden eine ÑKeep Aliveì Meldung
-	 * -  Der AudioMax Server erwartet alle 60 Sekunden eine ÑKeep Aliveì Meldung vom Kommunikations Partner.
-	 * -  Es kˆnnen Texte auf dem LCD Display ausgegeben werden (Ger‰te mit Display)
+	 * -  Alle Befehle werden mit ‚ÄûCarriage Return‚Äú (‚ÄûCR‚Äú, Dezimal 13) beendet
+	 * -  Das System gibt auf jeden Befehl eine Best√§tigung 
+	 * -  Der AudioServer sendet alle 60 Sekunden eine ‚ÄûKeep Alive‚Äú Meldung
+	 * -  Der AudioMax Server erwartet alle 60 Sekunden eine ‚ÄûKeep Alive‚Äú Meldung vom Kommunikations Partner.
+	 * -  Es k√∂nnen Texte auf dem LCD Display ausgegeben werden (Ger√§te mit Display)
 	 *
 	 * @page audiomax_protocol_set SET Kommando
 	 * Werte an AudioMax Server senden:
 	 * - SET SVR AUD [RAUMNUMMER] [AUDIO] [VALUE]    
-	 *                             + VOL = Volume (40ñ0, 40 = Mute)
+	 *                             + VOL = Volume (40‚Äì0, 40 = Mute)
 	 *                             + INP = Input Analog Signal (0-3)
-	 *                             + GAI = Gain, Verst‰rkung  (0-15, 0 = 0dB Verst‰rkung)
+	 *                             + GAI = Gain, Verst√§rkung  (0-15, 0 = 0dB Verst√§rkung)
 	 *                             + BAL = Balance (0-15, 15 = Rechts)
 	 *                             + BAS = Bass (0-15, 15 = +14dB)
 	 *                             + MID = Middle (0-15, 15 = +14dB)
 	 *                             + TRE = Treble (0-15, 15 = +14dB)
-	 * - SET SVR ROO [RAUMNUMMER] [VALUE]      Steuerung Raumverst‰rker (0 ñ 3)
+	 * - SET SVR ROO [RAUMNUMMER] [VALUE]      Steuerung Raumverst√§rker (0 ‚Äì 3)
 	 * - SET SVR PWR [STATUS]                  AudioMax Server Ein/Aus, (1=On 0=Off)
 	 * - SET SVR TEX [TEXT1] [TEXT2] [TEXT3]   Textausgabe auf LCD Display, max 20 Zeichen pro Zeile, TEXT1 = 2.Zeile, TEXT2 = 3.Zeile, TEXT3 = 4.Zeile
-	 * - SET SVR KAL 0                         ìKeep Aliveî Signal an PC
+	 * - SET SVR KAL 0                         ‚ÄúKeep Alive‚Äù Signal an PC
 	 * - SET SVR MOD [MODE] [VALUE]            Setzen von Betriebsarten (0 = Acknowledge, 1 = Debug On/Off, 2 = Button Room Amp, 3 = KAL von PC)
 	 *
 	 * @page audiomax_protocol_get GET Kommando
 	 * Werte von AudioMax Server abholen
 	 * - GET SVR AUD [RAUMNUMMER] [AUDIO]     Werte der Audioeinstellungen
-	 * - GET SVR ROO [RAUMNUMMER]             Status der Raumverst‰rker
+	 * - GET SVR ROO [RAUMNUMMER]             Status der Raumverst√§rker
 	 * - GET SVR PWR                          Status des Servers
 	 * - GET SVR VER                          Ausgabe der Firmwareversion
 	 * - GET SVR MOD [TYP]                    Ausgabe AudioMax Version (S404, S408, ..)
 	 * - GET SVR HAR                          Hardware Version, Herstelljahr
 	 *
 	 * @page audiomax_protocol_evt EVT Kommando
-	 * AudioMax Server sendet selbst‰ndig Statusmeldungen
+	 * AudioMax Server sendet selbst√§ndig Statusmeldungen
 	 * - EVT SRV [COMMAND] [ROOM] [AUDIO] [VALUE]    Statusmeldungen nach Power On
-	 * - EVT SVR KAL [STATUS]                        ÑKeep Aliveì Meldung an PC, 0=Standby, 1=Server On
-	 * - EVT SVR ROO [ROOM] 1                        Taste des Raumverst‰rkers [NUMMER] bet‰tigt (1 = bet‰tigt)
+	 * - EVT SVR KAL [STATUS]                        ‚ÄûKeep Alive‚Äú Meldung an PC, 0=Standby, 1=Server On
+	 * - EVT SVR ROO [ROOM] 1                        Taste des Raumverst√§rkers [NUMMER] bet√§tigt (1 = bet√§tigt)
 	 *
 	 * @page audiomax_protocol_mod MOD Kommando
-	 * Mit diesen Befehlen kˆnnen verschiedene Betriebsarten f¸r den AudioServer gesetzt werden
+	 * Mit diesen Befehlen k√∂nnen verschiedene Betriebsarten f√ºr den AudioServer gesetzt werden
 	 * SET SRV MOD [MODE] [STATUS]
 	 * - MODE 0    Acknowledge (Default = 0, 0= Acknowledge 0 bis 5, 1 = Echo des Befehls)
 	 * - MODE 1    Debug Ausgaben (Default = 0, 0 = keine Debug Ausgaben, 1 = Debug Ausgaben)
-	 * - MODE 2    Tasterfunktion Raumverst‰rker (Default = 0, 0 = nur Meldung an PC, 1 = Der Raumverst‰rker wird direkt geschalten +  Meldung an PC)
+	 * - MODE 2    Tasterfunktion Raumverst√§rker (Default = 0, 0 = nur Meldung an PC, 1 = Der Raumverst√§rker wird direkt geschalten +  Meldung an PC)
 	 * - MODE 3    KAL von PC aktiviert/deaktiviert (Default = 0, 0 = KAL von PC erwartet, 1 = keine KAL Meldung von PC erwartet)
 	 *
 	 * @page audiomax_protocol_error Acknowledge und Error Code
@@ -107,8 +107,8 @@
 	 *
 	 * Script zur kompletten Installation der AudioMax Entertainment Steuerung.
 	 *
-	 * Vor der Installation sollte noch das File AudioMax_Configuration.inc.php an die persˆnlichen
-	 * Bed¸rfnisse angepasst werden.
+	 * Vor der Installation sollte noch das File AudioMax_Configuration.inc.php an die pers√∂nlichen
+	 * Bed√ºrfnisse angepasst werden.
 	 *
 	 * @page rquirements_audiomax Installations Voraussetzungen
 	 * - IPS Kernel >= 2.50
@@ -116,7 +116,7 @@
 	 * - IPSLogger >= 2.50.1
 	 *
 	 * @page install_audiomax Installations Schritte
-	 * Folgende Schritte sind zur Installation der AudioMax Ansteuerung nˆtig:
+	 * Folgende Schritte sind zur Installation der AudioMax Ansteuerung n√∂tig:
 	 * - Laden des Modules (siehe IPSModuleManager)
 	 * - Konfiguration (Details siehe Konfiguration)
 	 * - Installation (siehe IPSModuleManager)
@@ -271,7 +271,7 @@
 		$instanceIdServer  = CreateDummyInstance('AudioMax Server', $categoryIdWebFrontLeft, 10);
 		CreateLink('Power',                $id_Power,            $instanceIdServer, 10);
 		CreateLink('Verbindung',           $id_Connection,       $instanceIdServer, 20);
-		CreateLink('Ger‰t Aktiv',          $id_Busy,             $instanceIdServer, 30);
+		CreateLink('Ger√§t Aktiv',          $id_Busy,             $instanceIdServer, 30);
 		CreateLink('Eingangs Buffer',      $id_InputBuffer,      $instanceIdServer, 40);
 		CreateLink('Letzter Befehl',       $id_LastCommand,      $instanceIdServer, 50);
 		CreateLink('Letzter Fehler',       $id_LastError,        $instanceIdServer, 60);
@@ -290,11 +290,11 @@
 
 				CreateLink('Power',                IPS_GetObjectIDByIdent(AM_VAR_ROOMPOWER,   $roomInstanceId),   $roomCategoryId, 10);
 				CreateLink('Eingang',              IPS_GetObjectIDByIdent(AM_VAR_INPUTSELECT, $roomInstanceId),   $roomCategoryId, 20);
-				CreateLink('Verst‰rkung',          IPS_GetObjectIDByIdent(AM_VAR_INPUTGAIN,   $roomInstanceId),   $roomCategoryId, 30);
-				CreateLink('Lautst‰rke',           IPS_GetObjectIDByIdent(AM_VAR_VOLUME,      $roomInstanceId),   $roomCategoryId, 40);
+				CreateLink('Verst√§rkung',          IPS_GetObjectIDByIdent(AM_VAR_INPUTGAIN,   $roomInstanceId),   $roomCategoryId, 30);
+				CreateLink('Lautst√§rke',           IPS_GetObjectIDByIdent(AM_VAR_VOLUME,      $roomInstanceId),   $roomCategoryId, 40);
 				CreateLink('Muting',               IPS_GetObjectIDByIdent(AM_VAR_MUTE,        $roomInstanceId),   $roomCategoryId, 50);
 				CreateLink('Balance',              IPS_GetObjectIDByIdent(AM_VAR_BALANCE,     $roomInstanceId),   $roomCategoryId, 60);
-				CreateLink('Hˆhen',                IPS_GetObjectIDByIdent(AM_VAR_TREBLE,      $roomInstanceId),   $roomCategoryId, 70);
+				CreateLink('H√∂hen',                IPS_GetObjectIDByIdent(AM_VAR_TREBLE,      $roomInstanceId),   $roomCategoryId, 70);
 				CreateLink('Mitten',               IPS_GetObjectIDByIdent(AM_VAR_MIDDLE,      $roomInstanceId),   $roomCategoryId, 80);
 				CreateLink('Bass',                 IPS_GetObjectIDByIdent(AM_VAR_BASS,        $roomInstanceId),   $roomCategoryId, 90);
 			}
@@ -304,16 +304,16 @@
 			CreateLink('MediaPlayer', IPS_GetObjectIDByName('Status', $instanceIdPlayer),   $categoryIdWebFrontRight, 100);
 
 			$categoryIdPlayer = CreateCategory('MediaPlayer', $categoryIdWebFrontRight, 100);
-			CreateLink('Lautst‰rke',   IPS_GetObjectIDByName('Lautst‰rke',   $instanceIdPlayer),   $categoryIdPlayer, 10);
+			CreateLink('Lautst√§rke',   IPS_GetObjectIDByName('Lautst√§rke',   $instanceIdPlayer),   $categoryIdPlayer, 10);
 			CreateLink('Status',       IPS_GetObjectIDByName('Status',       $instanceIdPlayer),   $categoryIdPlayer, 20);
 			CreateLink('Titel',        IPS_GetObjectIDByName('Titel',        $instanceIdPlayer),   $categoryIdPlayer, 30);
 			CreateLink('Titeldatei',   IPS_GetObjectIDByName('Titeldatei',   $instanceIdPlayer),   $categoryIdPlayer, 40);
-			CreateLink('Titell‰nge',   IPS_GetObjectIDByName('Titell‰nge',   $instanceIdPlayer),   $categoryIdPlayer, 50);
+			CreateLink('Titell√§nge',   IPS_GetObjectIDByName('Titell√§nge',   $instanceIdPlayer),   $categoryIdPlayer, 50);
 			CreateLink('Titelposition',IPS_GetObjectIDByName('Titelposition',$instanceIdPlayer),   $categoryIdPlayer, 60);
 			CreateLink('Wiederholen',  IPS_GetObjectIDByName('Wiederholen',  $instanceIdPlayer),   $categoryIdPlayer, 70);
 			CreateLink('Zufall',       IPS_GetObjectIDByName('Zufall',       $instanceIdPlayer),   $categoryIdPlayer, 80);
-			CreateLink('Lautst‰rke',   IPS_GetObjectIDByName('Lautst‰rke',   $instanceIdPlayer),   $categoryIdPlayer, 90);
-			CreateLink('Lautst‰rke',   IPS_GetObjectIDByName('Lautst‰rke',   $instanceIdPlayer),   $categoryIdPlayer, 100);
+			CreateLink('Lautst√§rke',   IPS_GetObjectIDByName('Lautst√§rke',   $instanceIdPlayer),   $categoryIdPlayer, 90);
+			CreateLink('Lautst√§rke',   IPS_GetObjectIDByName('Lautst√§rke',   $instanceIdPlayer),   $categoryIdPlayer, 100);
 		}
 		
 		$tabItem = $WFC10_TabPaneItem.$WFC10_TabItem;
@@ -337,7 +337,7 @@
 		$instanceIdServer = CreateCategory('AudioMax Server', $mobileId, 0);
 		CreateLink('Power',                $id_Power,            $instanceIdServer, 10);
 		CreateLink('Verbindung',           $id_Connection,       $instanceIdServer, 20);
-		CreateLink('Ger‰t Aktiv',          $id_Busy,             $instanceIdServer, 30);
+		CreateLink('Ger√§t Aktiv',          $id_Busy,             $instanceIdServer, 30);
 		CreateLink('Eingangs Buffer',      $id_InputBuffer,      $instanceIdServer, 40);
 		CreateLink('Letzter Befehl',       $id_LastCommand,      $instanceIdServer, 50);
 		CreateLink('Letzter Fehler',       $id_LastError,        $instanceIdServer, 60);
@@ -357,11 +357,11 @@
 
 				CreateLink('Power',                IPS_GetObjectIDByIdent(AM_VAR_ROOMPOWER,   $roomInstanceId),   $roomCategoryId, 10);
 				CreateLink('Eingang',              IPS_GetObjectIDByIdent(AM_VAR_INPUTSELECT, $roomInstanceId),   $roomCategoryId, 20);
-				CreateLink('Verst‰rkung',          IPS_GetObjectIDByIdent(AM_VAR_INPUTGAIN,   $roomInstanceId),   $roomCategoryId, 30);
-				CreateLink('Lautst‰rke',           IPS_GetObjectIDByIdent(AM_VAR_VOLUME,      $roomInstanceId),   $roomCategoryId, 40);
+				CreateLink('Verst√§rkung',          IPS_GetObjectIDByIdent(AM_VAR_INPUTGAIN,   $roomInstanceId),   $roomCategoryId, 30);
+				CreateLink('Lautst√§rke',           IPS_GetObjectIDByIdent(AM_VAR_VOLUME,      $roomInstanceId),   $roomCategoryId, 40);
 				CreateLink('Muting',               IPS_GetObjectIDByIdent(AM_VAR_MUTE,        $roomInstanceId),   $roomCategoryId, 50);
 				CreateLink('Balance',              IPS_GetObjectIDByIdent(AM_VAR_BALANCE,     $roomInstanceId),   $roomCategoryId, 60);
-				CreateLink('Hˆhen',                IPS_GetObjectIDByIdent(AM_VAR_TREBLE,      $roomInstanceId),   $roomCategoryId, 70);
+				CreateLink('H√∂hen',                IPS_GetObjectIDByIdent(AM_VAR_TREBLE,      $roomInstanceId),   $roomCategoryId, 70);
 				CreateLink('Mitten',               IPS_GetObjectIDByIdent(AM_VAR_MIDDLE,      $roomInstanceId),   $roomCategoryId, 80);
 				CreateLink('Bass',                 IPS_GetObjectIDByIdent(AM_VAR_BASS,        $roomInstanceId),   $roomCategoryId, 90);
 			}
@@ -371,16 +371,16 @@
 			CreateLink('MediaPlayer', IPS_GetObjectIDByName('Status', $instanceIdPlayer),   $mobileId, 100);
 
 			$categoryIdPlayer = CreateCategory('MediaPlayer', $mobileId, 100);
-			CreateLink('Lautst‰rke',   IPS_GetObjectIDByName('Lautst‰rke',   $instanceIdPlayer),   $categoryIdPlayer, 10);
+			CreateLink('Lautst√§rke',   IPS_GetObjectIDByName('Lautst√§rke',   $instanceIdPlayer),   $categoryIdPlayer, 10);
 			CreateLink('Status',       IPS_GetObjectIDByName('Status',       $instanceIdPlayer),   $categoryIdPlayer, 20);
 			CreateLink('Titel',        IPS_GetObjectIDByName('Titel',        $instanceIdPlayer),   $categoryIdPlayer, 30);
 			CreateLink('Titeldatei',   IPS_GetObjectIDByName('Titeldatei',   $instanceIdPlayer),   $categoryIdPlayer, 40);
-			CreateLink('Titell‰nge',   IPS_GetObjectIDByName('Titell‰nge',   $instanceIdPlayer),   $categoryIdPlayer, 50);
+			CreateLink('Titell√§nge',   IPS_GetObjectIDByName('Titell√§nge',   $instanceIdPlayer),   $categoryIdPlayer, 50);
 			CreateLink('Titelposition',IPS_GetObjectIDByName('Titelposition',$instanceIdPlayer),   $categoryIdPlayer, 60);
 			CreateLink('Wiederholen',  IPS_GetObjectIDByName('Wiederholen',  $instanceIdPlayer),   $categoryIdPlayer, 70);
 			CreateLink('Zufall',       IPS_GetObjectIDByName('Zufall',       $instanceIdPlayer),   $categoryIdPlayer, 80);
-			CreateLink('Lautst‰rke',   IPS_GetObjectIDByName('Lautst‰rke',   $instanceIdPlayer),   $categoryIdPlayer, 90);
-			CreateLink('Lautst‰rke',   IPS_GetObjectIDByName('Lautst‰rke',   $instanceIdPlayer),   $categoryIdPlayer, 100);
+			CreateLink('Lautst√§rke',   IPS_GetObjectIDByName('Lautst√§rke',   $instanceIdPlayer),   $categoryIdPlayer, 90);
+			CreateLink('Lautst√§rke',   IPS_GetObjectIDByName('Lautst√§rke',   $instanceIdPlayer),   $categoryIdPlayer, 100);
 		}
 	}
 

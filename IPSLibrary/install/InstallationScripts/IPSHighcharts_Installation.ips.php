@@ -33,8 +33,8 @@
 	 *
 	 * Script zur kompletten Installation von IPSHighcharts.
 	 *
-	 * Vor der Installation muß das File IPSHighcharts_Configuration.inc.php an die persönlichen
-	 * Bedürfnisse angepasst werden.
+	 * Vor der Installation muÃŸ das File IPSHighcharts_Configuration.inc.php an die persÃ¶nlichen
+	 * BedÃ¼rfnisse angepasst werden.
 	 *
 	 * @page requirements_ipshighcharts Installations Voraussetzungen
 	 * - IPS Kernel >= 2.50
@@ -43,7 +43,7 @@
 	 * - IPSComponent >= 2.50.1
 	 *
 	 * @page install_ipshighcharts Installations Schritte
-	 * Folgende Schritte sind zur Installation der IPSHighcharts Ansteuerung nötig:
+	 * Folgende Schritte sind zur Installation der IPSHighcharts Ansteuerung nÃ¶tig:
 	 * - Laden des Modules (siehe IPSModuleManager)
 	 * - Konfiguration (Details siehe Konfiguration)
 	 * - Installation (siehe IPSModuleManager)

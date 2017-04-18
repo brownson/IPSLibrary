@@ -18,7 +18,7 @@
 	 * - IPSLogger >= 2.50.1
 	 *
 	 * @page install_edip Installations Schritte
-	 * Folgende Schritte sind zur Installation der EDIP Ansteuerung nötig:
+	 * Folgende Schritte sind zur Installation der EDIP Ansteuerung nÃ¶tig:
 	 * - Laden des Modules (siehe IPSModuleManager)
 	 * - Konfiguration (Details siehe Konfiguration)
 	 * - Installation (siehe IPSModuleManager)

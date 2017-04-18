@@ -40,7 +40,7 @@
 		/**
 		 * @public
 		 *
-		 * Liefert den Pfad eines übergebenen Scriptes in der IPS Structure
+		 * Liefert den Pfad eines Ã¼bergebenen Scriptes in der IPS Structure
 		 *
 		 * @param string $file Name des Script Files
 		 */
@@ -58,7 +58,7 @@
 		/**
 		 * @public
 		 *
-		 * Liefert den Namen eines übergebenen Scriptes in der IPS Structure
+		 * Liefert den Namen eines Ã¼bergebenen Scriptes in der IPS Structure
 		 *
 		 * @param string $file Name des Script Files
 		 */

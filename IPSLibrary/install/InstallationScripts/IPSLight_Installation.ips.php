@@ -33,8 +33,8 @@
 	 *
 	 * Script zur kompletten Installation der IPSLight Steuerung.
 	 *
-	 * Vor der Installation muß das File IPSLight_Configuration.inc.php an die persönlichen
-	 * Bedürfnisse angepasst werden.
+	 * Vor der Installation muÃŸ das File IPSLight_Configuration.inc.php an die persÃ¶nlichen
+	 * BedÃ¼rfnisse angepasst werden.
 	 *
 	 * @page rquirements_IPSLight Installations Voraussetzungen
 	 * - IPS Kernel >= 2.50
@@ -44,7 +44,7 @@
 	 * - IPSMessageHandler >= 2.50.1
 	 *
 	 * @page install_IPSLight Installations Schritte
-	 * Folgende Schritte sind zur Installation der IPSLight Ansteuerung nötig:
+	 * Folgende Schritte sind zur Installation der IPSLight Ansteuerung nÃ¶tig:
 	 * - Laden des Modules (siehe IPSModuleManager)
 	 * - Konfiguration (Details siehe Konfiguration)
 	 * - Installation (siehe IPSModuleManager)

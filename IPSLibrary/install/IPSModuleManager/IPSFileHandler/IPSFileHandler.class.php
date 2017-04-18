@@ -45,7 +45,7 @@
 		/**
 		 * @public
 		 *
-		 * Liefert den übergebenen Pfadnamen mit einem abschließenden Pfad Delimiter
+		 * Liefert den Ã¼bergebenen Pfadnamen mit einem abschlieÃŸenden Pfad Delimiter
 		 *
 		 * @param string $path Pfad
 		 */
@@ -76,7 +76,7 @@
 		/**
 		 * @public
 		 *
-		 * Filtert Dateien die gleich sind (CRLF wird ignoriert) aus den übergebenen
+		 * Filtert Dateien die gleich sind (CRLF wird ignoriert) aus den Ã¼bergebenen
 		 * File Listen heraus.
 		 *
 		 * @param string $sourceList Liste der Files, die kopiert werden soll
@@ -119,7 +119,7 @@
 		 * @param string $sourceFile Datei die kopiert werden soll
 		 * @param string $destinationFile Datei die erzeugt werden soll
 		 * @param boolean $raiseError gibt an ob ein Error geraised werden soll oder ob die Function im Falle eines Fehlers false retounieren soll
-		 * @return boolean true für OK, false bei Fehler beim Kopiervorgang
+		 * @return boolean true fÃ¼r OK, false bei Fehler beim Kopiervorgang
 		 * @throws IPSFileHandlerException wenn Fehler beim Erzeugen der Zieldatei auftritt
 		 */
 		public function CopyFile($sourceFile, $destinationFile, $raiseError=true) {
@@ -203,7 +203,7 @@
 		 * Erzeugt Files aus den zugrundeliegenden Default Files 
 		 *
 		 * @param string $scriptList Liste der Default Files, von denen eine User Version erzeugt werden soll
-		 * @param boolean $overwriteUserFiles bestehende User Files mit Default überschreiben
+		 * @param boolean $overwriteUserFiles bestehende User Files mit Default Ã¼berschreiben
 		 * @throws IPSFileHandlerException wenn Fehler beim Erzeugen der Zieldatei auftritt
 		 */
 		public function CreateScriptsFromDefault($scriptList, $overwriteUserFiles=false) {
@@ -224,7 +224,7 @@
 		 * @param string $sourceList Liste der Files, die kopiert werden soll
 		 * @param string $destinationList Liste der Files, die erzeugt werden soll
 		 * @param boolean $raiseError gibt an ob ein Error geraised werden soll oder ob die Function im Falle eines Fehlers false retounieren soll
-		 * @return boolean true für OK, false bei Fehler beim Kopiervorgang
+		 * @return boolean true fÃ¼r OK, false bei Fehler beim Kopiervorgang
 		 * @throws IPSFileHandlerException wenn Fehler beim Erzeugen der Zieldatei auftritt
 		 */
 		public function CopyFiles ($sourceList, $destinationList, $raiseError=true) {
@@ -286,10 +286,10 @@
 		/**
 		 * @public
 		 *
-		 * Löschen eines Files
+		 * LÃ¶schen eines Files
 		 *
-		 * @param string $file File das gelöscht werden soll
-		 * @throws IPSFileHandlerException wenn Fehler beim Löschen der Zieldatei auftritt
+		 * @param string $file File das gelÃ¶scht werden soll
+		 * @throws IPSFileHandlerException wenn Fehler beim LÃ¶schen der Zieldatei auftritt
 		 */
 		public function DeleteFile($file) {
 		   if (file_exists($file)) {
@@ -303,10 +303,10 @@
 		/**
 		 * @public
 		 *
-		 * Löschen von Files
+		 * LÃ¶schen von Files
 		 *
-		 * @param string $localList Liste der Files, die gelöscht werden soll
-		 * @throws IPSFileHandlerException wenn Fehler beim Löschen der Zieldatei auftritt
+		 * @param string $localList Liste der Files, die gelÃ¶scht werden soll
+		 * @throws IPSFileHandlerException wenn Fehler beim LÃ¶schen der Zieldatei auftritt
 		 */
 		public function DeleteFiles($localList) {
 			foreach ($localList as $idx=>$file) {
@@ -317,10 +317,10 @@
 		/**
 		 * @public
 		 *
-		 * Löschen eines Files
+		 * LÃ¶schen eines Files
 		 *
-		 * @param string $file File das gelöscht werden soll
-		 * @throws IPSFileHandlerException wenn Fehler beim Löschen der Zieldatei auftritt
+		 * @param string $file File das gelÃ¶scht werden soll
+		 * @throws IPSFileHandlerException wenn Fehler beim LÃ¶schen der Zieldatei auftritt
 		 */
 		public function DeleteEmptyDirectories($file) {
 			$filePath = pathinfo($file, PATHINFO_DIRNAME);
