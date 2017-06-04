@@ -242,6 +242,13 @@
 					GetValue(IPS_GetObjectIDByIdent(c_Control_AzimuthEnd, $this->instanceId)),
 					GetValue(IPS_GetObjectIDByIdent(c_Control_Elevation,  $this->instanceId)),
 					GetValue(IPS_GetObjectIDByIdent(c_Control_Orientation,$this->instanceId)));
+					
+			$mediaID = IPSUtil_ObjectIDByPath('Program.IPSLibrary.data.modules.IPSShadowing.ProfileManager.GraphsSun.Sonnenstand');
+			if ($mediaID > 0) {
+				IPS_SendMediaEvent($mediaID);
+			}	
+		
+					
 		}
 	}
 
