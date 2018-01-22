@@ -1,4 +1,4 @@
- <?
+<?
     /*
      * This file is part of the IPSLibrary.
      *
@@ -27,7 +27,7 @@
     /**
     * @class IPSComponentCam_Mjpgstreamer
     *
-    * Definiert ein IPSComponentCam Object, das die Funktionen einer Cam Componente für einen
+    * Definiert ein IPSComponentCam Object, das die Funktionen einer Cam Componente fÃ¼r einen
     * Raspberry (Software mjpg_streamer) implementiert
     *
     * @author Thiemo
@@ -50,9 +50,9 @@
          * Initialisierung eines IPSComponentCam_Test Objektes
          *
          * @param string $ipAddress IP Adresse der Kamera
-         * @param string $username Username für Kamera Zugriff
-         * @param string $password Passwort für Kamera Zugriff
-         * @param string $port Port für Kamera Zugriff
+         * @param string $username Username fÃ¼r Kamera Zugriff
+         * @param string $password Passwort fÃ¼r Kamera Zugriff
+         * @param string $port Port fÃ¼r Kamera Zugriff
          */
         public function __construct($ipAddress, $username, $password, $port) {
             $this->ipAddress  = $ipAddress;
@@ -65,7 +65,7 @@
          * @public
          *
          * Funktion liefert String IPSComponent Constructor String.
-         * String kann dazu benützt werden, das Object mit der IPSComponent::CreateObjectByParams
+         * String kann dazu benÃ¼tzt werden, das Object mit der IPSComponent::CreateObjectByParams
          * wieder neu zu erzeugen.
          *
          * @return string Parameter String des IPSComponent Object
@@ -80,7 +80,7 @@
          * Function um Events zu behandeln, diese Funktion wird vom IPSMessageHandler aufgerufen, um ein aufgetretenes Event
          * an das entsprechende Module zu leiten.
          *
-         * @param integer $variable ID der auslösenden Variable
+         * @param integer $variable ID der auslÃ¶senden Variable
          * @param string $value Wert der Variable
          * @param IPSModuleCam $module Module Object an das das aufgetretene Event weitergeleitet werden soll
          */
@@ -94,7 +94,7 @@
          *
          * Liefert URL des Kamera Live Streams
          *
-         * @param integer $size Größe des Streams, mögliche Werte:
+         * @param integer $size GrÃ¶ÃŸe des Streams, mÃ¶gliche Werte:
          *                      IPSCOMPONENTCAM_SIZE_SMALL, IPSCOMPONENTCAM_SIZE_MIDDLE oder IPSCOMPONENTCAM_SIZE_LARGE
          * @return string URL des Streams
          */
@@ -121,7 +121,7 @@
          *
          * Liefert URL des Kamera Bildes
          *
-         * @param integer $size Größe des Bildes, mögliche Werte:
+         * @param integer $size GrÃ¶ÃŸe des Bildes, mÃ¶gliche Werte:
          *                      IPSCOMPONENTCAM_SIZE_SMALL, IPSCOMPONENTCAM_SIZE_MIDDLE oder IPSCOMPONENTCAM_SIZE_LARGE
          * @return string URL des Bildes
          */
@@ -149,7 +149,7 @@
          * Bewegen der Kamera
          *
          * @param integer $urlType Type der URL die geliefert werden soll.
-         *                         mögliche Werte: IPSCOMPONENTCAM_URL_MOVEHOME
+         *                         mÃ¶gliche Werte: IPSCOMPONENTCAM_URL_MOVEHOME
                                                    IPSCOMPONENTCAM_URL_MOVELEFT
                                                    IPSCOMPONENTCAM_URL_MOVERIGHT
                                                    IPSCOMPONENTCAM_URL_MOVEUP
@@ -176,7 +176,7 @@
                         $url = $url.''; // Not supported
                         break;
                 default:
-                    trigger_error('Diese Funktion ist für eine Abus Kamera noch NICHT implementiert !!!');
+                    trigger_error('Diese Funktion ist fÃ¼r eine Abus Kamera noch NICHT implementiert !!!');
             }
             return $url;
         }
@@ -186,7 +186,7 @@
          *
          * Liefert Breite des Kamera Bildes
          *
-         * @param integer $size Größe des Bildes, mögliche Werte:
+         * @param integer $size GrÃ¶ÃŸe des Bildes, mÃ¶gliche Werte:
          *                      IPSCOMPONENTCAM_SIZE_SMALL, IPSCOMPONENTCAM_SIZE_MIDDLE oder IPSCOMPONENTCAM_SIZE_LARGE
          * @return integer Breite des Bildes in Pixel
          */
@@ -210,11 +210,11 @@
         /**
          * @public
          *
-         * Liefert Höhe des Kamera Bildes
+         * Liefert HÃ¶he des Kamera Bildes
          *
-         * @param integer $size Größe des Bildes, mögliche Werte:
+         * @param integer $size GrÃ¶ÃŸe des Bildes, mÃ¶gliche Werte:
          *                      IPSCOMPONENTCAM_SIZE_SMALL, IPSCOMPONENTCAM_SIZE_MIDDLE oder IPSCOMPONENTCAM_SIZE_LARGE
-         * @return integer Höhe des Bildes in Pixel
+         * @return integer HÃ¶he des Bildes in Pixel
          */
         public function Get_Height($size=IPSCOMPONENTCAM_SIZE_MIDDLE) {
             switch ($size) {
@@ -235,4 +235,4 @@
     }
 
     /** @}*/
-?> 
+?>
