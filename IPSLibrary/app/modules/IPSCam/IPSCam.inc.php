@@ -38,7 +38,7 @@
 	IPSUtils_Include ("IPSCam_Manager.class.php",         "IPSLibrary::app::modules::IPSCam");
 
 	/**
-	 * Selektiert die spezifizierte Kamera und schaltet auf den gew¸nschten Mode um
+	 * Selektiert die spezifizierte Kamera und schaltet auf den gew√ºnschten Mode um
 	 *
 	 * @param int $cameraIdx Index der Kamera
 	 * @param int $mode Kamera Modus
@@ -50,12 +50,12 @@
 	
 	/**
 	 * Liefert den Camera Index (Position im Konfigurations Array) einer bestimmten Kamera
-	 * Dieser Index wird zur Ansteuerung der meisten IPSCam Funktionen benˆtigt.
+	 * Dieser Index wird zur Ansteuerung der meisten IPSCam Funktionen ben√∂tigt.
 	 *
 	 * @param string $name Name der Kamera
 	 * @return int Index der Kamera
 	 */
-	function IPSCam_IPSCam_GetCamIdxByName($name) {
+	function IPSCam_GetCamIdxByName($name) {
 		$config             = IPSCam_GetConfiguration();
 		foreach ($config as $idx=>$data) {
 			if ($data[IPSCAM_PROPERTY_NAME]==$name) {
@@ -65,9 +65,14 @@
 		trigger_error('Camera with Name "'.$name.'" could NOT be found in Configuration Array!!!');
 	}
 
+    // Keep for backward compatibility
+    function IPSCam_IPSCam_GetCamIdxByName($name) {
+		return IPSCam_GetCamIdxByName($name);
+	}
+
 	/**
 	 * Aktualisiert das entsprechende Kamera Bild, wenn der Kamera Index nicht gesetzt wird, 
-	 * wird das aktuell gew‰hlte Kamera Bild aktualisiert
+	 * wird das aktuell gew√§hlte Kamera Bild aktualisiert
 	 *
 	 * @param int $cameraIdx Index der Kamera
 	 */
@@ -78,7 +83,7 @@
 
 	/**
 	 * Speichert ein Bild der entsprechende Kamera , wenn der Kamera Index nicht gesetzt wird, 
-	 * wird das aktuell gew‰hlte Kamera Bild gespeichert
+	 * wird das aktuell gew√§hlte Kamera Bild gespeichert
 	 *
 	 * @param int $cameraIdx Index der Kamera
 	 * @return string Name des gespeicherten Bildes bzw. false wenn die Kamera nicht in Betrieb ist.
