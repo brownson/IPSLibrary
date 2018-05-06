@@ -554,23 +554,23 @@
 			$StepCount     = count($NextStepsToDo);
 			$Step          = $this->GetVariableValue(c_Control_Step);
 			if ($StepCount >= ($Step+4) and $Step>=0) {
-				$StartTime     = $this->GetVariableValue(c_Control_StartTime);
-				$SecsDone      = time()-$StartTime;
-				$SecsToDo      = $NextStepsToDo[$Step+1];
-				$Display       = $NextStepsToDo[$Step+2];
-				$SecsTotal     = $NextStepsToDo[$Step+3];
-				$SecStepBegin  = $NextStepsToDo[$Step+4];
-				$Command       = $NextStepsToDo[$Step];
+				$StartTime = $this->GetVariableValue(c_Control_StartTime);
+				$SecsDone = time()-$StartTime;
+				$SecsToDo = (int)$NextStepsToDo[$Step+1];
+				$Display = $NextStepsToDo[$Step+2];
+				$SecsTotal = (int)$NextStepsToDo[$Step+3];
+				$SecStepBegin = (int)$NextStepsToDo[$Step+4];
+				$Command = $NextStepsToDo[$Step];
 
 				if ($SecsTotal <> null) {
-					//  SecTotal   ... 100%
-					//  Begin+Done ...   x%
-					$Position       = round(($SecStepBegin+$SecsDone)*100/$SecsTotal);
+					// SecTotal ... 100%
+					// Begin+Done ... x%
+					$Position = (int)round(($SecStepBegin+$SecsDone)*100/$SecsTotal);
 					if ($Command==c_MovementId_Up or $Command==c_MovementId_MovingIn) {
 						$Position = 100-$Position;
 					}
 					if ($Position>100) {$Position=100;}
-					if ($Position<0)   {$Position=0;}
+					if ($Position<0) {$Position=0;} 					
 					$this->SetVariableValue(c_Control_Position, $Position);
 					$SecsOpen      = $SecsToDo-$SecsDone;
 					if ($SecsOpen < 0) {$SecsOpen=0;}
