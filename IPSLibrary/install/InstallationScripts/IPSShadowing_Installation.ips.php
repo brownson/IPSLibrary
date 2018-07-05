@@ -809,7 +809,7 @@
 		// Common Settings
 		$WebFrontSettingId  = CreateCategory('Settings', $categoryId_WebFront, 50);
 		CreateWFCItemCategory  ($WFC10_ConfigId, $WFC10_TabPaneItem.'_Settings', $WFC10_TabPaneItem, 50, 'Einstellungen', 'Gear', $WebFrontSettingId /*BaseId*/, 'true' /*BarBottomVisible*/);
-		CreateLink('Msg Prio. Temparatur',   IPS_GetObjectIDByIdent(c_Control_MsgPrioTemp,     $CategoryIdSettings),  $WebFrontSettingId, 60);
+		CreateLink('Msg Prio. Temperatur',   IPS_GetObjectIDByIdent(c_Control_MsgPrioTemp,     $CategoryIdSettings),  $WebFrontSettingId, 60);
 		CreateLink('Msg Prio. Programm',     IPS_GetObjectIDByIdent(c_Control_MsgPrioProg,     $CategoryIdSettings),  $WebFrontSettingId, 70);
 
 		// Application Logging
@@ -877,7 +877,7 @@
 		CreateLink('Automatic Ein',        $ScriptIdAutomaticOn,       $MobileSettingsId, 10);
 		CreateLink('Automatic Aus',        $ScriptIdAutomaticOff,      $MobileSettingsId, 20);
 		CreateLink('Automatic Reset',      $ScriptIdAutomaticReset,    $MobileSettingsId, 30);
-		CreateLink('Msg Prio. Temparatur', $ControlIdMsgPrioTemp,      $MobileSettingsId, 100);
+		CreateLink('Msg Prio. Temperatur', $ControlIdMsgPrioTemp,      $MobileSettingsId, 100);
 		CreateLink('Msg Prio. Programm',   $ControlIdMsgPrioTemp,      $MobileSettingsId, 110);
 
 		$MobileSettingScenarioId  = CreateCategory('Szenarien', $MobileSettingsId, 10, 'Script');
