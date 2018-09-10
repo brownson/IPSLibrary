@@ -415,10 +415,10 @@
 		private function AddNextStep(&$StepsToDo, $Command, $SecondsToDo, $Display, $SecondsTotal, $PercentagePosition) {
 			$Step = count($StepsToDo);
 			$StepsToDo[$Step]   = $Command;
-			$StepsToDo[$Step+1] = $SecondsToDo;
+			$StepsToDo[$Step+1] = number_format($SecondsToDo,2,'.','');
 			$StepsToDo[$Step+2] = $Display;
-			$StepsToDo[$Step+3] = $SecondsTotal;
-			$StepsToDo[$Step+4] = $PercentagePosition;
+			$StepsToDo[$Step+3] = number_format($SecondsTotal,2,'.','');
+			$StepsToDo[$Step+4] = number_format($PercentagePosition,2,'.','');
 		}
 	
 		// ----------------------------------------------------------------------------------------------------------------------------
@@ -556,10 +556,10 @@
 			if ($StepCount >= ($Step+4) and $Step>=0) {
 				$StartTime = $this->GetVariableValue(c_Control_StartTime);
 				$SecsDone = time()-$StartTime;
-				$SecsToDo = (int)$NextStepsToDo[$Step+1];
+				$SecsToDo = (float)$NextStepsToDo[$Step+1];
 				$Display = $NextStepsToDo[$Step+2];
-				$SecsTotal = (int)$NextStepsToDo[$Step+3];
-				$SecStepBegin = (int)$NextStepsToDo[$Step+4];
+				$SecsTotal = (float)$NextStepsToDo[$Step+3];
+				$SecStepBegin = (float)$NextStepsToDo[$Step+4];
 				$Command = $NextStepsToDo[$Step];
 
 				if ($SecsTotal <> null) {
@@ -700,7 +700,7 @@
 
 			// Manual Change ...
 			} elseif ($changeByUser) {
-				$programInfo = 'Manuelle Änderung';
+				$programInfo = 'Manuelle Ã„nderung';
         
 			// Present ...
 			} elseif ($profileManager->GetPresent() and $programPresent==c_ProgramId_OpenedDay and $isDay) {
@@ -722,7 +722,7 @@
 					$programInfo  = 'Temperatur';
 					$programDelay = $this->MoveByProgram($programTemp, 'Temperaturprogramm', true/*DimoutOption*/, true/*TriggeredByTemp*/);
 				} elseif ($changeByTemp) {
-					$programInfo  = 'Temperatur (Warte Öffnen)';
+					$programInfo  = 'Temperatur (Warte Ã–ffnen)';
 				} elseif ($shadowingByTemp) {
 					$programInfo  = 'Temperatur (Beschattung)';
 					$programDelay = $this->MoveByProgram($programTemp, 'Temperaturprogramm (Beschattung)', false/*DimoutOption*/, true/*TriggeredByTemp*/);
@@ -733,7 +733,7 @@
 			// Day
 			} elseif ($isDay) {
 				if (!$openByTemp and $changeByTemp) {
-					$programInfo = 'Tag (Warte Öffnen)';
+					$programInfo = 'Tag (Warte Ã–ffnen)';
 				} elseif ($openByTemp and $changeByTemp) {
 					SetValue(IPS_GetObjectIDByIdent(c_Control_TempChange, $this->deviceId), false);
 					if ($programDay<>c_ProgramId_Manual) {
