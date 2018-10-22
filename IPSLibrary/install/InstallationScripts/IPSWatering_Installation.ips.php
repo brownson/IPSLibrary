@@ -149,16 +149,16 @@
 		$CircleId              = CreateCategory($CircleName, $CategoryIdCircles, $Idx);
 		$ControlIdActive       = CreateVariable(c_Control_Active,       0 /*Boolean*/, $CircleId,  10, 'IPSWatering_Active',   $ScriptIdChangeSettings, false, 'Drops');
 		$ControlIdAutomatic    = CreateVariable(c_Control_Automatic,    0 /*Boolean*/, $CircleId,  20, '~Switch',              $ScriptIdChangeSettings, false, 'Power');
-		$ControlIdStartTime    = CreateVariable(c_Control_StartTime,    3 /*String*/,  $CircleId,  30, '~String',              $ScriptIdChangeSettings, '07:00', 'Clock');
+		$ControlIdStartTime    = CreateVariable(c_Control_StartTime,    3 /*String*/,  $CircleId,  30, '',              $ScriptIdChangeSettings, '07:00', 'Clock');
 		$ControlIdDuration     = CreateVariable(c_Control_Duration,     1 /*Integer*/, $CircleId,  40, 'IPSWatering_Duration', $ScriptIdChangeSettings, 45, 'Intensity');
 		$ControlIdProgram      = CreateVariable(c_Control_Program,      1 /*Integer*/, $CircleId,  50, 'IPSWatering_Program',  $ScriptIdChangeSettings, c_ProgramId_EveryDay, 'Calendar');
 		$ControlIdSensor       = CreateVariable(c_Control_Sensor,       1 /*Integer*/, $CircleId,  60, 'IPSWatering_Sensor',   $ScriptIdChangeSettings, 0, 'Rainfall');
-		$ControlIdLastDate     = CreateVariable(c_Control_LastDate,     3 /*String*/,  $CircleId, 100, '~String',              null, date(c_Format_LastDate));
-		$ControlIdLastTime     = CreateVariable(c_Control_LastTime,     3 /*String*/,  $CircleId, 110, '~String',              null, date(c_Format_LastTime));
-		$ControlIdNextDate     = CreateVariable(c_Control_NextDate,     3 /*String*/,  $CircleId, 120, '~String',              null, date(c_Format_NextDate));
-		$ControlIdNextTime     = CreateVariable(c_Control_NextTime,     3 /*String*/,  $CircleId, 130, '~String',              null, date(c_Format_NextTime));
-		$ControlIdNextDisplay  = CreateVariable(c_Control_NextDisplay,  3 /*String*/,  $CircleId, 140, '~String',              null, '');
-		$ControlIdToBeDone     = CreateVariable(c_Control_ToBeDone,     3 /*String*/,  $CircleId, 150, '~String',              null, 'Automatik Aus');
+		$ControlIdLastDate     = CreateVariable(c_Control_LastDate,     3 /*String*/,  $CircleId, 100, '',              null, date(c_Format_LastDate));
+		$ControlIdLastTime     = CreateVariable(c_Control_LastTime,     3 /*String*/,  $CircleId, 110, '',              null, date(c_Format_LastTime));
+		$ControlIdNextDate     = CreateVariable(c_Control_NextDate,     3 /*String*/,  $CircleId, 120, '',              null, date(c_Format_NextDate));
+		$ControlIdNextTime     = CreateVariable(c_Control_NextTime,     3 /*String*/,  $CircleId, 130, '',              null, date(c_Format_NextTime));
+		$ControlIdNextDisplay  = CreateVariable(c_Control_NextDisplay,  3 /*String*/,  $CircleId, 140, '',              null, '');
+		$ControlIdToBeDone     = CreateVariable(c_Control_ToBeDone,     3 /*String*/,  $CircleId, 150, '',              null, 'Automatik Aus');
 		$Idx = $Idx  + 10;
 	}
 	// Logging
