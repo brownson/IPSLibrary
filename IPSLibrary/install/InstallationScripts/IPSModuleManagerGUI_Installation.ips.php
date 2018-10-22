@@ -98,9 +98,9 @@
 	// ===================================================================================================
 	// Add Module Details
 	// ===================================================================================================
-	$variableIdStatus        = CreateVariable(IPSMMG_VAR_ACTION,      3 /*String*/,  $CategoryIdData, 10, '~String',  null,   'Overview', '');
-	$variableIdModule        = CreateVariable(IPSMMG_VAR_MODULE,      3 /*String*/,  $CategoryIdData, 20, '~String',  null,   '', '');
-	$variableIdInfo          = CreateVariable(IPSMMG_VAR_INFO,        3 /*String*/,  $CategoryIdData, 30, '~String',  null,   '', '');
+	$variableIdStatus        = CreateVariable(IPSMMG_VAR_ACTION,      3 /*String*/,  $CategoryIdData, 10, '',  null,   'Overview', '');
+	$variableIdModule        = CreateVariable(IPSMMG_VAR_MODULE,      3 /*String*/,  $CategoryIdData, 20, '',  null,   '', '');
+	$variableIdInfo          = CreateVariable(IPSMMG_VAR_INFO,        3 /*String*/,  $CategoryIdData, 30, '',  null,   '', '');
 	$variableIdHTML          = CreateVariable(IPSMMG_VAR_HTML,        3 /*String*/,  $CategoryIdData, 40, '~HTMLBox', null,   '<iframe frameborder="0" width="100%" height="600px"  src="../user/IPSModuleManagerGUI/IPSModuleManagerGUI.php"</iframe>', 'Information');
 
 	// ----------------------------------------------------------------------------------------------------------------------------
