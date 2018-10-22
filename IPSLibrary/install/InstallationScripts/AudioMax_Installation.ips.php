@@ -217,9 +217,9 @@
 	$id_Power            = CreateVariable(AM_VAR_MAINPOWER,       0 /*Boolean*/, $id_AudioMaxServerId,  10, '~Switch',              $id_ScriptSettings, false, 'Power');
 	$id_Busy             = CreateVariable(AM_VAR_BUSY,            0 /*Boolean*/, $id_AudioMaxServerId,  20, 'AudioMax_Busy',        null,               false, 'Distance');
 	$id_Connection       = CreateVariable(AM_VAR_CONNECTION,      0 /*Boolean*/, $id_AudioMaxServerId,  30, 'AudioMax_Connection',  $id_ScriptSettings, true,  '');
-	$id_LastError        = CreateVariable(AM_VAR_LASTERROR,       3 /*String*/,  $id_AudioMaxServerId,  40, '~String',              null,               '',    'Warning');
-	$id_LastCommand      = CreateVariable(AM_VAR_LASTCOMMAND,     3 /*String*/,  $id_AudioMaxServerId,  50, '~String',              null,               '',    'Information');
-	$id_InputBuffer      = CreateVariable(AM_VAR_INPUTBUFFER,     3 /*String*/,  $id_AudioMaxServerId,  60, '~String',              null,               '',    'Information');
+	$id_LastError        = CreateVariable(AM_VAR_LASTERROR,       3 /*String*/,  $id_AudioMaxServerId,  40, '',              null,               '',    'Warning');
+	$id_LastCommand      = CreateVariable(AM_VAR_LASTCOMMAND,     3 /*String*/,  $id_AudioMaxServerId,  50, '',              null,               '',    'Information');
+	$id_InputBuffer      = CreateVariable(AM_VAR_INPUTBUFFER,     3 /*String*/,  $id_AudioMaxServerId,  60, '',              null,               '',    'Information');
 	$id_KeepAliveCount   = CreateVariable(AM_VAR_KEEPALIVECOUNT,  1 /*Integer*/, $id_AudioMaxServerId,  70, '',                     null,               0, '');
 	$id_KeepAliveStatus  = CreateVariable(AM_VAR_KEEPALIVESTATUS, 0 /*Boolean*/, $id_AudioMaxServerId,  80, 'AudioMax_KeepAliveStatus', null,           true,  'Repeat');
 	$id_ModePowerRequest = CreateVariable(AM_VAR_MODEPOWERREQUEST,0 /*Boolean*/, $id_AudioMaxServerId,  90, '~Switch',               $id_ScriptSettings,true,  'Gear');
