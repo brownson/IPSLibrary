@@ -203,7 +203,7 @@
 	$variableIdModeSett  = CreateVariable(IPSCAM_VAR_MODESETT, 0 /*Boolean*/, $categoryIdCommon, 60, '~Switch',        $scriptIdActionScript, false, 'Gear');
 	$variableIdNavPict   = CreateVariable(IPSCAM_VAR_NAVPICT,  1 /*Integer*/, $categoryIdCommon, 70, 'IPSCam_NavPict', $scriptIdActionScript, -1, 'HollowArrowRight');
 	$variableIdNavDays   = CreateVariable(IPSCAM_VAR_NAVDAYS,  1 /*Integer*/, $categoryIdCommon, 80, 'IPSCam_NavDays', $scriptIdActionScript, -1, 'HollowDoubleArrowRight');
-	$variableIdNavTime   = CreateVariable(IPSCAM_VAR_NAVTIME,  3 /*String*/,  $categoryIdCommon, 90, '~String',        null,  date(IPSCAM_NAV_DATEFORMATDISP), 'Clock');
+	$variableIdNavTime   = CreateVariable(IPSCAM_VAR_NAVTIME,  3 /*String*/,  $categoryIdCommon, 90, '',        null,  date(IPSCAM_NAV_DATEFORMATDISP), 'Clock');
 
 	$camConfig = IPSCam_GetConfiguration();
 	foreach ($camConfig as $idx=>$data) {
@@ -218,7 +218,7 @@
 		$variableIdCamStreamX= CreateMediaStream (IPSCAM_VAR_CAMSTREAM, $categoryIdCamX, $urlStream,'Image', 40); 
 
 		$variableIdMotMode   = CreateVariable(IPSCAM_VAR_MOTMODE,    1 /*Integer*/,  $categoryIdCamX, 100, 'IPSCam_MotMode',     $scriptIdActionScript, IPSCAM_VAL_DISABLED, 'Motion');
-		$variableIdMotTime   = CreateVariable(IPSCAM_VAR_MOTTIME,    3 /*String*/,   $categoryIdCamX, 110, '~String',            $scriptIdActionScript, '13:00', 'Clock');
+		$variableIdMotTime   = CreateVariable(IPSCAM_VAR_MOTTIME,    3 /*String*/,   $categoryIdCamX, 110, '',            $scriptIdActionScript, '13:00', 'Clock');
 		$variableIdMotHist   = CreateVariable(IPSCAM_VAR_MOTHIST,    1 /*Integer*/,  $categoryIdCamX, 120, 'IPSCam_MotHist',     $scriptIdActionScript, 7, 'Image');
 		$variableIdMotSize   = CreateVariable(IPSCAM_VAR_MOTSIZE,    1 /*Integer*/,  $categoryIdCamX, 130, 'IPSCam_Size',        $scriptIdActionScript, 1, 'Distance');
 		$variableIdPictRef   = CreateVariable(IPSCAM_VAR_PICTREF,    1 /*Integer*/,  $categoryIdCamX, 200, 'IPSCam_PictRef',     $scriptIdActionScript, IPSCAM_VAL_DISABLED, 'Repeat');
@@ -226,8 +226,8 @@
 		$variableIdPictReset = CreateVariable(IPSCAM_VAR_PICTRESET,  1 /*Integer*/,  $categoryIdCamX, 220, 'IPSCam_PictReset',   $scriptIdActionScript, IPSCAM_VAL_DISABLED, 'Cross');
 		$variableIdPictHist  = CreateVariable(IPSCAM_VAR_PICTHIST,   1 /*Integer*/,  $categoryIdCamX, 230, 'IPSCam_PictHist',    $scriptIdActionScript, 14, 'Image');
 		$variableIdPictSize  = CreateVariable(IPSCAM_VAR_PICTSIZE,   1 /*Integer*/,  $categoryIdCamX, 240, 'IPSCam_Size',        $scriptIdActionScript, 1, 'Distance');
-		$variableIdNavTime   = CreateVariable(IPSCAM_VAR_NAVTIME,    3 /*String*/,   $categoryIdCamX, 300, '~String',            null,                  date(IPSCAM_NAV_DATEFORMATDISP), 'Clock');
-		$variableIdNavFile   = CreateVariable(IPSCAM_VAR_NAVFILE,    3 /*String*/,   $categoryIdCamX, 310, '~String',            null,                  date(IPSCAM_NAV_DATEFORMATFILE), '');
+		$variableIdNavTime   = CreateVariable(IPSCAM_VAR_NAVTIME,    3 /*String*/,   $categoryIdCamX, 300, '',            null,                  date(IPSCAM_NAV_DATEFORMATDISP), 'Clock');
+		$variableIdNavFile   = CreateVariable(IPSCAM_VAR_NAVFILE,    3 /*String*/,   $categoryIdCamX, 310, '',            null,                  date(IPSCAM_NAV_DATEFORMATFILE), '');
 		
 		IPSCAM_CreateDirectory(IPS_GetKernelDir().'Cams/'.$idx.'/History/');
 		IPSCAM_CreateDirectory(IPS_GetKernelDir().'Cams/'.$idx.'/Picture/');
