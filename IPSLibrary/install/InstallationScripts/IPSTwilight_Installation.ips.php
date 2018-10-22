@@ -115,33 +115,33 @@
 	//Data
 	$DisplaySwitchId   = CreateVariable('Display' ,     0 /*Boolean*/, $categoryId_DataValues, 10, '~Switch',$scriptId_Refresh, false,   'Information');
 
-	$SunriseBeg        = CreateVariable("SunriseBegin",           3 /*String*/,  $categoryId_DataValues,  110, '~String', $scriptId_Refresh, '');
-	$SunriseEnd        = CreateVariable("SunriseEnd",             3 /*String*/,  $categoryId_DataValues,  120, '~String', $scriptId_Refresh, '');
-	$SunriseBegLim     = CreateVariable("SunriseBeginLimited",    3 /*String*/,  $categoryId_DataValues,  130, '~String', $scriptId_Refresh, '');
-	$SunriseEndLim     = CreateVariable("SunriseEndLimited",      3 /*String*/,  $categoryId_DataValues,  140, '~String', $scriptId_Refresh, '');
-	$SunriseDisplay    = CreateVariable("SunriseDisplay",         3 /*String*/,  $categoryId_DataValues,  150, '~String', null,              '00:00 - 00:00');
-	$SunriseLimits     = CreateVariable("SunriseLimits",          3 /*String*/,  $categoryId_DataValues,  160, '~String', $scriptId_Refresh, '05:30-07:30/18:30-20:30');
+	$SunriseBeg        = CreateVariable("SunriseBegin",           3 /*String*/,  $categoryId_DataValues,  110, '', $scriptId_Refresh, '');
+	$SunriseEnd        = CreateVariable("SunriseEnd",             3 /*String*/,  $categoryId_DataValues,  120, '', $scriptId_Refresh, '');
+	$SunriseBegLim     = CreateVariable("SunriseBeginLimited",    3 /*String*/,  $categoryId_DataValues,  130, '', $scriptId_Refresh, '');
+	$SunriseEndLim     = CreateVariable("SunriseEndLimited",      3 /*String*/,  $categoryId_DataValues,  140, '', $scriptId_Refresh, '');
+	$SunriseDisplay    = CreateVariable("SunriseDisplay",         3 /*String*/,  $categoryId_DataValues,  150, '', null,              '00:00 - 00:00');
+	$SunriseLimits     = CreateVariable("SunriseLimits",          3 /*String*/,  $categoryId_DataValues,  160, '', $scriptId_Refresh, '05:30-07:30/18:30-20:30');
 
-	$CivilBeg          = CreateVariable("CivilBegin",             3 /*String*/,  $categoryId_DataValues,  210, '~String', $scriptId_Refresh, '');
-	$CivilEnd          = CreateVariable("CivilEnd",               3 /*String*/,  $categoryId_DataValues,  220, '~String', $scriptId_Refresh, '');
-	$CivilBegLim       = CreateVariable("CivilBeginLimited",      3 /*String*/,  $categoryId_DataValues,  230, '~String', $scriptId_Refresh, '');
-	$CivilEndLim       = CreateVariable("CivilEndLimited",        3 /*String*/,  $categoryId_DataValues,  240, '~String', $scriptId_Refresh, '');
-	$CivilDisplay      = CreateVariable("CivilDisplay",           3 /*String*/,  $categoryId_DataValues,  250, '~String', null,              '00:00 - 00:00');
-	$CivilLimits       = CreateVariable("CivilLimits",            3 /*String*/,  $categoryId_DataValues,  260, '~String', $scriptId_Refresh, '05:00-07:00/19:00-21:00');
+	$CivilBeg          = CreateVariable("CivilBegin",             3 /*String*/,  $categoryId_DataValues,  210, '', $scriptId_Refresh, '');
+	$CivilEnd          = CreateVariable("CivilEnd",               3 /*String*/,  $categoryId_DataValues,  220, '', $scriptId_Refresh, '');
+	$CivilBegLim       = CreateVariable("CivilBeginLimited",      3 /*String*/,  $categoryId_DataValues,  230, '', $scriptId_Refresh, '');
+	$CivilEndLim       = CreateVariable("CivilEndLimited",        3 /*String*/,  $categoryId_DataValues,  240, '', $scriptId_Refresh, '');
+	$CivilDisplay      = CreateVariable("CivilDisplay",           3 /*String*/,  $categoryId_DataValues,  250, '', null,              '00:00 - 00:00');
+	$CivilLimits       = CreateVariable("CivilLimits",            3 /*String*/,  $categoryId_DataValues,  260, '', $scriptId_Refresh, '05:00-07:00/19:00-21:00');
 
-	$NauticBeg         = CreateVariable("NauticBegin",            3 /*String*/,  $categoryId_DataValues,  310, '~String', $scriptId_Refresh, '');
-	$NauticEnd         = CreateVariable("NauticEnd",              3 /*String*/,  $categoryId_DataValues,  320, '~String', $scriptId_Refresh, '');
-	$NauticBegLim      = CreateVariable("NauticBeginLimited",     3 /*String*/,  $categoryId_DataValues,  330, '~String', $scriptId_Refresh, '');
-	$NauticEndLim      = CreateVariable("NauticEndLimited",       3 /*String*/,  $categoryId_DataValues,  340, '~String', $scriptId_Refresh, '');
-	$NauticDisplay     = CreateVariable("NauticDisplay",          3 /*String*/,  $categoryId_DataValues,  350, '~String', null,              '00:00 - 00:00');
-	$NauticLimits      = CreateVariable("NauticLimits",           3 /*String*/,  $categoryId_DataValues,  360, '~String', $scriptId_Refresh, '04:30-06:30/19:30-21:30');
+	$NauticBeg         = CreateVariable("NauticBegin",            3 /*String*/,  $categoryId_DataValues,  310, '', $scriptId_Refresh, '');
+	$NauticEnd         = CreateVariable("NauticEnd",              3 /*String*/,  $categoryId_DataValues,  320, '', $scriptId_Refresh, '');
+	$NauticBegLim      = CreateVariable("NauticBeginLimited",     3 /*String*/,  $categoryId_DataValues,  330, '', $scriptId_Refresh, '');
+	$NauticEndLim      = CreateVariable("NauticEndLimited",       3 /*String*/,  $categoryId_DataValues,  340, '', $scriptId_Refresh, '');
+	$NauticDisplay     = CreateVariable("NauticDisplay",          3 /*String*/,  $categoryId_DataValues,  350, '', null,              '00:00 - 00:00');
+	$NauticLimits      = CreateVariable("NauticLimits",           3 /*String*/,  $categoryId_DataValues,  360, '', $scriptId_Refresh, '04:30-06:30/19:30-21:30');
 
-	$AstronomicBeg     = CreateVariable("AstronomicBegin",        3 /*String*/,  $categoryId_DataValues,  410, '~String', $scriptId_Refresh, '');
-	$AstronomicEnd     = CreateVariable("AstronomicEnd",          3 /*String*/,  $categoryId_DataValues,  420, '~String', $scriptId_Refresh, '');
-	$AstronomicBegLim  = CreateVariable("AstronomicBeginLimited", 3 /*String*/,  $categoryId_DataValues,  430, '~String', $scriptId_Refresh, '');
-	$AstronomicEndLim  = CreateVariable("AstronomicEndLimited",   3 /*String*/,  $categoryId_DataValues,  440, '~String', $scriptId_Refresh, '');
-	$AstronomicDisplay = CreateVariable("AstronomicDisplay",      3 /*String*/,  $categoryId_DataValues,  450, '~String', null,              '00:00 - 00:00');
-	$AstronomicLimits  = CreateVariable("AstronomicLimits",       3 /*String*/,  $categoryId_DataValues,  460, '~String', $scriptId_Refresh, '04:00-06:00/20:00-22:00');
+	$AstronomicBeg     = CreateVariable("AstronomicBegin",        3 /*String*/,  $categoryId_DataValues,  410, '', $scriptId_Refresh, '');
+	$AstronomicEnd     = CreateVariable("AstronomicEnd",          3 /*String*/,  $categoryId_DataValues,  420, '', $scriptId_Refresh, '');
+	$AstronomicBegLim  = CreateVariable("AstronomicBeginLimited", 3 /*String*/,  $categoryId_DataValues,  430, '', $scriptId_Refresh, '');
+	$AstronomicEndLim  = CreateVariable("AstronomicEndLimited",   3 /*String*/,  $categoryId_DataValues,  440, '', $scriptId_Refresh, '');
+	$AstronomicDisplay = CreateVariable("AstronomicDisplay",      3 /*String*/,  $categoryId_DataValues,  450, '', null,              '00:00 - 00:00');
+	$AstronomicLimits  = CreateVariable("AstronomicLimits",       3 /*String*/,  $categoryId_DataValues,  460, '', $scriptId_Refresh, '04:00-06:00/20:00-22:00');
 
 	IPSUtils_Include ("IPSTwilight.ips.php", "IPSLibrary::app::modules::Weather::IPSTwilight");
 
