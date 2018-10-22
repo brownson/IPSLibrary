@@ -488,8 +488,8 @@
 		$ShadowingType = $DeviceConfig[$DeviceName][c_Property_ShadowingType];
 		$DeviceId      = CreateCategory($DeviceName, $CategoryIdDevices, $Idx);
 
-		$ControlIdDisplay          = CreateVariable(c_Control_Display,        3 /*String*/,  $DeviceId,  50, '~String',                      null,                    'Manuell', 'Information');
-		$ControlIdStepsToDo        = CreateVariable(c_Control_StepsToDo,      3 /*String*/,  $DeviceId,  60, '~String',                      null,                    '');
+		$ControlIdDisplay          = CreateVariable(c_Control_Display,        3 /*String*/,  $DeviceId,  50, '',                      null,                    'Manuell', 'Information');
+		$ControlIdStepsToDo        = CreateVariable(c_Control_StepsToDo,      3 /*String*/,  $DeviceId,  60, '',                      null,                    '');
 		$ControlIdStep             = CreateVariable(c_Control_Step,           1 /*Integer*/, $DeviceId,  70, 'IPSShadowing_Step',            null,                    -1);
 		$ControlIdStartTime        = CreateVariable(c_Control_StartTime,      1 /*Integer*/, $DeviceId,  80, '~UnixTimestamp',               null,                    -1);
 		$ControlIdProgramTime      = CreateVariable(c_Control_ProgramTime,    1 /*Integer*/, $DeviceId,  85, '~UnixTimestamp',               null,                    -1);
@@ -503,7 +503,7 @@
 		$ControlIdSunProfile       = CreateVariable(c_Control_ProfileSun,     1 /*Integer*/, $DeviceId, 340, 'IPSShadowing_ProfileSun',      $ScriptIdChangeSettings, 0,       'Sun');
 		$ControlIdBgnOfDayProfile  = CreateVariable(c_Control_ProfileBgnOfDay,1 /*Integer*/, $DeviceId, 350, 'IPSShadowing_ProfileBgnOfDay', $ScriptIdChangeSettings, 0,       'Clock');
 		$ControlIdEndOfDayProfile  = CreateVariable(c_Control_ProfileEndOfDay,1 /*Integer*/, $DeviceId, 360, 'IPSShadowing_ProfileEndOfDay', $ScriptIdChangeSettings, 0,       'Clock');
-		$ControlIdProfileInfo      = CreateVariable(c_Control_ProfileInfo,    3 /*String*/,  $DeviceId, 380, '~String',                      null,                    '',      'Information');
+		$ControlIdProfileInfo      = CreateVariable(c_Control_ProfileInfo,    3 /*String*/,  $DeviceId, 380, '',                      null,                    '',      'Information');
 
 		if ($ShadowingType==c_ShadowingType_Shutter) {
 			$ControlIdMovement         = CreateVariable(c_Control_Movement,       1 /*Integer*/, $DeviceId,  10, 'IPSShadowing_MovementSht', $ScriptIdChangeSettings, c_MovementId_Stop,  'Shutter');

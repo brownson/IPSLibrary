@@ -130,14 +130,14 @@
 			$profileIdx              = count(IPS_GetChildrenIds($categoryIdprofiles)) + 10;
 			$profileId               = CreateCategory ($profileName, $categoryIdprofiles, $profileIdx);
 			IPS_SetIdent($profileId, (string)$profileId);
-			CreateVariable(c_Control_ProfileName,       3 /*String*/,   $profileId, 0,  '~String',                        $ScriptIdChangeSettings, $profileName,       'Title');
+			CreateVariable(c_Control_ProfileName,       3 /*String*/,   $profileId, 0,  '',                        $ScriptIdChangeSettings, $profileName,       'Title');
 			CreateVariable(c_Control_AzimuthBgn,        1 /*Integer*/,  $profileId, 10, 'IPSShadowing_AzimuthBgn',        $ScriptIdChangeSettings, $azimuthBgn,        'HollowLargeArrowLeft');
 			CreateVariable(c_Control_AzimuthEnd,        1 /*Integer*/,  $profileId, 20, 'IPSShadowing_AzimuthEnd',        $ScriptIdChangeSettings, $azimuthEnd,        'HollowLargeArrowRight');
 			CreateVariable(c_Control_Elevation,         1 /*Integer*/,  $profileId, 30, 'IPSShadowing_Elevation',         $ScriptIdChangeSettings, $elevation,         'HollowLargeArrowUp');
 			CreateVariable(c_Control_Date,              1 /*Integer*/,  $profileId, 40, 'IPSShadowing_Date',              $ScriptIdChangeSettings, 1,                  'Calendar');
 			CreateVariable(c_Control_Simulation,        0 /*Boolean*/,  $profileId, 50, '~Switch',                        $ScriptIdChangeSettings, false,              'Repeat');
 			CreateVariable(c_Control_Orientation,       0 /*Boolean*/,  $profileId, 60, '~Switch',                        $ScriptIdChangeSettings, false,              'WindDirection');
-			CreateVariable(c_Control_ProfileInfo,       3 /*String*/,   $profileId, 70, '~String',                        null,                    '',                 'Information');
+			CreateVariable(c_Control_ProfileInfo,       3 /*String*/,   $profileId, 70, '',                        null,                    '',                 'Information');
 
 			IPS_SetVariableProfileAssociation('IPSShadowing_ProfileSun', $profileId, $profileName, "", -1);
 			

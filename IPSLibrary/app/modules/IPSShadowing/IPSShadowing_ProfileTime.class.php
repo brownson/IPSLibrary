@@ -169,14 +169,14 @@
 			$profileId = CreateCategory ($profileName, $categoryIdprofiles, $profileIdx);
 			IPS_SetIdent($profileId, (string)$profileId);
 
-			CreateVariable(c_Control_ProfileName,   3 /*String*/,   $profileId, 0,  '~String',                 $ScriptIdChangeSettings, $profileName,   'Title');
+			CreateVariable(c_Control_ProfileName,   3 /*String*/,   $profileId, 0,  '',                 $ScriptIdChangeSettings, $profileName,   'Title');
 			CreateVariable(c_Control_WorkdayMode,   1 /*Integer*/,  $profileId, 10, 'IPSShadowing_TimeMode',   $ScriptIdChangeSettings, $workdayMode,   'Gear');
-			CreateVariable(c_Control_WorkdayTime,   3 /*String*/,   $profileId, 20, '~String',                 ($workdayMode==c_ModeId_Individual?$ScriptIdChangeSettings:null), $workdayTime,   'Clock');
+			CreateVariable(c_Control_WorkdayTime,   3 /*String*/,   $profileId, 20, '',                 ($workdayMode==c_ModeId_Individual?$ScriptIdChangeSettings:null), $workdayTime,   'Clock');
 			CreateVariable(c_Control_WorkdayOffset, 1 /*Integer*/,  $profileId, 30, 'IPSShadowing_TimeOffset', ($workdayMode==c_ModeId_Individual?null:$ScriptIdChangeSettings), $workdayOffset, 'Distance');
 			CreateVariable(c_Control_WeekendMode,   1 /*Integer*/,  $profileId, 40, 'IPSShadowing_TimeMode',   $ScriptIdChangeSettings, $weekendMode,   'Gear');
-			CreateVariable(c_Control_WeekendTime,   3 /*String*/,   $profileId, 50, '~String',                 ($weekendMode==c_ModeId_Individual?$ScriptIdChangeSettings:null), $weekendTime,   'Clock');
+			CreateVariable(c_Control_WeekendTime,   3 /*String*/,   $profileId, 50, '',                 ($weekendMode==c_ModeId_Individual?$ScriptIdChangeSettings:null), $weekendTime,   'Clock');
 			CreateVariable(c_Control_WeekendOffset, 1 /*Integer*/,  $profileId, 60, 'IPSShadowing_TimeOffset', ($weekendMode==c_ModeId_Individual?null:$ScriptIdChangeSettings), $weekendOffset, 'Distance');
-			CreateVariable(c_Control_ProfileInfo,   3 /*String*/,   $profileId, 70, '~String',                 null,                    '',             'Information');
+			CreateVariable(c_Control_ProfileInfo,   3 /*String*/,   $profileId, 70, '',                 null,                    '',             'Information');
 
 			IPS_SetVariableProfileAssociation('IPSShadowing_Profile'.$profileType, $profileId, $profileName, "", -1);
 

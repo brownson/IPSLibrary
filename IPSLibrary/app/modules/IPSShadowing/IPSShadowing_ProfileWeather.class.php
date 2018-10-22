@@ -155,7 +155,7 @@
 			$profileIdx              = count(IPS_GetChildrenIds($categoryIdprofiles)) + 10;
 			$profileId               = CreateCategory ($profileName, $categoryIdprofiles, $profileIdx);
 			IPS_SetIdent($profileId, (string)$profileId);
-			CreateVariable(c_Control_ProfileName,       3 /*String*/,   $profileId, 0,  '~String',            $ScriptIdChangeSettings, $profileName,  'Title');
+			CreateVariable(c_Control_ProfileName,       3 /*String*/,   $profileId, 0,  '',            $ScriptIdChangeSettings, $profileName,  'Title');
 			CreateVariable(c_Control_RainCheck,         0 /*Boolean*/,  $profileId, 10, '~Switch',            $ScriptIdChangeSettings, $rainCheck,    'Drops');
 			if (defined('IPSSHADOWING_WINDLEVEL_CLASSIFICATION') and IPSSHADOWING_WINDLEVEL_CLASSIFICATION) {
 				$windLevel=intval($windLevel/3.6);
@@ -163,7 +163,7 @@
 			} else {
 				CreateVariable(c_Control_WindLevel,         1 /*Integer*/,  $profileId, 20, 'IPSShadowing_Wind',  $ScriptIdChangeSettings, $windLevel,    'WindSpeed');
 			}
-			CreateVariable(c_Control_ProfileInfo,       3 /*String*/,   $profileId, 30, '~String',            null,                    '',            'Information');
+			CreateVariable(c_Control_ProfileInfo,       3 /*String*/,   $profileId, 30, '',            null,                    '',            'Information');
 
 			IPS_SetVariableProfileAssociation('IPSShadowing_ProfileWeather', $profileId, $profileName, "", -1);
 			

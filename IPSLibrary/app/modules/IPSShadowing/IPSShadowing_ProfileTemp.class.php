@@ -205,7 +205,7 @@
 			$profileIdx              = count(IPS_GetChildrenIds($categoryIdprofiles)) + 10;
 			$profileId               = CreateCategory ($profileName, $categoryIdprofiles, $profileIdx);
 			IPS_SetIdent($profileId, (string)$profileId);
-			CreateVariable(c_Control_ProfileName,        3 /*String*/,   $profileId, 0,  '~String',                         $ScriptIdChangeSettings, $profileName,        'Title');
+			CreateVariable(c_Control_ProfileName,        3 /*String*/,   $profileId, 0,  '',                         $ScriptIdChangeSettings, $profileName,        'Title');
 			CreateVariable(c_Control_TempLevelOutShadow, 1 /*Integer*/,  $profileId, 10, 'IPSShadowing_TempLevelOutShadow', $ScriptIdChangeSettings, $tempLevelOutShadow, 'Temperature');
 			CreateVariable(c_Control_TempLevelInShadow,  1 /*Integer*/,  $profileId, 20, 'IPSShadowing_TempLevelInShadow',  $ScriptIdChangeSettings, $tempLevelInShadow,  'Temperature');
 			CreateVariable(c_Control_TempLevelOutClose,  1 /*Integer*/,  $profileId, 30, 'IPSShadowing_TempLevelOutClose',  $ScriptIdChangeSettings, $tempLevelOutClose,  'Temperature');
@@ -214,7 +214,7 @@
 			CreateVariable(c_Control_TempLevelInOpen,    1 /*Integer*/,  $profileId, 60, 'IPSShadowing_TempLevelInOpen',    $ScriptIdChangeSettings, $tempLevelInOpen,    'Temperature');
 			CreateVariable(c_Control_BrightnessLow,      1 /*Integer*/,  $profileId, 70, 'IPSShadowing_Brightness',         $ScriptIdChangeSettings, $brightnessLow,      'Sun');
 			CreateVariable(c_Control_BrightnessHigh,     1 /*Integer*/,  $profileId, 75, 'IPSShadowing_Brightness',         $ScriptIdChangeSettings, $brightnessHigh,     'Sun');
-			CreateVariable(c_Control_ProfileInfo,        3 /*String*/,   $profileId, 80, '~String',                         null,                    '',                  'Information');
+			CreateVariable(c_Control_ProfileInfo,        3 /*String*/,   $profileId, 80, '',                         null,                    '',                  'Information');
 
 			IPS_SetVariableProfileAssociation('IPSShadowing_ProfileTemp', $profileId, $profileName, "", -1);
 			

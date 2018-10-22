@@ -220,7 +220,7 @@
 			$ScriptIdChangeSettings  = IPSUtil_ObjectIDByPath('Program.IPSLibrary.app.modules.IPSShadowing.IPSShadowing_ChangeSettings');
 			$instanceId = CreateCategoryPath('Program.IPSLibrary.data.modules.IPSShadowing.Scenarios.'.$name);
 			IPS_SetIdent($instanceId, $instanceId);
-			$controlId  = CreateVariable (c_Control_ScenarioName, 3 /*String*/,  $instanceId, 10, '~String', $ScriptIdChangeSettings, $name, 'Title');
+			$controlId  = CreateVariable (c_Control_ScenarioName, 3 /*String*/,  $instanceId, 10, '', $ScriptIdChangeSettings, $name, 'Title');
 			$controlId  = CreateVariable (c_Control_ScenarioEdit, 0 /*Boolean*/, $instanceId, 20, '~Switch', $ScriptIdChangeSettings, false, 'Gear');
 			$scenario = new IPSShadowing_Scenario($instanceId);
 			$scenario->SetEditMode($defaultValue);
