@@ -88,8 +88,8 @@
 	$powerId               = CreateVariable("Power",           0 /*Boolean*/,  $CategoryIdData, 100 , '~Switch', $actionScriptId, 0);
 	$sourceId              = CreateVariable("Source",          1 /*Integer*/,  $CategoryIdData, 110 , 'NetPlayer_Source', $actionScriptId, 0 /*CD*/);
 	$controlId             = CreateVariable("Control",         1 /*Integer*/,  $CategoryIdData, 120 , 'NetPlayer_Control', $actionScriptId, 2 /*Stop*/);
-	$albumId               = CreateVariable("Album",           3 /*String*/,   $CategoryIdData, 130, '~String');
-	$interpretId           = CreateVariable("Interpret",       3 /*String*/,   $CategoryIdData, 140, '~String');
+	$albumId               = CreateVariable("Album",           3 /*String*/,   $CategoryIdData, 130, '');
+	$interpretId           = CreateVariable("Interpret",       3 /*String*/,   $CategoryIdData, 140, '');
 	$categoryId            = CreateVariable("Category",        1 /*Integer*/,  $CategoryIdData, 150 , 'NetPlayer_Category', $actionScriptId, 0);
 	$cdAlbumNavId          = CreateVariable("CDAlbumNav",      1 /*Integer*/,  $CategoryIdData, 160 , 'NetPlayer_CDAlbumNav', $actionScriptId, -1);
 	$cdAlbumListId         = CreateVariable("CDAlbumList",     1 /*Integer*/,  $CategoryIdData, 170 , 'NetPlayer_CDAlbumList', $actionScriptId, -1);
