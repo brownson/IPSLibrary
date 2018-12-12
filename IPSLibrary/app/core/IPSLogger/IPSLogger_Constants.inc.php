@@ -71,9 +71,9 @@
   		$LogTypeStyle= array (
 			c_LogType_Fatal                 => 'color:#000000;background:#FF6347;',
 			c_LogType_Error                 => 'color:#000000;background:#FF0000;',
-			c_LogType_Warning               => 'color:#FFFFFF;background:#696969;',
-			c_LogType_Notification          => 'color:#FFFFFF;',
-			c_LogType_Information           => 'color:#FFFFFF;',
+			c_LogType_Warning               => 'background:#bfbfbf;',
+			c_LogType_Notification          => 'font-weight:bold;',
+			c_LogType_Information           => '',
 			c_LogType_Debug                 => 'color:#B0C4DE;',
 			c_LogType_Communication         => 'color:#A9A9A9;',
 			c_LogType_Trace                 => 'color:#808080;',
