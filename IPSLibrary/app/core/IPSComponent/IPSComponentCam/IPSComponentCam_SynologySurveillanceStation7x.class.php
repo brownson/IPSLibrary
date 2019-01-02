@@ -72,7 +72,7 @@ class IPSComponentCam_SynologySurveillanceStation7x extends IPSComponentCam
             if ($content['timestamp'] > strtotime('-10 secs')) {
                 $this->sid     = $content['SID'];
                 $this->apiInfo = $content['apiInfo'];
-                echo time() . ': ' . __CLASS__ . '::' . __FUNCTION__ . ': SID ' . $this->sid . ' cached' . PHP_EOL;
+                //echo time() . ': ' . __CLASS__ . '::' . __FUNCTION__ . ': SID ' . $this->sid . ' cached' . PHP_EOL;
                 return true;
             }
         }
