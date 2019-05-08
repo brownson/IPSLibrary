@@ -161,7 +161,7 @@
 			$instanceId = CreateDummyInstance("Visualisierung", $categoryId, 30);
 			CreateLink('Monat',         IPS_GetObjectIDByIdent(c_Control_Date,       $this->instanceId), $instanceId, 10);
 			CreateLink('Simulation',    IPS_GetObjectIDByIdent(c_Control_Simulation, $this->instanceId), $instanceId, 20);
-			CreateLink('Ausrichtung Süden',  IPS_GetObjectIDByIdent(c_Control_Orientation, $this->instanceId), $instanceId, 30);
+			CreateLink('Ausrichtung Süden',  IPS_GetObjectIDByIdent(c_Control_Orientation, $this->instanceId), $instanceId, 30, 'AusrichtungSueden');
 			CreateLink('Profil Info',  IPS_GetObjectIDByIdent(c_Control_ProfileInfo, $this->instanceId), $categoryId, 40);
 
 			$this->GenerateGraphic();
