@@ -577,7 +577,7 @@
 	function CreateLink ($Name, $Link, $ParentId, $Position, $ident="") {
 		$LinkId = false;
 		if ($ident<>"") {
-			$LinkId = IPS_GetObjectIDByIdent($ident, $ParentId);
+			$LinkId = @IPS_GetObjectIDByIdent($ident, $ParentId);
 		}
 		if ($LinkId === false) $LinkId = @IPS_GetLinkIDByName($Name, $ParentId);
 		if ($LinkId === false) {
@@ -585,6 +585,8 @@
 			IPS_SetParent($LinkId, $ParentId);
 			IPS_SetName($LinkId, $Name);
 			if ($ident<>"") {
+				IPS_SetIdent($LinkId, $ident);
+			} else {
 				IPS_SetIdent($LinkId, Get_IdentByName($Name));
 			}
 			IPS_SetLinkTargetID($LinkId, $Link);
@@ -595,6 +597,7 @@
 		IPS_SetLinkTargetID($LinkId, $Link);
 		return $LinkId;
 	}
+
 
 	/*
 	 * Simulate IPS_SetLinkTargetID for IP-Symcon < 2.6
