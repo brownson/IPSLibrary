@@ -13,11 +13,11 @@
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function NetPlayer_CopyCoverFile ($path) {
 		$files = scandir($path);
+		$cover_jpg = "";
+		$cover_front = "";
 		foreach ($files as $file) {
 			$extension = pathinfo($file, PATHINFO_EXTENSION);
 			$filename = pathinfo($file, PATHINFO_FILENAME);
-			$cover_jpg = "";
-			$cover_front = "";
 			if (strtolower($extension)=='jpg') {
 				$cover_jpg = $path."/".$file;
 				if (strpos(strtolower($filename),'front')!==false) {
