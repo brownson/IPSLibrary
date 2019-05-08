@@ -13,7 +13,7 @@
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function ExtractCommProperties($PropertyData, $CommParams, $ControlData=null) {
-       if (!is_array($PropertyData) || !is_array($CommParams)) {
+      if (!is_array($PropertyData) || !is_array($CommParams)) {
           return false;
 	   }
 	   if (count($PropertyData) <> count($CommParams)) {
