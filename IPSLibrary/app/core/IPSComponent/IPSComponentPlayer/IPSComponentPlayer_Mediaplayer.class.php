@@ -183,7 +183,7 @@
 		 * @return string Name des Titels der gerade abgespielt wird
 		 */
 		public function GetTrackName() {
-			return GetValue(IPS_GetVariableIDByName('Titel',$this->instanceId));
+			return GetValue(IPS_GetObjectIDByIdent('TrackTitleVar',$this->instanceId));
 		}
 
 		/**
@@ -194,7 +194,7 @@
 		 * @return string Länge des Titels der gerade abgespielt wird
 		 */
 		public function GetTrackLength() {
-			return GetValue(IPS_GetVariableIDByName('Titellänge',$this->instanceId));
+			return GetValue(IPS_GetObjectIDByIdent ('TrackLenVar',$this->instanceId));
 		}
 
 		/**
@@ -205,7 +205,7 @@
 		 * @return string Position des Titels der gerade abgespielt wird
 		 */
 		public function GetTrackPosition() {
-			return GetValue(IPS_GetVariableIDByName('Titelposition',$this->instanceId));
+			return GetValue(IPS_GetObjectIDByIdent('TrackPosVar',$this->instanceId));
 		}
 
 	}
