@@ -10,7 +10,7 @@
    /**
     * @class IPSComponentSwitch_ZW
     *
-    * Definiert ein IPSComponentSwitch_ZW Object, das ein IPSComponentSwitch Object für Z-Wave implementiert.
+    * Definiert ein IPSComponentSwitch_ZW Object, das ein IPSComponentSwitch Object fÃ¼r Z-Wave implementiert.
     *
     * @author Andreas Tibud
     * @version
@@ -18,13 +18,13 @@
     */
 
 	IPSUtils_Include ('IPSComponentSwitch.class.php', 'IPSLibrary::app::core::IPSComponent::IPSComponentSwitch');
-
+   
 	class IPSComponentSwitch_ZW extends IPSComponentSwitch {
 
 		private $instanceId;
 		private $channel;
 
-		// Welche Klassen unterstütz der Schalter?
+		// Welche Klassen unterstÃ¼tz der Schalter?
 		private $b_class_basic = false;
 		private $b_class_switch = false;
 		private $b_class_multi = false;
@@ -38,10 +38,16 @@
 		 */
 		public function __construct($instanceId, $channel=0) {
 			$this->instanceId = IPSUtil_ObjectIDByPath($instanceId);
-			// Bei Multiinstanz fähigen Schalter gleich den Kanal merken
+			// Bei Multiinstanz fÃ¤higen Schalter gleich den Kanal merken
 			$this->channel = (int)$channel;
-			//Ermittlung der unterstützten Klassen
-			$classes = ZW_GetNodeClasses((int)$instanceId);
+         
+			//Ermittlung der unterstÃ¼tzten Klassen
+         if ((float)IPS_GetKernelVersion() >= 5.1) {
+	   		$classes = json_decode(ZW_GetInformation((int)$instanceId), true);
+         } else {
+   			$classes = ZW_GetNodeClasses((int)$instanceId);
+         }
+         
 			foreach ($classes as $class) {
 				switch ((int)$class){
 					case 32:
@@ -55,14 +61,13 @@
 						break;
 				}
 			}
-
 		}
 
 		/**
 		 * @public
 		 *
 		 * Funktion liefert String IPSComponent Constructor String.
-		 * String kann dazu benützt werden, das Object mit der IPSComponent::CreateObjectByParams
+		 * String kann dazu benÃ¼tzt werden, das Object mit der IPSComponent::CreateObjectByParams
 		 * wieder neu zu erzeugen.
 		 *
 		 * @return string Parameter String des IPSComponent Object
@@ -77,7 +82,7 @@
 		 * Function um Events zu behandeln, diese Funktion wird vom IPSMessageHandler aufgerufen, um ein aufgetretenes Event
 		 * an das entsprechende Module zu leiten.
 		 *
-		 * @param integer $variable ID der auslösenden Variable
+		 * @param integer $variable ID der auslÃ¶senden Variable
 		 * @param string $value Wert der Variable
 		 * @param IPSModuleSwitch $module Module Object an das das aufgetretene Event weitergeleitet werden soll
 		 */
@@ -90,8 +95,8 @@
 		 *
 		 * Zustand Setzen
 		 *
-		 * @param boolean $value Wert für Schalter
-		 * @param integer $onTime Zeit in Sekunden nach der der Aktor automatisch ausschalten soll (nicht unterstützt)
+		 * @param boolean $value Wert fÃ¼r Schalter
+		 * @param integer $onTime Zeit in Sekunden nach der der Aktor automatisch ausschalten soll (nicht unterstÃ¼tzt)
 		 */
 		public function SetState($value, $onTime=false) {
 			// Ein Binary Switch
