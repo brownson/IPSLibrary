@@ -40,14 +40,15 @@
 			$this->instanceId = IPSUtil_ObjectIDByPath($instanceId);
 			// Bei Multiinstanz fähigen Schalter gleich den Kanal merken
 			$this->channel = (int)$channel;
-         
+
 			//Ermittlung der unterstützten Klassen
-         if ((float)IPS_GetKernelVersion() >= 5.1) {
-	   		$classes = json_decode(ZW_GetInformation((int)$instanceId), true);
-         } else {
-   			$classes = ZW_GetNodeClasses((int)$instanceId);
-         }
-         
+			if ((float)IPS_GetKernelVersion() >= 5.1) {
+				$i = json_decode(ZW_GetInformation((int)$instanceId), true);
+				$classes = array_merge(json_decode($i["NodeClasses"], true), json_decode($i["NodeSecureClasses"], true));
+			} else {
+				$classes = ZW_GetNodeClasses((int)$instanceId);
+			}
+
 			foreach ($classes as $class) {
 				switch ((int)$class){
 					case 32:
