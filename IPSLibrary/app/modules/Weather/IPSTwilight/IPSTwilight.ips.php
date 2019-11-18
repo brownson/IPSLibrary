@@ -67,6 +67,7 @@
 	
 	switch ($_IPS['SENDER']) {
 		case 'WebFront':
+		case 'Action':
 			SetValue($_IPS['VARIABLE'], $_IPS['VALUE']);
 			if ($_IPS['VARIABLE']==$variableId_Display) {
 				CopyGraphics($variableId_Display);
