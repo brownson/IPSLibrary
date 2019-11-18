@@ -30,7 +30,7 @@
 	include_once "IPSShadowing.inc.php";
 
 	// ----------------------------------------------------------------------------------------------------------------------------
-	if ($_IPS['SENDER']=='WebFront') {
+	if ($_IPS['SENDER']=='WebFront' || $_IPS['SENDER']=='Action') {
 		$controlId   = $_IPS['VARIABLE'];
 		$value       = $_IPS['VALUE'];
 		$controlType = IPS_GetIdent($controlId);
