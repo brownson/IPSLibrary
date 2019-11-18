@@ -31,7 +31,7 @@
 	include_once "IPSPowerControl.inc.php";
 
 	// ----------------------------------------------------------------------------------------------------------------------------
-	if ($_IPS['SENDER']=='WebFront') {
+	if ($_IPS['SENDER']=='WebFront' || $_IPS['SENDER']=='Action') {
 		$variableId   = $_IPS['VARIABLE'];
 		$value        = $_IPS['VALUE'];
 
