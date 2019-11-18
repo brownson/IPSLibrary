@@ -35,7 +35,7 @@
 	$categoryName = IPS_GetName(IPS_GetParent($_IPS['VARIABLE']));
 	
 	// ----------------------------------------------------------------------------------------------------------------------------
-	if ($_IPS['SENDER']=='WebFront') {
+	if ($_IPS['SENDER']=='WebFront' || $_IPS['SENDER']=='Action') {
 		switch ($categoryName) {
 			case 'Switches':
 				IPSLight_SetValue($variableId, $value);
@@ -52,6 +52,7 @@
 
 	// ----------------------------------------------------------------------------------------------------------------------------
 	} else {
+      echo 'Sender=>>'.$_IPS['SENDER'].'<<';
 	}
 
     /** @}*/
