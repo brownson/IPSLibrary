@@ -30,7 +30,7 @@
 
 	include_once "IPSWatering.inc.php";
 
-	if ($_IPS['SENDER']=='WebFront') {
+	if ($_IPS['SENDER']=='WebFront' || $_IPS['SENDER']=='Action') {
 		$ControlId   = $_IPS['VARIABLE'];
 		$CircleId    = get_CirclyIdByControlId($ControlId);
 		$ControlType = get_ControlType($ControlId);
