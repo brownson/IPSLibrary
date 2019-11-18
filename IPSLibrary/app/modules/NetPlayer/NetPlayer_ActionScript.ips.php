@@ -13,7 +13,7 @@
 
 	include_once "NetPlayer.inc.php";
 
-	if ($_IPS['SENDER'] == 'WebFront') {
+	if ($_IPS['SENDER'] == 'WebFront' || $_IPS['SENDER']=='Action') {
 	   $variable = $_IPS['VARIABLE'];
 	   $value    = $_IPS['VALUE'];
 		switch ($variable) {
