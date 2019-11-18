@@ -33,8 +33,8 @@
 	 *
 	 * Script zur kompletten Installation von IPSPowerControl.
 	 *
-	 * Vor der Installation muÃŸ das File IPSPowerControl_Configuration.inc.php an die persÃ¶nlichen
-	 * BedÃ¼rfnisse angepasst werden.
+	 * Vor der Installation muß das File IPSPowerControl_Configuration.inc.php an die persönlichen
+	 * Bedürfnisse angepasst werden.
 	 *
 	 * @page rquirements_IPSPowerControl Installations Voraussetzungen
 	 * - IPS Kernel >= 2.50
@@ -43,7 +43,7 @@
 	 * - IPSComponent >= 2.50.1
 	 *
 	 * @page install_IPSPowerControl Installations Schritte
-	 * Folgende Schritte sind zur Installation der IPSPowerControl Ansteuerung nÃ¶tig:
+	 * Folgende Schritte sind zur Installation der IPSPowerControl Ansteuerung nötig:
 	 * - Laden des Modules (siehe IPSModuleManager)
 	 * - Konfiguration (Details siehe Konfiguration)
 	 * - Installation (siehe IPSModuleManager)
@@ -124,7 +124,7 @@
 	                               IPSPC_TYPE_STACK2      => 'Total',
 	                               IPSPC_TYPE_PIE         => 'Pie',
 	                               IPSPC_TYPE_OFF         => 'Off',
-	                               IPSPC_OFFSET_SEPARATOR => 'Â ',
+	                               IPSPC_OFFSET_SEPARATOR => ' ',
 	                               IPSPC_OFFSET_PREV      => '<<',
 	                               IPSPC_OFFSET_VALUE     => '0',
 	                               IPSPC_OFFSET_NEXT      => '>>'
@@ -137,7 +137,7 @@
 	                              IPSPC_PERIOD_WEEK     => 'Woche',
 	                              IPSPC_PERIOD_MONTH    => 'Monat',
 	                              IPSPC_PERIOD_YEAR     => 'Jahr',
-	                              IPSPC_COUNT_SEPARATOR => 'Â ',
+	                              IPSPC_COUNT_SEPARATOR => ' ',
 	                              IPSPC_COUNT_MINUS     => '-',
 	                              IPSPC_COUNT_VALUE     => '1',
 	                              IPSPC_COUNT_PLUS      => '+',
@@ -262,8 +262,8 @@
 		CreateLink('Anzahl -',      $scriptIdCountMinus,    $instanceIdChart, 70);
 		CreateLink('Anzahl +',      $scriptIdCountPlus,     $instanceIdChart, 80);
 		CreateLink('Zeit Offset',   $variableIdTimeOffset,  $instanceIdChart, 20);
-		CreateLink('Zeit ZurÃ¼ck',   $scriptIdNavPrev,       $instanceIdChart, 30);
-		CreateLink('Zeit VorwÃ¤rts', $scriptIdNavNext,       $instanceIdChart, 40);
+		CreateLink('Zeit Zurück',   $scriptIdNavPrev,       $instanceIdChart, 30);
+		CreateLink('Zeit Vorwärts', $scriptIdNavNext,       $instanceIdChart, 40);
 
 		$instanceIdChart = CreateDummyInstance("Auswahl Verbraucher", $mobileId, 40);
 		foreach (IPSPowerControl_GetValueConfiguration() as $idx=>$data) {
