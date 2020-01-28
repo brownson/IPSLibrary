@@ -1,4 +1,4 @@
-﻿<?
+<?
     /*
      * This file is part of the IPSLibrary.
      *
@@ -212,7 +212,7 @@
 	// ----------------------------------------------------------------------------------------------------------------------------
 	function CreateHomematicInstance($moduleManager, $Address, $Channel, $Name, $ParentId, $Protocol='BidCos-RF') {
 		foreach (IPS_GetInstanceListByModuleID("{EE4A81C6-5C90-4DB7-AD2F-F6BBD521412E}") as $HomematicModuleId ) {
-			$HMAddress = IPS_GetProperty($HomematicModuleId,'Address');
+			$HMAddress = HM_GetAddress($HomematicModuleId);
 			if ($HMAddress=="$Address:$Channel") {
 				$moduleManager->LogHandler()->Log("Found existing HomaticModule '$Name' Address=$Address, Channel=$Channel, Protocol=$Protocol");
 				return $HomematicModuleId;
@@ -223,14 +223,14 @@
 		$HomematicModuleId = IPS_CreateInstance("{EE4A81C6-5C90-4DB7-AD2F-F6BBD521412E}");
 		IPS_SetParent($HomematicModuleId, $ParentId);
 		IPS_SetName($HomematicModuleId, $Name);
-        IPS_SetProperty($HomematicModuleId,'Address',$Address.':'.$Channel);
+		HM_SetAddress($HomematicModuleId, $Address.':'.$Channel);
 		if ($Protocol == 'BidCos-RF') {
 			$Protocol = 0;
 		} else {
 			$Protocol = 1;
 		}
-        IPS_SetProperty($HomematicModuleId, 'Protocol', $Protocol);
-		IPS_SetProperty($HomematicModuleId, 'EmulateStatus', true);
+		HM_SetProtocol($HomematicModuleId, $Protocol);
+		HM_SetEmulateStatus($HomematicModuleId, true);
 		// Apply Changes
 		IPS_ApplyChanges($HomematicModuleId);
 

@@ -1,6 +1,4 @@
 <?
-IPSUtils_Include (IPS_GetKernelDir().'scripts\\_Global_functions.ips.php',''); //bma
-
     /*
      * This file is part of the IPSLibrary.
      *
@@ -59,14 +57,13 @@ IPSUtils_Include (IPS_GetKernelDir().'scripts\\_Global_functions.ips.php',''); /
 				if ($variableId!==false) {
 					usleep(100000);
 					set_time_limit(HM_TIMEOUT_REFRESH);
-					@HM_RequestStatus($instanceId, 'RSSI_DEVICE'); //bumaaas: @ erg√§nzt, da Fehlermeldung bei IP Ger√§ten
+					HM_RequestStatus($instanceId, 'RSSI_DEVICE');
 				}
 				$variableId = @IPS_GetVariableIDByName('RSSI_PEER', $instanceId);
 				if ($variableId!==false) {
 					usleep(100000);
 					set_time_limit(HM_TIMEOUT_REFRESH);
-		    		IPSLogger_Dbg(__file__, 'ID ' . $instanceId . ': ' . IPS_GetLocation($instanceId)); // bma: eingef√ºgt, da es schon mal auf dem nachfolgenden Stmt zu einer Warning kam: 'Warning: Waiting for response timed out'
-					@HM_RequestStatus($instanceId, 'RSSI_PEER'); //bma: @ erg√§nzt, da Fehlermeldung bei IP Ger√§ten
+					HM_RequestStatus($instanceId, 'RSSI_PEER');
 				}
 			}
 		}
@@ -110,28 +107,28 @@ IPSUtils_Include (IPS_GetKernelDir().'scripts\\_Global_functions.ips.php',''); /
 			$variableIdRssiPeer   = IPS_GetObjectIDByIdent(HM_CONTROL_RSSIPEER, $categoryIdHtml);
 
 			$str = "<table width='90%' align='center'>"; 
-			$str .= "<tr><td><b>Ger√§tname</b></td><td><b>Ger√§teID</b></td><td><b>Empfangsst√§rke</b></td></tr>";
+			$str .= "<tr><td><b>Ger‰tname</b></td><td><b>Ger‰teID</b></td><td><b>Empfangsst‰rke</b></td></tr>";
 			foreach($rssiDeviceList as $instanceId=>$value) {
-				$str .= "<tr><td>".IPS_GetName($instanceId)."</td><td>".IPS_GetProperty($instanceId, 'Address')."</td><td>".$value."</td></tr>";
+				$str .= "<tr><td>".IPS_GetName($instanceId)."</td><td>".HM_GetAddress($instanceId)."</td><td>".$value."</td></tr>";
 			}
 			$str .= "</table>";
 			SetValue($variableIdRssiDevice, $str);
 
 			$str = "<table width='90%' align='center'>"; 
-			$str .= "<tr><td><b>Ger√§tname</b></td><td><b>Ger√§teID</b></td><td><b>Empfangsst√§rke</b></td></tr>";
+			$str .= "<tr><td><b>Ger‰tname</b></td><td><b>Ger‰teID</b></td><td><b>Empfangsst‰rke</b></td></tr>";
 			foreach($rssiPeerList as $instanceId=>$value) {
-				$str .= "<tr><td>".IPS_GetName($instanceId)."</td><td>".IPS_GetProperty($instanceId, 'Address')."</td><td>".$value."</td></tr>";
+				$str .= "<tr><td>".IPS_GetName($instanceId)."</td><td>".HM_GetAddress($instanceId)."</td><td>".$value."</td></tr>";
 			}
 			$str .= "</table>";
 			SetValue($variableIdRssiPeer, $str);
 
 			$str = "<table width='90%' align='center'>"; 
-			$str .= "<tr><td><b>Ger√§tname</b></td><td><b>Ger√§teID</b></td><td><b>Empfangsst√§rke</b></td></tr>";
+			$str .= "<tr><td><b>Ger‰tname</b></td><td><b>Ger‰teID</b></td><td><b>Empfangsst‰rke</b></td></tr>";
 			$idx = 0;
 			foreach($rssiDeviceList as $instanceId=>$value) {
 				$idx++;
 				if ($idx<=10) {
-					$str .= "<tr><td>".IPS_GetName($instanceId)."</td><td>".IPS_GetProperty($instanceId, 'Address')."</td><td>".$value."</td></tr>";
+					$str .= "<tr><td>".IPS_GetName($instanceId)."</td><td>".HM_GetAddress($instanceId)."</td><td>".$value."</td></tr>";
 				}
 			}
 			$str .= "</table>";
@@ -141,7 +138,7 @@ IPSUtils_Include (IPS_GetKernelDir().'scripts\\_Global_functions.ips.php',''); /
 		/** 
 		 * @public
 		 *
-		 * Refresh Variablen und HTML der Empfangsst√§rken
+		 * Refresh Variablen und HTML der Empfangsst‰rken
 		 */
 		public function RefreshRSSI() {
 			$this->RefreshRSSIValues();
@@ -174,21 +171,18 @@ IPSUtils_Include (IPS_GetKernelDir().'scripts\\_Global_functions.ips.php',''); /
 		 * Refresh der Homematic Service Messages
 		 */
 		public function RefreshServiceMessages() {
-		    $texte = Array("CONFIG_PENDING"  =>"Konfigurationsdaten stehen zur √úbertragung an",
+		    $texte = Array("CONFIG_PENDING"  =>"Konfigurationsdaten stehen zur ‹bertragung an",
 		                   "LOWBAT"          =>"Batterieladezustand gering",
-		                   "STICKY_UNREACH"  =>"Ger√§tekommunikation war gest√∂rt",
-		                   "UNREACH"         =>"Ger√§tekommunikation aktuell gest√∂rt");
+		                   "STICKY_UNREACH"  =>"Ger‰tekommunikation war gestˆrt",
+		                   "UNREACH"         =>"Ger‰tekommunikation aktuell gestˆrt");
 
 		    $str = "<table width='90%' align='center'>"; // Farbe anpassen oder style entfernen
-		    $str .= "<tr><td><b>Ger√§tname</b></td><td><b>Ger√§teID</b></td><td><b>Meldung</b></td></tr>";
+		    $str .= "<tr><td><b>Ger‰tname</b></td><td><b>Ger‰teID</b></td><td><b>Meldung</b></td></tr>";
 		    $str_log = "";
 		    $ids = IPS_GetInstanceListByModuleID("{A151ECE9-D733-4FB9-AA15-7F7DD10C58AF}");
 		    if(sizeof($ids) == 0) die("Keine HomeMatic Socket Instanz gefunden!");
 
-		    IPSLogger_Dbg(__file__, 'ID ' . $ids[0] . ': ' . IPS_GetLocation($ids[0])); // bma: eingef√ºgt, da es schon mal auf dem nachfolgenden Stmt zu einer Warning kam: 'Warning: Waiting for response timed out'
-			 set_time_limit(HM_TIMEOUT_REFRESH); // bma: eingef√ºgt, da es zum TimeOut nach 5 sec kam.
 		    $msgs = HM_ReadServiceMessages($ids[0]);
-
 		    if($msgs === false) die("Verbindung zur CCU fehlgeschlagen");
 
 		    if(sizeof($msgs) == 0) {
@@ -196,8 +190,6 @@ IPSUtils_Include (IPS_GetKernelDir().'scripts\\_Global_functions.ips.php',''); /
 		        $str_log .= "Keine Servicemeldungen!";
 		    }
 		    foreach($msgs as $msg) {
-		        IPSLogger_Dbg(basename(__file__, '.class.php'), 'Message:'.json_encode($msg)); //bma: trace eingef√ºgt
-		        
 		       if(array_key_exists($msg['Message'], $texte)) {
 		            $text = $texte[$msg['Message']];
 		        } else {
@@ -205,10 +197,9 @@ IPSUtils_Include (IPS_GetKernelDir().'scripts\\_Global_functions.ips.php',''); /
 		        }
 		        $id = HM_GetInstanceIDFromHMAddress($msg['Address']);
 		        if(IPS_InstanceExists($id)) {
-					//$name = IPS_GetLocation($id);
-					$name = IPS_GetName($id); //bma: statt Pfad und Name wird nur der Name angezeigt
+					$name = IPS_GetLocation($id);
 		        } else {
-		            $name = "Ger√§t nicht in IP-Symcon eingerichtet";
+		            $name = "Ger‰t nicht in IP-Symcon eingerichtet";
 		        }
 
 		        $str .= "<tr><td>".$name."</td><td>".$msg['Address']."</td><td>".$text."</td></tr>";
@@ -222,7 +213,7 @@ IPSUtils_Include (IPS_GetKernelDir().'scripts\\_Global_functions.ips.php',''); /
 		    $variableIdPriority   = IPS_GetObjectIDByIdent(HM_CONTROL_PRIORITY, $categoryIdSettings);
 		    if (GetValue($variableIdMessages) <> $str) {
 		        SetValue($variableIdMessages, $str);
-		        IPSLogger_Not(basename(__file__, '.class.php'), 'New Homematic Service Messages:'.PHP_EOL.$str_log, GetValue($variableIdPriority)); //bma: basename eingef√ºgt
+		        IPSLogger_Not(__file__, 'New Homematic Service Messages:'.PHP_EOL.$str_log, GetValue($variableIdPriority));
 		    }
 		}
 
@@ -235,7 +226,7 @@ IPSUtils_Include (IPS_GetKernelDir().'scripts\\_Global_functions.ips.php',''); /
 			$homematicIntanceIdList = IPS_GetInstanceListByModuleID("{A151ECE9-D733-4FB9-AA15-7F7DD10C58AF}");
 			if(sizeof($homematicIntanceIdList) == 0) die("Keine HomeMatic Socket Instanz gefunden!");
 
-			$CCUIPAddress = IPS_GetProperty($homematicIntanceIdList[0], 'Host');
+			$CCUIPAddress = HM_GetHost($homematicIntanceIdList[0]);
 
 			$HM_Script = "
 				string itemID;
@@ -251,19 +242,19 @@ IPSUtils_Include (IPS_GetKernelDir().'scripts\\_Global_functions.ips.php',''); /
 					   if (aldp_obj.Value())
 						{
 						  aldp_obj.AlReceipt();
-							! dom.GetObject('Kommunikationsst√∂rung').State(dom.GetObject(itemID).Name());
+							! dom.GetObject('Kommunikationsstˆrung').State(dom.GetObject(itemID).Name());
 						}
 					  }
 				}";
 
-                // Initialisieren der Socket-Verbindung
+			// Initialisieren der Socket-Verbindung
 			$fp = fsockopen ($CCUIPAddress, 8181, $errno, $errstr, 2);
 			$res = "";
 
 			if (!$fp) {
 				$res = "$errstr ($errno)<br />\n";
 			} else {
-				// Zusammenstellen des Header f√ºr HTTP-Post
+				// Zusammenstellen des Header f¸r HTTP-Post
 				fputs($fp, "POST /Test.exe HTTP/1.1\r\n");
 				fputs($fp, "Content-type: application/x-www-form-urlencoded\r\n");
 				fputs($fp, "Content-length: ". strlen($HM_Script) ."\r\n");
@@ -274,7 +265,6 @@ IPSUtils_Include (IPS_GetKernelDir().'scripts\\_Global_functions.ips.php',''); /
 				}
 				fclose($fp);
 			}
-            echo $res;
 			return $res;
 		}
 		
@@ -287,10 +277,13 @@ IPSUtils_Include (IPS_GetKernelDir().'scripts\\_Global_functions.ips.php',''); /
 		 */
 		public function GetMaintainanceInstanceList() {
 			$homematicInstanceList     = IPS_GetInstanceListByModuleID("{EE4A81C6-5C90-4DB7-AD2F-F6BBD521412E}");
+			$homematicAddressList      = array();
 			$homematicMaintainanceList = array();
 
 			foreach ($homematicInstanceList as $homematicInstanceId ) {
-				$homematicAddress = IPS_GetProperty($homematicInstanceId,'Address');
+				$homematicAddress = HM_GetAddress($homematicInstanceId);
+				$homematicAddressList[$homematicAddress] = $homematicInstanceId;
+				
 				$pos = strpos($homematicAddress, ':0');
 				if ($pos !== false) {
 					$homematicMaintainanceList[$homematicInstanceId] = $homematicInstanceId;
