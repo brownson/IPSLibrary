@@ -38,7 +38,7 @@
 	function HM_GetInstanceIDFromHMAddress($sid) {
 		$ids = IPS_GetInstanceListByModuleID("{EE4A81C6-5C90-4DB7-AD2F-F6BBD521412E}");
 		foreach($ids as $id) {
-			$a = explode(":", HM_GetAddress($id));
+			$a = explode(":", IPS_GetProperty($id, 'Address'));
 			$b = explode(":", $sid);
 			if($a[0] == $b[0]) {
 				return $id;

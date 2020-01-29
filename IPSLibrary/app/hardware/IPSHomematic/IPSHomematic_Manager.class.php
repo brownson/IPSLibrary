@@ -109,7 +109,7 @@
 			$str = "<table width='90%' align='center'>"; 
 			$str .= "<tr><td><b>Gerätname</b></td><td><b>GeräteID</b></td><td><b>Empfangsstärke</b></td></tr>";
 			foreach($rssiDeviceList as $instanceId=>$value) {
-				$str .= "<tr><td>".IPS_GetName($instanceId)."</td><td>".HM_GetAddress($instanceId)."</td><td>".$value."</td></tr>";
+				$str .= "<tr><td>".IPS_GetName($instanceId)."</td><td>".IPS_GetProperty($instanceId, 'Address')."</td><td>".$value."</td></tr>";
 			}
 			$str .= "</table>";
 			SetValue($variableIdRssiDevice, $str);
@@ -117,7 +117,7 @@
 			$str = "<table width='90%' align='center'>"; 
 			$str .= "<tr><td><b>Gerätname</b></td><td><b>GeräteID</b></td><td><b>Empfangsstärke</b></td></tr>";
 			foreach($rssiPeerList as $instanceId=>$value) {
-				$str .= "<tr><td>".IPS_GetName($instanceId)."</td><td>".HM_GetAddress($instanceId)."</td><td>".$value."</td></tr>";
+				$str .= "<tr><td>".IPS_GetName($instanceId)."</td><td>".IPS_GetProperty($instanceId, 'Address')."</td><td>".$value."</td></tr>";
 			}
 			$str .= "</table>";
 			SetValue($variableIdRssiPeer, $str);
@@ -128,7 +128,7 @@
 			foreach($rssiDeviceList as $instanceId=>$value) {
 				$idx++;
 				if ($idx<=10) {
-					$str .= "<tr><td>".IPS_GetName($instanceId)."</td><td>".HM_GetAddress($instanceId)."</td><td>".$value."</td></tr>";
+					$str .= "<tr><td>".IPS_GetName($instanceId)."</td><td>".IPS_GetProperty($instanceId, 'Address')."</td><td>".$value."</td></tr>";
 				}
 			}
 			$str .= "</table>";
@@ -226,7 +226,7 @@
 			$homematicIntanceIdList = IPS_GetInstanceListByModuleID("{A151ECE9-D733-4FB9-AA15-7F7DD10C58AF}");
 			if(sizeof($homematicIntanceIdList) == 0) die("Keine HomeMatic Socket Instanz gefunden!");
 
-			$CCUIPAddress = HM_GetHost($homematicIntanceIdList[0]);
+			$CCUIPAddress = IPS_GetProperty($homematicIntanceIdList[0], 'Host');
 
 			$HM_Script = "
 				string itemID;
@@ -281,7 +281,7 @@
 			$homematicMaintainanceList = array();
 
 			foreach ($homematicInstanceList as $homematicInstanceId ) {
-				$homematicAddress = HM_GetAddress($homematicInstanceId);
+				$homematicAddress = IPS_GetProperty($homematicInstanceId,'Address');
 				$homematicAddressList[$homematicAddress] = $homematicInstanceId;
 				
 				$pos = strpos($homematicAddress, ':0');
