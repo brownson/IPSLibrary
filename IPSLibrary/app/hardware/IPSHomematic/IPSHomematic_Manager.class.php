@@ -57,13 +57,14 @@
 				if ($variableId!==false) {
 					usleep(100000);
 					set_time_limit(HM_TIMEOUT_REFRESH);
-					HM_RequestStatus($instanceId, 'RSSI_DEVICE');
+					@HM_RequestStatus($instanceId, 'RSSI_DEVICE'); //bumaaas: @ erg√§nzt, da Fehlermeldung bei IP Ger√§ten
 				}
 				$variableId = @IPS_GetVariableIDByName('RSSI_PEER', $instanceId);
 				if ($variableId!==false) {
 					usleep(100000);
 					set_time_limit(HM_TIMEOUT_REFRESH);
-					HM_RequestStatus($instanceId, 'RSSI_PEER');
+		    		IPSLogger_Dbg(__file__, 'ID ' . $instanceId . ': ' . IPS_GetLocation($instanceId)); // bma: eingef√ºgt, da es schon mal auf dem nachfolgenden Stmt zu einer Warning kam: 'Warning: Waiting for response timed out'
+					@HM_RequestStatus($instanceId, 'RSSI_PEER'); //bma: @ erg√§nzt, da Fehlermeldung bei IP Ger√§ten
 				}
 			}
 		}
@@ -107,7 +108,7 @@
 			$variableIdRssiPeer   = IPS_GetObjectIDByIdent(HM_CONTROL_RSSIPEER, $categoryIdHtml);
 
 			$str = "<table width='90%' align='center'>"; 
-			$str .= "<tr><td><b>Ger‰tname</b></td><td><b>Ger‰teID</b></td><td><b>Empfangsst‰rke</b></td></tr>";
+			$str .= "<tr><td><b>Ger√§tename</b></td><td><b>Ger√§teID</b></td><td><b>Empfangsst√§rke</b></td></tr>";
 			foreach($rssiDeviceList as $instanceId=>$value) {
 				$str .= "<tr><td>".IPS_GetName($instanceId)."</td><td>".IPS_GetProperty($instanceId, 'Address')."</td><td>".$value."</td></tr>";
 			}
@@ -115,7 +116,7 @@
 			SetValue($variableIdRssiDevice, $str);
 
 			$str = "<table width='90%' align='center'>"; 
-			$str .= "<tr><td><b>Ger‰tname</b></td><td><b>Ger‰teID</b></td><td><b>Empfangsst‰rke</b></td></tr>";
+			$str .= "<tr><td><b>Ger√§tename</b></td><td><b>Ger√§teID</b></td><td><b>Empfangsst√§rke</b></td></tr>";
 			foreach($rssiPeerList as $instanceId=>$value) {
 				$str .= "<tr><td>".IPS_GetName($instanceId)."</td><td>".IPS_GetProperty($instanceId, 'Address')."</td><td>".$value."</td></tr>";
 			}
@@ -123,7 +124,7 @@
 			SetValue($variableIdRssiPeer, $str);
 
 			$str = "<table width='90%' align='center'>"; 
-			$str .= "<tr><td><b>Ger‰tname</b></td><td><b>Ger‰teID</b></td><td><b>Empfangsst‰rke</b></td></tr>";
+			$str .= "<tr><td><b>Ger√§tename</b></td><td><b>Ger√§teID</b></td><td><b>Empfangsst√§rke</b></td></tr>";
 			$idx = 0;
 			foreach($rssiDeviceList as $instanceId=>$value) {
 				$idx++;
@@ -138,7 +139,7 @@
 		/** 
 		 * @public
 		 *
-		 * Refresh Variablen und HTML der Empfangsst‰rken
+		 * Refresh Variablen und HTML der Empfangsst√§rken
 		 */
 		public function RefreshRSSI() {
 			$this->RefreshRSSIValues();
@@ -171,18 +172,21 @@
 		 * Refresh der Homematic Service Messages
 		 */
 		public function RefreshServiceMessages() {
-		    $texte = Array("CONFIG_PENDING"  =>"Konfigurationsdaten stehen zur ‹bertragung an",
+		    $texte = Array("CONFIG_PENDING"  =>"Konfigurationsdaten stehen zur √úbertragung an",
 		                   "LOWBAT"          =>"Batterieladezustand gering",
-		                   "STICKY_UNREACH"  =>"Ger‰tekommunikation war gestˆrt",
-		                   "UNREACH"         =>"Ger‰tekommunikation aktuell gestˆrt");
+		                   "STICKY_UNREACH"  =>"Ger√§tekommunikation war gest√∂rt",
+		                   "UNREACH"         =>"Ger√§tekommunikation aktuell gest√∂rt");
 
 		    $str = "<table width='90%' align='center'>"; // Farbe anpassen oder style entfernen
-		    $str .= "<tr><td><b>Ger‰tname</b></td><td><b>Ger‰teID</b></td><td><b>Meldung</b></td></tr>";
+		    $str .= "<tr><td><b>Ger√§tename</b></td><td><b>Ger√§teID</b></td><td><b>Meldung</b></td></tr>";
 		    $str_log = "";
 		    $ids = IPS_GetInstanceListByModuleID("{A151ECE9-D733-4FB9-AA15-7F7DD10C58AF}");
 		    if(sizeof($ids) == 0) die("Keine HomeMatic Socket Instanz gefunden!");
 
+		    IPSLogger_Dbg(__file__, 'ID ' . $ids[0] . ': ' . IPS_GetLocation($ids[0])); // bma: eingef√ºgt, da es schon mal auf dem nachfolgenden Stmt zu einer Warning kam: 'Warning: Waiting for response timed out'
+			 set_time_limit(HM_TIMEOUT_REFRESH); // bma: eingef√ºgt, da es zum TimeOut nach 5 sec kam.
 		    $msgs = HM_ReadServiceMessages($ids[0]);
+
 		    if($msgs === false) die("Verbindung zur CCU fehlgeschlagen");
 
 		    if(sizeof($msgs) == 0) {
@@ -190,6 +194,8 @@
 		        $str_log .= "Keine Servicemeldungen!";
 		    }
 		    foreach($msgs as $msg) {
+		        IPSLogger_Dbg(basename(__file__, '.class.php'), 'Message:'.json_encode($msg)); //bma: trace eingef√ºgt
+		        
 		       if(array_key_exists($msg['Message'], $texte)) {
 		            $text = $texte[$msg['Message']];
 		        } else {
@@ -197,9 +203,10 @@
 		        }
 		        $id = HM_GetInstanceIDFromHMAddress($msg['Address']);
 		        if(IPS_InstanceExists($id)) {
-					$name = IPS_GetLocation($id);
+					//$name = IPS_GetLocation($id);
+					$name = IPS_GetName($id); //bma: statt Pfad und Name wird nur der Name angezeigt
 		        } else {
-		            $name = "Ger‰t nicht in IP-Symcon eingerichtet";
+		            $name = "Ger√§t nicht in IP-Symcon eingerichtet";
 		        }
 
 		        $str .= "<tr><td>".$name."</td><td>".$msg['Address']."</td><td>".$text."</td></tr>";
@@ -213,7 +220,7 @@
 		    $variableIdPriority   = IPS_GetObjectIDByIdent(HM_CONTROL_PRIORITY, $categoryIdSettings);
 		    if (GetValue($variableIdMessages) <> $str) {
 		        SetValue($variableIdMessages, $str);
-		        IPSLogger_Not(__file__, 'New Homematic Service Messages:'.PHP_EOL.$str_log, GetValue($variableIdPriority));
+		        IPSLogger_Not(basename(__file__, '.class.php'), 'New Homematic Service Messages:'.PHP_EOL.$str_log, GetValue($variableIdPriority)); //bma: basename eingef√ºgt
 		    }
 		}
 
@@ -242,19 +249,19 @@
 					   if (aldp_obj.Value())
 						{
 						  aldp_obj.AlReceipt();
-							! dom.GetObject('Kommunikationsstˆrung').State(dom.GetObject(itemID).Name());
+							! dom.GetObject('Kommunikationsst√∂rung').State(dom.GetObject(itemID).Name());
 						}
 					  }
 				}";
 
-			// Initialisieren der Socket-Verbindung
+                // Initialisieren der Socket-Verbindung
 			$fp = fsockopen ($CCUIPAddress, 8181, $errno, $errstr, 2);
 			$res = "";
 
 			if (!$fp) {
 				$res = "$errstr ($errno)<br />\n";
 			} else {
-				// Zusammenstellen des Header f¸r HTTP-Post
+				// Zusammenstellen des Header f√ºr HTTP-Post
 				fputs($fp, "POST /Test.exe HTTP/1.1\r\n");
 				fputs($fp, "Content-type: application/x-www-form-urlencoded\r\n");
 				fputs($fp, "Content-length: ". strlen($HM_Script) ."\r\n");
@@ -265,6 +272,7 @@
 				}
 				fclose($fp);
 			}
+
 			return $res;
 		}
 		
