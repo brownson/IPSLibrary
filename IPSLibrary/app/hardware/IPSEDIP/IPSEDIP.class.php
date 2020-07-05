@@ -454,7 +454,7 @@
 			$variable     = IPS_GetVariable($variableId);
 			$value        = GetValue($variableId);
 			$action       = $variable['VariableCustomAction'] ;
-			$type         = $variable['VariableValue']['ValueType'];
+			$type         = $variable['VariableType'];
 			$profile      = $variable['VariableCustomProfile'];
 			$profileData  = IPS_GetVariableProfile($profile);
 			$associations = $profileData['Associations'];
