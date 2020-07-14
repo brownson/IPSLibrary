@@ -259,8 +259,8 @@
 		$instanceIdChart  = CreateDummyInstance("Zeitraum", $mobileId, 30);
 		CreateLink('Zeitraum',      $variableIdPeriodCount, $instanceIdChart, 50);
 		CreateLink('Anzahl',        $variableIdTimeCount,   $instanceIdChart, 60);
-		CreateLink('Anzahl -',      $scriptIdCountMinus,    $instanceIdChart, 70);
-		CreateLink('Anzahl +',      $scriptIdCountPlus,     $instanceIdChart, 80);
+		CreateLink('Anzahl -',      $scriptIdCountMinus,    $instanceIdChart, 70, 'anzahlminus');
+		CreateLink('Anzahl +',      $scriptIdCountPlus,     $instanceIdChart, 80, 'anzahlplus');
 		CreateLink('Zeit Offset',   $variableIdTimeOffset,  $instanceIdChart, 20);
 		CreateLink('Zeit Zurück',   $scriptIdNavPrev,       $instanceIdChart, 30);
 		CreateLink('Zeit Vorwärts', $scriptIdNavNext,       $instanceIdChart, 40);
