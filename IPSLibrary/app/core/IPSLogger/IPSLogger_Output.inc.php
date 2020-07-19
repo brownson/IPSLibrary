@@ -86,18 +86,17 @@
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	function IPSLogger_OutLog4IPS($LogLevel, $LogType, $Context, $Msg) {
-			// bumaas: Sonderzeichen entfernen um Lesefehler von Log4View zu vermeiden
-			$Msg  =  str_replace (array('<','>'), '.', $Msg); 
-            $Out  = '<event';
-            $Out .=   ' logger="'.$Context.'"';
-            $Out .=   ' timestamp="'.date('Y-m-d\TH:i:s.u').'+01:00"';
-            $Out .=   ' level="'.IPSLogger_LogTypeXml($LogType).'"';
-            $Out .=   ' domain="IPS.exe"';
-            $Out .=   ' thread="'.$_IPS['THREAD'].'"';
-            $Out .=   ' username="IPS">';
-			// bumaas: die Ausgabe muss utf8 decodiert werden
-            $Out .=   '<message>'.utf8_decode($Msg).'</message>';
-            $Out .= '</event>';
+           $Out  = '<event';
+      // bumaas: die Ausgabe muss utf8 decodiert werden
+           $Out .=   ' logger="'.utf8_decode($Context).'"';
+           $Out .=   ' timestamp="'.date('Y-m-d\TH:i:s.u').'+01:00"';
+           $Out .=   ' level="'.IPSLogger_LogTypeXml($LogType).'"';
+           $Out .=   ' domain="IPS.exe"';
+           $Out .=   ' thread="'.$_IPS['THREAD'].'"';
+           $Out .=   ' username="IPS">';
+      // bumaas: die Ausgabe muss utf8 decodiert werden und sollte zudem als Character Data ausgegeben werden, damit es nicht als XML geparst wird
+           $Out .=   '<message><![CDATA['.utf8_decode($Msg).']]></message>';
+           $Out .= '</event>';
 
             $File = 'IPSLogger_'.date('Ymd').'.'.c_Log4IPS_Extension;
             IPSLogger_WriteFile(c_Log4IPS_Directory, $File, $Out, c_ID_Log4IPSOutEnabled);
