@@ -120,7 +120,7 @@
 		if ($CommProperties !== false) {
 			$CommType   = $CommProperties[c_Property_Comm];
 			$DeviceName = $CommProperties[c_Property_Device];
-			IPSLogger_Trc(__File__, 'Received Data "'.implode($CommParams, '.').'" for Device '.$DeviceName);
+			IPSLogger_Trc(__File__, 'Received Data "'.implode('.', $CommParams).'" for Device '.$DeviceName);
 			switch ($CommType) {
 				case c_Property_CommPower:
 				case c_Property_CommPower2:
