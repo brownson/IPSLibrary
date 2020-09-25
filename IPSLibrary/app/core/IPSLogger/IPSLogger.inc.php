@@ -120,9 +120,11 @@
 	 * @param $LogContext - Context of Logging (Identifier or Filename).
 	 * @param $LogMessage - Message to be logged
 	 */
+if (!function_exists('IPSLogger_Fat')) {
    function IPSLogger_Fat($LogContext, $LogMessage) {
       IPSLogger_Out(c_LogLevel_Fatal, c_LogType_Fatal, $LogContext, $LogMessage);
    }
+}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	/** Procedure to log a Error
@@ -130,9 +132,11 @@
 	 * @param $LogContext - Context of Logging (Identifier or Filename).
 	 * @param $LogMessage - Message to be logged
 	 */
+if (!function_exists('IPSLogger_Err')) {
 	function IPSLogger_Err($LogContext, $LogMessage) {
 		IPSLogger_Out(c_LogLevel_Error, c_LogType_Error, $LogContext, $LogMessage);
 	}
+}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	/** Procedure to log a Warning
@@ -140,9 +144,11 @@
 	 * @param $LogContext - Context of Logging (Identifier or Filename).
 	 * @param $LogMessage - Message to be logged
 	 */
+if (!function_exists('IPSLogger_Wrn')) {
    function IPSLogger_Wrn($LogContext, $LogMessage) {
       IPSLogger_Out(c_LogLevel_Warning, c_LogType_Warning, $LogContext, $LogMessage);
    }
+}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	/** Procedure to log a Notification
@@ -151,9 +157,11 @@
 	 * @param $LogMessage - Message to be logged
 	 * @param $Priority - Priority of Notificaton Message (0 means high priority, higher values indicates a lower priority)
 	 */
+if (!function_exists('IPSLogger_Not')) {
    function IPSLogger_Not($LogContext, $LogMessage, $Priority=0) {
       IPSLogger_Out(c_LogLevel_Notification, c_LogType_Notification, $LogContext, $LogMessage, $Priority);
    }
+}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	/** Procedure to log Informations
@@ -161,9 +169,11 @@
 	 * @param $LogContext - Context of Logging (Identifier or Filename).
 	 * @param $LogMessage - Message to be logged
 	 */
+if (!function_exists('IPSLogger_Inf')) {
    function IPSLogger_Inf($LogContext, $LogMessage) {
       IPSLogger_Out(c_LogLevel_Information, c_LogType_Information, $LogContext, $LogMessage);
    }
+}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	/** Debugging Procedure for IPS LogHandler
@@ -171,9 +181,11 @@
 	 * @param $LogContext - Context of Logging (Identifier or Filename).
 	 * @param $LogMessage - Message to be logged
 	 */
+if (!function_exists('IPSLogger_Dbg')) {
    function IPSLogger_Dbg($LogContext, $LogMessage) {
       IPSLogger_Out(c_LogLevel_Debug, c_LogType_Debug, $LogContext, $LogMessage);
    }
+}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	/** Procedure to log Communications
@@ -181,9 +193,11 @@
 	 * @param $LogContext - Context of Logging (Identifier or Filename).
 	 * @param $LogMessage - Message to be logged
 	 */
+if (!function_exists('IPSLogger_Com')) {
    function IPSLogger_Com($LogContext, $LogMessage) {
       IPSLogger_Out(c_LogLevel_Communication, c_LogType_Communication, $LogContext, $LogMessage);
    }
+}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	/** Procedure to log Test Messages
@@ -191,9 +205,11 @@
 	 * @param $LogContext - Context of Logging (Identifier or Filename).
 	 * @param $LogMessage - Message to be logged
 	 */
+if (!function_exists('IPSLogger_Tst')) {
    function IPSLogger_Tst($LogContext, $LogMessage) {
       IPSLogger_Out(c_LogLevel_Test, c_LogType_Test, $LogContext, $LogMessage);
    }
+}
 
 	// ---------------------------------------------------------------------------------------------------------------------------
 	/** Procedure for Tracing Messages
@@ -201,10 +217,12 @@
 	 * @param $LogContext - Context of Logging (Identifier or Filename).
 	 * @param $LogMessage - Message to be logged
 	 */
+if (!function_exists('IPSLogger_Trc')) {
    function IPSLogger_Trc($LogContext, $LogMessage) {
       IPSLogger_Out(c_LogLevel_Trace, c_LogType_Trace, $LogContext, $LogMessage);
    }
-   
+}
+
    // ---------------------------------------------------------------------------------------------------------------------------
     /** Procedure to set a custom trace level for a specific logcontext
      *
