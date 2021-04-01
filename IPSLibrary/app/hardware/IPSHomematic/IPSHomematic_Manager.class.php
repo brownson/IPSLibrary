@@ -56,13 +56,13 @@
 				$variableId = @IPS_GetVariableIDByName('RSSI_DEVICE', $instanceId);
 				if ($variableId!==false) {
 					usleep(100000);
-					set_time_limit(HM_TIMEOUT_REFRESH);
+					//set_time_limit(HM_TIMEOUT_REFRESH);
 					@HM_RequestStatus($instanceId, 'RSSI_DEVICE'); //bumaaas: @ ergänzt, da Fehlermeldung bei IP Geräten
 				}
 				$variableId = @IPS_GetVariableIDByName('RSSI_PEER', $instanceId);
 				if ($variableId!==false) {
 					usleep(100000);
-					set_time_limit(HM_TIMEOUT_REFRESH);
+					//set_time_limit(HM_TIMEOUT_REFRESH);
 		    		IPSLogger_Dbg(__file__, 'ID ' . $instanceId . ': ' . IPS_GetLocation($instanceId)); // bma: eingefügt, da es schon mal auf dem nachfolgenden Stmt zu einer Warning kam: 'Warning: Waiting for response timed out'
 					@HM_RequestStatus($instanceId, 'RSSI_PEER'); //bma: @ ergänzt, da Fehlermeldung bei IP Geräten
 				}
@@ -156,7 +156,7 @@
 			foreach ($instanceIdList as $instanceId) {
 				$variableId = @IPS_GetVariableIDByName('STATE', $instanceId);
 				if ($variableId!==false) {
-					set_time_limit(HM_TIMEOUT_REFRESH);
+					//set_time_limit(HM_TIMEOUT_REFRESH);
 					HM_RequestStatus($instanceId, 'STATE');
 				}
 				//$variableId = @IPS_GetVariableIDByName('LEVEL', $instanceId);
@@ -184,7 +184,7 @@
 		    if(sizeof($ids) == 0) die("Keine HomeMatic Socket Instanz gefunden!");
 
 		    IPSLogger_Dbg(__file__, 'ID ' . $ids[0] . ': ' . IPS_GetLocation($ids[0])); // bma: eingefügt, da es schon mal auf dem nachfolgenden Stmt zu einer Warning kam: 'Warning: Waiting for response timed out'
-			 set_time_limit(HM_TIMEOUT_REFRESH); // bma: eingefügt, da es zum TimeOut nach 5 sec kam.
+			//set_time_limit(HM_TIMEOUT_REFRESH); // bma: eingefügt, da es zum TimeOut nach 5 sec kam.
 		    $msgs = HM_ReadServiceMessages($ids[0]);
 
 		    if($msgs === false) die("Verbindung zur CCU fehlgeschlagen");
