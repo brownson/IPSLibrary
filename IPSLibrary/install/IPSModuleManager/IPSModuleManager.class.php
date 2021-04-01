@@ -126,7 +126,7 @@
 
 			// Increase PHP Timeout for current Session
 			$timeLimit = $this->managerConfigHandler->GetValueIntDef('TimeLimit', '', '300'); /*5 Minuten*/
-			set_time_limit($timeLimit);
+			//set_time_limit($timeLimit);
 			global $_IPS;
 			$_IPS['PROXY'] = $this->managerConfigHandler->GetValueDef('Proxy', '', ''); /*Proxy Settings*/
 		}
