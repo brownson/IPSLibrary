@@ -758,7 +758,7 @@
 		 */
 		// ----------------------------------------------------------------------------------------------------------------------------
 		public function PurgeFiles() {
-			set_time_limit(600); // Set PHP Time Limit of 10 Minutes for Purging of Files
+			//set_time_limit(600); // Set PHP Time Limit of 10 Minutes for Purging of Files
 			IPSLogger_Inf(__file__, 'Purge History and MotionCapture Camera Files');
 
 			foreach ($this->config as $cameraIdx=>$data) {
