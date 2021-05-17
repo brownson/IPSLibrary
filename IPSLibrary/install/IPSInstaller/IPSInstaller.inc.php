@@ -723,6 +723,9 @@
 			if (!IPS_SetEventCyclicTimeFrom($TimerId, $Hour, $Minute, 0)) {
 				Error ("IPS_SetEventCyclicTimeFrom failed !!!");
 			}
+			if (function_exists('IPS_SetEventAction')) {
+				IPS_SetEventAction($eventID, '{7938A5A2-0981-5FE0-BE6C-8AA610D654EB}', []);
+			}
 			IPS_SetEventActive($TimerId, true);
 			Debug ('Created Timer '.$Name.'='.$TimerId."");
 		}
