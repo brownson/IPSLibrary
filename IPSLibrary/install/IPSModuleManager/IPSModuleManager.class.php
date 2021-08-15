@@ -3,8 +3,8 @@
 	/**@defgroup ipsmodulemanager IPSModuleManager
 	 * @{
 	 *
-	 * Der IPSModuleManager bildet das Herzstück des IPSLibrary Installers. Er beinhaltet diverse Konfigurations Möglichkeiten, die
-	 * man in der Datei IPSModuleManager.ini verändern kann (Ablagerort: IPSLibrary.install.InitializationFile).
+	 * Der IPSModuleManager bildet das HerzstÃ¼ck des IPSLibrary Installers. Er beinhaltet diverse Konfigurations MÃ¶glichkeiten, die
+	 * man in der Datei IPSModuleManager.ini verÃ¤ndern kann (Ablagerort: IPSLibrary.install.InitializationFile).
 	 *
 	 * @file          IPSModuleManager.class.php
 	 * @author        Andreas Brauneis
@@ -121,7 +121,8 @@
 
 			// Increase PHP Timeout for current Session
 			$timeLimit = $this->managerConfigHandler->GetValueIntDef('TimeLimit', '', '300'); /*5 Minuten*/
-			set_time_limit($timeLimit);
+			if(IPS_GetKernelVersion() < 6)
+				set_time_limit($timeLimit);
 			global $_IPS;
 			$_IPS['PROXY'] = $this->managerConfigHandler->GetValueDef('Proxy', '', ''); /*Proxy Settings*/
 		}
@@ -140,7 +141,7 @@
 		/**
        * @public
 		 *
-		 * Liefert aktuellen ConfigHandler für ModuleManager
+		 * Liefert aktuellen ConfigHandler fÃ¼r ModuleManager
 		 *
 	    * @return IPSConfigHandler aktuellen Config Handler
 		 */
@@ -151,7 +152,7 @@
 		/**
        * @public
 		 *
-		 * Liefert aktuellen ConfigHandler für Module
+		 * Liefert aktuellen ConfigHandler fÃ¼r Module
 		 *
 	    * @return IPSConfigHandler aktuellen Config Handler
 		 */
@@ -173,12 +174,12 @@
 		/**
 		 * @public
 		 *
-		 * Liefert den Wert eines übergebenen Parameters, es wird zuerst im ConfigHandler des aktuellen
+		 * Liefert den Wert eines Ã¼bergebenen Parameters, es wird zuerst im ConfigHandler des aktuellen
 		 * Modules gesucht, wird er dort nicht gefunden erfolgt die Suche im ModuleManager Config Handler.
 		 *
 		 * @param string $key Name des Parameters
 		 * @param string $section Name der Parameter Gruppe, kann auch leer sein
-		 * @return string liefert den Wert des übergebenen Parameters
+		 * @return string liefert den Wert des Ã¼bergebenen Parameters
 		 * @throws ConfigurationException wenn der betroffene Parameter nicht gefunden wurde
 		 */
 		public function GetConfigValue($key, $section=null) {
@@ -192,12 +193,12 @@
 		/**
 		 * @public
 		 *
-		 * Liefert den integer Wert eines übergebenen Parameters, es wird zuerst im ConfigHandler des aktuellen
+		 * Liefert den integer Wert eines Ã¼bergebenen Parameters, es wird zuerst im ConfigHandler des aktuellen
 		 * Modules gesucht, wird er dort nicht gefunden erfolgt die Suche im ModuleManager Config Handler.
 		 *
 		 * @param string $key Name des Parameters
 		 * @param string $section Name der Parameter Gruppe, kann auch leer sein
-		 * @return integer liefert den Wert des übergebenen Parameters
+		 * @return integer liefert den Wert des Ã¼bergebenen Parameters
 		 * @throws ConfigurationException wenn der betroffene Parameter nicht gefunden wurde
 		 */
 		public function GetConfigValueInt ($key, $section=null) {
@@ -207,12 +208,12 @@
 		/**
 		 * @public
 		 *
-		 * Liefert den boolean Wert eines übergebenen Parameters, es wird zuerst im ConfigHandler des aktuellen
+		 * Liefert den boolean Wert eines Ã¼bergebenen Parameters, es wird zuerst im ConfigHandler des aktuellen
 		 * Modules gesucht, wird er dort nicht gefunden erfolgt die Suche im ModuleManager Config Handler.
 		 *
 		 * @param string $key Name des Parameters
 		 * @param string $section Name der Parameter Gruppe, kann auch leer sein
-		 * @return boolean liefert den Wert des übergebenen Parameters
+		 * @return boolean liefert den Wert des Ã¼bergebenen Parameters
 		 * @throws ConfigurationException wenn der betroffene Parameter nicht gefunden wurde
 		 */
 		public function GetConfigValueBool ($key, $section=null) {
@@ -222,12 +223,12 @@
 		/**
 		 * @public
 		 *
-		 * Liefert den float Wert eines übergebenen Parameters, es wird zuerst im ConfigHandler des aktuellen
+		 * Liefert den float Wert eines Ã¼bergebenen Parameters, es wird zuerst im ConfigHandler des aktuellen
 		 * Modules gesucht, wird er dort nicht gefunden erfolgt die Suche im ModuleManager Config Handler.
 		 *
 		 * @param string $key Name des Parameters
 		 * @param string $section Name der Parameter Gruppe, kann auch leer sein
-		 * @return float liefert den Wert des übergebenen Parameters
+		 * @return float liefert den Wert des Ã¼bergebenen Parameters
 		 * @throws ConfigurationException wenn der betroffene Parameter nicht gefunden wurde
 		 */
 		public function GetConfigValueFloat ($key, $section=null) {
@@ -237,14 +238,14 @@
 		/**
 		 * @public
 		 *
-		 * Liefert den Wert eines übergebenen Parameters, es wird zuerst im ConfigHandler des aktuellen
+		 * Liefert den Wert eines Ã¼bergebenen Parameters, es wird zuerst im ConfigHandler des aktuellen
 		 * Modules gesucht, wird er dort nicht gefunden erfolgt die Suche im ModuleManager Config Handler.
 		 * Ist er dort auch nicht definiert, wird der Default Wert retouniert.
 		 *
 		 * @param string $key Name des Parameters
 		 * @param string $section Name der Parameter Gruppe, kann auch leer sein
 		 * @param string $defaultValue Default Wert wenn Parameter nicht gefunden wurde
-		 * @return string liefert den Wert des übergebenen Parameters
+		 * @return string liefert den Wert des Ã¼bergebenen Parameters
 		 */
 		public function GetConfigValueDef($key, $section=null, $defaultValue="") {
 			if ($this->moduleConfigHandler->ExistsValue($key, $section)) {
@@ -259,14 +260,14 @@
 		/**
 		 * @public
 		 *
-		 * Liefert den integer Wert eines übergebenen Parameters, es wird zuerst im ConfigHandler des aktuellen
+		 * Liefert den integer Wert eines Ã¼bergebenen Parameters, es wird zuerst im ConfigHandler des aktuellen
 		 * Modules gesucht, wird er dort nicht gefunden erfolgt die Suche im ModuleManager Config Handler.
 		 * Ist er dort auch nicht definiert, wird der Default Wert retouniert.
 		 *
 		 * @param string $key Name des Parameters
 		 * @param string $section Name der Parameter Gruppe, kann auch leer sein
 		 * @param string $defaultValue Default Wert wenn Parameter nicht gefunden wurde
-		 * @return integer liefert den Wert des übergebenen Parameters
+		 * @return integer liefert den Wert des Ã¼bergebenen Parameters
 		 */
 		public function GetConfigValueIntDef($key, $section=null, $defaultValue="") {
 			return (int)$this->GetConfigValueDef($key, $section, $defaultValue);
@@ -275,14 +276,14 @@
 		/**
 		 * @public
 		 *
-		 * Liefert den boolean Wert eines übergebenen Parameters, es wird zuerst im ConfigHandler des aktuellen
+		 * Liefert den boolean Wert eines Ã¼bergebenen Parameters, es wird zuerst im ConfigHandler des aktuellen
 		 * Modules gesucht, wird er dort nicht gefunden erfolgt die Suche im ModuleManager Config Handler.
 		 * Ist er dort auch nicht definiert, wird der Default Wert retouniert.
 		 *
 		 * @param string $key Name des Parameters
 		 * @param string $section Name der Parameter Gruppe, kann auch leer sein
 		 * @param string $defaultValue Default Wert wenn Parameter nicht gefunden wurde
-		 * @return boolean liefert den Wert des übergebenen Parameters
+		 * @return boolean liefert den Wert des Ã¼bergebenen Parameters
 		 */
 		public function GetConfigValueBoolDef ($key, $section=null, $defaultValue="") {
 			return (boolean)$this->GetConfigValueDef($key, $section, $defaultValue);
@@ -291,14 +292,14 @@
 		/**
 		 * @public
 		 *
-		 * Liefert den float Wert eines übergebenen Parameters, es wird zuerst im ConfigHandler des aktuellen
+		 * Liefert den float Wert eines Ã¼bergebenen Parameters, es wird zuerst im ConfigHandler des aktuellen
 		 * Modules gesucht, wird er dort nicht gefunden erfolgt die Suche im ModuleManager Config Handler.
 		 * Ist er dort auch nicht definiert, wird der Default Wert retouniert.
 		 *
 		 * @param string $key Name des Parameters
 		 * @param string $section Name der Parameter Gruppe, kann auch leer sein
 		 * @param string $defaultValue Default Wert wenn Parameter nicht gefunden wurde
-		 * @return float liefert den Wert des übergebenen Parameters
+		 * @return float liefert den Wert des Ã¼bergebenen Parameters
 		 */
 		public function GetConfigValueFloatDef ($key, $section=null, $defaultValue="") {
 		   return (float)$this->GetConfigValueDef($key, $section, $defaultValue);
@@ -377,7 +378,7 @@
 		 * @public
 		 *
 		 * Liefert die ID des Objectes, mit dem das Modul konfiguriert werden kann.
-		 * Falls kein Objekt gefunden wird, dann liefert die Funktion FALSE zurück.
+		 * Falls kein Objekt gefunden wird, dann liefert die Funktion FALSE zurÃ¼ck.
 		 *
 		 * @return integer ID des Objectes
 		 */
@@ -397,7 +398,7 @@
 		/**
 		 * @public
 		 *
-		 * Liefert ein Array mit Informationen zu dem Module zurück
+		 * Liefert ein Array mit Informationen zu dem Module zurÃ¼ck
 		 *
 		 * @return string[] Infos zu Modul
 		 */
@@ -485,11 +486,11 @@
 		/**
 		 * @private
 		 *
-		 * Liefert die ScriptListe für einen übergebenen FileType
+		 * Liefert die ScriptListe fÃ¼r einen Ã¼bergebenen FileType
 		 *
 		 * @param string $fileKey Type des Files (ScriptList, DefaultList, ExampleList, ...)
 		 * @param string $fileTypeSection Filetype Section (app, config, webfront ...)
-		 * @param string $baseDirectory Basis Verzeichnis für die Generierung der Filenamen
+		 * @param string $baseDirectory Basis Verzeichnis fÃ¼r die Generierung der Filenamen
 		 * @return array[] Liste mit Filenamen
 		 */
 		private function GetScriptList($fileKey, $fileTypeSection, $baseDirectory) {
@@ -580,12 +581,12 @@
 		/**
 		 * @public
 		 *
-		 * Lädt eine Liste von Dateien anhand des Filetypes von einem Source Repository
+		 * LÃ¤dt eine Liste von Dateien anhand des Filetypes von einem Source Repository
 		 *
 		 * @param string $fileKey Type des Files (ScriptList, DefaultList, ExampleList, ...)
 		 * @param string $fileTypeSection Filetype Section (app, config, webfront ...)
 		 * @param string $sourceRepository Pfad/Url zum Source Repository, das zum Laden verwendet werden soll
-		 * @param boolean $overwriteUserFiles bestehende User Files mit Default überschreiben
+		 * @param boolean $overwriteUserFiles bestehende User Files mit Default Ã¼berschreiben
 		 */
 		private function LoadModuleFiles($fileKey, $fileTypeSection, $sourceRepository, $overwriteUserFiles=false) {
 			$localList       = $this->GetScriptList($fileKey, $fileTypeSection, IPS_GetKernelDir().'scripts\\');
@@ -604,10 +605,10 @@
 		/**
 		 * @public
 		 *
-		 * Lädt alle zugehörigen Files des Modules von einem Source Repository
+		 * LÃ¤dt alle zugehÃ¶rigen Files des Modules von einem Source Repository
 		 *
 		 * @param string $sourceRepository Pfad/Url zum Source Repository, das zum Laden verwendet werden soll
-		 * @param boolean $overwriteUserFiles bestehende User Files mit Default überschreiben
+		 * @param boolean $overwriteUserFiles bestehende User Files mit Default Ã¼berschreiben
 		 */
 		public function LoadModule($sourceRepository='', $overwriteUserFiles=false) {
 			if ($sourceRepository=='') {
@@ -645,7 +646,7 @@
 		 *
 		 * Installiert ein Module,
 		 *
-		 * @param string $forceInstallation wenn true, wird auch eine Installation ausgeführt, wenn sich die Version des Modules nicht geändert hat
+		 * @param string $forceInstallation wenn true, wird auch eine Installation ausgefÃ¼hrt, wenn sich die Version des Modules nicht geÃ¤ndert hat
 		 */
 		public function InstallModule($forceInstallation = true) {
 			$newVersion = $this->fileConfigHandler->GetValueDef(IPSConfigHandler::INSTALLVERSION, null, 
@@ -665,8 +666,8 @@
 		 * @public
 		 *
 		 * Update des aktuellen Modules auf die neueste Version. Es erfolgt zuerst ein Download des Modules,
-		 * sollte sich die Version des Modules verändert haben, wird autom. auch das Installations Script
-		 * ausgeführt.
+		 * sollte sich die Version des Modules verÃ¤ndert haben, wird autom. auch das Installations Script
+		 * ausgefÃ¼hrt.
 		 *
 		 * @param string $sourceRepository Pfad/Url zum Source Repository, das zum Speichern verwendet werden soll
 		 */
@@ -763,13 +764,13 @@
 		/**
 		 * @public
 		 *
-		 * Löscht ein Module aus IP-Symcon
+		 * LÃ¶scht ein Module aus IP-Symcon
 		 *
-		 * Es werden folgende Komponenten gelöscht
+		 * Es werden folgende Komponenten gelÃ¶scht
 		 *   - Alle WebFront Seiten, die autom. generiert wurden
-		 *   - Alle Mobile Interface Einträge
+		 *   - Alle Mobile Interface EintrÃ¤ge
 		 *   - Alle Variablen und Scripte in IPS
-		 *   - Alle zugehörigen Dateien
+		 *   - Alle zugehÃ¶rigen Dateien
 		 *
 		 */
 		public function DeleteModule() {
@@ -856,8 +857,8 @@
 		 * Exportiert einkomplettes Module zu einem Ziel Verzeichnis
 		 *
 		 * @param string $sourceRepository Pfad/Url zum Source Repository, das zum Speichern verwendet werden soll
-		 * @param string $changeText Text der für die ChangeList verwendet werden soll
-		 * @param boolean $installationRequired Installation durch Änderung notwendig
+		 * @param string $changeText Text der fÃ¼r die ChangeList verwendet werden soll
+		 * @param boolean $installationRequired Installation durch Ã„nderung notwendig
 		 */
 		public function DeployModule($sourceRepository='', $changeText='', $installationRequired=false) {
 			if ($sourceRepository=='') {
