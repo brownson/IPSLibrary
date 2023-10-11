@@ -362,7 +362,8 @@
 
 		imagestring($image,1,10,$imageHeight-7,"Generated at ".date('d-M-Y H:i:s')."",$textColor);
 
-		imagegif ($image, IPS_GetKernelDir().'media/'.$fileName.'.gif', 90);
+		//imagegif ($image, IPS_GetKernelDir().'media/'.$fileName.'.gif', 90);
+		imagegif ($image, IPS_GetKernelDir().'media/'.$fileName.'.gif');
 		imagedestroy($image);
 	}
 
@@ -474,7 +475,8 @@
 
 		//imagestring($image,3,$imageWidth/2-100,15,"Tag- und Nachtstunden in Korneuburg",$textColor);
 		imagestring($image,1,10,$marginTop+$dayHeight+$marginBottom-7,"Generated at ".date('d-M-Y H:i:s')." by Brownson",$textColor);
-		imagegif ($image, IPS_GetKernelDir().'media/'.$fileName.'.gif', 90);
+		//imagegif ($image, IPS_GetKernelDir().'media/'.$fileName.'.gif', 90);
+		imagegif ($image, IPS_GetKernelDir().'media/'.$fileName.'.gif');
 		imagedestroy($image);
 	}
 
