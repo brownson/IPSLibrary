@@ -110,7 +110,7 @@
 		}
 		else
 		{
-			$s = "<iframe src='./user/IPSHighcharts/IPSTemplates/$chartType.php?$callBy="	. $callIdent . "' " .
+			$s = "<iframe src='/user/IPSHighcharts/IPSTemplates/$chartType.php?$callBy="	. $callIdent . "' " .
 				"width='100%' height='". $height ."' frameborder='0' scrolling='no'></iframe>";
 		}
 		return $s;
@@ -123,8 +123,12 @@
 	// ------------------------------------------------------------------------
 	function CreateConfigFile($stringForCfgFile, $id, $charttype = 'Highcharts')
 	{
-		$path = "webfront\user\IPSHighcharts\\" . $charttype;
-		$filename = $charttype . "Cfg$id.tmp";
+		//$path     = "webfront\user\IPSHighcharts\\" . $charttype;
+		$path     = "user\IPSHighcharts\\" . $charttype;
+		//to be compatible for older IPS versions (<7.0)
+		if (file_exists(IPS_GetKernelDir() . 'webfront')) {
+			$path = 'webfront\\' . $path;
+		} 
 
 		return CreateConfigFileByPathAndFilename($stringForCfgFile, $path, $filename);
 	}
@@ -837,7 +841,7 @@
 		// Werte ersetzten (sinnvoll für Boolean, oder Integer - z.B.: Tür/Fenster-Kontakt oder Drehgriffkontakt)
 		if ($serie['ReplaceValues'] != false)
 		{
-			if (isset($serie['ReplaceValues'][$val]))
+			if (is_int($val) && isset($serie['ReplaceValues'][$val]))
 				$val = $serie['ReplaceValues'][$val];
 		}
 
