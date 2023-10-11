@@ -7,23 +7,23 @@
 	 * @version
 	 * Version 2.50.1, 31.01.2012<br/>
 	 *
-	 * Script für PHP ErrorHandler
+	 * Script fÃ¼r PHP ErrorHandler
 	 *
 	 * Dieses Script dient zur Anbindung des PHP ErrorHandlers. Registriert wird das Script in PHP
 	 * durch folgenden Eintrag in der Datei "php.ini" im Root Verzeichnis von IPS:
 	 *
 	 * <pre>auto_prepend_file="<<ReplacePathToIPSymcon>>\scripts\IPSLogger_PhpErrorHandler.ips.php"</pre>
 	 *
-	 * Mit der IPS Version 2.5 ist dieses File über die Datei "__autoload.php" zu registrieren, die
+	 * Mit der IPS Version 2.5 ist dieses File Ã¼ber die Datei "__autoload.php" zu registrieren, die
 	 * bei jedem Script Aufruf automatisch geladen wird.
 	 *
 	 *	<pre>include_once "\IPSLibrary\app\core\IPSLogger\IPSLogger_PhpErrorHandler.ips.php";</pre>
 	 *
 	 */
 
-	function IPSLogger_PhpErrorHandler ($ErrType, $ErrMsg, $FileName, $LineNum, $Vars)
+	function IPSLogger_PhpErrorHandler ($ErrType, $ErrMsg, $FileName, $LineNum)
 	{
-		if (error_reporting() == 0) {return false;}   // No Reporting of suppressed Erros (suppressed @)
+		if (error_reporting() !== E_ALL ^ E_DEPRECATED) {return false;}   // No Reporting of suppressed Erros (suppressed by @), see https://www.php.net/manual/en/language.operators.errorcontrol.php#125938
 		require_once "IPSLogger.inc.php";
 
 		$ErrorDetails = c_lf."   Error in Script ".$FileName." on Line ".$LineNum;
@@ -58,6 +58,9 @@
 			case E_COMPILE_WARNING:
 				IPSLogger_Err("PHP", 'Compile Warning: '.$ErrMsg.$ErrorDetails);
 				$FatalError = true;
+				break;
+			case E_DEPRECATED: 
+				IPSLogger_Err("PHP", 'Deprecated: '.$ErrMsg.$ErrorDetails);
 				break;
 			case E_USER_ERROR:
 				IPSLogger_Err("PHP", 'User Error: '.$ErrMsg.$ErrorDetails);
@@ -102,7 +105,7 @@
 		}
 	}
 
-	$old_error_handler = set_error_handler("IPSLogger_PhpErrorHandler",E_ALL);
+	$old_error_handler = set_error_handler("IPSLogger_PhpErrorHandler",E_ALL ^ E_DEPRECATED);
 
 	function IPSLogger_PhpFatalErrorHandler() {
 		if (@is_array($e = @error_get_last())) {
