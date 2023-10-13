@@ -123,12 +123,13 @@
 	// ------------------------------------------------------------------------
 	function CreateConfigFile($stringForCfgFile, $id, $charttype = 'Highcharts')
 	{
-		//$path     = "webfront\user\IPSHighcharts\\" . $charttype;
 		$path     = "user\IPSHighcharts\\" . $charttype;
 		//to be compatible for older IPS versions (<7.0)
 		if (file_exists(IPS_GetKernelDir() . 'webfront')) {
 			$path = 'webfront\\' . $path;
-		} 
+		}
+		$filename = $charttype . "Cfg$id.tmp";
+
 
 		return CreateConfigFileByPathAndFilename($stringForCfgFile, $path, $filename);
 	}
